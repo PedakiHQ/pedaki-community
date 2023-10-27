@@ -1,0 +1,13 @@
+.idea
+.vscode
+node_modules
+.envrc
+.turbo
+.yalc
+yalc.lock
+dist
+.eslintcache
+coverage
+.env.*
+!*.env.test.example
+!*.env.example

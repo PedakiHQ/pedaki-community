@@ -1,0 +1,50 @@
+{
+  "name": "pedaki-community",
+  "version": "0.0.0",
+  "private": true,
+  "repository": "https://github.com/PedakiHQ/pedaki-community",
+  "homepage": "https://www.pedaki.fr",
+  "author": "Nathan David <me@vahor.fr>",
+  "license": "CC-BY-NC-SA-4.0",
+  "keywords": [
+    "pedaki"
+  ],
+  "scripts": {
+    "start": "dotenv -- turbo run start",
+    "build": "dotenv -- turbo run build",
+    "test": "NODE_ENV=test dotenv -e .env.test -c -- turbo run test",
+    "test:coverage": "NODE_ENV=test dotenv -e .env.test -c -- turbo run test:coverage",
+    "test:watch": "NODE_ENV=test dotenv -e .env.test -c -- turbo run test:watch",
+    "dev": "dotenv -- turbo run dev",
+    "lint": "SKIP_ENV_VALIDATION=true && turbo run lint",
+    "format:check": "turbo run format:check",
+    "typecheck": "turbo run typecheck",
+    "format": "turbo run format",
+    "clean": "turbo run clean && rimraf node_modules",
+    "check": "SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check test"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "latest",
+    "@changesets/cli": "latest",
+    "@types/fs-extra": "^11.0.3",
+    "@types/node": "^18.18.4",
+    "@vitest/coverage-v8": "^0.34.6",
+    "cpy": "^10.1.0",
+    "dotenv-cli": "latest",
+    "execa": "^8.0.1",
+    "fs-extra": "^11.1.1",
+    "rimraf": "latest",
+    "tsconfig-replace-paths": "^0.0.14",
+    "tsup": "^7.2.0",
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  },
+  "engines": {
+    "node": ">=18.0.0 <19.0.0",
+    "pnpm": ">=8.0.0",
+    "yarn": "use-pnpm",
+    "npm": "use-pnpm"
+  },
+  "packageManager": "pnpm@8.9.2"
+}
