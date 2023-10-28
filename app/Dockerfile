@@ -16,7 +16,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 COPY app/package.json ./app/
 
-RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community
 
 COPY app ./app
 
@@ -32,7 +32,7 @@ RUN pnpm build --filter app
 # Delete node_modules and reinstall only production dependencies
 RUN npx rimraf --glob ./**/node_modules
 # TODO: remove no-frozen-lockfile
-RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --production --filter app
+RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --production --filter @pedaki/community
 
 # TODO: add prisma
 # # Copy back node_modules/.prisma

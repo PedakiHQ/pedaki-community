@@ -44,7 +44,6 @@ jobs:
         with:
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
-          publish: scripts/release-ghcr.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production

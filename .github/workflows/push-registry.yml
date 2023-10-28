@@ -5,8 +5,8 @@ on:
     inputs:
       version:
         type: string
-        description: Image version
-        required: true
+        description: Image version (optional)
+        required: false
 
 jobs:
   push-app-image:
@@ -29,5 +29,5 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: 'Build Inventory Image'
-        run: scripts/release-ghcr.sh ${{github.event.inputs.version}}
+        run: bash ./scripts/release-ghcr.sh ${{github.event.inputs.version}}
 
