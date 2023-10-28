@@ -36,7 +36,7 @@
     "experimentalDecorators": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "~/*": [
+      "~api/*": [
         "src/*"
       ]
     }

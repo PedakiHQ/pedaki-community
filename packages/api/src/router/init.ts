@@ -1,6 +1,6 @@
 import { initTRPC } from '@trpc/server';
-import { env } from '~/env';
-import type { Context } from '~/router/context';
+import { env } from '~api/env';
+import type { Context } from '~api/router/context';
 import superjson from 'superjson';
 
 export const t = initTRPC.context<Context>().create({

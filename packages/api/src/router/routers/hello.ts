@@ -1,4 +1,4 @@
-import { procedure, router } from '~/router/trpc.ts';
+import { procedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
 export const helloRouter = router({

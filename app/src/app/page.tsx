@@ -6,7 +6,7 @@ function IndexPage() {
   const hello = api.hello.hello.useQuery(
     { text: 'client' },
     {
-      refetchInterval: 500,
+      refetchInterval: 1000,
     },
   );
   if (!hello.data) {

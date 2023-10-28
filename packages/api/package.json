@@ -15,15 +15,13 @@
   },
   "homepage": "https://www.pedaki.fr",
   "scripts": {
-    "build": "tsup",
-    "build:watch": "tsup --watch",
     "lint": "eslint . --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit --declaration"
   },
   "publishConfig": {
-    "directory": "dist"
+    "directory": "src"
   },
   "keywords": [],
   "author": "pedaki",

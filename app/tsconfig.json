@@ -38,6 +38,9 @@
     "paths": {
       "~/*": [
         "src/*"
+      ],
+      "~api/*": [
+        "../packages/api/src/*"
       ]
     },
     "plugins": [
