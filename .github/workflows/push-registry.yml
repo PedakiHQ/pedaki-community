@@ -30,4 +30,6 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: bash ./scripts/release-ghcr.sh ${{github.event.inputs.version}}
+        env:
+          IMAGE_NAME: ghcr.io/pedakihq/pedaki
 
