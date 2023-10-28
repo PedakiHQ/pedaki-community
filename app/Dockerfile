@@ -15,38 +15,34 @@ COPY .npmrc ./
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 COPY app/package.json ./app/
+COPY packages/api/package.json ./packages/api/
 
 RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community
 
 COPY app ./app
+COPY packages/api ./packages/api
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN pnpm build --filter app
 
-# TODO: add prisma
-# # Copy node_modules/.prisma to a tmp folder
-# RUN mkdir -p tmp
-# RUN cp -r node_modules/.prisma tmp/.prisma
-
-# Delete node_modules and reinstall only production dependencies
-RUN npx rimraf --glob ./**/node_modules
-# TODO: remove no-frozen-lockfile
-RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --production --filter @pedaki/community
-
-# TODO: add prisma
-# # Copy back node_modules/.prisma
-# RUN cp -r tmp/.prisma node_modules
+RUN pnpm build --filter @pedaki/community
 
 FROM base AS runner
 WORKDIR /app
 
-# TODO: nextjs:nodejs user and group
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/app/.next/standalone ./
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder /app/app/.next/standalone/app ./
 COPY --from=builder /app/app/.next/static ./.next/static
+COPY --from=builder /app/app/.next/standalone/node_modules ./node_modules
+
+USER nextjs
 
 ## Load public env vars
 ARG PORT=80

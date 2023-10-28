@@ -1,0 +1,10 @@
+**/.git
+**/.turbo
+**/.next
+**/.idea
+**/.husky
+**/.env
+**/dist
+**/node_modules
+**/.gitignore
+**/Dockerfile
