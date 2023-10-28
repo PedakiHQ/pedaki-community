@@ -1,5 +1,6 @@
 'use client';
-import { api } from '../utils/trpc';
+
+import { api } from '~/server/clients/client.ts';
 
 function IndexPage() {
   const hello = api.hello.useQuery({ text: 'client' });

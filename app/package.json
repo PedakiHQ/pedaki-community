@@ -1,23 +1,30 @@
 {
-  "name": "@pedaki/app",
+  "name": "@pedaki/community",
   "version": "0.0.2",
-  "author": "Clément RICATTE",
+  "license": "CC-BY-NC-SA-4.0",
+  "author": "pedaki",
   "repository": {
     "type": "git",
     "url": "https://github.com/pedakihq/pedaki-community",
     "directory": "app"
   },
+  "bugs": {
+    "url": "https://github.com/pedakihq/pedaki-community/issues"
+  },
   "homepage": "https://www.pedaki.fr",
-  "description": "Pedaki app",
-  "license": "CC-BY-NC-SA-4.0",
-  "private": false,
+  "description": "pedaki app - community version",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "typecheck": "tsc --noEmit --declaration"
   },
   "dependencies": {
+    "@pedaki/design": "^0.4.1",
+    "@t3-oss/env-core": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.43.0",
     "@trpc/next": "^10.43.0",
@@ -30,7 +37,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^18.17",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
@@ -39,5 +46,13 @@
     "postcss": "^8",
     "tailwindcss": "^3",
     "typescript": "^5"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0 <19.0.0",
+    "pnpm": ">=8.0.0",
+    "yarn": "use-pnpm",
+    "npm": "use-pnpm"
+  },
+  "packageManager": "pnpm@8.7.6",
+  "prettier": "@pedaki/prettier-config"
 }

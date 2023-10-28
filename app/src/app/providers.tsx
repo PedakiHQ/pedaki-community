@@ -1,7 +1,7 @@
 'use client';
 
-import { TrpcProvider } from '../server/providers';
 import React from 'react';
+import { TrpcProvider } from '../server/providers';
 
 interface Props {
   children: any; // TODO: type

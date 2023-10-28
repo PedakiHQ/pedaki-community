@@ -1,10 +1,10 @@
 {
-  "name": "pedaki-community",
+  "name": "pedaki",
   "version": "0.0.0",
   "private": true,
   "repository": "https://github.com/PedakiHQ/pedaki-community",
   "homepage": "https://www.pedaki.fr",
-  "author": "Nathan David <me@vahor.fr>",
+  "author": "pedaki",
   "license": "CC-BY-NC-SA-4.0",
   "keywords": [
     "pedaki"
@@ -26,6 +26,8 @@
   "devDependencies": {
     "@changesets/changelog-github": "latest",
     "@changesets/cli": "latest",
+    "@pedaki/eslint-config": "^0.1.1",
+    "@pedaki/prettier-config": "^0.0.5",
     "@types/fs-extra": "^11.0.3",
     "@types/node": "^18.18.4",
     "@vitest/coverage-v8": "^0.34.6",
@@ -41,10 +43,11 @@
     "vitest": "^0.34.6"
   },
   "engines": {
-    "node": ">=18.0.0 <19.0.0",
+    "node": ">=18.17.0 <19.0.0",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.9.2"
+  "packageManager": "pnpm@8.9.2",
+  "prettier": "@pedaki/prettier-config"
 }

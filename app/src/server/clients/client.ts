@@ -2,18 +2,14 @@
 
 import { httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
+import { getUrl } from '~/server/clients/shared';
+import { type AppRouter } from '~/server/router/router';
 import superjson from 'superjson';
-import type { AppRouter } from '../server/routers/_app';
-
-const baseUrl = '';
-
-export const getUrl = () => {
-  return baseUrl + '/api/t';
-};
 
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
+      transformer: superjson,
       queryClientConfig: {
         defaultOptions: {
           queries: {
@@ -46,11 +42,9 @@ export const api = createTRPCNext<AppRouter>({
           },
         },
       },
-      transformer: superjson,
-
       links: [
         loggerLink({
-          enabled: (opts) =>
+          enabled: opts =>
             process.env.NODE_ENV === 'development' ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
