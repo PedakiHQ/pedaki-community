@@ -15,8 +15,8 @@ importers:
         specifier: latest
         version: 2.26.2
       '@pedaki/eslint-config':
-        specifier: ^0.1.1
-        version: 0.1.1(@tanstack/eslint-plugin-query@5.0.5)(@typescript-eslint/eslint-plugin@6.9.0)(@typescript-eslint/parser@6.9.0)(eslint-config-next@14.0.0)(eslint-config-prettier@9.0.0)(eslint-plugin-node@11.1.0)(eslint@8.52.0)
+        specifier: ^0.1.2
+        version: 0.1.2(@tanstack/eslint-plugin-query@5.0.5)(@typescript-eslint/eslint-plugin@6.9.0)(@typescript-eslint/parser@6.9.0)(eslint-config-next@14.0.0)(eslint-config-prettier@9.0.0)(eslint-plugin-node@11.1.0)(eslint@8.52.0)
       '@pedaki/prettier-config':
         specifier: ^0.0.5
         version: 0.0.5(prettier@3.0.3)
@@ -1107,8 +1107,9 @@ packages:
       windy-radix-palette: 2.0.0-beta.7(@radix-ui/colors@3.0.0)(tailwindcss@3.3.5)
     dev: false
 
-  /@pedaki/eslint-config@0.1.1(@tanstack/eslint-plugin-query@5.0.5)(@typescript-eslint/eslint-plugin@6.9.0)(@typescript-eslint/parser@6.9.0)(eslint-config-next@14.0.0)(eslint-config-prettier@9.0.0)(eslint-plugin-node@11.1.0)(eslint@8.52.0):
-    resolution: {integrity: sha512-xzhijuvu5y2jv0mawPRQMisBiD7EvPDlWeWMow7fe7q5G/DNG3Pagl/YijUM9/BvlakDtskBBnC+vTyyToe3tQ==}
+  /@pedaki/eslint-config@0.1.2(@tanstack/eslint-plugin-query@5.0.5)(@typescript-eslint/eslint-plugin@6.9.0)(@typescript-eslint/parser@6.9.0)(eslint-config-next@14.0.0)(eslint-config-prettier@9.0.0)(eslint-plugin-node@11.1.0)(eslint@8.52.0):
+    resolution: {integrity: sha512-k5gC36eMgAWWg1y5ylARHkZzPdkOq1CShbovuFz4zfyI1MIZiCggwfuceXdE83lxJXQ+gleMEyo65gUCVpNt5g==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
       '@tanstack/eslint-plugin-query': ^5.0.0
       '@typescript-eslint/eslint-plugin': 6.9.0

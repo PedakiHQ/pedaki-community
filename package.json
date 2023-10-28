@@ -26,7 +26,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "latest",
     "@changesets/cli": "latest",
-    "@pedaki/eslint-config": "^0.1.1",
+    "@pedaki/eslint-config": "^0.1.2",
     "@pedaki/prettier-config": "^0.0.5",
     "@types/fs-extra": "^11.0.3",
     "@types/node": "^18.18.4",
