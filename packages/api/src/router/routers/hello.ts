@@ -1,7 +1,7 @@
+import { procedure, router } from '~/router/trpc.ts';
 import { z } from 'zod';
-import { procedure, router } from '../router/trpc';
 
-export const appRouter = router({
+export const helloRouter = router({
   hello: procedure
     .input(
       z.object({
@@ -14,5 +14,3 @@ export const appRouter = router({
       };
     }),
 });
-
-export type AppRouter = typeof appRouter;

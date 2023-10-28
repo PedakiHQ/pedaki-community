@@ -3,7 +3,7 @@
 import { httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import { getUrl } from '~/server/clients/shared';
-import { type AppRouter } from '~/server/router/router';
+import { type AppRouter } from '@pedaki/api/router/router';
 import superjson from 'superjson';
 
 export const api = createTRPCNext<AppRouter>({

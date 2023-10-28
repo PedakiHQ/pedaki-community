@@ -1,6 +1,6 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { createContext } from '~/server/router/context.ts';
-import { appRouter } from '~/server/router/router.ts';
+import { createContext } from '@pedaki/api/router/context';
+import { appRouter } from '@pedaki/api/router/router';
 
 // Add back once NextAuth v5 is released
 // export const runtime = 'edge';

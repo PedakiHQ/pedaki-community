@@ -1,9 +1,14 @@
 'use client';
 
-import { api } from '~/server/clients/client.ts';
+import { api } from '~/server/clients/client';
 
 function IndexPage() {
-  const hello = api.hello.useQuery({ text: 'client' });
+  const hello = api.hello.hello.useQuery(
+    { text: 'client' },
+    {
+      refetchInterval: 500,
+    },
+  );
   if (!hello.data) {
     return <div>Loading...</div>;
   }

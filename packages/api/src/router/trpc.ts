@@ -1,4 +1,4 @@
-import { t } from '~/server/router/init.ts';
+import { t } from '~/router/init.ts';
 
 export const router = t.router;
 

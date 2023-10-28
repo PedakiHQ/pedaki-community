@@ -2,7 +2,7 @@
 
 import { httpBatchLink, loggerLink } from '@trpc/client';
 import { experimental_createTRPCNextAppDirServer } from '@trpc/next/app-dir/server';
-import type { AppRouter } from '~/server/router/router.ts';
+import type { AppRouter } from '@pedaki/api/router/router';
 import { cookies } from 'next/headers.js';
 import superjson from 'superjson';
 import { getUrl } from './shared';
