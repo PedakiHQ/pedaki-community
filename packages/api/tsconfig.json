@@ -36,22 +36,13 @@
     "experimentalDecorators": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "~/*": [
-        "src/*"
-      ],
       "~api/*": [
-        "../packages/api/src/*"
+        "src/*"
       ]
-    },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    }
   },
   "include": [
-    "src",
-    ".next/types/**/*.ts"
+    "src"
   ],
   "exclude": [
     "../node_modules",

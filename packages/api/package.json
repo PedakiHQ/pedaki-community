@@ -1,55 +1,47 @@
 {
-  "name": "@pedaki/community",
-  "version": "0.0.2",
-  "license": "CC-BY-NC-SA-4.0",
-  "author": "pedaki",
+  "name": "@pedaki/api",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/pedakihq/pedaki-community",
-    "directory": "app"
+    "directory": "packages/api"
   },
   "bugs": {
     "url": "https://github.com/pedakihq/pedaki-community/issues"
   },
   "homepage": "https://www.pedaki.fr",
-  "description": "pedaki app - community version",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit --declaration"
   },
+  "publishConfig": {
+    "directory": "src"
+  },
+  "keywords": [],
+  "author": "pedaki",
+  "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
-    "@pedaki/api": "workspace:*",
-    "@pedaki/design": "^0.4.1",
     "@t3-oss/env-core": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.43.0",
     "@trpc/next": "^10.43.0",
     "@trpc/react-query": "^10.43.0",
     "@trpc/server": "^10.43.0",
-    "next": "14.0.0",
-    "react": "^18",
-    "react-dom": "^18",
     "superjson": "^2.2.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^18.17",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.0",
-    "postcss": "^8",
-    "tailwindcss": "^3",
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18.0.0 ",
+    "node": ">=18.0.0",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"

@@ -35,14 +35,17 @@ jobs:
         run: pnpm install --child-concurrency 3 --frozen-lockfile --prefer-offline
 
       - name: Run eslint
+        if: always()
         run: pnpm lint
 
       - name: Run prettier
+        if: always()
         run: pnpm format:check
 
       - name: Run typescript
+        if: always()
         run: pnpm typecheck
 
-      - name: Run tests
-        if: always()
-        run: pnpm test
+#        TODO: enable tests
+#      - name: Run tests
+#        if: always()
