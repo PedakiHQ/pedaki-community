@@ -12,7 +12,7 @@ on:
 jobs:
   generate-changeset:
     runs-on: ubuntu-latest
-    if: github.actor == 'renovate[bot]' && github.repository == 'pedakihq/pedaki'
+    if: github.actor == 'renovate[bot]'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
