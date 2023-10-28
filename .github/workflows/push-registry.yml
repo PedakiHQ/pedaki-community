@@ -6,11 +6,18 @@ on:
       version:
         type: string
         description: Image version
+        required: true
 
 jobs:
   push-app-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Enforce permission requirement
+        id: check-permissions
+        uses: prince-chrismc/check-actor-permissions-action@v3
+        with:
+          permission: write
+
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
 
@@ -22,8 +29,5 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: 'Build Inventory Image'
-        run: |
-          docker build . --tag ghcr.io/pedakihq/pedaki:latest -f ./app/Dockerfile
-          docker push ghcr.io/pedakihq/pedaki:latest
-          docker tag ghcr.io/pedakihq/pedaki:latest ghcr.io/pedakihq/pedaki:${{ github.event.inputs.version }}
-          docker push ghcr.io/pedakihq/pedaki:${{ github.event.inputs.version }}
+        run: scripts/release-ghcr.sh ${{github.event.inputs.version}}
+

@@ -38,15 +38,13 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Create Release Pull Request or Publish
+      - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
-          version: node .github/changeset-version.mjs
-          publish: pnpm exec changeset publish
+          publish: scripts/release-ghcr.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_ENV: production

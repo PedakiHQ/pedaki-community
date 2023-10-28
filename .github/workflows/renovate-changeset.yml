@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/renovate-changeset.yml'
       - '**/package.json'
+      - '**/.nvrmc'
 
 jobs:
   generate-changeset:

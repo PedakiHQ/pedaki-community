@@ -7,10 +7,10 @@
     }
   ],
   "commit": false,
-  "fixed": [],
+  "fixed": [["pedaki", "@pedaki/api", "@pedaki/community"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["docs"]
+  "ignore": []
 }
