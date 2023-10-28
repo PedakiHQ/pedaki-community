@@ -1,6 +1,6 @@
 'use client';
 
-import { TrpcProvider } from '~/server/providers';
+import { TrpcProvider } from '~/server/provider.tsx';
 import React from 'react';
 
 interface Props {

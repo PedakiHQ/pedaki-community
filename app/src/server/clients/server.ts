@@ -5,7 +5,7 @@ import { httpBatchLink, loggerLink } from '@trpc/client';
 import { experimental_createTRPCNextAppDirServer } from '@trpc/next/app-dir/server';
 import { cookies } from 'next/headers.js';
 import superjson from 'superjson';
-import { getUrl } from './shared';
+import { getUrl } from './shared.ts';
 
 export const api: ReturnType<typeof experimental_createTRPCNextAppDirServer<AppRouter>> =
   experimental_createTRPCNextAppDirServer<AppRouter>({

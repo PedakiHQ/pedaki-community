@@ -1,7 +1,7 @@
 'use client';
 
 import { api } from '~/server/clients/client';
-import React from 'react';
+import type React from 'react';
 
 export const TrpcProvider = api.withTRPC(
   (props: React.PropsWithChildren) => props.children,
