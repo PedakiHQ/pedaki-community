@@ -7,7 +7,7 @@
     }
   ],
   "commit": false,
-  "fixed": [["pedaki", "@pedaki/api", "@pedaki/community"]],
+  "fixed": [["pedaki", "@pedaki/community", "@pedaki/api"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
