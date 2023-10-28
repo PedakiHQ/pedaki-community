@@ -9,6 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
+    if: github.repository == 'pedakihq/pedaki-community'
     name: Release
     runs-on: ubuntu-latest
     env:
