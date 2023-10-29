@@ -1,4 +1,4 @@
-name: Deploy Images to GHCR
+name: Deploy Images to GHCR (community)
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: 'Build Inventory Image'
+      - name: 'Build Image and push to GHCR'
         run: bash ./scripts/release-ghcr.sh ${{github.event.inputs.version}}
         env:
           IMAGE_NAME: ghcr.io/pedakihq/pedaki
