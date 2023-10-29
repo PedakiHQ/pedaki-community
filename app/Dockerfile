@@ -24,6 +24,7 @@ COPY packages/api ./packages/api
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV SKIP_ENV_VALIDATION 1
 
 RUN pnpm build --filter @pedaki/community
 

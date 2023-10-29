@@ -44,8 +44,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "turbo run format",
-      "turbo run lint",
-      "git add"
+      "turbo run lint"
     ]
   },
   "engines": {

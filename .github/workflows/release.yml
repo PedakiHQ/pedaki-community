@@ -45,6 +45,7 @@ jobs:
         with:
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
+          publish: pnpm changeset tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production

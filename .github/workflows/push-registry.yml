@@ -7,6 +7,9 @@ on:
         type: string
         description: Image version (optional)
         required: false
+  push:
+    tags:
+      - v*
 
 jobs:
   push-app-image:
