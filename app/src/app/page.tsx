@@ -25,6 +25,7 @@ export default function Bidule() {
         <IndexPage />
       <p>{process.env.NEXT_PUBLIC_TESTVALUE}</p>
         <p>bidule</p>
+        <p>rebidule</p>
     </main>
   );
 }
