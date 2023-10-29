@@ -1,16 +1,9 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.3.1/schema.json",
-  "changelog": [
-    "@changesets/changelog-github",
-    {
-      "repo": "pedakihq/pedaki-community"
-    }
-  ],
+  "changelog": false,
   "commit": false,
   "fixed": [["@pedaki/community", "@pedaki/api"]],
-  "linked": [],
   "access": "public",
   "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": []
+  "updateInternalDependencies": "patch"
 }
