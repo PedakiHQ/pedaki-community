@@ -43,8 +43,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "turbo run format",
-      "turbo run lint"
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "engines": {

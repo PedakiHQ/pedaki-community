@@ -8,7 +8,17 @@ const nextConfig = {
   transpilePackages: ['@pedaki/api'],
 
   images: {
-    domains: ["static.pedaki.fr"],
+    domains: ['static.pedaki.fr'],
+  },
+
+  eslint: {
+    // Already checked in ci
+    ignoreDuringBuilds: true,
+  },
+
+  typescript: {
+    // Already checked in ci
+    ignoreBuildErrors: true,
   },
 };
 
