@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '~/env.ts';
 import { api } from '~/server/clients/client';
 
 function IndexPage() {
@@ -22,10 +23,10 @@ function IndexPage() {
 export default function Bidule() {
   return (
     <main className="yeye flex min-h-screen flex-col items-center justify-between p-24">
-        <IndexPage />
-      <p>{process.env.NEXT_PUBLIC_TESTVALUE}</p>
-        <p>bidule</p>
-        <p>rebidule</p>
+      <IndexPage />
+      <p>{env.NEXT_PUBLIC_TESTVALUE}</p>
+      <p>bidule</p>
+      <p>rebidule</p>
     </main>
   );
 }
