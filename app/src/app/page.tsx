@@ -10,7 +10,7 @@ function IndexPage() {
     },
   );
   if (!hello.data) {
-    return <div>Loading...</div>;
+    return <div>Loadddding...</div>;
   }
   return (
     <div>
@@ -19,11 +19,12 @@ function IndexPage() {
   );
 }
 
-export default function Home() {
+export default function Bidule() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="yeye flex min-h-screen flex-col items-center justify-between p-24">
+        <IndexPage />
       <p>{process.env.NEXT_PUBLIC_TESTVALUE}</p>
-      <IndexPage />
+        <p>bidule</p>
     </main>
   );
 }
