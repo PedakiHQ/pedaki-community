@@ -1,6 +1,6 @@
 {
   "name": "@pedaki/community",
-  "version": "0.0.0",
+  "version": "0.4.2-beta.0",
   "license": "CC-BY-NC-SA-4.0",
   "author": "pedaki",
   "repository": {
@@ -23,8 +23,8 @@
     "typecheck": "tsc --noEmit --declaration"
   },
   "dependencies": {
-    "@pedaki/api": "workspace:*",
-    "@pedaki/design": "^0.4.1",
+    "@pedaki/api": "0.4.2-beta.0",
+    "@pedaki/design": "0.4.2-beta.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.43.0",

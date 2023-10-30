@@ -1,6 +1,6 @@
 {
   "name": "pedaki",
-  "version": "0.0.0",
+  "version": "0.4.2-beta.0",
   "private": true,
   "repository": "https://github.com/PedakiHQ/pedaki-community",
   "homepage": "https://www.pedaki.fr",
@@ -28,8 +28,8 @@
     "preprepare-release": "pnpm check"
   },
   "devDependencies": {
-    "@pedaki/eslint-config": "^0.1.2",
-    "@pedaki/prettier-config": "^0.0.5",
+    "@pedaki/eslint-config": "0.4.2-beta.0",
+    "@pedaki/prettier-config": "0.4.2-beta.0",
     "@types/fs-extra": "^11.0.3",
     "@types/node": "^18.18.4",
     "@vitest/coverage-v8": "^0.34.6",
