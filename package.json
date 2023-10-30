@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@pedaki/eslint-config": "0.4.2-beta.0",
-    "@pedaki/prettier-config": "0.4.2-beta.0",
+    "@pedaki/prettier-config": "0.4.2-beta.6",
     "@types/fs-extra": "^11.0.3",
     "@types/node": "^18.18.4",
     "@vitest/coverage-v8": "^0.34.6",

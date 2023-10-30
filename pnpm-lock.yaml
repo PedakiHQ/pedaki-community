@@ -15,8 +15,8 @@ importers:
         specifier: 0.4.2-beta.0
         version: 0.4.2-beta.0(@tanstack/eslint-plugin-query@5.0.5)(@typescript-eslint/eslint-plugin@6.9.0)(@typescript-eslint/parser@6.9.0)(eslint-config-next@14.0.0)(eslint-config-prettier@9.0.0)(eslint-plugin-node@11.1.0)(eslint@8.52.0)
       '@pedaki/prettier-config':
-        specifier: 0.4.2-beta.0
-        version: 0.4.2-beta.0(prettier@3.0.3)
+        specifier: 0.4.2-beta.6
+        version: 0.4.2-beta.6(prettier@3.0.3)
       '@types/fs-extra':
         specifier: ^11.0.3
         version: 11.0.3
@@ -957,8 +957,8 @@ packages:
       eslint-plugin-node: 11.1.0(eslint@8.52.0)
     dev: true
 
-  /@pedaki/prettier-config@0.4.2-beta.0(prettier@3.0.3):
-    resolution: {integrity: sha512-7nRz8dhIQNCPHKXjo8NtvV6tzuQdQjpWajPacJSrBJSbKgV5B66VwRh0Yz56vApg0F3rQ2/jfoxJ8Jty21mAig==}
+  /@pedaki/prettier-config@0.4.2-beta.6(prettier@3.0.3):
+    resolution: {integrity: sha512-Du1Urpnfyy2cHq6mv5QUTgzyOBr3R9nkJi6fDUAuv0tWd7mzJPhENRwiRObwjyiTUnmzQoOy0VU8PW3ZqArDVw==}
     peerDependencies:
       prettier: ^3.0.2
     dependencies:
