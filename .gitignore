@@ -8,6 +8,9 @@ yalc.lock
 dist
 .eslintcache
 coverage
-.env.*
-!*.env.test.example
-!*.env.example
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.loc

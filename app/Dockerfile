@@ -5,6 +5,8 @@ RUN apt-get update -y && apt-get install -y openssl ca-certificates && apt-get c
 FROM base AS builder
 WORKDIR /app
 
+RUN apt-get update -y && apt-get install -y bash && apt-get clean
+
 # Install corepack pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -36,26 +38,25 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/app/public ./public
 
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV SKIP_SERVER_ENV_CHECK=true
+
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-COPY --from=builder /app/app/.next/standalone/app ./
-COPY --from=builder /app/app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/app/.next/standalone/app ./
+COPY --from=builder --chown=nextjs:nodejs /app/app/.next/static ./.next/static
 COPY --from=builder /app/app/.next/standalone/node_modules ./node_modules
+
+COPY app/entrypoint.sh .
+COPY app/.env.production .
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
 
 USER nextjs
 
-## Load public env vars
-ARG PORT=80
-ARG NEXT_PUBLIC_TESTVALUE
-
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV PORT=$PORT
-
-ENV NODE_ENV=production
-ENV SKIP_SERVER_ENV_CHECK=true
-ENV NEXT_PUBLIC_TESTVALUE=$NEXT_PUBLIC_TESTVALUE
-
+ENV PORT=80
 EXPOSE $PORT
 
 CMD ["node", "server.js"]
