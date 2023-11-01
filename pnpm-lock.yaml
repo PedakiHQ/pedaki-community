@@ -69,7 +69,7 @@ importers:
   app:
     dependencies:
       '@pedaki/api':
-        specifier: 0.4.2-beta.6
+        specifier: workspace:*
         version: link:../packages/api/src
       '@pedaki/design':
         specifier: 0.4.2-beta.6
