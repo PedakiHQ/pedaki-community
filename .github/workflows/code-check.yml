@@ -50,6 +50,9 @@ jobs:
         if: always()
         run: pnpm typecheck
 
-#        TODO: enable tests
-#      - name: Run tests
-#        if: always()
+      # TODO: enable tests
+      # - name: Run tests
+      #   if: always()
+
+      - name: Run build
+        run: pnpm build
