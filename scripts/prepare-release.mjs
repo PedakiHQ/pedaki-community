@@ -87,8 +87,8 @@ const preReleaseSuffix = (useOld, preRelease) => {
 
 const updateDependencies = (dependencies, newVersion) => {
     if (!dependencies) return;
-    for (const packageName of Object.keys(dependencies)) {
-        if (packageName.startsWith('@pedaki')) {
+    for (const [packageName, version] of Object.entries(dependencies)) {
+        if (packageName.startsWith('@pedaki') && !version.startsWith('workspace:')) {
             dependencies[packageName] = newVersion;
         }
     }
