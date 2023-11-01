@@ -10,8 +10,6 @@ interface Props {
 }
 
 export const Providers = ({ children, locale }: Props) => {
-  console.log('provider locale', locale);
-
   return (
     <>
       <TrpcProvider>
