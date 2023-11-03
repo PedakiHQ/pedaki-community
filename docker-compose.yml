@@ -1,7 +1,7 @@
 name: pedaki
 services:
   db:
-    image: mysql:8.0.35
+    image: mysql:8.2.0
     restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: pedaki
