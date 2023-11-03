@@ -16,36 +16,36 @@
     "test:coverage": "NODE_ENV=test dotenv -e .env.test -c -- turbo run test:coverage",
     "test:watch": "NODE_ENV=test dotenv -e .env.test -c -- turbo run test:watch",
     "dev": "dotenv -- turbo run dev",
-    "lint": "SKIP_ENV_VALIDATION=true && turbo run lint",
+    "lint": "cross-env SKIP_ENV_VALIDATION=true && turbo run lint",
     "format:check": "turbo run format:check",
     "typecheck": "turbo run typecheck",
     "format": "turbo run format",
     "clean": "turbo run clean && rimraf node_modules",
-    "check": "SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check",
-    "_check": "SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check test",
+    "check": "cross-env SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check",
+    "_check": "cross-env SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check test",
     "prepare": "husky install",
     "prepare-release": "node --no-warnings=ExperimentalWarning scripts/prepare-release.mjs",
     "preprepare-release": "pnpm check"
   },
   "devDependencies": {
+    "@manypkg/get-packages": "^2.2.0",
     "@pedaki/eslint-config": "0.4.2-beta.6",
     "@pedaki/prettier-config": "0.4.2-beta.6",
     "@types/fs-extra": "^11.0.3",
     "@types/node": "^18.18.4",
     "@vitest/coverage-v8": "^0.34.6",
+    "chalk": "^5.3.0",
     "dotenv-cli": "latest",
     "fs-extra": "^11.1.1",
     "husky": "^8.0.3",
-    "chalk": "^5.3.0",
-    "@manypkg/get-packages": "^2.2.0",
-    "rimraf": "latest",
-    "lint-staged": "^15.0.2",
     "inquirer": "^9.2.11",
+    "lint-staged": "^15.0.2",
     "open": "^9.1.0",
-    "turbo": "^1.10.16",
     "ora": "^7.0.1",
-    "typescript": "^5.2.2",
+    "rimraf": "latest",
     "throat": "^6.0.2",
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2",
     "vitest": "^0.34.6"
   },
   "lint-staged": {
@@ -61,5 +61,8 @@
     "npm": "use-pnpm"
   },
   "packageManager": "pnpm@8.10.2",
-  "prettier": "@pedaki/prettier-config"
+  "prettier": "@pedaki/prettier-config",
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
 }
