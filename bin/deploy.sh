@@ -21,7 +21,7 @@ echo "What version do you want to install ? (default: 'latest')"
 echo "You can find the list of versions here: https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions"
 read -r PEDAKI_APP_VERSION
 if [[ -z "$PEDAKI_APP_TAG" ]]; then
-  $PEDAKI_APP_TAG="latest"
+  PEDAKI_APP_TAG="latest"
   echo "Using default version: $PEDAKI_APP_TAG"
 else
   echo "Using provided version: $PEDAKI_APP_TAG"
@@ -31,7 +31,7 @@ fi
 echo "What domain do you want to use ? (default: 'localhost')"
 read -r DOMAIN
 if [[ -z "$DOMAIN" ]]; then
-  $DOMAIN="localhost"
+  DOMAIN="localhost"
   echo "Using default domain: $DOMAIN"
 else
   echo "Using provided domain: $DOMAIN"
@@ -42,11 +42,11 @@ sudo echo ""
 
 # Update apt
 echo "Updating apt cache..."
-sudo apt-get update -qq
+sudo apt-get -qq update
 
 # Clone app
 echo "Installing pedaki app from github"
-sudo apt-get install -y git -qq
+sudo apt-get install -y -qq git apt-utils gettext-base
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
@@ -64,7 +64,7 @@ cd ..
 
 # Add caddyfile (https://caddyserver.com/docs/automatic-https)
 # TODO: use production letsencrypt
-$TLS_BLOCK="acme_ca https://acme-staging-v02.api.letsencrypt.org/directory"
+TLS_BLOCK="acme_ca https://acme-staging-v02.api.letsencrypt.org/directory"
 rm -f Caddyfile
 envsubst > Caddyfile <<EOF
 {
@@ -84,7 +84,7 @@ EOF
 
 # Setup docker (https://docs.docker.com/engine/install/ubuntu/)
 echo "Installing docker..."
-sudo apt-get install -y ca-certificates curl gnupg -qq
+sudo apt-get install -y -qq ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -92,8 +92,8 @@ echo \
   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io -qq
+sudo apt-get -qq update
+sudo apt-get install -y -qq docker-ce docker-ce-cli containerd.io
 
 # Start docker
 echo "Configuring Docker Compose...."
