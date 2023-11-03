@@ -1,3 +1,4 @@
+import { env } from '~api/env.ts';
 import { procedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
@@ -10,7 +11,7 @@ export const helloRouter = router({
     )
     .query(opts => {
       return {
-        greeting: `hello ${opts.input.text}`,
+        greeting: `${env.SECRET_PRIVATE_VARIABLE} ${opts.input.text}`,
       };
     }),
 });
