@@ -56,7 +56,7 @@ ENTRYPOINT ["./entrypoint.sh"]
 
 USER nextjs
 
-ENV PORT=80
+ENV PORT=8000
 EXPOSE $PORT
 
 CMD ["node", "server.js"]
