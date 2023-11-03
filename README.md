@@ -10,6 +10,13 @@
 
 # Demo
 
+# Install community version
+
+TODO message
+```shell
+bash $(curl -s https://raw.githubusercontent.com/PedakiHQ/pedaki/main/bin/deploy.sh)
+```
+
 # Technologies
 
 - [Next.js](https://nextjs.org/) - Framework React
