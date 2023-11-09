@@ -15,7 +15,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
   exit 1
 fi
 
-PEDAKI_APP_VERSION=$1
+PEDAKI_APP_VERSION=$0
 if [[ -z "$PEDAKI_APP_VERSION" ]]; then
   # Ask for the version
   echo "What version do you want to install ? (default: 'latest')"
@@ -31,7 +31,7 @@ else
   echo "(parameter) Using provided version: $PEDAKI_APP_TAG"
 fi
 
-DOMAIN=$2
+DOMAIN=$1
 if [[ -z "$DOMAIN" ]]; then
   # Ask for the domain
   echo "What domain do you want to use ? (default: 'localhost')"
