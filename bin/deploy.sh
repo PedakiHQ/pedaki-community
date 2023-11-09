@@ -15,26 +15,35 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
   exit 1
 fi
 
-
-# Ask for the version
-echo "What version do you want to install ? (default: 'latest')"
-echo "You can find the list of versions here: https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions"
-read -r PEDAKI_APP_VERSION
-if [[ -z "$PEDAKI_APP_TAG" ]]; then
-  PEDAKI_APP_TAG="latest"
-  echo "Using default version: $PEDAKI_APP_TAG"
+PEDAKI_APP_VERSION=$1
+if [[ -z "$PEDAKI_APP_VERSION" ]]; then
+  # Ask for the version
+  echo "What version do you want to install ? (default: 'latest')"
+  echo "You can find the list of versions here: https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions"
+  read -r PEDAKI_APP_VERSION
+  if [[ -z "$PEDAKI_APP_TAG" ]]; then
+    PEDAKI_APP_TAG="latest"
+    echo "Using default version: $PEDAKI_APP_TAG"
+  else
+    echo "Using provided version: $PEDAKI_APP_TAG"
+  fi
 else
-  echo "Using provided version: $PEDAKI_APP_TAG"
+  echo "(parameter) Using provided version: $PEDAKI_APP_TAG"
 fi
 
-# Ask for the domain
-echo "What domain do you want to use ? (default: 'localhost')"
-read -r DOMAIN
+DOMAIN=$2
 if [[ -z "$DOMAIN" ]]; then
-  DOMAIN="localhost"
-  echo "Using default domain: $DOMAIN"
+  # Ask for the domain
+  echo "What domain do you want to use ? (default: 'localhost')"
+  read -r DOMAIN
+  if [[ -z "$DOMAIN" ]]; then
+    DOMAIN="localhost"
+    echo "Using default domain: $DOMAIN"
+  else
+    echo "Using provided domain: $DOMAIN"
+  fi
 else
-  echo "Using provided domain: $DOMAIN"
+  echo "(parameter) Using provided domain: $DOMAIN"
 fi
 
 echo "Please enter your sudo password now:"
@@ -70,7 +79,7 @@ envsubst > Caddyfile <<EOF
 {
 $TLS_BLOCK
 }
-$DOMAIN, :80, :443 {
+https://$DOMAIN, :80, :443 {
 reverse_proxy http://web:8000
 }
 EOF
