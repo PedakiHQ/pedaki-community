@@ -15,8 +15,8 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
   exit 1
 fi
 
-PEDAKI_APP_VERSION=$0
-if [[ -z "$PEDAKI_APP_VERSION" ]]; then
+PEDAKI_APP_TAG=$1
+if [[ -z "$PEDAKI_APP_TAG" ]]; then
   # Ask for the version
   echo "What version do you want to install ? (default: 'latest')"
   echo "You can find the list of versions here: https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions"
@@ -31,7 +31,7 @@ else
   echo "(parameter) Using provided version: $PEDAKI_APP_TAG"
 fi
 
-DOMAIN=$1
+DOMAIN=$2
 if [[ -z "$DOMAIN" ]]; then
   # Ask for the domain
   echo "What domain do you want to use ? (default: 'localhost')"
@@ -120,5 +120,16 @@ sudo -E docker compose -f docker-compose.yml up -d
 
 echo "Waiting for the app to be ready..."
 echo "This can take a few minutes..."
-bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost/_health)" != "200" ]]; do sleep 5; done'
+timeout=30
+start_time=$(date +%s)
+# TODO: call /_health endpoint
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost)" != "200" ]]; do
+    current_time=$(date +%s)
+    elapsed_time=$((current_time - start_time))
+    if [[ $elapsed_time -ge $timeout ]]; then
+        echo "Timeout reached. Exiting..."
+        break
+    fi
+    sleep 5
+done
 echo "App is ready!"
