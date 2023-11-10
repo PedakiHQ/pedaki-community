@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+
+  relationMode = "prisma"
+}
+
+// Necessary for Next auth
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            String  @map("user_id") @db.VarChar(25)
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model User {
+  id            String    @id @default(cuid()) @db.VarChar(25)
+  name          String
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  password      String?
+  blocked       Boolean   @default(false)
+
+  image String @default("") @db.VarChar(1000)
+
+  accounts Account[]
+  tokens   Token[]
+
+  @@index([id])
+  @@map("users")
+}
+
+model Token {
+  id Int @id @default(autoincrement())
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+  type        TokenType
+  hashedToken String    @map("hashed_token")
+  expiresAt   DateTime  @map("expires_at")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @map("user_id") @db.VarChar(25)
+
+  @@unique([type, hashedToken], name: "unique_token")
+  @@index([userId])
+  @@map("tokens")
+}
+
+enum TokenType {
+  CONFIRM_EMAIL
+}

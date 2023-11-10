@@ -35,7 +35,9 @@
     "@types/node": "^18.18.9",
     "@vitest/coverage-v8": "^0.34.6",
     "chalk": "^5.3.0",
+    "cpy": "^11.0.0",
     "dotenv-cli": "latest",
+    "execa": "^8.0.1",
     "fs-extra": "^11.1.1",
     "husky": "^8.0.3",
     "inquirer": "^9.2.12",
@@ -44,6 +46,7 @@
     "ora": "^7.0.1",
     "rimraf": "latest",
     "throat": "^6.0.2",
+    "tsup": "^7.2.0",
     "turbo": "^1.10.16",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"

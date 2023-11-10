@@ -1,0 +1,33 @@
+{
+  "name": "@pedaki/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./index.js",
+  "types": "./index.d.ts",
+  "publishConfig": {
+    "directory": "dist"
+  },
+  "scripts": {
+    "build": "prisma generate && tsup",
+    "lint": "eslint . --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.5.2",
+    "prisma-field-encryption": "^1.5.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.5.2"
+  },
+  "engines": {
+    "node": ">=18.0.0 <19.0.0",
+    "pnpm": ">=8.0.0",
+    "yarn": "use-pnpm",
+    "npm": "use-pnpm"
+  },
+  "packageManager": "pnpm@8.7.6",
+  "prettier": "@pedaki/prettier-config"
+}
