@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@pedaki/design/ui/form';
-import { IconGoogle, IconSpinner } from '@pedaki/design/ui/icons';
+import { IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
 import { api } from '~/server/clients/client';
 import { signIn } from 'next-auth/react';
@@ -55,10 +55,7 @@ export function SignupForm() {
   });
   const { isSubmitting } = form.formState;
 
-  const [providerLoading, setProviderLoading] = React.useState(false);
   const signupMutation = api.auth.signup.useMutation();
-
-  const isLoading = isSubmitting || providerLoading;
 
   async function onSubmit(values: LoginFormValues) {
     await wrapWithLoading(
@@ -99,15 +96,6 @@ export function SignupForm() {
       });
   }
 
-  async function providerSignin(provider: string) {
-    try {
-      setProviderLoading(true);
-      await signIn(provider, { callbackUrl: '/' });
-    } finally {
-      setProviderLoading(false);
-    }
-  }
-
   return (
     <div className="grid gap-6">
       <Form {...form}>
@@ -123,7 +111,7 @@ export function SignupForm() {
                     placeholder="John"
                     type="text"
                     autoComplete="name"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -144,7 +132,7 @@ export function SignupForm() {
                     autoCapitalize="none"
                     autoComplete="email"
                     autoCorrect="off"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -163,7 +151,7 @@ export function SignupForm() {
                     placeholder="********"
                     type="password"
                     autoComplete="current-password"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -182,7 +170,7 @@ export function SignupForm() {
                     placeholder="********"
                     type="password"
                     autoComplete="current-password"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -192,36 +180,12 @@ export function SignupForm() {
           />
 
           <div className="grid gap-2">
-            <Button disabled={isLoading} className="mt-2">
-              {isLoading && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
+            <Button disabled={isSubmitting} className="mt-2">
+              {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
               S&apos;inscrire
             </Button>
           </div>
         </form>
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-primary px-2 text-secondary">OU</span>
-          </div>
-        </div>
-        <div className="flex flex-row space-x-2">
-          <Button
-            variant="outline"
-            type="button"
-            disabled={isLoading}
-            onClick={() => providerSignin('google')}
-            className="flex-1"
-          >
-            {isLoading ? (
-              <IconSpinner className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <IconGoogle className="mr-2 h-4 w-4" />
-            )}{' '}
-            Google
-          </Button>
-        </div>
         <div className="text-center text-sm">
           <span className="text-secondary">Vous avez déjà un compte ?</span>{' '}
           <Link href="/auth/login" className="text-orange">

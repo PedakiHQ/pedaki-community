@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
+import '@pedaki/design/tailwind/index.css';
 import { Providers } from '~/app/[locale]/providers';
 import { getI18n, getStaticParams } from '~/locales/server';
 
