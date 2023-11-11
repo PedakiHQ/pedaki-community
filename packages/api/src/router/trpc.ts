@@ -1,5 +1,6 @@
-import { t } from '~api/router/init.ts';
+import { t } from './init.ts';
+import { isLogged } from './middleware/session.middleware.ts';
 
 export const router = t.router;
-
-export const procedure = t.procedure;
+export const publicProcedure = t.procedure;
+export const privateProcedure = t.procedure.use(isLogged);

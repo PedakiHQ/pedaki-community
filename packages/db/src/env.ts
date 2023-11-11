@@ -6,7 +6,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
     DATABASE_URL: z.string().url(),
-    PRISMA_ENCRYPTION_KEY: z.string().min(1).default('secret'),
+    PRISMA_ENCRYPTION_KEY: z.string().min(1),
   },
   runtimeEnv: process.env,
 });

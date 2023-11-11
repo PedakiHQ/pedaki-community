@@ -2,14 +2,14 @@ import type { DefaultSession, NextAuthOptions } from 'next-auth';
 import { env } from './env';
 
 declare module 'next-auth' {
-  interface Session extends Omit<DefaultSession, 'user'> {
+  interface Session {
     user: {
       image: string;
       name: string;
       email: string;
       id: string;
       emailVerified: boolean;
-    };
+    } & DefaultSession['user'];
   }
 
   // Database results (also the output type of the `authorize`, `profile` callback)

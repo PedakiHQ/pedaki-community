@@ -1,7 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Context {}
+import { auth } from '@pedaki/auth/server.ts';
+import type { NextRequest } from 'next/server';
 
-// TODO: any
-export const createContext = (opts?: any): Context => {
-  return {};
+export interface Context {
+  session: Awaited<ReturnType<typeof auth>>;
+}
+
+export const createContext = async ({ req }: { req: NextRequest }): Promise<Context> => {
+  const session = await auth();
+
+  return {
+    session,
+  };
 };
