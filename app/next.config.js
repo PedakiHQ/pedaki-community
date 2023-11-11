@@ -5,7 +5,7 @@ const nextConfig = {
   poweredByHeader: false,
   output: 'standalone',
 
-  transpilePackages: ['@pedaki/api'],
+  transpilePackages: ['@pedaki/api', '@pedaki/auth'],
 
   images: {
     domains: ['static.pedaki.fr'],

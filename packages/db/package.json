@@ -5,15 +5,24 @@
   "type": "module",
   "exports": "./index.js",
   "types": "./index.d.ts",
-  "publishConfig": {
-    "directory": "dist"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pedakihq/pedaki-community",
+    "directory": "packages/db"
   },
+  "bugs": {
+    "url": "https://github.com/pedakihq/pedaki-community/issues"
+  },
+  "homepage": "https://www.pedaki.fr",
   "scripts": {
-    "build": "prisma generate && tsup",
+    "build": "prisma generate",
     "lint": "eslint . --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "directory": "src"
   },
   "dependencies": {
     "@prisma/client": "^5.5.2",

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@pedaki/api": "workspace:*",
+    "@pedaki/auth": "workspace:*",
     "@pedaki/design": "0.4.2-beta.7",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
