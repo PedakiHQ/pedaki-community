@@ -21,4 +21,5 @@ jobs:
           fetch-depth: 0
 
       - name: Run script
+        timeout-minutes: 3
         run: bash ./bin/deploy.sh latest localhost
