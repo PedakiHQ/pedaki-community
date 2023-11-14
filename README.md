@@ -14,7 +14,7 @@
 
 TODO message
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/PedakiHQ/pedaki-community/main/bin/deploy.sh)
+bash <(curl -s https://raw.githubusercontent.com/PedakiHQ/pedaki-community/main/bin/deploy)
 ```
 
 # Technologies
