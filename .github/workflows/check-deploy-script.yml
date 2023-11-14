@@ -22,4 +22,4 @@ jobs:
 
       - name: Run script
         timeout-minutes: 3
-        run: bash ./bin/deploy.sh latest localhost
+        run: bash ./bin/deploy latest localhost
