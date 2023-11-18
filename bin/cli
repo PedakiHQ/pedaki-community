@@ -4,10 +4,11 @@ set -e # exit on error
 
 # Install pnpm
 echo "Installing nodejs and pnpm..."
-sudo apt-get install -y -qq nodejs npm
-sudo npm install -g pnpm
+sudo apt-get install -y -qq nodejs npm > /dev/null
+sudo npm install -g pnpm > /dev/null
 
 echo "Installing tools dependencies"
+pnpm install -g turbo -s
 pnpm install --filter @pedaki/tools --frozen-lockfile --production --ignore-script -s
 
 echo "Running tools"

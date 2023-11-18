@@ -26,9 +26,9 @@ sudo echo ""
 
 # Update apt
 echo "Updating apt cache..."
-sudo apt-get -qq update
-sudo apt-get install -y -qq git apt-utils gettext-base
-sudo apt-get install -y -qq ca-certificates curl gnupg
+sudo apt-get -qq update > /dev/null
+sudo apt-get install -y -qq git apt-utils gettext-base > /dev/null
+sudo apt-get install -y -qq ca-certificates curl gnupg > /dev/null
 
 # Setup docker (https://docs.docker.com/engine/install/ubuntu/)
 echo "Installing docker..."
