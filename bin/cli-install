@@ -9,8 +9,8 @@ sudo npm install -g pnpm rimraf > /dev/null
 rimraf ./**/node_modules > /dev/null || true
 
 echo "[CLI] Installing cli dependencies"
-pnpm install -g turbo -s
-pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script -s
+pnpm install -g turbo
+pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script
 
 echo "[CLI] Running tools"
 pnpm build --filter @pedaki/cli > /dev/null
