@@ -46,8 +46,6 @@ echo "Staring docker service..."
 sudo service docker start
 
 
-
-clear
 echo "Dependencies installed!"
 
 # Clone app
