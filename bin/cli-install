@@ -13,6 +13,6 @@ npm install -g turbo -s
 pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script -s
 
 echo "[CLI] Building cli"
-pnpm build --filter @pedaki/cli
-cd packages/cli && pnpm link --global > /dev/null && cd ../..
+pnpm build --filter @pedaki/cli > /dev/null
+cd packages/cli && npm link --global > /dev/null && cd ../..
 
