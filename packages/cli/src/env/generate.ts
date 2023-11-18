@@ -284,7 +284,7 @@ PASSWORD_SALT=${this.#salt}
 
   writeEnvFile(env: string) {
     fs.writeFileSync('.env.production.local', env);
-    console.log(CHECK + ' Configuration saved to .env.production');
+    console.log(CHECK + ' Configuration saved to .env.production.local');
   }
 }
 

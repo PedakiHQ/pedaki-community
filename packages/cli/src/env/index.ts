@@ -14,7 +14,7 @@ class EnvCommand implements Command {
         ${DOLLAR} pedaki env <command> [options]
 
     ${label('Commands')}
-        generate      Generate .env.production file
+        generate      Generate .env.production.local file
 `,
       {
         importMeta: import.meta,
