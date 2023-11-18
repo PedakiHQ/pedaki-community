@@ -2,8 +2,6 @@
 
 set -e # exit on error
 
-export PNPM_HOME=~/.pnpm/store
-
 # Install pnpm
 echo "[CLI] Installing nodejs and pnpm..."
 sudo apt-get install -y -qq nodejs npm > /dev/null
@@ -11,7 +9,7 @@ sudo npm install -g pnpm rimraf > /dev/null
 rimraf ./**/node_modules > /dev/null || true
 
 echo "[CLI] Installing cli dependencies"
-pnpm install -g turbo
+npm install -g turbo
 pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script
 
 echo "[CLI] Running tools"
