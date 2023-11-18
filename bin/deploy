@@ -54,7 +54,7 @@ git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
 echo "Installing tools"
-./cli prepare .env.production
+./bin/cli prepare .env.production
 
 PEDAKI_APP_TAG=$1
 if [[ -z "$PEDAKI_APP_TAG" ]]; then
