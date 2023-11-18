@@ -53,6 +53,9 @@ echo "Installing pedaki app from github"
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
+# TODO remove
+git checkout init-auth
+
 echo "Installing tools"
 ./bin/cli prepare .env.production
 
