@@ -4,8 +4,8 @@ import meow from 'meow';
 import { DOLLAR, execOrShowHelp, label } from './help.ts';
 
 const commands: Record<string, Promise<Command>> = {
-  db: import('./db').then(mod => mod.default),
-  env: import('./env').then(mod => mod.default),
+  db: import('./db/index.ts').then(mod => mod.default),
+  env: import('./env/index.ts').then(mod => mod.default),
 };
 
 const cli = meow(
