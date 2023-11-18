@@ -7,7 +7,8 @@ export const env = createEnv({
 
     NEXTAUTH_SECRET: z.string().min(2),
 
-    PASSWORD_SALT: z.string().min(1),
+    PASSWORD_SALT: z.string().min(2),
   },
   runtimeEnv: process.env,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });

@@ -3,14 +3,18 @@ import { fieldEncryptionExtension } from 'prisma-field-encryption';
 import { env } from './env.ts';
 
 const prismaClientSingleton = () => {
-  const client = new PrismaClient({
+  let client = new PrismaClient({
     log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn', 'info'] : ['error'],
   });
-  return client.$extends(
-    fieldEncryptionExtension({
-      encryptionKey: env.PRISMA_ENCRYPTION_KEY,
-    }),
-  ) as PrismaClient;
+  if (env.PRISMA_ENCRYPTION_KEY) {
+    console.log('Using field encryption');
+    client = client.$extends(
+      fieldEncryptionExtension({
+        encryptionKey: env.PRISMA_ENCRYPTION_KEY,
+      }),
+    ) as PrismaClient;
+  }
+  return client;
 };
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;

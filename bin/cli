@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e # exit on error
+
+# Install pnpm
+echo "Installing nodejs and pnpm..."
+sudo apt-get install -y -qq nodejs npm
+sudo npm install -g pnpm
+
+echo "Installing tools dependencies"
+pnpm install --filter @pedaki/tools --frozen-lockfile --production --ignore-script -s
+
+echo "Running tools"
+pnpm start --filter @pedaki/tools
+
+

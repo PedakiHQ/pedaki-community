@@ -9,4 +9,5 @@ export const env = createEnv({
     PRISMA_ENCRYPTION_KEY: z.string().min(1),
   },
   runtimeEnv: process.env,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
