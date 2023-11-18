@@ -5,5 +5,7 @@ module.exports = {
     },
     rules: {
         'node/no-unpublished-import': 'off',
+        "node/shebang": "off",
+        "no-process-exit": "off",
     }
 };

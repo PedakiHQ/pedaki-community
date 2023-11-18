@@ -22,7 +22,7 @@ fi
 echo "Installing dependencies..."
 
 echo "Please enter your sudo password now:"
-sudo echo ""
+sudo echo "Password accepted!"
 
 # Update apt
 echo "Updating apt cache..."
@@ -45,64 +45,17 @@ sudo apt-get install -y -qq docker-ce docker-ce-cli containerd.io
 echo "Staring docker service..."
 sudo service docker start
 
+echo "Dependencies installed!\n\n"
 
-echo "Dependencies installed!"
-
-# Clone app
+# Clone app (only used to pull the latest version of the cli - and docker-compose.yml)
 echo "Installing pedaki app from github"
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
-# TODO remove
-git checkout init-auth
-
-echo "Installing tools"
-./bin/cli prepare .env.production
-
-PEDAKI_APP_TAG=$1
-if [[ -z "$PEDAKI_APP_TAG" ]]; then
-  # Ask for the version
-  echo "What version do you want to install ? (default: 'latest')"
-  echo "You can find the list of versions here: https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions"
-  read -r PEDAKI_APP_VERSION
-  if [[ -z "$PEDAKI_APP_TAG" ]]; then
-    PEDAKI_APP_TAG="latest"
-    echo "Using default version: $PEDAKI_APP_TAG"
-  else
-    echo "Using provided version: $PEDAKI_APP_TAG"
-  fi
-else
-  echo "(parameter) Using provided version: $PEDAKI_APP_TAG"
-fi
-
-DOMAIN=$2
-if [[ -z "$DOMAIN" ]]; then
-  # Ask for the domain
-  echo "What domain do you want to use ? (default: 'localhost')"
-  read -r DOMAIN
-  if [[ -z "$DOMAIN" ]]; then
-    DOMAIN="localhost"
-    echo "Using default domain: $DOMAIN"
-  else
-    echo "Using provided domain: $DOMAIN"
-  fi
-else
-  echo "(parameter) Using provided domain: $DOMAIN"
-fi
-
-# Pull latest changes if the repo already exists
-if [[ "$PEDAKI_APP_TAG" == "latest" ]]; then
-  echo "Pulling latest changes..."
-  git checkout main &> /dev/null || true
-  git pull &> /dev/null || true
-else
-  echo "Checking out version $PEDAKI_APP_TAG..."
-  git fetch --all --tags &> /dev/null || true
-  git checkout "$PEDAKI_APP_TAG"
-fi
-
-
-
+echo "Installing pedaki cli"
+./bin/cli-install
+pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"
+export $(cat .env.production | xargs)
 
 # Go back to root
 cd ..
@@ -119,15 +72,6 @@ https://$DOMAIN, :80, :443 {
   reverse_proxy http://web:8000
 }
 EOF
-
-# Write .env file
-envsubst > .env.production <<EOF
-DOMAIN=$DOMAIN
-PEDAKI_APP_TAG=$PEDAKI_APP_TAG
-
-DATABASE_URL=mysql://pedaki:pedaki@db:3306/pedaki
-EOF
-export $(cat .env.production | xargs)
 
 # Start docker compose
 echo "Configuring Docker Compose...."
