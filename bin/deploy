@@ -60,7 +60,7 @@ git checkout init-auth
 echo "Installing pedaki cli"
 ./bin/cli-install
 pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"
-export $(cat .env.production | xargs)
+export $(grep -v '^#' .env.production.local | xargs)
 
 # Go back to root
 cd ..
