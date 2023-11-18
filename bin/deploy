@@ -52,6 +52,9 @@ echo "Installing pedaki app from github"
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
+# TODO: remove
+git checkout init-auth
+
 echo "Installing pedaki cli"
 ./bin/cli-install
 pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"
