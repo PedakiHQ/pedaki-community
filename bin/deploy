@@ -52,6 +52,7 @@ echo ""
 
 # Clone app (only used to pull the latest version of the cli - and docker-compose.yml)
 echo "[pedaki] Installing pedaki app from github"
+rm -rf pedaki-community
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
