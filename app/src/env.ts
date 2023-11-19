@@ -7,7 +7,7 @@ export const env = createEnv({
   },
 
   client: {
-    NEXT_PUBLIC_TESTVALUE: z.string(),
+    NEXT_PUBLIC_TESTVALUE: z.string().default('testvalue'),
   },
 
   runtimeEnv: {

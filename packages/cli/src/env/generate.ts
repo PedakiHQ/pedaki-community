@@ -92,10 +92,6 @@ class EnvGenerateCommand implements Command {
   }
 
   async askForTag(flags: Record<string, any>): Promise<string> {
-    if (IS_CI) {
-      return 'latest';
-    }
-
     if (flags.tag) {
       console.log(CHECK + ' Using provided tag (' + flags.tag + ')');
       return flags.tag as string;
@@ -181,10 +177,6 @@ class EnvGenerateCommand implements Command {
     if (flags.domain) {
       console.log(CHECK + ' Using provided domain (' + flags.domain + ')');
       return flags.domain as string;
-    }
-
-    if (IS_CI) {
-      return 'localhost';
     }
 
     const question = {
@@ -351,14 +343,11 @@ class EnvGenerateCommand implements Command {
 
     return answer.resendApiKey;
   }
+
   async askForEmailDomain(flags: Record<string, any>): Promise<string> {
     if (flags.emailDomain) {
-      console.log(CHECK + ' Using provided email domain');
+      console.log(CHECK + ' Using provided email domain (' + flags.emailDomain + ')');
       return flags.emailDomain as string;
-    }
-
-    if (IS_CI) {
-      return 'emailDomain';
     }
 
     // Resend API is used to send emails
@@ -401,12 +390,12 @@ NODE_ENV=production
 PEDAKI_TAG=${this.#tag}
 PEDAKI_DOMAIN=${this.#domain}
 
-DATABASE_URL=mysql://pedaki:pedaki@db:3306/pedaki
+DATABASE_URL=mysql://pedaki:pedaki@127.0.0.1:3306/pedaki
 PRISMA_ENCRYPTION_KEY=${this.#key}
 PASSWORD_SALT=${this.#salt}
 
 RESEND_API_KEY=${this.#resendApiKey}
-EMAIL_DOMAIN=${this.#emailDomain}
+RESEND_EMAIL_DOMAIN=${this.#emailDomain}
 `;
 
     // remove first and last line

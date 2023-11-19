@@ -29,3 +29,5 @@ jobs:
           PEDAKI_APP_TAG: latest
           ADMIN_EMAIL: developers@pedaki.fr
           ADMIN_PASSWORD: password
+          ADMIN_NAME: GitHub Actions
+          EMAIL_DOMAIN: pedaki.fr

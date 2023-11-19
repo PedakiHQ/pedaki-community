@@ -57,7 +57,7 @@ cd pedaki-community
 
 echo "[pedaki] Installing pedaki cli"
 ./bin/cli-install
-pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"
+pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"  --email-domain "$EMAIL_DOMAIN"
 export $(grep -v '^#' .env.production.local | xargs)
 
 # Go back to root
@@ -88,7 +88,7 @@ sudo -E docker compose -f docker-compose.yml up -d db
 echo "[pedaki] Seeding database..."
 cd pedaki-community
 pedaki db migrate
-pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD"
+pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD" --name "$ADMIN_NAME"
 cd ..
 
 echo "[pedaki] Starting app..."

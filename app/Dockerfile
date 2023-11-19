@@ -20,13 +20,17 @@ COPY app/package.json ./app/
 COPY packages/api/package.json ./packages/api/
 COPY packages/auth/package.json ./packages/auth/
 COPY packages/db/package.json ./packages/db/
+COPY packages/services/package.json ./packages/services/
 
-RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community --production --ignore-script
+RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community --ignore-script
 
 COPY app ./app
 COPY packages/api ./packages/api
 COPY packages/auth ./packages/auth
 COPY packages/db ./packages/db
+COPY packages/services ./packages/services
+
+COPY scripts ./scripts
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
