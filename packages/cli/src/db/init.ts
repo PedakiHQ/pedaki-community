@@ -13,6 +13,8 @@ class DbInitCommand implements Command {
   #email = '';
   #name = '';
 
+  #activationToken = '';
+
   async handle() {
     const cli = meow(
       `
@@ -173,7 +175,7 @@ class DbInitCommand implements Command {
         needResetPassword: !password,
       });
       if (!password) {
-        await authService.createActivateAccountToken(this.#email);
+        this.#activationToken = await authService.createActivateAccountToken(this.#email);
       }
 
       spinner.succeed(`Admin user created`);
@@ -187,15 +189,15 @@ class DbInitCommand implements Command {
     }
   }
 
-  async sendMail(flags: Record<string, any>) {
-    if (flags.password) {
+  async sendMail() {
+    if (!this.#activationToken) {
       console.log(CHECK + ' Password provided, not sending email');
       return;
     }
     const spinner = ora('Sending email').start();
 
     try {
-      await mailService.sendActivateAccountEmail(this.#email, this.#name);
+      await mailService.sendActivateAccountEmail(this.#email, this.#name, this.#activationToken);
       spinner.succeed(`Email sent`);
     } catch (e) {
       spinner.fail('Email sending failed');
