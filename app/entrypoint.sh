@@ -1,7 +1,8 @@
 #!/bin/bash
 
-set +x # no verbose
-set -e # exit on error
+# https://github.com/factorim/next-with-system-env
+
+set +x # disable verbose mode
 
 # config
 envFilename='.env.production'
@@ -20,15 +21,13 @@ function apply_path {
     # get system env
     envValue=$(env | grep "^$configName=" | grep -oe '[^=]*$');
 
-    echo "Config: ${configName} = ${configValue}"
-
     # if config found
     if [ -n "$configValue" ] && [ -n "$envValue" ]; then
       # replace all
-      echo "Replace: ${configValue} with: ${envValue}"
+      echo "+ Replace: ${configValue} with: ${envValue}"
       find $nextFolder \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i "s#$configValue#$envValue#g"
     else
-      echo "Not found: ${configValue}"
+      echo "- Not found: ${configValue}"
     fi
   done < $envFilename
 }

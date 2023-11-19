@@ -58,9 +58,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/app/.next/static ./.next/static
 COPY --from=builder /app/app/.next/standalone/node_modules ./node_modules
 
 COPY app/entrypoint.sh .
-COPY app/.env.production .
+COPY .env.production .
 RUN chmod +x ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["bash", "./entrypoint.sh"]
 
 USER nextjs
 
