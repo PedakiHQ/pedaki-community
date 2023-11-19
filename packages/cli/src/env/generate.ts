@@ -377,8 +377,12 @@ class EnvGenerateCommand implements Command {
       },
     };
 
-    console.log(chalk.gray`The email domain will be shown in the "from" field of the emails sent by Pedaki.`);
-    console.log(chalk.gray`for example, if you enter "example.com", emails will be sent from "no-reply@example.com".`);
+    console.log(
+      chalk.gray`The email domain will be shown in the "from" field of the emails sent by Pedaki.`,
+    );
+    console.log(
+      chalk.gray`for example, if you enter "example.com", emails will be sent from "no-reply@example.com".`,
+    );
     console.log(chalk.gray`Note that you must have registered this domain with Resend.`);
 
     const answer = await inquirer.prompt<{ emailDomain: string }>([question]);

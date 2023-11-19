@@ -1,7 +1,7 @@
 import { prisma } from '@pedaki/db';
 import { authService } from '@pedaki/services/auth/auth.service.js';
 import { mailService } from '@pedaki/services/mail/mail.service.js';
-import { CHECK, CROSS, DOLLAR, handleBaseFlags, label } from '~/help.ts';
+import { CHECK, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -176,6 +176,11 @@ class DbInitCommand implements Command {
   }
 
   async sendMail() {
+    if (IS_CI) {
+      console.log(CHECK + ' Skipping email sending in CI');
+      return;
+    }
+
     const spinner = ora('Sending email').start();
 
     try {
