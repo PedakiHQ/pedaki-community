@@ -1,6 +1,6 @@
 {
   "name": "@pedaki/cli",
-  "version": "1.0.0",
+  "version": "0.4.2-beta.8",
   "description": "",
   "private": true,
   "main": "index.js",
@@ -24,8 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "@47ng/cloak": "^1.1.0",
-    "@pedaki/common": "0.4.2-beta.7",
-    "@pedaki/mailer": "0.4.2-beta.7",
+    "@pedaki/common": "0.4.2-beta.8",
+    "@pedaki/mailer": "0.4.2-beta.8",
     "@pedaki/db": "workspace:*",
     "@pedaki/services": "workspace:*",
     "dotenv": "^16.3.1",
