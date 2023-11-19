@@ -5,5 +5,6 @@ module.exports = {
     },
     rules: {
         'node/no-unpublished-import': 'off',
+        'node/no-extraneous-import': 'off',
     }
 };

@@ -4,8 +4,9 @@ import dotenv from 'dotenv';
 import meow from 'meow';
 
 const commands = {
-  migrate: import('./migrate.ts').then(mod => mod.default),
-  init: import('./init.ts').then(mod => mod.default),
+  migrate: () => import('./migrate.ts').then(mod => mod.default),
+  init: () => import('./init.ts').then(mod => mod.default),
+    reset: () => import('./reset.ts').then(mod => mod.default),
 };
 
 const REQUIRED_ENV = [
@@ -25,6 +26,7 @@ class DbCommand implements Command {
     ${label('Commands')}
         migrate  Apply pending migrations to the database    
         init     Generate initial data for the database (admin user, etc.)    
+        reset    Reset the database (drop all tables)
 `,
       {
         importMeta: import.meta,

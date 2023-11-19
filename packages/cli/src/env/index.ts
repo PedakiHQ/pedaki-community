@@ -3,7 +3,7 @@ import type { Command } from '~/types.ts';
 import meow from 'meow';
 
 const commands = {
-  generate: import('./generate.ts').then(mod => mod.default),
+  generate: () => import('./generate.ts').then(mod => mod.default),
 };
 
 class EnvCommand implements Command {

@@ -1,6 +1,6 @@
-import { generateToken } from '@pedaki/common/utils/random.js';
 import { prisma } from '@pedaki/db';
 import { authService } from '@pedaki/services/auth/auth.service.js';
+import { mailService } from '@pedaki/services/mail/mail.service.js';
 import { CHECK, CROSS, DOLLAR, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import chalk from 'chalk';
@@ -23,7 +23,6 @@ class DbInitCommand implements Command {
         --email, -e       Email address for the admin user
         --name, -n        Name for the admin user
         --force, -f       Force initialization even if database is not empty
-        --visible, -v     Show the password in the console
 `,
       {
         flags: {
@@ -34,10 +33,6 @@ class DbInitCommand implements Command {
           force: {
             type: 'boolean',
             shortFlag: 'f',
-          },
-          visible: {
-            type: 'boolean',
-            shortFlag: 'v',
           },
         },
         importMeta: import.meta,
@@ -61,7 +56,8 @@ class DbInitCommand implements Command {
       }
     } while (!confirm);
 
-    const password = await this.createAdminUser(cli.flags);
+    await this.createAdminUser();
+    await this.sendMail();
   }
 
   async checkEmptyDatabase(flags: Record<string, any>) {
@@ -159,27 +155,35 @@ class DbInitCommand implements Command {
     return answer.confirm;
   }
 
-  async createAdminUser(flags: Record<string, any>): Promise<string> {
+  async createAdminUser() {
     const spinner = ora('Creating admin user').start();
 
     try {
-      const password = generateToken(32, '');
-      await authService.createAccount(this.#name, this.#email, password, {
+      await authService.createAccount(this.#name, this.#email, null, {
         needResetPassword: true,
       });
-
-      if (flags.visible) {
-        spinner.info(`Admin user created with password ${password}`);
-      }
+      await authService.createActivateAccountToken(this.#email);
 
       spinner.succeed(`Admin user created`);
-      return password;
     } catch (e) {
       if ((e as { code: string }).code === 'P2002') {
         spinner.fail('A user with this email address already exists');
       } else {
         spinner.fail('Admin user creation failed');
       }
+      process.exit(1);
+    }
+  }
+
+  async sendMail() {
+    const spinner = ora('Sending email').start();
+
+    try {
+      await mailService.sendActivateAccountEmail(this.#email, this.#name);
+      spinner.succeed(`Email sent`);
+    } catch (e) {
+      spinner.fail('Email sending failed');
+      console.error(e);
       process.exit(1);
     }
   }

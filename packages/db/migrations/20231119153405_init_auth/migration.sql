@@ -38,12 +38,14 @@ CREATE TABLE `users` (
 CREATE TABLE `tokens` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `type` ENUM('CONFIRM_EMAIL') NOT NULL,
-    `hashed_token` VARCHAR(191) NOT NULL,
+    `type` ENUM('CONFIRM_EMAIL', 'ACTIVATE_ACCOUNT', 'RESET_PASSWORD') NOT NULL,
+    `token` VARCHAR(191) NOT NULL,
+    `token_hash` VARCHAR(320) NULL,
     `expires_at` DATETIME(3) NOT NULL,
     `user_id` VARCHAR(25) NULL,
 
     INDEX `tokens_user_id_idx`(`user_id`),
-    UNIQUE INDEX `tokens_type_hashed_token_key`(`type`, `hashed_token`),
+    INDEX `tokens_token_hash_idx`(`token_hash`),
+    UNIQUE INDEX `tokens_type_token_hash_key`(`type`, `token_hash`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

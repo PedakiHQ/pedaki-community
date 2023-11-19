@@ -14,7 +14,7 @@ export let IS_CI = process.env.CI === 'true';
 export const execOrShowHelp = async (
   cli: Result<any>,
   position: number,
-  commands: Record<string, Promise<Command>>,
+  commands: Record<string, () => Promise<Command>>,
 ) => {
   const command = cli.input[position];
   const options = cli.flags as BaseOptions;
@@ -25,7 +25,7 @@ export const execOrShowHelp = async (
   }
 
   if (command in commands) {
-    const cmd = commands[command]!;
+    const cmd = commands[command]!();
     await cmd.then(async mod => {
       await mod.handle(options);
     });

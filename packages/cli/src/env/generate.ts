@@ -14,6 +14,7 @@ const HIDE_VALUE_FOR = ['PRISMA_ENCRYPTION_KEY', 'PASSWORD_SALT', 'RESEND_API_KE
 class EnvGenerateCommand implements Command {
   #tag = 'latest';
   #domain = 'localhost';
+  #emailDomain = '';
   #key = '';
   #salt = '';
   #resendApiKey = '';
@@ -30,6 +31,7 @@ class EnvGenerateCommand implements Command {
         --key, -k         Encryption key
         --salt, -s        Password salt
         --resend-api-key  Resend API key
+        --email-domain    Email domain
         
     ${label('Examples')}
         Generate env file with predefined domain name and image tag
@@ -56,6 +58,9 @@ class EnvGenerateCommand implements Command {
           resendApiKey: {
             type: 'string',
           },
+          emailDomain: {
+            type: 'string',
+          },
         },
         importMeta: import.meta,
       },
@@ -73,6 +78,7 @@ class EnvGenerateCommand implements Command {
       this.#key = await this.askForEncryptionKey(cli.flags);
       this.#salt = await this.askForPasswordSalt(cli.flags);
       this.#resendApiKey = await this.askForResendApiKey(cli.flags);
+      this.#emailDomain = await this.askForEmailDomain(cli.flags);
 
       env = this.buildEnvFile();
       confirm = await this.confirmEnvFile(env);
@@ -345,6 +351,41 @@ class EnvGenerateCommand implements Command {
 
     return answer.resendApiKey;
   }
+  async askForEmailDomain(flags: Record<string, any>): Promise<string> {
+    if (flags.emailDomain) {
+      console.log(CHECK + ' Using provided email domain');
+      return flags.emailDomain as string;
+    }
+
+    if (IS_CI) {
+      return 'emailDomain';
+    }
+
+    // Resend API is used to send emails
+    // https://resend.com/
+
+    const question = {
+      name: 'emailDomain',
+      message: 'Email domain',
+      validate: (value: string) => {
+        // no space
+        if (value.includes(' ')) {
+          return 'The email domain must not contain spaces';
+        }
+
+        return true;
+      },
+    };
+
+    console.log(chalk.gray`The email domain will be shown in the "from" field of the emails sent by Pedaki.`);
+    console.log(chalk.gray`for example, if you enter "example.com", emails will be sent from "no-reply@example.com".`);
+    console.log(chalk.gray`Note that you must have registered this domain with Resend.`);
+
+    const answer = await inquirer.prompt<{ emailDomain: string }>([question]);
+    console.log(); // empty line
+
+    return answer.emailDomain;
+  }
 
   buildEnvFile() {
     const env = `
@@ -361,6 +402,7 @@ PRISMA_ENCRYPTION_KEY=${this.#key}
 PASSWORD_SALT=${this.#salt}
 
 RESEND_API_KEY=${this.#resendApiKey}
+EMAIL_DOMAIN=${this.#emailDomain}
 `;
 
     // remove first and last line

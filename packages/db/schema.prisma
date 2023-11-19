@@ -53,17 +53,23 @@ model Token {
 
   createdAt   DateTime  @default(now()) @map("created_at")
   type        TokenType
-  hashedToken String    @map("hashed_token")
+
+  token     String  /// @encrypted
+  tokenHash String? @map("token_hash") @db.VarChar(320) /// @encryption:hash(token)
+
   expiresAt   DateTime  @map("expires_at")
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @map("user_id") @db.VarChar(25)
 
-  @@unique([type, hashedToken], name: "unique_token")
+  @@unique([type, tokenHash], name: "unique_token")
   @@index([userId])
+  @@index([tokenHash])
   @@map("tokens")
 }
 
 enum TokenType {
   CONFIRM_EMAIL
+  ACTIVATE_ACCOUNT
+  RESET_PASSWORD
 }

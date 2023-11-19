@@ -32,7 +32,7 @@ class DbMigrateCommand implements Command {
 
     try {
       // install prisma deps
-      await $`pnpm install --filter @pedaki/db --ignore-script -s`;
+      await $`pnpm install --filter @pedaki/db --ignore-script -s --config.confirmModulesPurge=false`;
       spinner.info('Dependencies installed');
 
       // go in packages/db

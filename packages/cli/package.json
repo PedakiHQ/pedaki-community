@@ -25,6 +25,7 @@
   "dependencies": {
     "@47ng/cloak": "^1.1.0",
     "@pedaki/common": "0.4.2-beta.7",
+    "@pedaki/mailer": "0.4.2-beta.7",
     "@pedaki/db": "workspace:*",
     "@pedaki/services": "workspace:*",
     "dotenv": "^16.3.1",
