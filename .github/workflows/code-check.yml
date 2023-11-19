@@ -38,6 +38,10 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile --prefer-offline
 
+      - name: Build packages
+        if: always()
+        run: pnpm build --filter "./packages/*"
+
       - name: Run eslint
         if: always()
         run: pnpm lint

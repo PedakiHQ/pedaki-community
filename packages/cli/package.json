@@ -12,8 +12,8 @@
     "start": "node src/index.ts",
     "build": "tsup --clean",
     "lint": "eslint .",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\"",
-    "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit --declaration"
   },
   "publishConfig": {

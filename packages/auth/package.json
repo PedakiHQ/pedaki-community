@@ -15,7 +15,7 @@
   },
   "homepage": "https://www.pedaki.fr",
   "scripts": {
-    "lint": "eslint . --cache",
+    "lint": "eslint .",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit --declaration"
