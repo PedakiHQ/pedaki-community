@@ -86,13 +86,14 @@ class EnvGenerateCommand implements Command {
             console.log(CHECK + ' Using provided tag (' + flags.tag + ')');
             return flags.tag;
         }
+        const localVersion = packageJson.packageJson.version;
 
         // use inquirer
         const question = {
             type: 'input',
             name: 'tag',
             message: 'Image tag',
-            default: 'latest',
+            default: localVersion,
         };
 
         console.log(chalk.bold('What version do you want to install?'));
@@ -105,6 +106,11 @@ class EnvGenerateCommand implements Command {
     }
 
     async checkoutTag(tag: string) {
+        if (IS_CI) {
+            console.log(CHECK + ' CI environment, skipping checkout')
+            return;
+        }
+
         const spinner = ora('Checking out tag').start();
 
         const localVersion = packageJson.packageJson.version;
@@ -151,7 +157,10 @@ class EnvGenerateCommand implements Command {
             await $`git pull`;
         }
 
-        spinner.succeed(`Checked out version ${tag}`);
+        spinner.info(`Checked out version ${tag}`);
+
+        spinner.succeed("Please restart the install script to use the new version");
+        process.exit(0);
     }
 
     async askForDomain(flags: Record<string, any>): Promise<string> {
