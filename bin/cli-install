@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -e # exit on error
+
+# Install pnpm
+echo "[CLI] Installing nodejs and pnpm..."
+sudo apt-get install -y -qq nodejs npm > /dev/null
+sudo npm install -g pnpm rimraf -s
+rimraf ./**/node_modules > /dev/null || true
+
+echo "[CLI] Installing cli dependencies"
+npm install -g turbo -s
+pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script -s
+
+echo "[CLI] Building cli"
+pnpm build --filter @pedaki/cli > /dev/null
+cd packages/cli && npm link > /dev/null && cd ../..
+

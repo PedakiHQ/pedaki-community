@@ -6,6 +6,9 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
     SECRET_PRIVATE_VARIABLE: z.string().min(2),
+
+    PASSWORD_SALT: z.string().min(2),
   },
   runtimeEnv: process.env,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });

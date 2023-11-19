@@ -14,7 +14,7 @@ services:
       retries: 10
 
   web:
-      image: "ghcr.io/pedakihq/pedaki:$PEDAKI_APP_TAG"
+      image: "ghcr.io/pedakihq/pedaki:$PEDAKI_TAG"
       depends_on:
         db:
           condition: service_healthy

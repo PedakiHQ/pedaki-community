@@ -1,0 +1,49 @@
+{
+  "name": "@pedaki/cli",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "pedaki": "./dist/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.ts",
+    "build": "tsup --clean",
+    "lint": "eslint .",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "typecheck": "tsc --noEmit --declaration"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  },
+  "keywords": [],
+  "author": "Nathan David <me@vahor.fr>",
+  "license": "MIT",
+  "dependencies": {
+    "@47ng/cloak": "^1.1.0",
+    "@pedaki/common": "0.4.2-beta.7",
+    "@pedaki/db": "workspace:*",
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.12",
+    "meow": "^12.1.1",
+    "ora": "^7.0.1",
+    "read-package-up": "^11.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.1.4"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.6.0",
+    "@types/inquirer": "^9.0.7"
+  },
+  "engines": {
+    "node": ">=18.0.0 <19.0.0",
+    "pnpm": ">=8.0.0",
+    "yarn": "use-pnpm",
+    "npm": "use-pnpm"
+  },
+  "packageManager": "pnpm@8.7.6",
+  "prettier": "@pedaki/prettier-config"
+}

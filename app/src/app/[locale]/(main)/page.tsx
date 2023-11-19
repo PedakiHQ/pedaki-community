@@ -1,10 +1,11 @@
-import LocaleButton from '~/components/LocaleButton';
-import TestAPI from '~/components/TestAPI';
+import type { PageType } from '~/app/types.ts';
+import LocaleButton from '~/components/LocaleButton.tsx';
+import TestAPI from '~/components/TestAPI.tsx';
 import { env } from '~/env.ts';
-import { getI18n } from '~/locales/server';
+import { getI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from 'next-international/server';
 
-export default async function Bidule({ params }: { params: { locale: string } }) {
+export default async function Bidule({ params }: PageType) {
   setStaticParamsLocale(params.locale);
   const t = await getI18n();
 

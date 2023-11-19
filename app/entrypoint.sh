@@ -1,6 +1,8 @@
 #!/bin/bash
-# no verbose
-set +x
+
+set +x # no verbose
+set -e # exit on error
+
 # config
 envFilename='.env.production'
 nextFolder='./.next/'

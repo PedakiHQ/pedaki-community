@@ -18,11 +18,15 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 COPY app/package.json ./app/
 COPY packages/api/package.json ./packages/api/
+COPY packages/auth/package.json ./packages/auth/
+COPY packages/db/package.json ./packages/db/
 
-RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community
+RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community --production --ignore-script
 
 COPY app ./app
 COPY packages/api ./packages/api
+COPY packages/auth ./packages/auth
+COPY packages/db ./packages/db
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1

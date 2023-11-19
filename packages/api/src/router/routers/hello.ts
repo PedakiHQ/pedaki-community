@@ -1,9 +1,9 @@
 import { env } from '~api/env.ts';
-import { procedure, router } from '~api/router/trpc.ts';
+import { publicProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
 export const helloRouter = router({
-  hello: procedure
+  hello: publicProcedure
     .input(
       z.object({
         text: z.string(),
