@@ -2,17 +2,34 @@
 
 set -e # exit on error
 
-# Install pnpm
-echo "[CLI] Installing nodejs and pnpm..."
-sudo apt-get install -y -qq nodejs npm > /dev/null
-sudo npm install -g pnpm rimraf -s
-rimraf ./**/node_modules > /dev/null || true
+NODE_MAJOR=18
 
-echo "[CLI] Installing cli dependencies"
+# Install pnpm
+echo "[pedaki] Adding node 18 repository..."
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt-get update -qq > /dev/null
+
+echo "[pedaki] Installing nodejs and pnpm..."
+sudo apt-get install -y -qq nodejs
+sudo npm install -g pnpm rimraf -s
+rimraf ./**/node_modules || true
+
+echo "[pedaki] Installing cli dependencies"
 npm install -g turbo -s
 pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script -s
 
-echo "[CLI] Building cli"
+echo "[pedaki] Building cli"
 pnpm build --filter @pedaki/cli > /dev/null
-cd packages/cli && npm link > /dev/null && cd ../..
 
+# I don't know why but pnpm link doesn't work on CI
+LINKER=$(test -n "$IS_CI" && echo "npm" || echo "pnpm")
+cd packages/cli
+if [ "$LINKER" = "pnpm" ]; then
+  echo "[pedaki] Linking cli"
+  pnpm link --global > /dev/null
+else
+  echo "[pedaki] Linking cli (using npm)"
+  npm link > /dev/null
+fi
+cd ../..

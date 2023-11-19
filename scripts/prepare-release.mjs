@@ -5,7 +5,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import {getPackages} from "@manypkg/get-packages";
-import {$} from 'execa';
+import { $ } from 'execa';
 import ora from "ora";
 import open from "open";
 import fs from "fs";

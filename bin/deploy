@@ -3,11 +3,10 @@
 set -e
 
 export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_MODE=l
 
 # TODO hello blabla
 #  You need to have at least X GB of RAM to run this script.
-
-echo "blabla"
 
 # Check that we are on linux
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
@@ -19,19 +18,18 @@ fi
 
 
 # Deps
-echo "Installing dependencies..."
+echo "[pedaki] Installing dependencies..."
 
-echo "Please enter your sudo password now:"
+echo "[pedaki] Please enter your sudo password now:"
 sudo echo "Password accepted!"
+echo ""
 
 # Update apt
-echo "Updating apt cache..."
-sudo apt-get -qq update > /dev/null
-sudo apt-get install -y -qq git apt-utils gettext-base > /dev/null
-sudo apt-get install -y -qq ca-certificates curl gnupg > /dev/null
+echo "[pedaki] Updating apt cache..."
+sudo apt-get -qq update
 
 # Setup docker (https://docs.docker.com/engine/install/ubuntu/)
-echo "Installing docker..."
+echo "[pedaki] Installing docker..."
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -42,19 +40,22 @@ echo \
 sudo apt-get -qq update
 sudo apt-get install -y -qq docker-ce docker-ce-cli containerd.io
 
-echo "Staring docker service..."
+echo "[pedaki] Installing apt dependencies..."
+sudo apt-get install -y -qq git apt-utils gettext-base ca-certificates curl gnupg
+
+echo "[pedaki] Staring docker service..."
 sudo service docker start
 
-echo "Dependencies installed!"
+echo "[pedaki] Dependencies installed!"
 echo ""
 
 
 # Clone app (only used to pull the latest version of the cli - and docker-compose.yml)
-echo "Installing pedaki app from github"
+echo "[pedaki] Installing pedaki app from github"
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
-echo "Installing pedaki cli"
+echo "[pedaki] Installing pedaki cli"
 ./bin/cli-install
 pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"
 export $(grep -v '^#' .env.production.local | xargs)
@@ -76,25 +77,25 @@ https://$DOMAIN, :80, :443 {
 EOF
 
 # Start docker compose
-echo "Configuring Docker Compose...."
+echo "[pedaki] Configuring Docker Compose...."
 rm -f docker-compose.yml
 cp pedaki-community/docker-compose.yml docker-compose.yml.tmpl
 envsubst < docker-compose.yml.tmpl > docker-compose.yml
 rm docker-compose.yml.tmpl
-echo "Starting Database..."
+echo "[pedaki] Starting Database..."
 sudo -E docker compose -f docker-compose.yml up -d db
 
-echo "Seeding database..."
+echo "[pedaki] Seeding database..."
 cd pedaki-community
 pedaki db migrate
 pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD"
 cd ..
 
-echo "Starting app..."
+echo "[pedaki] Starting app..."
 sudo -E docker compose -f docker-compose.yml up -d web
 
-echo "Waiting for the app to be ready..."
-echo "This can take a few minutes..."
+echo "[pedaki] Waiting for the app to be ready..."
+echo "[pedaki] This can take a few minutes..."
 # TODO: call /_health endpoint
 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost)" != "200" ]]; do sleep 5; done'
-echo "App is ready!"
+echo "[pedaki] App is ready!"

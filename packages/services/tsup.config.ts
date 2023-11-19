@@ -1,6 +1,6 @@
 import cpy from 'cpy';
 import { esbuildPluginFilePathExtensions } from 'esbuild-plugin-file-path-extensions';
-import { execaCommand } from 'execa';
+import { $ } from 'execa';
 import type { Options } from 'tsup';
 import { defineConfig } from 'tsup';
 
@@ -20,14 +20,8 @@ export default defineConfig((options: Options) => ({
   plugins: [esbuildPluginFilePathExtensions({ esmExtension: 'js' })],
   onSuccess: async () => {
     await cpy('package.json', 'dist');
-    await execaCommand('pnpm exec tsconfig-replace-paths', {
-      stdout: process.stdout,
-      stderr: process.stderr,
-    });
-    await execaCommand('node ../../scripts/fix-ts-paths.js', {
-      stdout: process.stdout,
-      stderr: process.stderr,
-    });
+    await $`pnpm exec tsconfig-replace-paths`;
+    await $`node ../../scripts/fix-ts-paths.js`;
   },
   ...options,
 }));

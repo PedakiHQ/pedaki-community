@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "dotenv-cli": "latest",
+    "execa": "^8.0.1",
+    "ora": "^7.0.1",
     "cross-env": "^7.0.3"
   },
   "devDependencies": {
-    "execa": "^8.0.1",
-    "cpy": "^11.0.0",
     "@manypkg/get-packages": "^2.2.0",
     "@pedaki/eslint-config": "0.4.2-beta.7",
     "@pedaki/prettier-config": "0.4.2-beta.7",
@@ -46,7 +46,6 @@
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "open": "^9.1.0",
-    "ora": "^7.0.1",
     "rimraf": "latest",
     "throat": "^6.0.2",
     "turbo": "^1.10.16",

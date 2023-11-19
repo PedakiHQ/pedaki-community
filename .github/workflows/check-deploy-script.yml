@@ -24,6 +24,7 @@ jobs:
         timeout-minutes: 3
         run: bash ./bin/deploy
         env:
+          IS_CI: true
           DOMAIN: localhost
           PEDAKI_APP_TAG: latest
           ADMIN_EMAIL: developers@pedaki.fr
