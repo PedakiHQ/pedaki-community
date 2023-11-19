@@ -83,7 +83,7 @@ cp pedaki-community/docker-compose.yml docker-compose.yml.tmpl
 envsubst < docker-compose.yml.tmpl > docker-compose.yml
 rm docker-compose.yml.tmpl
 echo "[pedaki] Starting Database..."
-sudo -E docker compose -q -f docker-compose.yml up -d db
+sudo -E docker compose -f docker-compose.yml up -d db
 
 echo "[pedaki] Seeding database..."
 cd pedaki-community
@@ -92,7 +92,7 @@ pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD" --name "$ADMI
 cd ..
 
 echo "[pedaki] Starting app..."
-sudo -E docker compose -q -f docker-compose.yml up -d web
+sudo -E docker compose -f docker-compose.yml up -d web
 
 echo "[pedaki] Waiting for the app to be ready..."
 echo "[pedaki] This can take a few minutes..."
