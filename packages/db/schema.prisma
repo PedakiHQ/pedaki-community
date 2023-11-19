@@ -36,6 +36,7 @@ model User {
   email         String    @unique
   emailVerified DateTime? @map("email_verified")
   password      String?
+  needResetPassword Boolean @default(false) @map("need_reset_password")
   blocked       Boolean   @default(false)
 
   image String @default("") @db.VarChar(1000)

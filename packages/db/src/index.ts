@@ -7,7 +7,6 @@ const prismaClientSingleton = () => {
     log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn', 'info'] : ['error'],
   });
   if (env.PRISMA_ENCRYPTION_KEY) {
-    console.log('Using field encryption');
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,

@@ -1,19 +1,16 @@
 {
-  "name": "@pedaki/cli",
+  "name": "@pedaki/services",
   "version": "1.0.0",
   "description": "",
   "private": true,
   "main": "index.js",
   "type": "module",
-  "bin": {
-    "pedaki": "./dist/index.js"
-  },
   "scripts": {
-    "start": "node src/index.ts",
     "build": "tsup --clean",
+    "build:watch": "tsup --watch",
     "lint": "eslint .",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
     "typecheck": "tsc --noEmit --declaration"
   },
   "publishConfig": {
@@ -23,23 +20,18 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "@47ng/cloak": "^1.1.0",
     "@pedaki/common": "0.4.2-beta.7",
     "@pedaki/db": "workspace:*",
-    "@pedaki/services": "workspace:*",
-    "dotenv": "^16.3.1",
-    "chalk": "^5.3.0",
-    "inquirer": "^9.2.12",
-    "meow": "^12.1.1",
-    "ora": "^7.0.1",
-    "read-package-up": "^11.0.0",
-    "zod": "^3.22.4",
+    "@pedaki/auth": "workspace:*",
+    "@t3-oss/env-core": "^0.7.1",
+    "exponential-backoff": "^3.1.1",
+    "esbuild-plugin-file-path-extensions": "^1.0.0",
     "tsup": "^8.0.0",
-    "tsx": "^4.1.4"
+    "tsconfig-replace-paths": "^0.0.14",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@prisma/client": "^5.6.0",
-    "@types/inquirer": "^9.0.7"
+    "@prisma/client": "^5.6.0"
   },
   "engines": {
     "node": ">=18.0.0 <19.0.0",
@@ -47,6 +39,6 @@
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.10.5",
+  "packageManager": "pnpm@8.7.6",
   "prettier": "@pedaki/prettier-config"
 }

@@ -25,6 +25,7 @@ CREATE TABLE `users` (
     `email` VARCHAR(191) NOT NULL,
     `email_verified` DATETIME(3) NULL,
     `password` VARCHAR(191) NULL,
+    `need_reset_password` BOOLEAN NOT NULL DEFAULT false,
     `blocked` BOOLEAN NOT NULL DEFAULT false,
     `image` VARCHAR(1000) NOT NULL DEFAULT '',
 

@@ -86,7 +86,8 @@ sudo -E docker compose -f docker-compose.yml up -d db
 
 echo "Seeding database..."
 cd pedaki-community
-pedaki db init
+pedaki db migrate
+pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD"
 cd ..
 
 echo "Starting app..."

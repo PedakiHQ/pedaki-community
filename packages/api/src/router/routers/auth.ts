@@ -1,9 +1,6 @@
-import { generateDataURL } from '@pedaki/common/utils/circle-gradient';
-import { hashPassword } from '@pedaki/common/utils/hash';
-import { prisma } from '@pedaki/db';
+import { authService } from '@pedaki/services/auth/auth.service.js';
 import type { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
-import { env } from '~api/env';
 import { publicProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
@@ -17,17 +14,8 @@ export const authRouter = router({
       }),
     )
     .mutation(async ({ input }) => {
-      const password = hashPassword(input.password, env.PASSWORD_SALT);
-
       try {
-        await prisma.user.create({
-          data: {
-            name: input.name,
-            email: input.email,
-            password,
-            image: generateDataURL(128),
-          },
-        });
+        await authService.createAccount(input.name, input.email, input.password);
       } catch (e) {
         if ((e as Prisma.PrismaClientKnownRequestError).code === 'P2002') {
           throw new TRPCError({

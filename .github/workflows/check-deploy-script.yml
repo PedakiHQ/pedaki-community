@@ -22,4 +22,9 @@ jobs:
 
       - name: Run script
         timeout-minutes: 3
-        run: bash ./bin/deploy latest localhost
+        run: bash ./bin/deploy
+        env:
+          DOMAIN: localhost
+          PEDAKI_APP_TAG: latest
+          ADMIN_EMAIL: developers@pedaki.fr
+          ADMIN_PASSWORD: password
