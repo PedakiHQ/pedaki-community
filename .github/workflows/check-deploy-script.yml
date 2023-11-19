@@ -26,7 +26,7 @@ jobs:
         env:
           IS_CI: true
           DOMAIN: localhost
-          PEDAKI_APP_TAG: latest
+          PEDAKI_TAG: latest
           ADMIN_EMAIL: developers@pedaki.fr
           ADMIN_PASSWORD: password
           ADMIN_NAME: GitHub Actions

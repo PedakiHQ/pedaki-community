@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+echo "[pedaki] Installing firewall..."
+sudo apt-get update -qq -y
+sudo apt-get install ufw -y -qq
+
+echo "[pedaki] Setting up firewall..."
+sudo ufw enable
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw default deny incoming
+
+echo "[pedaki] Checking firewall status..."
+sudo ufw status
+sudo ufw reload
+
+echo "[pedaki] Firewall installed!"

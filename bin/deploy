@@ -55,9 +55,11 @@ echo "[pedaki] Installing pedaki app from github"
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
-echo "[pedaki] Installing pedaki cli"
-./bin/cli-install
-pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_APP_TAG"  --email-domain "$EMAIL_DOMAIN"
+chmod +x ./bin/firewall && ./bin/firewall
+chmod +x ./bin/cli-install && ./bin/cli-install
+
+echo "[pedaki] Generating environment variables..."
+pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_TAG"  --email-domain "$EMAIL_DOMAIN"
 export $(grep -v '^#' .env.production.local | xargs)
 
 # Go back to root
@@ -92,6 +94,7 @@ pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD" --name "$ADMI
 cd ..
 
 echo "[pedaki] Starting app..."
+
 sudo -E docker compose -f docker-compose.yml up -d web
 
 echo "[pedaki] Waiting for the app to be ready..."

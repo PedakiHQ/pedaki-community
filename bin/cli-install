@@ -4,6 +4,8 @@ set -e # exit on error
 
 NODE_MAJOR=18
 
+echo "[pedaki] Installing pedaki cli"
+
 # Install pnpm
 echo "[pedaki] Adding node 18 repository..."
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
@@ -23,13 +25,9 @@ echo "[pedaki] Building cli"
 pnpm build --filter @pedaki/cli > /dev/null
 
 # I don't know why but pnpm link doesn't work on CI
-LINKER=$(test -n "$IS_CI" && echo "npm" || echo "pnpm")
+# Can't use pnpm link https://github.com/pnpm/pnpm/issues/4761
 cd packages/cli
-if [ "$LINKER" = "pnpm" ]; then
-  echo "[pedaki] Linking cli"
-  pnpm link --global > /dev/null
-else
-  echo "[pedaki] Linking cli (using npm)"
-  npm link > /dev/null
-fi
+#  pnpm link --global > /dev/null
+echo "[pedaki] Linking cli (using npm)"
+npm link > /dev/null
 cd ../..
