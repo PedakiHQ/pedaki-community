@@ -23,13 +23,14 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
+    "@47ng/cloak": "^1.1.0",
     "@pedaki/common": "0.4.2-beta.7",
     "@pedaki/db": "workspace:*",
     "chalk": "^5.3.0",
-    "@47ng/cloak": "^1.1.0",
     "inquirer": "^9.2.12",
     "meow": "^12.1.1",
     "ora": "^7.0.1",
+    "read-package-up": "^11.0.0",
     "tsup": "^7.3.0",
     "tsx": "^4.1.3"
   },
