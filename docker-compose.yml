@@ -23,6 +23,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      caddy:
+        condition: service_healthy
 
   caddy:
     image: caddy:2.7.5
@@ -32,5 +34,8 @@ services:
       - 443:443
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-    depends_on:
-      - web
+    healthcheck:
+      test: [ "CMD", "caddy", "version" ]
+      timeout: 20s
+      retries: 10
+
