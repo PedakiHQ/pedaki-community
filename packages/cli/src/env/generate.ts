@@ -53,7 +53,7 @@ class EnvGenerateCommand implements Command {
             type: 'string',
             shortFlag: 's',
           },
-          'resend-api-key': {
+          resendApiKey: {
             type: 'string',
           },
         },
@@ -106,7 +106,7 @@ class EnvGenerateCommand implements Command {
 
     console.log(chalk.bold('What version do you want to install?'));
     const url = chalk.underline`https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions`;
-    console.log(chalk.gray`You can find the list of available versions here: ${url}`);
+    console.log(chalk.gray('You can find the list of available versions here: ' + url));
 
     const answer = await inquirer.prompt<{ tag: string }>([question]);
 
@@ -317,9 +317,8 @@ class EnvGenerateCommand implements Command {
     // https://resend.com/
 
     console.log(chalk.bold('Resend API key'));
-    console.log(
-      chalk.gray`To send emails, we are using Resend.` + chalk.underline`https://resend.com/`,
-    );
+    const url = chalk.underline`https://resend.com`;
+    console.log(chalk.gray('To send emails, we are using Resend. ' + url));
     console.log(chalk.gray`You can create an account for free and get an API key.`);
 
     const question = {
@@ -328,9 +327,7 @@ class EnvGenerateCommand implements Command {
       mask: '*',
       message: 'Resend API key',
       validate: (value: string) => {
-        if (!value) return true; // optional
         // should start with re_
-
         if (!value.startsWith('re_')) {
           return 'The Resend API key must start with re_';
         }

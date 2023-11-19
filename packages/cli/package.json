@@ -26,6 +26,7 @@
     "@47ng/cloak": "^1.1.0",
     "@pedaki/common": "0.4.2-beta.7",
     "@pedaki/db": "workspace:*",
+    "dotenv": "^16.3.1",
     "chalk": "^5.3.0",
     "inquirer": "^9.2.12",
     "meow": "^12.1.1",
