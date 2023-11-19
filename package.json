@@ -51,7 +51,8 @@
     "throat": "^6.0.2",
     "turbo": "^1.10.16",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^0.34.6",
+    "esbuild": "^0.19.6"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

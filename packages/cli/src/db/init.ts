@@ -1,0 +1,211 @@
+import { prisma } from '@pedaki/db';
+import { authService } from '@pedaki/services/auth/auth.service.js';
+import { mailService } from '@pedaki/services/mail/mail.service.js';
+import { CHECK, CROSS, DOLLAR, handleBaseFlags, label } from '~/help.ts';
+import type { Command } from '~/types.ts';
+import chalk from 'chalk';
+import inquirer from 'inquirer';
+import meow from 'meow';
+import ora from 'ora';
+import z from 'zod';
+
+class DbInitCommand implements Command {
+  #email = '';
+  #name = '';
+
+  #activationToken = '';
+
+  async handle() {
+    const cli = meow(
+      `
+    ${label('Usage')}
+        ${DOLLAR} pedaki db init [options]
+        
+    ${label('Options')}
+        --email, -e       Email address for the admin user
+        --name, -n        Name for the admin user
+        --password, -p    Password for the admin user (if not provided, an activation email will be sent)
+        --force, -f       Force initialization even if database is not empty
+`,
+      {
+        flags: {
+          email: {
+            type: 'string',
+            shortFlag: 'e',
+          },
+          name: {
+            type: 'string',
+            shortFlag: 'n',
+          },
+          password: {
+            type: 'string',
+            shortFlag: 'p',
+          },
+          force: {
+            type: 'boolean',
+            shortFlag: 'f',
+          },
+        },
+        importMeta: import.meta,
+      },
+    );
+
+    handleBaseFlags(cli);
+
+    await this.checkEmptyDatabase(cli.flags);
+
+    let confirm = false;
+
+    do {
+      this.#email = await this.askForEmail(cli.flags);
+      this.#name = await this.askForName(cli.flags);
+
+      confirm = await this.confirmCreation();
+      if (!confirm) {
+        console.log(CROSS + ' Try again');
+        console.log();
+      }
+    } while (!confirm);
+
+    await this.createAdminUser(cli.flags);
+    await this.sendMail();
+  }
+
+  async checkEmptyDatabase(flags: Record<string, any>) {
+    const spinner = ora('Checking database').start();
+
+    try {
+      const count = await prisma.user.count();
+      if (count > 0) {
+        if (flags.force) {
+          spinner.warn('Database is not empty, but --force flag is set, continuing anyway');
+          return;
+        }
+        spinner.fail(
+          'Database is not empty, aborting. You can use `pedaki db reset` to reset your database or use the --force flag to force initialization.',
+        );
+        process.exit(1);
+      }
+
+      spinner.succeed('Database is empty');
+    } catch (e) {
+      spinner.fail('Database check failed');
+      console.error(e);
+      process.exit(1);
+    }
+  }
+
+  async askForEmail(flags: Record<string, any>): Promise<string> {
+    if (flags.email) {
+      console.log(CHECK + ' Using provided email (' + flags.email + ')');
+      return flags.email as string;
+    }
+
+    const schema = z.string().email();
+
+    // use inquirer
+    const question = {
+      type: 'input',
+      name: 'email',
+      message: 'Admin email address',
+      validate: (value: string) => {
+        try {
+          schema.parse(value);
+          return true;
+        } catch (error) {
+          return 'Please enter a valid email address';
+        }
+      },
+    };
+
+    console.log(chalk.bold('We need an admin email address to create your account.'));
+    console.log(chalk.gray`This account will be used to manage your Pedaki workspace.`);
+    console.log(chalk.gray`We will send you a temporary password to this email address.`);
+
+    const answer = await inquirer.prompt<{ email: string }>([question]);
+    console.log();
+
+    return answer.email;
+  }
+
+  async askForName(flags: Record<string, any>): Promise<string> {
+    if (flags.name) {
+      console.log(CHECK + ' Using provided name (' + flags.name + ')');
+      return flags.name as string;
+    }
+
+    // use inquirer
+    const question = {
+      type: 'input',
+      name: 'name',
+      message: 'Admin name',
+      validate: (value: string) => {
+        if (!value) return 'Please enter a name';
+        return true;
+      },
+    };
+
+    console.log(chalk.bold('How should we call you?'));
+
+    const answer = await inquirer.prompt<{ name: string }>([question]);
+    console.log();
+
+    return answer.name;
+  }
+
+  async confirmCreation() {
+    const question = {
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Confirm creation?',
+      default: true,
+    };
+
+    const answer = await inquirer.prompt<{ confirm: boolean }>([question]);
+
+    return answer.confirm;
+  }
+
+  async createAdminUser(flags: Record<string, any>) {
+    const spinner = ora('Creating admin user').start();
+
+    try {
+      const password = (flags.password as string) || null;
+      await authService.createAccount(this.#name, this.#email, password, {
+        needResetPassword: !password,
+      });
+      if (!password) {
+        this.#activationToken = await authService.createActivateAccountToken(this.#email);
+      }
+
+      spinner.succeed(`Admin user created`);
+    } catch (e) {
+      if ((e as { code: string }).code === 'P2002') {
+        spinner.fail('A user with this email address already exists');
+      } else {
+        spinner.fail('Admin user creation failed');
+      }
+      process.exit(1);
+    }
+  }
+
+  async sendMail() {
+    if (!this.#activationToken) {
+      console.log(CHECK + ' Password provided, not sending email');
+      return;
+    }
+    const spinner = ora('Sending email').start();
+
+    try {
+      await mailService.sendActivateAccountEmail(this.#email, this.#name, this.#activationToken);
+      spinner.succeed(`Email sent`);
+    } catch (e) {
+      spinner.fail('Email sending failed');
+      console.error(e);
+      process.exit(1);
+    }
+  }
+}
+
+const cmd = new DbInitCommand();
+export default cmd;

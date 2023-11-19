@@ -81,8 +81,17 @@ rm -f docker-compose.yml
 cp pedaki-community/docker-compose.yml docker-compose.yml.tmpl
 envsubst < docker-compose.yml.tmpl > docker-compose.yml
 rm docker-compose.yml.tmpl
-echo "Starting Docker Compose...."
-sudo -E docker compose -f docker-compose.yml up -d
+echo "Starting Database..."
+sudo -E docker compose -f docker-compose.yml up -d db
+
+echo "Seeding database..."
+cd pedaki-community
+pedaki db migrate
+pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD"
+cd ..
+
+echo "Starting app..."
+sudo -E docker compose -f docker-compose.yml up -d web
 
 echo "Waiting for the app to be ready..."
 echo "This can take a few minutes..."
