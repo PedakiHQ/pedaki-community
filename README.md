@@ -12,7 +12,11 @@
 
 # Install community version
 
-TODO message
+## Requirements
+- Ubuntu server 22.04
+- Domain name
+- Resend account
+
 ```shell
 bash <(curl -s https://raw.githubusercontent.com/PedakiHQ/pedaki-community/main/bin/deploy)
 ```
