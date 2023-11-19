@@ -1,7 +1,7 @@
 import { prisma } from '@pedaki/db';
 import { authService } from '@pedaki/services/auth/auth.service.js';
 import { mailService } from '@pedaki/services/mail/mail.service.js';
-import { CHECK, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
+import { CHECK, CROSS, DOLLAR, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -22,6 +22,7 @@ class DbInitCommand implements Command {
     ${label('Options')}
         --email, -e       Email address for the admin user
         --name, -n        Name for the admin user
+        --password, -p    Password for the admin user (if not provided, an activation email will be sent)
         --force, -f       Force initialization even if database is not empty
 `,
       {
@@ -29,6 +30,14 @@ class DbInitCommand implements Command {
           email: {
             type: 'string',
             shortFlag: 'e',
+          },
+          name: {
+            type: 'string',
+            shortFlag: 'n',
+          },
+          password: {
+            type: 'string',
+            shortFlag: 'p',
           },
           force: {
             type: 'boolean',
@@ -56,7 +65,7 @@ class DbInitCommand implements Command {
       }
     } while (!confirm);
 
-    await this.createAdminUser();
+    await this.createAdminUser(cli.flags);
     await this.sendMail();
   }
 
@@ -155,14 +164,17 @@ class DbInitCommand implements Command {
     return answer.confirm;
   }
 
-  async createAdminUser() {
+  async createAdminUser(flags: Record<string, any>) {
     const spinner = ora('Creating admin user').start();
 
     try {
-      await authService.createAccount(this.#name, this.#email, null, {
-        needResetPassword: true,
+      const password = (flags.password as string) || null;
+      await authService.createAccount(this.#name, this.#email, password, {
+        needResetPassword: !password,
       });
-      await authService.createActivateAccountToken(this.#email);
+      if (!password) {
+        await authService.createActivateAccountToken(this.#email);
+      }
 
       spinner.succeed(`Admin user created`);
     } catch (e) {
@@ -175,12 +187,11 @@ class DbInitCommand implements Command {
     }
   }
 
-  async sendMail() {
-    if (IS_CI) {
-      console.log(CHECK + ' Skipping email sending in CI');
+  async sendMail(flags: Record<string, any>) {
+    if (flags.password) {
+      console.log(CHECK + ' Password provided, not sending email');
       return;
     }
-
     const spinner = ora('Sending email').start();
 
     try {
