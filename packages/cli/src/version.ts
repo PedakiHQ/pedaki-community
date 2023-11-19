@@ -1,3 +1,4 @@
-import { readPackageUp } from 'read-package-up';
+// @ts-ignore
+import packageJson from '../package.json' assert { type: 'json' };
 
-export const packageJson = (await readPackageUp())!;
+export const VERSION = packageJson.version;

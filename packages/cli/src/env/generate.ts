@@ -2,7 +2,7 @@ import fs from 'fs';
 import { generateKey, parseKeySync } from '@47ng/cloak';
 import { CHECK, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
-import { packageJson } from '~/version.ts';
+import { VERSION } from '~/version.ts';
 import chalk from 'chalk';
 import { $ } from 'execa';
 import inquirer from 'inquirer';
@@ -96,14 +96,13 @@ class EnvGenerateCommand implements Command {
       console.log(CHECK + ' Using provided tag (' + flags.tag + ')');
       return flags.tag as string;
     }
-    const localVersion = packageJson.packageJson.version;
 
     // use inquirer
     const question = {
       type: 'input',
       name: 'tag',
       message: 'Image tag',
-      default: localVersion,
+      default: VERSION,
     };
 
     console.log(chalk.bold('What version do you want to install?'));
@@ -123,8 +122,7 @@ class EnvGenerateCommand implements Command {
 
     const spinner = ora('Checking out tag').start();
 
-    const localVersion = packageJson.packageJson.version;
-    if (tag === localVersion) {
+    if (tag === VERSION) {
       spinner.succeed(`Already on version ${tag}, skipping checkout`);
       return;
     }
