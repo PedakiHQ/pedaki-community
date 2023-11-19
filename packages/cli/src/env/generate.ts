@@ -9,13 +9,14 @@ import inquirer from 'inquirer';
 import meow from 'meow';
 import ora from 'ora';
 
-const HIDE_VALUE_FOR = ['PRISMA_ENCRYPTION_KEY', 'PASSWORD_SALT'] as const;
+const HIDE_VALUE_FOR = ['PRISMA_ENCRYPTION_KEY', 'PASSWORD_SALT', 'RESEND_API_KEY'] as const;
 
 class EnvGenerateCommand implements Command {
   #tag = 'latest';
   #domain = 'localhost';
   #key = '';
   #salt = '';
+  #resendApiKey = '';
 
   async handle() {
     const cli = meow(
@@ -27,9 +28,11 @@ class EnvGenerateCommand implements Command {
         --domain, -d      Domain name
         --tag, -t         Image tag
         --key, -k         Encryption key
+        --salt, -s        Password salt
+        --resend-api-key  Resend API key
         
     ${label('Examples')}
-        Generate env file with domain name and image tag
+        Generate env file with predefined domain name and image tag
         ${DOLLAR} pedaki env generate --domain example.com --tag latest
 `,
       {
@@ -50,6 +53,9 @@ class EnvGenerateCommand implements Command {
             type: 'string',
             shortFlag: 's',
           },
+          'resend-api-key': {
+            type: 'string',
+          },
         },
         importMeta: import.meta,
       },
@@ -66,6 +72,7 @@ class EnvGenerateCommand implements Command {
       this.#domain = await this.askForDomain(cli.flags);
       this.#key = await this.askForEncryptionKey(cli.flags);
       this.#salt = await this.askForPasswordSalt(cli.flags);
+      this.#resendApiKey = await this.askForResendApiKey(cli.flags);
 
       env = this.buildEnvFile();
       confirm = await this.confirmEnvFile(env);
@@ -296,6 +303,52 @@ class EnvGenerateCommand implements Command {
     return answer.salt;
   }
 
+  async askForResendApiKey(flags: Record<string, any>): Promise<string> {
+    if (IS_CI) {
+      return 'null';
+    }
+
+    if (flags.resendApiKey) {
+      console.log(CHECK + ' Using provided Resend API key');
+      return flags.resendApiKey as string;
+    }
+
+    // Resend API is used to send emails
+    // https://resend.com/
+
+    console.log(chalk.bold('Resend API key'));
+    console.log(
+      chalk.gray`To send emails, we are using Resend.` + chalk.underline`https://resend.com/`,
+    );
+    console.log(chalk.gray`You can create an account for free and get an API key.`);
+
+    const question = {
+      type: 'password',
+      name: 'resendApiKey',
+      mask: '*',
+      message: 'Resend API key',
+      validate: (value: string) => {
+        if (!value) return true; // optional
+        // should start with re_
+
+        if (!value.startsWith('re_')) {
+          return 'The Resend API key must start with re_';
+        }
+        // spaces are not allowed
+        if (value.includes(' ')) {
+          return 'The Resend API key must not contain spaces';
+        }
+
+        return true;
+      },
+    };
+
+    const answer = await inquirer.prompt<{ resendApiKey: string }>([question]);
+    console.log(); // empty line
+
+    return answer.resendApiKey;
+  }
+
   buildEnvFile() {
     const env = `
 # Pedaki environment variables
@@ -307,6 +360,8 @@ PEDAKI_DOMAIN=${this.#domain}
 DATABASE_URL=mysql://pedaki:pedaki@db:3306/pedaki
 PRISMA_ENCRYPTION_KEY=${this.#key}
 PASSWORD_SALT=${this.#salt}
+
+RESEND_API_KEY=${this.#resendApiKey}
 `;
 
     // remove first and last line
