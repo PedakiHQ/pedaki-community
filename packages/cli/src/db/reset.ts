@@ -1,4 +1,4 @@
-import { DOLLAR, handleBaseFlags, label } from '~/help.ts';
+import { checkEnvVariables, DOLLAR, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import { $ } from 'execa';
 import meow from 'meow';
@@ -18,6 +18,8 @@ class DbResetCommand implements Command {
     );
 
     handleBaseFlags(cli);
+
+    checkEnvVariables(['DATABASE_URL', 'PRISMA_ENCRYPTION_KEY']);
 
     await this.applyPrismaReset();
   }

@@ -1,7 +1,7 @@
 import { prisma } from '@pedaki/db';
 import { authService } from '@pedaki/services/auth/auth.service.js';
 import { mailService } from '@pedaki/services/mail/mail.service.js';
-import { CHECK, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
+import { CHECK, checkEnvVariables, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -51,6 +51,8 @@ class DbInitCommand implements Command {
     );
 
     handleBaseFlags(cli);
+
+    checkEnvVariables(['DATABASE_URL', 'RESEND_API_KEY', 'PRISMA_ENCRYPTION_KEY', 'PASSWORD_SALT']);
 
     await this.checkEmptyDatabase(cli.flags);
 

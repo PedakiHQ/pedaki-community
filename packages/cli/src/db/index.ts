@@ -1,4 +1,4 @@
-import { checkEnvVariables, DOLLAR, execOrShowHelp, label } from '~/help.ts';
+import { DOLLAR, execOrShowHelp, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import meow from 'meow';
 
@@ -7,13 +7,6 @@ const commands = {
   init: () => import('./init.ts').then(mod => mod.default),
   reset: () => import('./reset.ts').then(mod => mod.default),
 };
-
-const REQUIRED_ENV = [
-  'DATABASE_URL',
-  'RESEND_API_KEY',
-  'PRISMA_ENCRYPTION_KEY',
-  'PASSWORD_SALT',
-] as const;
 
 class DbCommand implements Command {
   async handle() {
@@ -31,8 +24,7 @@ class DbCommand implements Command {
         importMeta: import.meta,
       },
     );
-
-    checkEnvVariables(REQUIRED_ENV);
+    handleBaseFlags(cli);
 
     await execOrShowHelp(cli, 1, commands);
   }
