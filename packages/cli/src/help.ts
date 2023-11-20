@@ -1,7 +1,6 @@
-// template method: use with label`...`
-
 import type { BaseOptions, Command } from '~/types.ts';
 import chalk from 'chalk';
+import dotenv from 'dotenv';
 import type { Result } from 'meow';
 
 export const label = (value: string) => chalk.blue.bold(value);
@@ -52,4 +51,19 @@ export const handleBaseFlags = (cli: Result<any>) => {
     console.log(`${CHECK} CI mode enabled`);
     IS_CI = true;
   }
+};
+
+export const checkEnvVariables = (required_env: readonly string[]) => {
+  dotenv.config({ path: './.env.production.local' });
+
+  if (required_env.some(envVariable => !process.env[envVariable])) {
+    console.error(
+      CROSS,
+      'Missing environment variables. Please check your .env.production.local file.\nRun `pedaki env generate` to generate a new .env.production.local file.',
+    );
+    console.error(`   Required environment variables: ${required_env.join(', ')}`);
+    process.exit(1);
+  }
+
+  console.log(CHECK, 'Environment variables loaded from .env.production.local');
 };

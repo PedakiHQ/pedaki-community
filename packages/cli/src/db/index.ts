@@ -1,6 +1,5 @@
-import { CHECK, CROSS, DOLLAR, execOrShowHelp, label } from '~/help.ts';
+import { checkEnvVariables, DOLLAR, execOrShowHelp, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
-import dotenv from 'dotenv';
 import meow from 'meow';
 
 const commands = {
@@ -33,23 +32,9 @@ class DbCommand implements Command {
       },
     );
 
-    this.checkEnvVariables();
+    checkEnvVariables(REQUIRED_ENV);
 
     await execOrShowHelp(cli, 1, commands);
-  }
-
-  checkEnvVariables() {
-    dotenv.config({ path: './.env.production.local' });
-
-    if (REQUIRED_ENV.some(envVariable => !process.env[envVariable])) {
-      console.error(
-        CROSS,
-        'Missing environment variables. Please check your .env.production.local file.\nRun `pedaki env generate` to generate a new .env.production.local file.',
-      );
-      process.exit(1);
-    }
-
-    console.log(CHECK, 'Environment variables loaded from .env.production.local');
   }
 }
 
