@@ -390,6 +390,7 @@ PEDAKI_DOMAIN=${this.#domain}
 
 DATABASE_URL=mysql://pedaki:pedaki@127.0.0.1:3306/pedaki
 PRISMA_ENCRYPTION_KEY=${this.#key}
+
 PASSWORD_SALT=${this.#salt}
 
 RESEND_API_KEY=${this.#resendApiKey}
