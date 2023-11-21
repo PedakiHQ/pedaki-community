@@ -54,8 +54,6 @@ export const handleBaseFlags = (cli: Result<any>) => {
 };
 
 export const checkEnvVariables = (required_env: readonly string[]) => {
-  dotenv.config({ path: './.env.production.local' });
-
   if (required_env.some(envVariable => !process.env[envVariable])) {
     console.error(
       CROSS,
@@ -64,6 +62,10 @@ export const checkEnvVariables = (required_env: readonly string[]) => {
     console.error(`   Required environment variables: ${required_env.join(', ')}`);
     process.exit(1);
   }
+};
 
-  console.log(CHECK, 'Environment variables loaded from .env.production.local');
+export const loadEnvVariables = (path: string) => {
+  // Check if .env.production.local exists
+  dotenv.config({ path });
+  console.log(CHECK, 'Environment variables loaded from', path);
 };

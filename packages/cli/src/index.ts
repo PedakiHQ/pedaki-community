@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import meow from 'meow';
-import { DOLLAR, execOrShowHelp, label } from './help.ts';
+import { DOLLAR, execOrShowHelp, label, loadEnvVariables } from './help.ts';
 
 const commands = {
   db: () => import('./db/index.ts').then(mod => mod.default),
@@ -19,6 +19,7 @@ const cli = meow(
     ${label('Options')}
         --help, -h      Show help
         --version, -v   Show version
+        --env-file       Path to .env file
         --ci            Force CI mode (no interactive prompts)
 `,
   {
@@ -35,9 +36,15 @@ const cli = meow(
         type: 'boolean',
         default: false,
       },
+      envFile: {
+        type: 'string',
+        default: '.env.production.local',
+      },
     },
     importMeta: import.meta,
   },
 );
+
+loadEnvVariables(cli.flags.envFile);
 
 await execOrShowHelp(cli, 0, commands);
