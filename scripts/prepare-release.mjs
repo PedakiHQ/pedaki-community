@@ -49,6 +49,12 @@ const questions = [
         message: 'Is this a pre-release?',
         default: true,
         when: (answers) => answers.versionType !== 'manual'
+    },
+    {
+        type: 'pedakiDeps',
+        name: 'confirm',
+        message: 'Update pedaki dependencies?',
+        default: false,
     }
 ];
 
@@ -95,7 +101,7 @@ const updateDependencies = (dependencies, newVersion) => {
     return dependencies;
 }
 
-const updatePackageJson = async (newVersion) => {
+const updatePackageJson = async (newVersion, updatePedakiDependencies) => {
     const spinner = ora('Updating package.json files...');
     spinner.start();
 
@@ -108,8 +114,10 @@ const updatePackageJson = async (newVersion) => {
         console.log(`Updating ${chalk.cyan(path.basename(path.dirname(packageJsonFile)))}...`);
         const packageJson = JSON.parse(fs.readFileSync(packageJsonFile));
         packageJson.version = newVersion;
-        packageJson.dependencies = updateDependencies(packageJson.dependencies, newVersion);
-        packageJson.devDependencies = updateDependencies(packageJson.devDependencies, newVersion);
+        if (updatePedakiDependencies) {
+            packageJson.dependencies = updateDependencies(packageJson.dependencies, newVersion);
+            packageJson.devDependencies = updateDependencies(packageJson.devDependencies, newVersion);
+        }
         fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2));
     }
 
@@ -187,7 +195,7 @@ inquirer.prompt(questions).then(async (answers) => {
                 process.exit(0);
             }
         });
-        await updatePackageJson(newVersion);
+        await updatePackageJson(newVersion, answers.pedakiDeps);
         await updateLockFiles();
         await commitChanges(newVersion);
         await openNewTagPage(newVersion, isPreRelease);
