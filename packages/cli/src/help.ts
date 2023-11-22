@@ -47,7 +47,7 @@ export const handleBaseFlags = (cli: Result<any>) => {
     process.exit(0);
   }
 
-  if (options.ci ?? cli.flags.ci) {
+  if ((options.ci ?? cli.flags.ci) && !IS_CI) {
     console.log(`${CHECK} CI mode enabled`);
     IS_CI = true;
   }
