@@ -85,6 +85,10 @@ rm -f docker-compose.yml
 cp pedaki-community/docker-compose.yml docker-compose.yml.tmpl
 envsubst < docker-compose.yml.tmpl > docker-compose.yml
 rm docker-compose.yml.tmpl
+echo "[pedaki] Pulling latest images..."
+sudo -E docker compose -f docker-compose.yml pull
+echo "[pedaki] Docker Compose configured!"
+
 echo "[pedaki] Starting Database..."
 sudo -E docker compose -f docker-compose.yml up -d db
 
