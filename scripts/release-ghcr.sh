@@ -1,3 +1,5 @@
+set -e # stop on error
+
 VERSION=$1
 
 if [ -z "$IMAGE_NAME" ]; then
@@ -12,7 +14,7 @@ fi
 
 echo "Version: ${VERSION}"
 
-docker build . --tag $IMAGE_NAME:latest -f ./app/Dockerfile
+docker build . --tag $IMAGE_NAME:latest -f $DOCKERFILE
 
 docker push $IMAGE_NAME:latest
 docker tag $IMAGE_NAME:latest $IMAGE_NAME:${VERSION}

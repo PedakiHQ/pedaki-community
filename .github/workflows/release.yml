@@ -31,3 +31,4 @@ jobs:
         run: bash ./scripts/release-ghcr.sh
         env:
           IMAGE_NAME: ghcr.io/pedakihq/pedaki
+          DOCKERFILE: ./app/Dockerfile
