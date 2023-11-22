@@ -10,12 +10,16 @@ class DbMigrateCommand implements Command {
       `
     ${label('Usage')}
         ${DOLLAR} pedaki db migrate [options]
+        
+    ${label('Options')}
+        --skip-install, -s    Skip installing dependencies
 `,
       {
         flags: {
-          email: {
-            type: 'string',
-            shortFlag: 'e',
+          skipInstall: {
+            type: 'boolean',
+            shortFlag: 's',
+            default: false,
           },
         },
         importMeta: import.meta,
@@ -26,16 +30,21 @@ class DbMigrateCommand implements Command {
 
     checkEnvVariables(['DATABASE_URL', 'PRISMA_ENCRYPTION_KEY']);
 
-    await this.applyPrismaMigrations();
+    await this.applyPrismaMigrations(cli.flags);
   }
 
-  async applyPrismaMigrations() {
+  async applyPrismaMigrations(flags: { skipInstall: boolean }) {
     const spinner = ora('Applying Database migrations').start();
 
     try {
-      // install prisma deps
-      await $`pnpm install --filter @pedaki/db --ignore-script -s --config.confirmModulesPurge=false`;
-      spinner.info('Dependencies installed');
+      if (!flags.skipInstall) {
+        // install prisma deps
+        spinner.info('Installing dependencies');
+        await $`pnpm install --filter @pedaki/db --ignore-script -s --config.confirmModulesPurge=false`;
+        spinner.info('Dependencies installed');
+      } else {
+        spinner.info('Skipping dependencies installation');
+      }
 
       // go in packages/db
       const cwd = process.cwd();
