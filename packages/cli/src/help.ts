@@ -49,7 +49,7 @@ export const handleBaseFlags = (cli: Result<any>) => {
   }
 
   if ((options.ci ?? cli.flags.ci) && !IS_CI) {
-    logger.info(`${CHECK} CI mode enabled`);
+    logger.debug(`${CHECK} CI mode enabled`);
     IS_CI = true;
   }
 };
@@ -68,5 +68,5 @@ export const checkEnvVariables = (required_env: readonly string[]) => {
 export const loadEnvVariables = (path: string) => {
   // Check if .env.production.local exists
   dotenv.config({ path });
-  logger.info({ message: `${CHECK} Environment variables loaded from ${path}` });
+  logger.debug({ message: `${CHECK} Environment variables loaded from ${path}` });
 };
