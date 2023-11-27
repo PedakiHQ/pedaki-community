@@ -8,6 +8,8 @@ export const env = createEnv({
     SECRET_PRIVATE_VARIABLE: z.string().min(2),
 
     PASSWORD_SALT: z.string().min(2),
+
+    LOGGER_SERVICE_NAME: z.string(),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

@@ -1,5 +1,7 @@
 import crypto from 'crypto';
+import * as api from '@opentelemetry/api';
 import { env } from '~/env.ts';
+import { VERSION } from '~/version.ts';
 import winston from 'winston';
 
 const instanceId = crypto.randomBytes(8).toString('hex');
@@ -8,16 +10,17 @@ const { combine, json, colorize, cli } = winston.format;
 
 export const logger = winston.createLogger({
   level: env.LOGGER_LEVEL,
-  format: winston.format.combine(
+  format: combine(
     winston.format(info => {
-      // Override service name
-      info.scope = { name: '@pedaki' };
-      info.instanceId = instanceId;
-
-      if (typeof info.durationMs === 'number') {
-        info.durationMS = info.durationMs;
-        delete info.durationMs;
+      const span = api.trace.getActiveSpan();
+      if (span) {
+        info.spanId = span.spanContext().spanId;
+        info.traceId = span.spanContext().traceId;
       }
+
+      info.instanceId = instanceId;
+      info.version = VERSION;
+
       return info;
     })(),
     json(),
