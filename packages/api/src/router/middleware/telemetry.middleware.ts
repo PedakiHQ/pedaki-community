@@ -1,5 +1,4 @@
 import { trace } from '@opentelemetry/api';
-import { env } from '~api/env.ts';
 import { t } from '~api/router/init.ts';
 import { flatten } from 'flat';
 
@@ -13,10 +12,6 @@ export const withTelemetry = t.middleware(async ({ rawInput, path, type, ctx, ne
         path: path,
         type: type,
         ok: result.ok,
-        service: {
-          name: env.LOGGER_SERVICE_NAME,
-          namespace: env.LOGGER_SERVICE_NAME,
-        },
       }),
     );
     span.end();
