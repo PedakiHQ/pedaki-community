@@ -3,6 +3,7 @@
 # https://github.com/factorim/next-with-system-env
 
 set +x # disable verbose mode
+set +e # stop on error
 
 # config
 envFilename='.env.production'
@@ -25,12 +26,20 @@ function apply_path {
     if [ -n "$configValue" ] && [ -n "$envValue" ]; then
       # replace all
       echo "+ Replace: ${configValue} with: ${envValue}"
-      find $nextFolder \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i "s#$configValue#$envValue#g"
+      find $nextFolder \( -type d -name .git -prune \) -o -type f -print0 2> /dev/null | xargs -0 sed -i "s#$configValue#$envValue#g"
+      export "$configName=$envValue"
+      sed  "s#$configValue#$envValue#g" $envFilename > $envFilename.tmp
     else
       echo "- Not found: ${configValue}"
     fi
   done < $envFilename
+  mv $envFilename.tmp $envFilename
+  rm -f $envFilename.tmp
 }
-apply_path
+
+(test -f $envFilename -a -n $envFilename && echo "Found config file: $envFilename") || exit 1
+
+apply_path || (echo "Error while applying path" && exit 1)
+
 echo "Starting Nextjs"
 exec "$@"
