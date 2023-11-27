@@ -4,7 +4,7 @@ import { env } from '~/env.ts';
 import { VERSION } from '~/version.ts';
 import winston from 'winston';
 
-const instanceId = crypto.randomBytes(8).toString('hex');
+export const INSTANCE_ID = crypto.randomBytes(8).toString('hex');
 
 const { combine, json, simple } = winston.format;
 
@@ -29,10 +29,10 @@ export const logger = winston.createLogger({
       info.service = {
         name: env.LOGGER_SERVICE_NAME,
         namespace: env.LOGGER_NAMESPACE,
+        instanceId: INSTANCE_ID,
+        community: true,
+        version: VERSION,
       };
-      info.instanceId = instanceId;
-      info.community = true;
-      info.version = VERSION;
 
       return info;
     })(),
