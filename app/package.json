@@ -25,6 +25,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
     "@pedaki/api": "workspace:*",
+    "@pedaki/logger": "workspace:*",
     "@pedaki/auth": "workspace:*",
     "@pedaki/design": "0.4.2-beta.9",
     "@t3-oss/env-nextjs": "^0.7.1",

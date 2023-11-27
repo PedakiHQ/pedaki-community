@@ -5,6 +5,10 @@ const nextConfig = {
   poweredByHeader: false,
   output: 'standalone',
 
+  experimental: {
+    instrumentationHook: true,
+  },
+
   transpilePackages: ['@pedaki/api', '@pedaki/auth'],
 
   images: {
