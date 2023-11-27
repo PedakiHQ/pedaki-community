@@ -1,0 +1,35 @@
+{
+  "name": "@pedaki/logger",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsup --clean",
+    "build:watch": "tsup --watch",
+    "lint": "eslint .",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
+    "typecheck": "tsc --noEmit --declaration"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  },
+  "keywords": [],
+  "author": "Nathan David <me@vahor.fr>",
+  "license": "MIT",
+  "dependencies": {
+    "@t3-oss/env-core": "^0.7.1",
+    "winston": "^3.11.0",
+    "zod": "^3.22.4"
+  },
+  "engines": {
+    "node": ">=18.0.0 <19.0.0",
+    "pnpm": ">=8.0.0",
+    "yarn": "use-pnpm",
+    "npm": "use-pnpm"
+  },
+  "packageManager": "pnpm@8.7.6",
+  "prettier": "@pedaki/prettier-config"
+}
