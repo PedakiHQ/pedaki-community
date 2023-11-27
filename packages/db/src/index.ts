@@ -1,11 +1,22 @@
+import { logger } from '@pedaki/logger';
 import { PrismaClient } from '@prisma/client';
 import { fieldEncryptionExtension } from 'prisma-field-encryption';
 import { env } from './env.ts';
 
+const logLevels =
+  env.NODE_ENV === 'development'
+    ? (['query', 'error', 'warn', 'info'] as const)
+    : (['error'] as const);
+
 const prismaClientSingleton = () => {
   let client = new PrismaClient({
-    log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn', 'info'] : ['error'],
+    log: logLevels.map(level => ({ level, emit: 'event' })),
   });
+
+  client.$on('error', e => {
+    logger.error(e);
+  });
+
   if (env.PRISMA_ENCRYPTION_KEY) {
     client = client.$extends(
       fieldEncryptionExtension({
@@ -13,6 +24,7 @@ const prismaClientSingleton = () => {
       }),
     ) as PrismaClient;
   }
+
   return client;
 };
 
