@@ -27,8 +27,8 @@ function apply_path {
       # replace all
       echo "+ Replace: ${configValue} with: ${envValue}"
       find $nextFolder \( -type d -name .git -prune \) -o -type f -print0 2> /dev/null | xargs -0 sed -i "s#$configValue#$envValue#g"
+      echo "$configName=$envValue" >> $envFilename.tmp
       export "$configName=$envValue"
-      sed  "s#$configValue#$envValue#g" $envFilename > $envFilename.tmp
     else
       echo "- Not found: ${configValue}"
     fi
