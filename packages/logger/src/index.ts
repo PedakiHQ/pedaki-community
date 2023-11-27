@@ -6,7 +6,14 @@ import winston from 'winston';
 
 const instanceId = crypto.randomBytes(8).toString('hex');
 
-const { combine, json, colorize, cli } = winston.format;
+const { combine, json, simple } = winston.format;
+
+const removeColors = winston.format(info => {
+  if (info.message && typeof info.message === 'string') {
+    info.message = info.message.replace(/\x1B\[\d+m/g, '');
+  }
+  return info;
+});
 
 export const logger = winston.createLogger({
   level: env.LOGGER_LEVEL,
@@ -23,12 +30,24 @@ export const logger = winston.createLogger({
 
       return info;
     })(),
-    json(),
+    simple(),
   ),
   exitOnError: false,
   transports: [
-    new winston.transports.Console({ level: 'debug', format: combine(colorize(), cli()) }),
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.Console({
+      level: 'info',
+      format: winston.format.printf(info => {
+        return info.message ? `${info.message}` : '';
+      }),
+    }),
+    new winston.transports.File({
+      filename: 'error.log',
+      level: 'error',
+      format: combine(removeColors(), json()),
+    }),
+    new winston.transports.File({
+      filename: 'combined.log',
+      format: combine(removeColors(), json()),
+    }),
   ],
 });
