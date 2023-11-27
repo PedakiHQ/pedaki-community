@@ -58,7 +58,7 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/app/.next/standalone/app ./
 COPY --from=builder --chown=nextjs:nodejs /app/app/.next/static ./.next/static
 COPY --from=builder /app/app/.next/standalone/node_modules ./node_modules
-COPY --from=builder /app/packages/logger/packages.json ./node_modules/@pedaki/package.json
+COPY --from=builder /app/packages/logger/package.json ./node_modules/@pedaki/package.json
 
 COPY app/entrypoint.sh .
 COPY .env.production .
