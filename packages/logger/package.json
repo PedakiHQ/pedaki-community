@@ -1,6 +1,6 @@
 {
-  "name": "@pedaki/services",
-  "version": "0.4.2-beta.9",
+  "name": "@pedaki/logger",
+  "version": "1.0.0",
   "description": "",
   "private": true,
   "main": "index.js",
@@ -20,19 +20,10 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "@pedaki/common": "0.4.2-beta.9",
-    "@pedaki/db": "workspace:*",
-    "@pedaki/logger": "workspace:*",
-    "@pedaki/auth": "workspace:*",
+    "@opentelemetry/api": "^1.7.0",
     "@t3-oss/env-core": "^0.7.1",
-    "exponential-backoff": "^3.1.1",
-    "esbuild-plugin-file-path-extensions": "^1.0.0",
-    "tsup": "^8.0.1",
-    "tsconfig-replace-paths": "^0.0.14",
+    "winston": "^3.11.0",
     "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "@prisma/client": "^5.6.0"
   },
   "engines": {
     "node": ">=18.0.0 <19.0.0",
@@ -40,6 +31,6 @@
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@8.7.6",
   "prettier": "@pedaki/prettier-config"
 }

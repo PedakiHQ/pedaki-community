@@ -1,0 +1,6 @@
+dist
+*.md
+package.json
+coverage
+.yalc
+src/version.ts

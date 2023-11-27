@@ -1,4 +1,5 @@
 import { prisma } from '@pedaki/db';
+import { logger } from '@pedaki/logger';
 import { authService } from '@pedaki/services/auth/auth.service.js';
 import { mailService } from '@pedaki/services/mail/mail.service.js';
 import { CHECK, checkEnvVariables, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
@@ -64,7 +65,7 @@ class DbInitCommand implements Command {
 
       confirm = await this.confirmCreation();
       if (!confirm) {
-        console.log(CROSS + ' Try again');
+        logger.info(CROSS + ' Try again');
         console.log();
       }
     } while (!confirm);
@@ -92,14 +93,14 @@ class DbInitCommand implements Command {
       spinner.succeed('Database is empty');
     } catch (e) {
       spinner.fail('Database check failed');
-      console.error(e);
+      logger.error(e);
       process.exit(1);
     }
   }
 
   async askForEmail(flags: Record<string, any>): Promise<string> {
     if (flags.email) {
-      console.log(CHECK + ' Using provided email (' + flags.email + ')');
+      logger.info(CHECK + ' Using provided email (' + flags.email + ')');
       return flags.email as string;
     }
 
@@ -120,9 +121,9 @@ class DbInitCommand implements Command {
       },
     };
 
-    console.log(chalk.bold('We need an admin email address to create your account.'));
-    console.log(chalk.gray`This account will be used to manage your Pedaki workspace.`);
-    console.log(chalk.gray`We will send you a temporary password to this email address.`);
+    logger.info(chalk.bold('We need an admin email address to create your account.'));
+    logger.info(chalk.gray`This account will be used to manage your Pedaki workspace.`);
+    logger.info(chalk.gray`We will send you a temporary password to this email address.`);
 
     const answer = await inquirer.prompt<{ email: string }>([question]);
     console.log();
@@ -132,7 +133,7 @@ class DbInitCommand implements Command {
 
   async askForName(flags: Record<string, any>): Promise<string> {
     if (flags.name) {
-      console.log(CHECK + ' Using provided name (' + flags.name + ')');
+      logger.info(CHECK + ' Using provided name (' + flags.name + ')');
       return flags.name as string;
     }
 
@@ -147,7 +148,7 @@ class DbInitCommand implements Command {
       },
     };
 
-    console.log(chalk.bold('How should we call you?'));
+    logger.info(chalk.bold('How should we call you?'));
 
     const answer = await inquirer.prompt<{ name: string }>([question]);
     console.log();
@@ -157,7 +158,7 @@ class DbInitCommand implements Command {
 
   async confirmCreation() {
     if (IS_CI) {
-      console.log(CHECK + ' Skipping confirmation in CI');
+      logger.info(CHECK + ' Skipping confirmation in CI');
       return true;
     }
 
@@ -198,7 +199,7 @@ class DbInitCommand implements Command {
 
   async sendMail() {
     if (!this.#activationToken) {
-      console.log(CHECK + ' Password provided, not sending email');
+      logger.info(CHECK + ' Password provided, not sending email');
       return;
     }
     const spinner = ora('Sending email').start();
@@ -208,7 +209,7 @@ class DbInitCommand implements Command {
       spinner.succeed(`Email sent`);
     } catch (e) {
       spinner.fail('Email sending failed');
-      console.error(e);
+      logger.error(e);
       process.exit(1);
     }
   }

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { generateKey, parseKeySync } from '@47ng/cloak';
+import { logger } from '@pedaki/logger';
 import { CHECK, CROSS, DOLLAR, handleBaseFlags, IS_CI, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import { VERSION } from '~/version.ts';
@@ -83,7 +84,7 @@ class EnvGenerateCommand implements Command {
       env = this.buildEnvFile();
       confirm = await this.confirmEnvFile(env);
       if (!confirm) {
-        console.log(CROSS + ' Try again');
+        logger.warn(CROSS + ' Try again');
         console.log();
       }
     } while (!confirm);
@@ -93,7 +94,7 @@ class EnvGenerateCommand implements Command {
 
   async askForTag(flags: Record<string, any>): Promise<string> {
     if (flags.tag) {
-      console.log(CHECK + ' Using provided tag (' + flags.tag + ')');
+      logger.info(CHECK + ' Using provided tag (' + flags.tag + ')');
       return flags.tag as string;
     }
 
@@ -105,9 +106,9 @@ class EnvGenerateCommand implements Command {
       default: VERSION,
     };
 
-    console.log(chalk.bold('What version do you want to install?'));
+    logger.info(chalk.bold('What version do you want to install?'));
     const url = chalk.underline`https://github.com/PedakiHQ/pedaki/pkgs/container/pedaki/versions`;
-    console.log(chalk.gray('You can find the list of available versions here: ' + url));
+    logger.info(chalk.gray('You can find the list of available versions here: ' + url));
 
     const answer = await inquirer.prompt<{ tag: string }>([question]);
 
@@ -116,7 +117,7 @@ class EnvGenerateCommand implements Command {
 
   async checkoutTag(tag: string) {
     if (IS_CI) {
-      console.log(CHECK + ' CI environment, skipping checkout');
+      logger.info(CHECK + ' CI environment, skipping checkout');
       return;
     }
 
@@ -173,7 +174,7 @@ class EnvGenerateCommand implements Command {
 
   async askForDomain(flags: Record<string, any>): Promise<string> {
     if (flags.domain) {
-      console.log(CHECK + ' Using provided domain (' + flags.domain + ')');
+      logger.info(CHECK + ' Using provided domain (' + flags.domain + ')');
       return flags.domain as string;
     }
 
@@ -192,11 +193,11 @@ class EnvGenerateCommand implements Command {
       },
     };
 
-    console.log(chalk.bold('What is your domain name?'));
-    console.log(
+    logger.info(chalk.bold('What is your domain name?'));
+    logger.info(
       chalk.gray`This is used to generate the SSL certificate and to configure the web server.`,
     );
-    console.log(
+    logger.info(
       chalk.gray`You must have a DNS record pointing to your server's IP address before running this command.`,
     );
 
@@ -208,7 +209,7 @@ class EnvGenerateCommand implements Command {
 
   async askForEncryptionKey(flags: Record<string, any>): Promise<string> {
     if (flags.key) {
-      console.log(CHECK + ' Using provided encryption key');
+      logger.info(CHECK + ' Using provided encryption key');
       return flags.key as string;
     }
 
@@ -239,9 +240,9 @@ class EnvGenerateCommand implements Command {
       },
     };
 
-    console.log(chalk.bold('Encryption key'));
-    console.log(chalk.gray`This is used to encrypt your data.`);
-    console.log(chalk.gray`If you don't provide a key, a random one will be generated.`);
+    logger.info(chalk.bold('Encryption key'));
+    logger.info(chalk.gray`This is used to encrypt your data.`);
+    logger.info(chalk.gray`If you don't provide a key, a random one will be generated.`);
 
     const answer = await inquirer.prompt<{ key: string }>([question]);
     console.log(); // empty line
@@ -256,7 +257,7 @@ class EnvGenerateCommand implements Command {
 
   async askForPasswordSalt(flags: Record<string, any>): Promise<string> {
     if (flags.salt) {
-      console.log(CHECK + ' Using provided salt');
+      logger.info(CHECK + ' Using provided salt');
       return flags.salt as string;
     }
 
@@ -284,9 +285,9 @@ class EnvGenerateCommand implements Command {
       },
     };
 
-    console.log(chalk.bold('Password salt'));
-    console.log(chalk.gray`This is used to hash your passwords.`);
-    console.log(chalk.gray`If you don't provide a salt, a random one will be generated.`);
+    logger.info(chalk.bold('Password salt'));
+    logger.info(chalk.gray`This is used to hash your passwords.`);
+    logger.info(chalk.gray`If you don't provide a salt, a random one will be generated.`);
 
     const answer = await inquirer.prompt<{ salt: string }>([question]);
     console.log(); // empty line
@@ -301,7 +302,7 @@ class EnvGenerateCommand implements Command {
 
   async askForResendApiKey(flags: Record<string, any>): Promise<string> {
     if (flags.resendApiKey) {
-      console.log(CHECK + ' Using provided Resend API key');
+      logger.info(CHECK + ' Using provided Resend API key');
       return flags.resendApiKey as string;
     }
 
@@ -312,10 +313,10 @@ class EnvGenerateCommand implements Command {
     // Resend API is used to send emails
     // https://resend.com/
 
-    console.log(chalk.bold('Resend API key'));
+    logger.info(chalk.bold('Resend API key'));
     const url = chalk.underline`https://resend.com`;
-    console.log(chalk.gray('To send emails, we are using Resend. ' + url));
-    console.log(chalk.gray`You can create an account for free and get an API key.`);
+    logger.info(chalk.gray('To send emails, we are using Resend. ' + url));
+    logger.info(chalk.gray`You can create an account for free and get an API key.`);
 
     const question = {
       type: 'password',
@@ -344,7 +345,7 @@ class EnvGenerateCommand implements Command {
 
   async askForEmailDomain(flags: Record<string, any>): Promise<string> {
     if (flags.emailDomain) {
-      console.log(CHECK + ' Using provided email domain (' + flags.emailDomain + ')');
+      logger.info(CHECK + ' Using provided email domain (' + flags.emailDomain + ')');
       return flags.emailDomain as string;
     }
 
@@ -364,13 +365,13 @@ class EnvGenerateCommand implements Command {
       },
     };
 
-    console.log(
+    logger.info(
       chalk.gray`The email domain will be shown in the "from" field of the emails sent by Pedaki.`,
     );
-    console.log(
+    logger.info(
       chalk.gray`for example, if you enter "example.com", emails will be sent from "no-reply@example.com".`,
     );
-    console.log(chalk.gray`Note that you must have registered this domain with Resend.`);
+    logger.info(chalk.gray`Note that you must have registered this domain with Resend.`);
 
     const answer = await inquirer.prompt<{ emailDomain: string }>([question]);
     console.log(); // empty line
@@ -416,7 +417,7 @@ RESEND_EMAIL_DOMAIN=${this.#emailDomain}
       default: true,
     };
 
-    console.log(chalk.bold('Here is your configuration:'));
+    logger.info(chalk.bold('Here is your configuration:'));
     const prefix = chalk.gray('|  ');
     const lines = env.split('\n').map(line => {
       const [key] = line.split('=', 1);
@@ -425,18 +426,18 @@ RESEND_EMAIL_DOMAIN=${this.#emailDomain}
       }
       return line;
     });
-    console.log(prefix + lines.join('\n' + prefix));
-    console.log();
+    logger.info(prefix + lines.join('\n' + prefix));
+    console.log(); // Empty line
 
     const answer = await inquirer.prompt<{ confirm: boolean }>([question]);
-    console.log(); // empty line
+    console.log(); // Empty line
 
     return answer.confirm;
   }
 
   writeEnvFile(env: string) {
     fs.writeFileSync('.env.production.local', env);
-    console.log(CHECK + ' Configuration saved to .env.production.local');
+    logger.info(CHECK + ' Configuration saved to .env.production.local');
   }
 }
 

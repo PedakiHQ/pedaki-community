@@ -1,3 +1,4 @@
+import { logger } from '@pedaki/logger';
 import type { BaseOptions, Command } from '~/types.ts';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
@@ -29,7 +30,7 @@ export const execOrShowHelp = async (
       await mod.handle(options);
     });
   } else {
-    console.log(`${CROSS} Unknown command "${cli.input.join(' ')}"`);
+    logger.warn({ message: `${CROSS} Unknown command "${cli.input.join(' ')}"` });
     cli.showHelp();
   }
 };
@@ -43,23 +44,23 @@ export const handleBaseFlags = (cli: Result<any>) => {
   }
 
   if (options.version ?? cli.flags.v) {
-    console.log(cli.pkg?.version);
+    logger.info(cli.pkg?.version);
     process.exit(0);
   }
 
   if ((options.ci ?? cli.flags.ci) && !IS_CI) {
-    console.log(`${CHECK} CI mode enabled`);
+    logger.info(`${CHECK} CI mode enabled`);
     IS_CI = true;
   }
 };
 
 export const checkEnvVariables = (required_env: readonly string[]) => {
   if (required_env.some(envVariable => !process.env[envVariable])) {
-    console.error(
-      CROSS,
-      'Missing environment variables. Please check your .env.production.local file.\nRun `pedaki env generate` to generate a new .env.production.local file.',
-    );
-    console.error(`   Required environment variables: ${required_env.join(', ')}`);
+    logger.error({
+      message: `${CHECK} Missing environment variables. Please check your .env.production.local file.\nRun \`pedaki env generate\` to generate a new .env.production.local file. \n   Required environment variables: ${required_env.join(
+        ', ',
+      )}`,
+    });
     process.exit(1);
   }
 };
@@ -67,5 +68,5 @@ export const checkEnvVariables = (required_env: readonly string[]) => {
 export const loadEnvVariables = (path: string) => {
   // Check if .env.production.local exists
   dotenv.config({ path });
-  console.log(CHECK, 'Environment variables loaded from', path);
+  logger.info({ message: `${CHECK} Environment variables loaded from ${path}` });
 };

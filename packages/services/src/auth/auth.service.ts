@@ -2,6 +2,7 @@ import { generateDataURL } from '@pedaki/common/utils/circle-gradient.js';
 import { hashPassword } from '@pedaki/common/utils/hash.js';
 import { generateToken } from '@pedaki/common/utils/random.js';
 import { prisma } from '@pedaki/db';
+import { logger } from '@pedaki/logger';
 import { env } from '~/env.ts';
 
 class AuthService {
@@ -24,6 +25,8 @@ class AuthService {
         image: generateDataURL(128),
       },
     });
+
+    logger.info(`Created account for ${email}`);
   }
 
   async createActivateAccountToken(email: string): Promise<string> {
@@ -41,6 +44,8 @@ class AuthService {
         },
       },
     });
+
+    logger.info(`Created activation token for ${email}`);
 
     return token;
   }

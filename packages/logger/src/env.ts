@@ -5,12 +5,8 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
-    SECRET_PRIVATE_VARIABLE: z.string().min(2),
-
-    PASSWORD_SALT: z.string().min(2),
-
-    LOGGER_SERVICE_NAME: z.string(),
+    LOGGER_SERVICE_NAME: z.string().default('pedaki'),
+    LOGGER_LEVEL: z.enum(['error', 'warn', 'info', 'verbose', 'debug', 'silly']).default('info'),
   },
   runtimeEnv: process.env,
-  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
