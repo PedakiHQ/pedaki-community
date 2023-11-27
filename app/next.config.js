@@ -24,6 +24,17 @@ const nextConfig = {
     // Already checked in ci
     ignoreBuildErrors: true,
   },
+
+  webpack: (config, {isServer}) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        os: false,
+        path: false,
+      };
+    }
+    return config;
+  },
 };
 
 module.exports = nextConfig;
