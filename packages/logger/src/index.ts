@@ -25,7 +25,13 @@ export const logger = winston.createLogger({
         info.traceId = span.spanContext().traceId;
       }
 
+      // Meta data
+      info.service = {
+        name: env.LOGGER_SERVICE_NAME,
+        namespace: env.LOGGER_NAMESPACE,
+      };
       info.instanceId = instanceId;
+      info.community = true;
       info.version = VERSION;
 
       return info;
