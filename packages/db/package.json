@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",
+    "@pedaki/logger": "workspace:*",
     "prisma-field-encryption": "^1.5.0",
     "cpy": "^11.0.0",
     "tsup": "^8.0.1"

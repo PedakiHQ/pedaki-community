@@ -1,3 +1,4 @@
+import { logger } from '@pedaki/logger';
 import { checkEnvVariables, DOLLAR, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import { $ } from 'execa';
@@ -59,7 +60,7 @@ class DbMigrateCommand implements Command {
       spinner.succeed('Database migrations applied');
     } catch (e) {
       spinner.fail('Database migrations failed');
-      console.error(e);
+      logger.error(e);
       process.exit(1);
     }
   }
