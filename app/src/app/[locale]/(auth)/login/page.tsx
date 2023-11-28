@@ -1,7 +1,7 @@
 import type { PageType } from '~/app/types.ts';
 import { setStaticParamsLocale } from 'next-international/server';
 
-export default async function AuthLogin({ params }: PageType) {
+export default function AuthLogin({ params }: PageType) {
   setStaticParamsLocale(params.locale);
 
   return (

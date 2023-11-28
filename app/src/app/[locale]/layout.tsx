@@ -2,7 +2,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import '@pedaki/design/tailwind/index.css';
 import { Providers } from '~/app/[locale]/providers';
-import { getI18n, getStaticParams, type LocaleCode } from '~/locales/server';
+import { getI18n, getStaticParams } from '~/locales/server';
+import type { LocaleCode } from '~/locales/server';
 import { locales } from '~/locales/shared';
 import { notFound } from 'next/navigation';
 
