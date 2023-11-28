@@ -2,7 +2,9 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import '@pedaki/design/tailwind/index.css';
 import { Providers } from '~/app/[locale]/providers';
-import { getI18n, getStaticParams } from '~/locales/server';
+import { getI18n, getStaticParams, type LocaleCode } from '~/locales/server';
+import { locales } from '~/locales/shared';
+import { notFound } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,8 +32,12 @@ export default function RootLayout({
   params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: LocaleCode };
 }) {
+  if (!locales.includes(locale)) {
+    return notFound();
+  }
+
   return (
     <html lang={locale}>
       <body className={inter.className}>
