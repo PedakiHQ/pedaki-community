@@ -10,7 +10,7 @@ export default async function Bidule({ params }: PageType) {
   const t = await getI18n();
 
   return (
-    <main className="yeye flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <TestAPI />
       <p>{env.NEXT_PUBLIC_TESTVALUE}</p>
       <p>bidule</p>
