@@ -22,7 +22,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
       },
     },
   );
-  // @ts-ignore
+  // @ts-expect-error
   return authMiddleware(request, event);
 }
 

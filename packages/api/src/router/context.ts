@@ -5,7 +5,7 @@ export interface Context {
   session: Awaited<ReturnType<typeof auth>>;
 }
 
-export const createContext = async ({ req }: { req: NextRequest }): Promise<Context> => {
+export const createContext = async ({}: { req: NextRequest }): Promise<Context> => {
   const session = await auth();
 
   return {

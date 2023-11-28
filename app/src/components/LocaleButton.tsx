@@ -1,6 +1,6 @@
 'use client';
 
-import { useChangeLocale, useCurrentLocale, useI18n } from '~/locales/client';
+import { useChangeLocale, useCurrentLocale } from '~/locales/client';
 import type { LocaleCode } from '~/locales/server';
 import { Suspense } from 'react';
 
