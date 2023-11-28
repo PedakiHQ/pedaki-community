@@ -23,11 +23,3 @@ pnpm install --filter @pedaki/cli --frozen-lockfile --production --ignore-script
 
 echo "[pedaki] Building cli"
 pnpm build --filter @pedaki/cli > /dev/null
-
-# I don't know why but pnpm link doesn't work on CI
-# Can't use pnpm link https://github.com/pnpm/pnpm/issues/4761
-cd packages/cli
-#  pnpm link --global > /dev/null
-echo "[pedaki] Linking cli (using npm)"
-npm link > /dev/null
-cd ../..

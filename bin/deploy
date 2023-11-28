@@ -59,11 +59,15 @@ cd pedaki-community
 chmod +x ./bin/firewall && ./bin/firewall
 chmod +x ./bin/cli-install && ./bin/cli-install
 
+# Used later
+TARGET=$(pwd)
+pedaki="node --no-warnings=ExperimentalWarning $TARGET/packages/cli/dist/index.js"
+
 # Go back to root
 cd ..
 
 echo "[pedaki] Generating environment variables..."
-pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_TAG"  --email-domain "$EMAIL_DOMAIN"
+$pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_TAG"  --email-domain "$EMAIL_DOMAIN"
 export $(grep -v '^#' .env.production.local | xargs)
 
 # Add caddyfile (https://caddyserver.com/docs/automatic-https)
@@ -94,8 +98,8 @@ sudo -E docker compose -f docker-compose.yml up -d db
 
 echo "[pedaki] Seeding database..."
 cd pedaki-community
-pedaki db migrate
-pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD" --name "$ADMIN_NAME"
+$pedaki db migrate
+$pedaki db init --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD" --name "$ADMIN_NAME"
 cd ..
 
 echo "[pedaki] Starting app..."
