@@ -14,7 +14,7 @@ export const api: ReturnType<typeof experimental_createTRPCNextAppDirServer<AppR
         transformer: superjson,
         links: [
           loggerLink({
-            enabled: opts => true,
+            enabled: () => true,
           }),
           httpBatchLink({
             url: getUrl(),

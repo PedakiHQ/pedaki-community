@@ -2,7 +2,7 @@ import { trace } from '@opentelemetry/api';
 import { t } from '~api/router/init.ts';
 import { flatten } from 'flat';
 
-export const withTelemetry = t.middleware(async ({ rawInput, path, type, ctx, next }) => {
+export const withTelemetry = t.middleware(async ({ rawInput, path, type, next }) => {
   const tracer = trace.getTracer('trpc');
   return tracer.startActiveSpan(`${path} - ${type}`, async span => {
     const result = await next();
