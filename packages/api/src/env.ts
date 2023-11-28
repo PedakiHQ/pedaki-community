@@ -5,7 +5,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
-    SECRET_PRIVATE_VARIABLE: z.string().min(2),
+    SECRET_PRIVATE_VARIABLE: z.string().min(2).default('default'),
 
     PASSWORD_SALT: z.string().min(2),
 
