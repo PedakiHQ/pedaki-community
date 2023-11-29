@@ -6,6 +6,15 @@ import { env } from '~/env.ts';
 import { getI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from 'next-international/server';
 
+export const generateMetadata = async () => {
+  const t = await getI18n();
+
+  return {
+    title: { absolute: t('metadata.title') },
+    description: t('metadata.description'),
+  };
+};
+
 export default async function Bidule({ params }: PageType) {
   setStaticParamsLocale(params.locale);
   const t = await getI18n();

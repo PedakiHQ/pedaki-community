@@ -12,17 +12,16 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   const locale = locales.includes(params.locale) ? params.locale : fallbackLocale;
-  const t = await getI18n();
 
   return {
     title: {
       template: '%s - Pedaki',
-      default: t('metadata.title'),
+      default: 'Pedaki',
     },
-    description: t('metadata.description'),
+    description: 'todo',
     openGraph: {
-      title: t('metadata.title'),
-      description: t('metadata.description'),
+      title: 'Pedaki',
+      description: 'todo',
       locale: locale,
     },
     icons: [
