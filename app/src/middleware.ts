@@ -18,7 +18,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
     },
     {
       pages: {
-        signIn: `/${locale}/login`,
+        signIn: `/${locale}/auth/login`,
       },
     },
   );
