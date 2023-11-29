@@ -4,18 +4,27 @@ import '@pedaki/design/tailwind/index.css';
 import { Providers } from '~/app/[locale]/providers';
 import { getI18n, getStaticParams } from '~/locales/server';
 import type { LocaleCode } from '~/locales/server';
-import { locales } from '~/locales/shared';
+import { fallbackLocale, locales } from '~/locales/shared';
 import { notFound } from 'next/navigation';
 import React from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const generateMetadata = async () => {
+export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
+  const locale = locales.includes(params.locale) ? params.locale : fallbackLocale;
   const t = await getI18n();
 
   return {
-    title: t('metadata.title'),
+    title: {
+      template: '%s - Pedaki',
+      default: t('metadata.title'),
+    },
     description: t('metadata.description'),
+    openGraph: {
+      title: t('metadata.title'),
+      description: t('metadata.description'),
+      locale: locale,
+    },
     icons: [
       { rel: 'icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
       { rel: 'apple-touch-icon', url: 'https://static.pedaki.fr/logo/apple-touch-icon.png' },
