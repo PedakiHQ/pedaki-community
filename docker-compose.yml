@@ -27,7 +27,7 @@ services:
         condition: service_healthy
 
   caddy:
-    image: caddy:2.7.5
+    image: caddy:2.7.6
     restart: unless-stopped
     ports:
       - 80:80
