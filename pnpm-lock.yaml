@@ -182,8 +182,8 @@ importers:
         specifier: workspace:*
         version: link:../auth/src
       '@pedaki/common':
-        specifier: 0.4.2-beta.9
-        version: 0.4.2-beta.9(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
+        specifier: 0.4.2
+        version: 0.4.2(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
       '@pedaki/db':
         specifier: workspace:*
         version: link:../db/dist
@@ -238,8 +238,8 @@ importers:
         specifier: ^1.0.9
         version: 1.0.9(@prisma/client@5.6.0)
       '@pedaki/common':
-        specifier: 0.4.2-beta.9
-        version: 0.4.2-beta.9(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
+        specifier: 0.4.2
+        version: 0.4.2(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
       '@pedaki/db':
         specifier: workspace:*
         version: link:../db/dist
@@ -273,8 +273,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       '@pedaki/common':
-        specifier: 0.4.2-beta.9
-        version: 0.4.2-beta.9(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
+        specifier: 0.4.2
+        version: 0.4.2(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
       '@pedaki/db':
         specifier: workspace:*
         version: link:../db/dist
@@ -336,7 +336,7 @@ importers:
         version: 1.5.0(@prisma/client@5.6.0)
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(postcss@8.4.31)(typescript@5.3.2)
+        version: 8.0.1(typescript@5.3.2)
     devDependencies:
       prisma:
         specifier: ^5.6.0
@@ -365,8 +365,8 @@ importers:
         specifier: workspace:*
         version: link:../auth/src
       '@pedaki/common':
-        specifier: 0.4.2-beta.9
-        version: 0.4.2-beta.9(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
+        specifier: 0.4.2
+        version: 0.4.2(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3)
       '@pedaki/db':
         specifier: workspace:*
         version: link:../db/dist
@@ -387,7 +387,7 @@ importers:
         version: 0.0.14
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(postcss@8.4.31)(typescript@5.3.2)
+        version: 8.0.1(typescript@5.3.2)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -2123,8 +2123,8 @@ packages:
       '@noble/hashes': 1.3.2
     dev: false
 
-  /@pedaki/common@0.4.2-beta.9(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3):
-    resolution: {integrity: sha512-NBLXxWo9svT9kknvbS7GEbARE7UZqojcnxbyJK6v1U8+BKl9UUc+1r9hy7Et+S7b3utpQjsgnseRmhlcnzr/nw==}
+  /@pedaki/common@0.4.2(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.3)(sonner@1.2.3):
+    resolution: {integrity: sha512-oNB5iZOl1DJ+CryPDus1caaZpwX+o0YHErfz2uJSDpLGMpfviM/aaQpgY9AI4ceWxdDN1cWJjAw+FpxW5rbh7A==}
     engines: {node: '>=18.0.0 <19.0.0', npm: use-pnpm, pnpm: '>=8.0.0', yarn: use-pnpm}
     peerDependencies:
       bcryptjs: ^2.4.3
@@ -7162,7 +7162,6 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: true
 
   /nanoid@5.0.3:
     resolution: {integrity: sha512-I7X2b22cxA4LIHXPSqbBCEQSL+1wv8TuoefejsX4HFWyC6jc5JG7CEaxOltiKjc1M+YCS2YkrZZcj4+dytw9GA==}
@@ -7720,6 +7719,18 @@ packages:
       read-cache: 1.0.0
       resolve: 1.22.8
 
+  /postcss-import@15.1.0(postcss@8.4.32):
+    resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      postcss: ^8.0.0
+    dependencies:
+      postcss: 8.4.32
+      postcss-value-parser: 4.2.0
+      read-cache: 1.0.0
+      resolve: 1.22.8
+    dev: false
+
   /postcss-js@4.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
     engines: {node: ^12 || ^14 || >= 16}
@@ -7728,6 +7739,16 @@ packages:
     dependencies:
       camelcase-css: 2.0.1
       postcss: 8.4.31
+
+  /postcss-js@4.0.1(postcss@8.4.32):
+    resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
+    engines: {node: ^12 || ^14 || >= 16}
+    peerDependencies:
+      postcss: ^8.4.21
+    dependencies:
+      camelcase-css: 2.0.1
+      postcss: 8.4.32
+    dev: false
 
   /postcss-load-config@4.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
@@ -7745,6 +7766,23 @@ packages:
       postcss: 8.4.31
       yaml: 2.3.3
 
+  /postcss-load-config@4.0.1(postcss@8.4.32):
+    resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 2.1.0
+      postcss: 8.4.32
+      yaml: 2.3.3
+    dev: false
+
   /postcss-nested@6.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
     engines: {node: '>=12.0'}
@@ -7753,6 +7791,16 @@ packages:
     dependencies:
       postcss: 8.4.31
       postcss-selector-parser: 6.0.13
+
+  /postcss-nested@6.0.1(postcss@8.4.32):
+    resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
+    engines: {node: '>=12.0'}
+    peerDependencies:
+      postcss: ^8.2.14
+    dependencies:
+      postcss: 8.4.32
+      postcss-selector-parser: 6.0.13
+    dev: false
 
   /postcss-selector-parser@6.0.13:
     resolution: {integrity: sha512-EaV1Gl4mUEV4ddhDnv/xtj7sxwrwxdetHdWUGnT4VJQf+4d05v6lHYZr8N573k5Z0BViss7BDhfWtKS3+sfAqQ==}
@@ -7779,7 +7827,6 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: true
 
   /preact-render-to-string@5.2.3(preact@10.11.3):
     resolution: {integrity: sha512-aPDxUn5o3GhWdtJtW0svRC2SS/l8D9MAgo2+AWml+BhDImb27ALf04Q2d+AHqUUOc6RdSXFIBVa2gxzgMKgtZA==}
@@ -8746,11 +8793,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.31
-      postcss-import: 15.1.0(postcss@8.4.31)
-      postcss-js: 4.0.1(postcss@8.4.31)
-      postcss-load-config: 4.0.1(postcss@8.4.31)
-      postcss-nested: 6.0.1(postcss@8.4.31)
+      postcss: 8.4.32
+      postcss-import: 15.1.0(postcss@8.4.32)
+      postcss-js: 4.0.1(postcss@8.4.32)
+      postcss-load-config: 4.0.1(postcss@8.4.32)
+      postcss-nested: 6.0.1(postcss@8.4.32)
       postcss-selector-parser: 6.0.13
       postcss-value-parser: 4.2.0
       resolve: 1.22.8
@@ -8969,6 +9016,45 @@ packages:
       joycon: 3.1.1
       postcss: 8.4.31
       postcss-load-config: 4.0.1(postcss@8.4.31)
+      resolve-from: 5.0.0
+      rollup: 4.5.0
+      source-map: 0.8.0-beta.0
+      sucrase: 3.34.0
+      tree-kill: 1.2.2
+      typescript: 5.3.2
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: false
+
+  /tsup@8.0.1(typescript@5.3.2):
+    resolution: {integrity: sha512-hvW7gUSG96j53ZTSlT4j/KL0q1Q2l6TqGBFc6/mu/L46IoNWqLLUzLRLP1R8Q7xrJTmkDxxDoojV5uCVs1sVOg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.0.2(esbuild@0.19.7)
+      cac: 6.7.14
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.19.7
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 4.0.1(postcss@8.4.32)
       resolve-from: 5.0.0
       rollup: 4.5.0
       source-map: 0.8.0-beta.0
