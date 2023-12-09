@@ -1,36 +1,13 @@
-import type { DefaultSession, NextAuthOptions } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 import { env } from './env';
 
 declare module 'next-auth' {
-  interface Session {
-    user: {
-      image: string;
-      name: string;
-      email: string;
-      id: string;
-      emailVerified: boolean;
-    } & DefaultSession['user'];
-  }
-
-  // Database results (also the output type of the `authorize`, `profile` callback)
   interface User {
     id: string;
     image: string;
     email: string;
     name: string;
     emailVerified: Date | null;
-  }
-}
-
-declare module 'next-auth/jwt' {
-  // Globally the same thing, this is the output type of the `jwt` callback
-  // One main difference is the picture field which corresponds to the user's image field
-  interface JWT {
-    name: string;
-    email: string;
-    id: string;
-    emailVerified: boolean;
-    picture: string;
   }
 }
 
@@ -58,4 +35,4 @@ export const baseAuthOptions = {
     updateAge: 24 * 60 * 60, // 24 hours
   },
   providers: [],
-} satisfies NextAuthOptions;
+} satisfies NextAuthConfig;

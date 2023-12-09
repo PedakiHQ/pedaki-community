@@ -1,10 +1,8 @@
-'use client';
-
-import { useSession } from 'next-auth/react';
+import { auth } from '@pedaki/auth/edge.ts';
 import React from 'react';
 
-const TestAuthComponent = () => {
-  const session = useSession();
+const TestAuthComponent = async () => {
+  const session = await auth();
 
   return (
     <div className="max-w-screen-lg overflow-auto">

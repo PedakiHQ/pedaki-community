@@ -37,12 +37,12 @@ const LoginForm = () => {
     resolver: zodResolver(LoginFormSchema),
     mode: 'onChange',
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'yep@email.com',
+      password: 'test123456',
     },
   });
 
-  const { isSubmitting, isValid } = form.formState;
+  const { isSubmitting } = form.formState;
 
   function onSubmit(values: LoginFormValues) {
     return wrapWithLoading(
