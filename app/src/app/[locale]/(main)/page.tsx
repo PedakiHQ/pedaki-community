@@ -1,3 +1,4 @@
+import TestAuthComponent from '~/app/[locale]/(main)/TestAuthComponent.tsx';
 import type { PageType } from '~/app/types.ts';
 import LocaleButton from '~/components/LocaleButton.tsx';
 import TestAPI from '~/components/TestAPI.tsx';
@@ -22,6 +23,7 @@ export default async function Bidule({ params }: PageType) {
           <LocaleButton locale="fr" />
         </div>
       </div>
+      <TestAuthComponent />
     </main>
   );
 }

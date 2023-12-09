@@ -11,10 +11,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@pedaki/design/ui/form';
-import { IconSpinner } from '@pedaki/design/ui/icons';
+import { IconLock, IconMail, IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
+import { StyledLink } from '@pedaki/design/ui/styled-link';
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,10 +22,12 @@ import { z } from 'zod';
 // TODO: move this in a shared package
 const LoginFormSchema = z.object({
   email: z
-    .string({ required_error: "L'adresse email est requise" })
+    .string()
+    .nonempty({ message: "L'adresse email est requise" })
     .email("L'adresse email n'est pas valide"),
   password: z
-    .string({ required_error: 'Le mot de passe est requis' })
+    .string()
+    .nonempty({ message: 'Le mot de passe est requis' })
     .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
 });
 type LoginFormValues = z.infer<typeof LoginFormSchema>;
@@ -35,12 +37,12 @@ const LoginForm = () => {
     resolver: zodResolver(LoginFormSchema),
     mode: 'onChange',
     defaultValues: {
-      // TODO: remove this
-      email: 'test@email.com',
-      password: 'test123456789',
+      email: '',
+      password: '',
     },
   });
-  const { isSubmitting } = form.formState;
+
+  const { isSubmitting, isValid } = form.formState;
 
   function onSubmit(values: LoginFormValues) {
     return wrapWithLoading(
@@ -63,64 +65,76 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="grid gap-6">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="name@example.com"
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    disabled={isSubmitting}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mot de passe</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="********"
-                    type="password"
-                    autoComplete="current-password"
-                    disabled={isSubmitting}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="grid gap-2">
-            <Button disabled={isSubmitting} className="mt-2" variant="neutral">
-              {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-              Se connecter
-            </Button>
-          </div>
-        </form>
-        <div className="text-sm text-center">
-          <span className="text-secondary">Vous n&apos;avez pas de compte ?</span>{' '}
-          <Link href="/auth/register" className="text-orange">
-            S&apos;inscrire
-          </Link>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  icon={IconMail}
+                  placeholder="tony@parker.com"
+                  type="email"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  autoCorrect="off"
+                  disabled={isSubmitting}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mot de passe</FormLabel>
+              <FormControl>
+                <Input
+                  icon={IconLock}
+                  placeholder="********"
+                  type="password"
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button variant="filled-primary" type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
+          Se connecter
+        </Button>
+
+        <div className="flex items-center justify-between">
+          <StyledLink
+            href="/auth/forgot-password"
+            className="text-p-xs"
+            decoration="underline"
+            variant="gray"
+          >
+            Mot de passe oublié ?
+          </StyledLink>
+          <StyledLink
+            href="/auth/register"
+            className="text-p-xs"
+            decoration="underline"
+            variant="gray"
+          >
+            Première connexion ?
+          </StyledLink>
         </div>
-      </Form>
-    </div>
+      </form>
+    </Form>
   );
 };
 
