@@ -14,7 +14,7 @@ export default function LocaleButton({ locale }: { locale: LocaleCode }) {
       <button
         onClick={() => changeLocale(locale)}
         disabled={isActive}
-        className="m-3 rounded border-2 border-red-500 p-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="border-red-500 m-3 rounded border-2 p-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {locale}
       </button>

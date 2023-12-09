@@ -186,7 +186,7 @@ export function SignupForm() {
             </Button>
           </div>
         </form>
-        <div className="text-center text-sm">
+        <div className="text-sm text-center">
           <span className="text-secondary">Vous avez déjà un compte ?</span>{' '}
           <Link href="/auth/login" className="text-orange">
             Se connecter

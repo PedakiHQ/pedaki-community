@@ -113,7 +113,7 @@ const LoginForm = () => {
             </Button>
           </div>
         </form>
-        <div className="text-center text-sm">
+        <div className="text-sm text-center">
           <span className="text-secondary">Vous n&apos;avez pas de compte ?</span>{' '}
           <Link href="/auth/register" className="text-orange">
             S&apos;inscrire
