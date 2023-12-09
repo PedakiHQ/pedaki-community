@@ -6,7 +6,11 @@ import React from 'react';
 const TestAuthComponent = () => {
   const session = useSession();
 
-  return <pre>{JSON.stringify(session, null, 2)}</pre>;
+  return (
+    <div className="max-w-screen-lg overflow-auto">
+      <pre>{JSON.stringify(session, null, 2)}</pre>
+    </div>
+  );
 };
 
 export default TestAuthComponent;

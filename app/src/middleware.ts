@@ -26,9 +26,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
   let localePath = pathname.split('/', 2)[1] as LocaleCode | undefined;
   localePath = localePath && locales.includes(localePath) ? localePath : undefined;
 
-  const locale =
-    request.cookies.get('Next-Locale')?.value ??
-    (localePath && locales.includes(localePath) ? localePath : 'fr');
+  const locale = request.cookies.get('Next-Locale')?.value ?? localePath ?? 'fr';
 
   const pathnameWithoutLocale = localePath ? pathname.replace(`/${localePath}`, '') : pathname;
 
