@@ -2,8 +2,8 @@ import { auth } from '@pedaki/auth/edge.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { locales } from '~/locales/shared';
 import { createI18nMiddleware } from 'next-international/middleware';
-import {NextResponse  } from 'next/server';
-import type {NextRequest} from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 const I18nMiddleware = createI18nMiddleware({
   locales,
@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
   if (isInWithoutAuth) {
     // Check if the user is already logged in, if that's the case redirect to the homepage
     const user = await auth();
-    if(user) {
+    if (user) {
       return NextResponse.redirect(new URL(`/${locale}?error=AlreadyLogged`, request.nextUrl));
     }
 
@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
     // If no user, redirect to login page
     return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.nextUrl));
   }
-  return i18nMiddleware(request)
+  return i18nMiddleware(request);
 }
 
 export const config = {
