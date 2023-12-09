@@ -1,13 +1,34 @@
-import type { NextAuthConfig } from 'next-auth';
+import type { DefaultSession, NextAuthConfig } from 'next-auth';
 import { env } from './env';
 
 declare module 'next-auth' {
+  interface Session {
+    user: {
+      image: string;
+      name: string;
+      email: string;
+      id: string;
+      emailVerified: boolean;
+    } & DefaultSession['user'];
+  }
+
+  // Database results (also the output type of the `authorize`, `profile` callback)
   interface User {
     id: string;
     image: string;
     email: string;
     name: string;
-    emailVerified: Date | null;
+    emailVerified: boolean;
+  }
+}
+
+declare module '@auth/core/jwt' {
+  interface JWT {
+    name: string;
+    email: string;
+    id: string;
+    emailVerified: boolean;
+    picture: string;
   }
 }
 

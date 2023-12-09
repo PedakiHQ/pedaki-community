@@ -6,24 +6,25 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { env } from './env.ts';
 import { baseAuthOptions } from './index.ts';
 
-// TODO: réponse pas complete
-
 export const authOptions: NextAuthConfig = {
   ...baseAuthOptions,
   pages: {
     signIn: '/auth/login',
+    signOut: '/',
     error: '/auth/login', // Error code passed in query string as ?error=
+    verifyRequest: '/',
+    newUser: '/',
   },
   adapter: PrismaAdapter(prisma),
   callbacks: {
     jwt: ({ token, user, trigger, session }) => {
-      console.log('JWT Callback', { token, user, trigger, session })
+      // console.log('JWT Callback', { token, user, trigger, session })
       if (user) {
         token.id = user.id;
         token.emailVerified = user.emailVerified !== null;
       }
 
-      if (trigger === 'update') {
+      if (trigger === 'update' && session) {
         // TODO: Check type of session
         // We are only expecting the user.emailVerified property to be updated (confirm-email)
         const checkedSession = session as {
@@ -38,18 +39,19 @@ export const authOptions: NextAuthConfig = {
     },
     session: ({ session, token }) => {
       // Called every time a session is checked
-      console.log("Session Callback", { session, token });
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          emailVerified: token.emailVerified,
-        },
+      // console.log("Session Callback", { session, token })
+
+      session.user = {
+        ...session.user,
+        id: token.id,
+        emailVerified: token.emailVerified,
       };
+
+      return session;
     },
     signIn: ({ user, account }) => {
-      console.log('Sign In Callback', { user, account });
+      // Use the signIn() callback to control if a user is allowed to sign in.
+      // console.log('Sign In Callback', { user, account });
 
       // TODO check spam email
 
@@ -74,6 +76,14 @@ export const authOptions: NextAuthConfig = {
           where: {
             email: credentials.email as string,
           },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            emailVerified: true,
+            password: true,
+          },
         });
 
         if (!user?.password) {
@@ -95,7 +105,7 @@ export const authOptions: NextAuthConfig = {
           name: user.name,
           email: user.email,
           image: user.image,
-          emailVerified: user.emailVerified,
+          emailVerified: !!user.emailVerified,
         };
       },
     }),
