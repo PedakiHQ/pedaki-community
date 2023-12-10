@@ -20,7 +20,7 @@ function apply_path {
     configName="$(cut -d'=' -f1 <<<"$line")"
     configValue="$(cut -d'=' -f2 <<<"$line")"
     # get system env
-    envValue=$(env | grep "^$configName=" | grep -oe '[^=]*$');
+    envValue=$(env | grep "^$configName=" | sed -e 's/^[^=]*=//');
 
     # if config found
     if [ -n "$configValue" ] && [ -n "$envValue" ]; then
