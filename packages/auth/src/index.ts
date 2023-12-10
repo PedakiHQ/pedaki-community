@@ -15,9 +15,10 @@ declare module 'next-auth' {
   // Database results (also the output type of the `authorize`, `profile` callback)
   interface User {
     id: string;
-    image: string;
-    email: string;
-    name: string;
+    // TODO: bug with types
+    // image: string;
+    // email: string;
+    // name: string;
     emailVerified: boolean;
   }
 }
