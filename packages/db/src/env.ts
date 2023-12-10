@@ -7,6 +7,7 @@ export const env = createEnv({
 
     DATABASE_URL: z.string().min(1),
     PRISMA_ENCRYPTION_KEY: z.string().min(1),
+    PRISMA_DECRYPTION_KEYS: z.array(z.string()),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
