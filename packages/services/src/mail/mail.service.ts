@@ -12,7 +12,7 @@ class MailService {
   }
 
   async sendInviteEmail(email: string, name: string, token: string): Promise<void> {
-    const url = BASE_URL + '/auth/invite?token=' + token;
+    const url = BASE_URL + '/auth/activate?token=' + token;
     await sendEmail(email, InviteAccountMail, { name, url });
     logger.info(`Sent invitation email to ${email}`);
   }
