@@ -23,6 +23,7 @@ class AuthService {
         email: email,
         password: password,
         needResetPassword: options?.needResetPassword,
+        active: !options?.needResetPassword,
         image: generateDataURL(128),
       },
     });
