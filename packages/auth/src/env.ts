@@ -7,6 +7,8 @@ export const env = createEnv({
 
     AUTH_SECRET: z.string().min(2),
 
+    PEDAKI_DOMAIN: z.string().min(2),
+
     PASSWORD_SALT: z.string().min(2),
   },
   runtimeEnv: process.env,

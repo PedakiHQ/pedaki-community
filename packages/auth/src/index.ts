@@ -42,7 +42,7 @@ declare module '@auth/core/jwt' {
   }
 }
 
-const useSecureCookies = process.env.NODE_ENV === 'production';
+const useSecureCookies = env.NODE_ENV === 'production';
 
 export const baseAuthOptions = {
   secret: env.AUTH_SECRET,
@@ -56,7 +56,7 @@ export const baseAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        domain: env.NODE_ENV === 'production' ? '.pedaki.fr' : undefined,
+        domain: env.NODE_ENV === 'production' ? `${env.PEDAKI_DOMAIN}.pedaki.fr` : undefined,
         secure: useSecureCookies,
       },
     },
