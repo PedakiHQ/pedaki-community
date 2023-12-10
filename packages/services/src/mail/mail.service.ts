@@ -11,9 +11,9 @@ class MailService {
     logger.info(`Sent activation email to ${email}`);
   }
 
-  async sendInviteEmail(email: string, name: string, token: string): Promise<void> {
+  async sendInviteEmail(email: string, token: string): Promise<void> {
     const url = BASE_URL + '/auth/activate?token=' + token;
-    await sendEmail(email, InviteAccountMail, { name, url });
+    await sendEmail(email, InviteAccountMail, { url });
     logger.info(`Sent invitation email to ${email}`);
   }
 }

@@ -6,13 +6,11 @@ import * as React from 'react';
 import { FROM_EMAIL_NO_REPLY } from '../constants.ts';
 
 const InviteAccountMail: Mail<{
-  name: string;
   url: string;
-}> = ({ name = 'name', url = 'https://example.com/auth/activate?token=token' }) => {
+}> = ({ url = 'https://example.com/auth/activate?token=token' }) => {
   return (
     <Html>
       <Head />
-      <span>Hello {name},</span>
       <Link href={url} target="_blank">
         Cliquez ici pour initialiser votre compte
       </Link>
