@@ -1,7 +1,9 @@
+import { auth } from '@pedaki/auth/edge.ts';
+import type { LocaleCode } from '~/locales/server.ts';
 import { locales } from '~/locales/shared';
-import { withAuth } from 'next-auth/middleware';
 import { createI18nMiddleware } from 'next-international/middleware';
-import type { NextFetchEvent, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 const I18nMiddleware = createI18nMiddleware({
   locales,
@@ -9,21 +11,43 @@ const I18nMiddleware = createI18nMiddleware({
   urlMappingStrategy: 'rewriteDefault',
 });
 
-export function middleware(request: NextRequest, event: NextFetchEvent) {
-  const locale = request.cookies.get('Next-Locale')?.value ?? 'fr';
+const withoutAuth = [
+  '/auth/forgot-password',
+  '/auth/reset-password',
+  '/auth/login',
+  '/auth/activate',
+];
 
-  const authMiddleware = withAuth(
-    function middleware(req) {
-      return I18nMiddleware(req);
-    },
-    {
-      pages: {
-        signIn: `/${locale}/auth/login`,
-      },
-    },
-  );
-  // @ts-expect-error
-  return authMiddleware(request, event);
+const i18nMiddleware = function middleware(req: NextRequest) {
+  return I18nMiddleware(req);
+};
+
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  let localePath = pathname.split('/', 2)[1] as LocaleCode | undefined;
+  localePath = localePath && locales.includes(localePath) ? localePath : undefined;
+
+  const locale = request.cookies.get('Next-Locale')?.value ?? localePath ?? 'fr';
+
+  const pathnameWithoutLocale = localePath ? pathname.replace(`/${localePath}`, '') : pathname;
+
+  const isInWithoutAuth = withoutAuth.includes(pathnameWithoutLocale);
+  if (isInWithoutAuth) {
+    // Check if the user is already logged in, if that's the case redirect to the homepage
+    const user = await auth();
+    if (user) {
+      return NextResponse.redirect(new URL(`/${locale}?error=AlreadyLogged`, request.nextUrl));
+    }
+
+    return i18nMiddleware(request);
+  }
+
+  const user = await auth();
+  if (!user) {
+    // If no user, redirect to login page
+    return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.nextUrl));
+  }
+  return i18nMiddleware(request);
 }
 
 export const config = {

@@ -1,7 +1,10 @@
-import type { DefaultSession, NextAuthOptions } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 import { env } from './env';
 
-declare module 'next-auth' {
+declare module '@auth/core/types' {
+  /**
+   * Returned by `auth`, contains information about the active session.
+   */
   interface Session {
     user: {
       image: string;
@@ -12,19 +15,24 @@ declare module 'next-auth' {
     } & DefaultSession['user'];
   }
 
-  // Database results (also the output type of the `authorize`, `profile` callback)
+  /**
+   * The shape of the user object returned in the OAuth providers' `profile` callback,
+   * or the second parameter of the `session` callback, when using a database.
+   */
   interface User {
     id: string;
+    // @ts-expect-error: in our case it's always a string
     image: string;
+    // @ts-expect-error: in our case it's always a string
     email: string;
+    // @ts-expect-error: in our case it's always a string
     name: string;
-    emailVerified: Date | null;
+    emailVerified: boolean;
   }
 }
 
-declare module 'next-auth/jwt' {
-  // Globally the same thing, this is the output type of the `jwt` callback
-  // One main difference is the picture field which corresponds to the user's image field
+declare module '@auth/core/jwt' {
+  /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
     name: string;
     email: string;
@@ -58,4 +66,4 @@ export const baseAuthOptions = {
     updateAge: 24 * 60 * 60, // 24 hours
   },
   providers: [],
-} satisfies NextAuthOptions;
+} satisfies NextAuthConfig;

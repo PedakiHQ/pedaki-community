@@ -1,31 +1,32 @@
-'use server';
-
-import type { AppRouter } from '@pedaki/api/router/router';
-import { httpBatchLink, loggerLink } from '@trpc/client';
+import { auth } from '@pedaki/auth/server';
+import { loggerLink } from '@trpc/client';
+import { experimental_nextCacheLink } from '@trpc/next/app-dir/links/nextCache';
 import { experimental_createTRPCNextAppDirServer } from '@trpc/next/app-dir/server';
-import { cookies } from 'next/headers.js';
-import superjson from 'superjson';
-import { getUrl } from './shared.ts';
+import { appRouter } from '~api/router/router';
+import SuperJSON from 'superjson';
 
-export const api: ReturnType<typeof experimental_createTRPCNextAppDirServer<AppRouter>> =
-  experimental_createTRPCNextAppDirServer<AppRouter>({
-    config() {
-      return {
-        transformer: superjson,
-        links: [
-          loggerLink({
-            enabled: () => true,
-          }),
-          httpBatchLink({
-            url: getUrl(),
-            headers() {
-              return {
-                cookie: cookies().toString(),
-                'x-trpc-source': 'rsc-http',
-              };
-            },
-          }),
-        ],
-      };
-    },
-  });
+/**
+ * This client invokes procedures directly on the server without fetching over HTTP.
+ */
+export const api = experimental_createTRPCNextAppDirServer<typeof appRouter>({
+  config() {
+    return {
+      transformer: SuperJSON,
+      links: [
+        loggerLink({
+          enabled: () => true,
+        }),
+        experimental_nextCacheLink({
+          // requests are cached for 5 seconds
+          revalidate: 5,
+          router: appRouter,
+          createContext: async () => {
+            return {
+              session: await auth(),
+            };
+          },
+        }),
+      ],
+    };
+  },
+});

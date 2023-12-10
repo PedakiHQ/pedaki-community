@@ -6,6 +6,7 @@ import { getI18n, getStaticParams } from '~/locales/server';
 import type { LocaleCode } from '~/locales/server';
 import { locales } from '~/locales/shared';
 import { notFound } from 'next/navigation';
+import React from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 

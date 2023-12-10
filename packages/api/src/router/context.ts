@@ -1,8 +1,9 @@
 import { auth } from '@pedaki/auth/server.ts';
+import type { Session } from 'next-auth';
 import type { NextRequest } from 'next/server';
 
 export interface Context {
-  session: Awaited<ReturnType<typeof auth>>;
+  session: Session | null;
 }
 
 export const createContext = async ({}: { req: NextRequest }): Promise<Context> => {
