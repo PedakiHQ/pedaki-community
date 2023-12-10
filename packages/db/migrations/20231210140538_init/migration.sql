@@ -26,6 +26,7 @@ CREATE TABLE `users` (
     `email_verified` DATETIME(3) NULL,
     `password` VARCHAR(191) NULL,
     `need_reset_password` BOOLEAN NOT NULL DEFAULT false,
+    `active` BOOLEAN NOT NULL DEFAULT false,
     `blocked` BOOLEAN NOT NULL DEFAULT false,
     `image` VARCHAR(1000) NOT NULL DEFAULT '',
 
@@ -41,11 +42,17 @@ CREATE TABLE `tokens` (
     `type` ENUM('CONFIRM_EMAIL', 'ACTIVATE_ACCOUNT', 'RESET_PASSWORD') NOT NULL,
     `token` VARCHAR(191) NOT NULL,
     `token_hash` VARCHAR(320) NULL,
-    `expires_at` DATETIME(3) NOT NULL,
+    `expires_at` DATETIME(3) NULL,
     `user_id` VARCHAR(25) NULL,
 
     INDEX `tokens_user_id_idx`(`user_id`),
     INDEX `tokens_token_hash_idx`(`token_hash`),
-    UNIQUE INDEX `tokens_type_token_hash_key`(`type`, `token_hash`),
+    UNIQUE INDEX `tokens_type_token_key`(`type`, `token`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `accounts` ADD CONSTRAINT `accounts_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tokens` ADD CONSTRAINT `tokens_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
