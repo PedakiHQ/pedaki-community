@@ -45,9 +45,10 @@ declare module '@auth/core/jwt' {
 const useSecureCookies = process.env.NODE_ENV === 'production';
 
 export const baseAuthOptions = {
-  secret: env.NEXTAUTH_SECRET,
+  secret: env.AUTH_SECRET,
   debug: env.NODE_ENV !== 'production',
   useSecureCookies: useSecureCookies,
+  trustHost: true,
   cookies: {
     sessionToken: {
       name: `${useSecureCookies ? '__Secure-' : ''}next-auth.session-token`,
