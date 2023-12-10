@@ -43,6 +43,7 @@ declare module '@auth/core/jwt' {
 }
 
 const useSecureCookies = env.NODE_ENV === 'production';
+const cookiePrefix = useSecureCookies ? '__Secure-' : '';
 
 export const baseAuthOptions = {
   secret: env.AUTH_SECRET,
@@ -51,12 +52,12 @@ export const baseAuthOptions = {
   trustHost: true,
   cookies: {
     sessionToken: {
-      name: `${useSecureCookies ? '__Secure-' : ''}next-auth.session-token`,
+      name: `${cookiePrefix}authjs.session-token`,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        domain: env.NODE_ENV === 'production' ? `${env.PEDAKI_DOMAIN}.pedaki.fr` : undefined,
+        domain: env.NODE_ENV === 'production' ? env.PEDAKI_DOMAIN : undefined,
         secure: useSecureCookies,
       },
     },
