@@ -1,17 +1,17 @@
 import { env } from '~api/env.ts';
-import { publicProcedure, router } from '~api/router/trpc.ts';
+import { privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
 export const helloRouter = router({
-  hello: publicProcedure
+  hello: privateProcedure
     .input(
       z.object({
         text: z.string(),
       }),
     )
-    .query(opts => {
+    .query(({ ctx, input }) => {
       return {
-        greeting: `${env.SECRET_PRIVATE_VARIABLE} ${opts.input.text}`,
+        greeting: `${env.SECRET_PRIVATE_VARIABLE} ${input.text} ${ctx.session.user.name}`,
       };
     }),
 });
