@@ -1,6 +1,6 @@
 {
   "name": "@pedaki/auth",
-  "version": "0.4.2-beta.11",
+  "version": "0.4.3-beta.0",
   "description": "",
   "private": true,
   "main": "index.js",
