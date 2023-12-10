@@ -1,13 +1,20 @@
 import { logger } from '@pedaki/logger';
 import { sendEmail } from '@pedaki/mailer/send-email.js';
 import { BASE_URL } from '~/constants.ts';
-import InitializeAccountMail from '~/mail/templates/InitializeAccountMail.tsx';
+import InitializeWorkspaceMail from '~/mail/templates/InitializeWorkspaceMail.tsx';
+import InviteAccountMail from '~/mail/templates/InviteAccountMail.tsx';
 
 class MailService {
-  async sendActivateAccountEmail(email: string, name: string, token: string): Promise<void> {
-    const url = BASE_URL + '/auth/activate-account?token=' + token;
-    await sendEmail(email, InitializeAccountMail, { name, url });
+  async sendActivateWorkspaceEmail(email: string, name: string, token: string): Promise<void> {
+    const url = BASE_URL + '/auth/activate?token=' + token;
+    await sendEmail(email, InitializeWorkspaceMail, { name, url });
     logger.info(`Sent activation email to ${email}`);
+  }
+
+  async sendInviteEmail(email: string, name: string, token: string): Promise<void> {
+    const url = BASE_URL + '/auth/invite?token=' + token;
+    await sendEmail(email, InviteAccountMail, { name, url });
+    logger.info(`Sent invitation email to ${email}`);
   }
 }
 

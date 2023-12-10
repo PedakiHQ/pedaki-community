@@ -3,7 +3,7 @@ import type { PageType } from '~/app/types.ts';
 import { setStaticParamsLocale } from 'next-international/server';
 import React from 'react';
 
-export default function LoginPage({ params }: PageType) {
+export default function ForgotPasswordPage({ params }: PageType) {
   setStaticParamsLocale(params.locale);
 
   return (

@@ -183,7 +183,7 @@ class DbInitCommand implements Command {
         needResetPassword: !password,
       });
       if (!password) {
-        this.#activationToken = await authService.createActivateAccountToken(this.#email);
+        this.#activationToken = await authService.createToken(this.#email, 'ACTIVATE_ACCOUNT');
       }
 
       spinner.succeed(`Admin user created`);
@@ -192,6 +192,7 @@ class DbInitCommand implements Command {
         spinner.fail('A user with this email address already exists');
       } else {
         spinner.fail('Admin user creation failed');
+        logger.error(e);
       }
       process.exit(1);
     }
@@ -205,7 +206,7 @@ class DbInitCommand implements Command {
     const spinner = ora('Sending email').start();
 
     try {
-      await mailService.sendActivateAccountEmail(this.#email, this.#name, this.#activationToken);
+      await mailService.sendActivateWorkspaceEmail(this.#email, this.#name, this.#activationToken);
       spinner.succeed(`Email sent`);
     } catch (e) {
       spinner.fail('Email sending failed');

@@ -5,10 +5,10 @@ import { Link } from '@react-email/link';
 import * as React from 'react';
 import { FROM_EMAIL_NO_REPLY } from '../constants.ts';
 
-const InitializeAccountMail: Mail<{
+const InitializeWorkspaceMail: Mail<{
   name: string;
   url: string;
-}> = ({ name = 'name', url = 'https://example.com/auth/initialize?token=token' }) => {
+}> = ({ name = 'name', url = 'https://example.com/auth/activate?token=token' }) => {
   return (
     <Html>
       <Head />
@@ -20,8 +20,7 @@ const InitializeAccountMail: Mail<{
   );
 };
 
-// @ts-ignore
-InitializeAccountMail.sender = FROM_EMAIL_NO_REPLY;
-InitializeAccountMail.subject = () => `Initialiser votre compte`;
+InitializeWorkspaceMail.sender = FROM_EMAIL_NO_REPLY;
+InitializeWorkspaceMail.subject = () => `Initialiser votre workspace`;
 
-export default InitializeAccountMail;
+export default InitializeWorkspaceMail;

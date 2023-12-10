@@ -37,8 +37,8 @@ const LoginForm = () => {
     resolver: zodResolver(LoginFormSchema),
     mode: 'onChange',
     defaultValues: {
-      email: 'yep@email.com',
-      password: 'test123456',
+      email: '',
+      password: '',
     },
   });
 
