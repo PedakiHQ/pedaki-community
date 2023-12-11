@@ -1,3 +1,5 @@
+import { prisma } from '@pedaki/db';
+import { migrate } from '@pedaki/db/encryption/migrations/index.js';
 import { logger } from '@pedaki/logger';
 import { checkEnvVariables, DOLLAR, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
@@ -57,7 +59,10 @@ class DbMigrateCommand implements Command {
       spinner.info('Client generated');
 
       await $db`pnpm prisma migrate deploy`;
-      spinner.succeed('Database migrations applied');
+      spinner.info('Database tables deployed');
+
+      await migrate(prisma);
+      spinner.info('Database tables encrypted');
     } catch (e) {
       spinner.fail('Database migrations failed');
       logger.error(e);

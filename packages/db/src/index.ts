@@ -1,3 +1,4 @@
+import { logger } from '@pedaki/logger';
 import { PrismaClient } from '@prisma/client';
 import { fieldEncryptionExtension } from 'prisma-field-encryption';
 import { env } from './env.ts';
@@ -7,13 +8,16 @@ const prismaClientSingleton = () => {
     log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn', 'info'] : ['error'],
   });
 
-  if (env.PRISMA_ENCRYPTION_KEY) {
-    client = client.$extends(
-      fieldEncryptionExtension({
-        encryptionKey: env.PRISMA_ENCRYPTION_KEY,
-      }),
-    ) as PrismaClient;
-  }
+  client = client.$extends(
+    fieldEncryptionExtension({
+      encryptionKey: env.PRISMA_ENCRYPTION_KEY,
+      decryptionKeys: env.PRISMA_DECRYPTION_KEYS.filter(Boolean),
+    }),
+  ) as PrismaClient;
+
+  logger.debug('Created Prisma client', {
+    decryptionKeysLength: env.PRISMA_DECRYPTION_KEYS.length,
+  });
 
   return client;
 };

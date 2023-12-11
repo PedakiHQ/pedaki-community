@@ -2,6 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator fieldEncryptionMigrations {
+  provider     = "prisma-field-encryption"
+  output       = "./src/encryption/migrations"
+
+  concurrently = false
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")

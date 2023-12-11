@@ -33,7 +33,7 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "experimentalDecorators": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": false
   },
   "include": [
     "src",
