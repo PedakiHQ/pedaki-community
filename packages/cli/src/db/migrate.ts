@@ -61,8 +61,12 @@ class DbMigrateCommand implements Command {
       await $db`pnpm prisma migrate deploy`;
       spinner.info('Database tables deployed');
 
-      await migrate(prisma);
-      spinner.info('Database tables encrypted');
+      if (process.env.PRISMA_DECRYPTION_KEY) {
+        await migrate(prisma);
+        spinner.succeed('Encryption keys migrated');
+      } else {
+        spinner.succeed('Skipped rotating encryption keys');
+      }
     } catch (e) {
       spinner.fail('Database migrations failed');
       logger.error(e);
