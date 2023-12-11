@@ -16,6 +16,7 @@ const withoutAuth = [
   '/auth/reset-password',
   '/auth/login',
   '/auth/activate',
+  '/auth/join',
 ];
 
 const i18nMiddleware = function middleware(req: NextRequest) {
