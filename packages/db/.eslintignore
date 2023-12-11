@@ -1,3 +1,4 @@
 .eslintrc.cjs
 tsup.config.ts
 dist
+src/encryption/migrations
