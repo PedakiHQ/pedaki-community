@@ -63,56 +63,30 @@ export const authRouter = router({
       await authService.deleteToken(token, 'ACTIVATE_ACCOUNT');
     }),
 
-  //
-  // debug_delete_account: publicProcedure
-  //     .input(UserModelSchema.pick({ id: true }))
-  //     .output(z.any())
-  //     .mutation(async ({ input }) => {
-  //         try {
-  //             await prisma.user.delete({
-  //                 where: {
-  //                     id: input.id,
-  //                 },
-  //             });
-  //         } catch (e) {
-  //             // If the user doesn't exist, we don't care
-  //         }
-  //     }),
-  //
-  // debug_send_validation_email: privateProcedure.mutation(({ ctx }) => {
-  //     return confirmEmailFlow(prisma, {
-  //         id: ctx.session.id,
-  //         name: ctx.session.name,
-  //         email: 'nathan.d0601@gmail.com', //ctx.session.email
-  //     });
-  // }),
-  //
-  // confirmEmail: publicProcedure
-  //     .input(
-  //         z.object({
-  //             token: z.string(),
-  //         }),
-  //     )
-  //     .mutation(async ({ input }) => {
-  //         const { token } = input;
-  //
-  //         const tokenRecord = await getTokenOrThrow(prisma, token, true);
-  //
-  //         if (tokenRecord.userId === null) {
-  //             throw new TRPCError({
-  //                 code: 'BAD_REQUEST',
-  //                 message: 'INVALID_TOKEN',
-  //             });
-  //         }
-  //
-  //         // If everything is ok, update the user
-  //         await prisma.user.update({
-  //             where: {
-  //                 id: tokenRecord.userId,
-  //             },
-  //             data: {
-  //                 emailVerified: new Date(),
-  //             },
-  //         });
-  //     }),
+  acceptInvite: publicProcedure
+    .input(
+      z.object({
+        token: z.string(),
+        name: z.string(),
+        email: z.string(),
+        password: z.string(),
+      }),
+    )
+    .output(z.any())
+    .mutation(async ({ input }) => {
+      const { email, password, token, name } = input;
+
+      // check that the token is valid
+      const tokenRecord = await authService.getAccountFromToken(token, 'ACTIVATE_ACCOUNT');
+      if (tokenRecord.email !== email) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'INVALID_TOKEN',
+        });
+      }
+
+      await authService.updatePassword(email, password);
+      await authService.updateAccount(email, name);
+      await authService.deleteToken(token, 'ACTIVATE_ACCOUNT');
+    }),
 });

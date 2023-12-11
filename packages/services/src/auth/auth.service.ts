@@ -47,14 +47,28 @@ class AuthService {
     logger.info(`Updated password for ${email}`);
   }
 
+  async updateAccount(email: string, name: string): Promise<void> {
+    await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
+        name: name,
+      },
+    });
+
+    logger.info(`Updated account for ${email}`);
+  }
+
   async deleteToken(token: string, type: TokenType): Promise<void> {
     // TODO: move this in a token service ?
-    await prisma.token.deleteMany({
+    const result = await prisma.token.deleteMany({
       where: {
         token: token,
         type: type,
       },
     });
+    logger.info(`Deleted ${result.count} ${type} tokens`);
   }
 
   async createToken(email: string, type: TokenType): Promise<string> {
