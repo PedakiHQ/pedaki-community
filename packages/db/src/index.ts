@@ -1,7 +1,9 @@
 import { logger } from '@pedaki/logger';
-import { PrismaClient } from '@prisma/client';
+import PrismaClientPkg from '@prisma/client';
 import { fieldEncryptionExtension } from 'prisma-field-encryption';
 import { env } from './env.ts';
+
+const PrismaClient = PrismaClientPkg.PrismaClient;
 
 const prismaClientSingleton = () => {
   let client = new PrismaClient({
@@ -9,12 +11,13 @@ const prismaClientSingleton = () => {
   });
 
   if (env.PRISMA_ENCRYPTION_KEY) {
+    // @ts-expect-error: extends breaks the type
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,
         decryptionKeys: env.PRISMA_DECRYPTION_KEYS?.filter(Boolean),
       }),
-    ) as PrismaClient;
+    );
   }
   logger.debug('Created Prisma client', {
     withEncryption: !!env.PRISMA_ENCRYPTION_KEY,
