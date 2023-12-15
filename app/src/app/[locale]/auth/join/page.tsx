@@ -18,12 +18,12 @@ export default async function AcceptInvitePage({
     // TODO: render error page with custom message
     return <AuthErrorPage />;
   }
-  const settings = getWorkspaceSettings();
+  const settings = await getWorkspaceSettings();
   const userData = await api.auth.getUserInfoFromActivationToken.query({ token });
 
   return (
     <AuthWrapper
-      title={`Tu as été invité à rejoindre ${settings.name}`}
+      title={`Tu as été invité à rejoindre ${settings.NAME}`}
       description="Avant d'accéder au workspace, choisis un mot de passe"
     >
       <JoinForm email={userData.email} token={token} />

@@ -74,6 +74,21 @@ model Token {
   @@map("tokens")
 }
 
+model WorkspaceSetting {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  key   WorkspaceSettingKey @unique
+  value String
+
+  @@map("settings")
+}
+
+enum WorkspaceSettingKey {
+  NAME
+}
+
 enum TokenType {
   CONFIRM_EMAIL
   ACTIVATE_ACCOUNT
