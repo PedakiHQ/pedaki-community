@@ -75,11 +75,9 @@ model Token {
 }
 
 model WorkspaceSetting {
-  id Int @id @default(autoincrement())
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  createdAt DateTime @default(now()) @map("created_at")
-
-  key   WorkspaceSettingKey @unique
+  key   WorkspaceSettingKey @id @unique
   value String
 
   @@map("settings")
