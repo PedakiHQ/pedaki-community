@@ -20,7 +20,6 @@ export const authOptions: NextAuthConfig = {
     jwt: ({ token, user, trigger, session }) => {
       // console.log('JWT Callback', { token, user, trigger, session })
       if (user) {
-        // @ts-expect-error: TODO
         token.emailVerified = user.emailVerified !== null;
       }
 
@@ -43,7 +42,6 @@ export const authOptions: NextAuthConfig = {
 
       session.user = {
         ...session.user,
-        // @ts-ignore: TODO
         emailVerified: token.emailVerified,
       };
 
