@@ -9,22 +9,14 @@ const Logo: React.FC<{
   width?: number;
   height?: number;
   className?: string;
-}> = ({ width = 120, height = 36, className }) => {
+}> = ({ className }) => {
   return (
     <Link className={cn('flex select-none items-center hover:opacity-75', className)} href="/">
       <Image
-        src="https://static.pedaki.fr/logo/logo-light.svg"
+        src="https://static.pedaki.fr/logo/apple-touch-icon.png"
         alt="Pedaki"
-        height={height}
-        width={width}
-        className="inline dark:hidden"
-      />
-      <Image
-        src="https://static.pedaki.fr/logo/logo-dark.svg"
-        alt="Pedaki"
-        height={height}
-        width={width}
-        className="hidden dark:inline"
+        height={180}
+        width={180}
       />
     </Link>
   );
