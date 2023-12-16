@@ -29,9 +29,11 @@ export const logger = winston.createLogger({
       info.service = {
         name: env.LOGGER_SERVICE_NAME,
         namespace: env.LOGGER_NAMESPACE,
+        version: VERSION,
+      };
+      info.pedaki = {
         instanceId: INSTANCE_ID,
         community: true,
-        version: VERSION,
       };
 
       return info;
