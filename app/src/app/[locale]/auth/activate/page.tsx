@@ -2,8 +2,8 @@ import ActivateForm from '~/app/[locale]/auth/activate/activate-form.tsx';
 import AuthWrapper from '~/app/[locale]/auth/auth-wrapper.tsx';
 import type { PageType } from '~/app/types.ts';
 import AuthErrorPage from '~/components/ErrorPage/AuthErrorPage.tsx';
+import { setStaticParamsLocale } from '~/locales/utils';
 import { api } from '~/server/clients/server';
-import { setStaticParamsLocale } from 'next-international/server';
 import React from 'react';
 
 export default async function ActivateAccountPage({

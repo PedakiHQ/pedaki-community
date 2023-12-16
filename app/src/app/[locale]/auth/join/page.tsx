@@ -2,9 +2,9 @@ import AuthWrapper from '~/app/[locale]/auth/auth-wrapper.tsx';
 import JoinForm from '~/app/[locale]/auth/join/join-form.tsx';
 import type { PageType } from '~/app/types.ts';
 import AuthErrorPage from '~/components/ErrorPage/AuthErrorPage.tsx';
+import { setStaticParamsLocale } from '~/locales/utils';
 import { api } from '~/server/clients/server';
 import { getWorkspaceSettings } from '~/settings';
-import { setStaticParamsLocale } from 'next-international/server';
 import React from 'react';
 
 export default async function AcceptInvitePage({
