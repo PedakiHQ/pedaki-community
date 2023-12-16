@@ -1,6 +1,6 @@
 import { auth } from '@pedaki/auth/edge.ts';
 import type { LocaleCode } from '~/locales/server.ts';
-import { locales } from '~/locales/shared';
+import { fallbackLocale, locales } from '~/locales/shared';
 import { createI18nMiddleware } from 'next-international/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -28,7 +28,9 @@ export async function middleware(request: NextRequest) {
   let localePath = pathname.split('/', 2)[1] as LocaleCode | undefined;
   localePath = localePath && locales.includes(localePath) ? localePath : undefined;
 
-  const locale = request.cookies.get('Next-Locale')?.value ?? localePath ?? 'fr';
+  const locale = request.cookies.get('Next-Locale')?.value ?? localePath ?? fallbackLocale;
+  // Workaround to have to cookie available in the first request
+  request.cookies.set('Next-Locale', locale);
 
   const pathnameWithoutLocale = localePath ? pathname.replace(`/${localePath}`, '') : pathname;
 
