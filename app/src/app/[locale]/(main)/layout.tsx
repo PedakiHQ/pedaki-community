@@ -8,7 +8,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
       <div className="flex flex-1">
         <Sidebar />
         <main className="ml-[17rem] min-h-screen w-full gap-6 p-2 pl-0 peer-data-[collapsed=true]:ml-20">
-          <div className="grid h-full grid-cols-12 rounded-lg border bg-white p-8 shadow-lg">
+          <div className="grid h-full grid-cols-12 rounded-2xl border bg-white p-8 shadow-lg">
             <Suspense>{children}</Suspense>
           </div>
         </main>
