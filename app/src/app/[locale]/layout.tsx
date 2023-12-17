@@ -1,56 +1,56 @@
 import './globals.css';
 import '@pedaki/design/tailwind/index.css';
-import {Providers} from '~/app/[locale]/providers';
-import {getI18n, getStaticParams} from '~/locales/server';
-import type {LocaleCode} from '~/locales/server';
-import {locales} from '~/locales/shared';
-import {fixLocale} from '~/locales/utils';
-import {setStaticParamsLocale} from 'next-international/server';
-import {notFound} from 'next/navigation';
-import React, {Suspense} from 'react';
+import { BaseProvider } from '~/app/[locale]/baseProvider.tsx';
+import { getI18n, getStaticParams } from '~/locales/server';
+import type { LocaleCode } from '~/locales/server';
+import { locales } from '~/locales/shared';
+import { fixLocale } from '~/locales/utils';
+import { setStaticParamsLocale } from 'next-international/server';
+import { notFound } from 'next/navigation';
+import React, { Suspense } from 'react';
 
-export const generateMetadata = async ({params}: { params: { locale: LocaleCode } }) => {
-    const locale = fixLocale(params.locale);
-    setStaticParamsLocale(locale);
-    const t = await getI18n();
+export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
+  const locale = fixLocale(params.locale);
+  setStaticParamsLocale(locale);
+  const t = await getI18n();
 
-    return {
-        title: {
-            template: `%s - ${t('metadata.title')}`,
-            default: t('metadata.title'),
-        },
-        description: t('metadata.description'),
-        openGraph: {
-            locale: locale,
-        },
-        icons: [
-            {rel: 'icon', url: 'https://static.pedaki.fr/logo/favicon.ico'},
-            {rel: 'apple-touch-icon', url: 'https://static.pedaki.fr/logo/apple-touch-icon.png'},
-            {rel: 'mask-icon', url: 'https://static.pedaki.fr/logo/favicon.ico'},
-            {rel: 'image/x-icon', url: 'https://static.pedaki.fr/logo/favicon.ico'},
-        ],
-    };
+  return {
+    title: {
+      template: `%s - ${t('metadata.title')}`,
+      default: t('metadata.title'),
+    },
+    description: t('metadata.description'),
+    openGraph: {
+      locale: locale,
+    },
+    icons: [
+      { rel: 'icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
+      { rel: 'apple-touch-icon', url: 'https://static.pedaki.fr/logo/apple-touch-icon.png' },
+      { rel: 'mask-icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
+      { rel: 'image/x-icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
+    ],
+  };
 };
 
 export function generateStaticParams() {
-    return getStaticParams();
+  return getStaticParams();
 }
 
 export default function Layout({
-                                   children,
-                                   params: {locale},
-                               }: {
-    children: React.ReactNode;
-    params: { locale: LocaleCode };
+  children,
+  params: { locale },
+}: {
+  children: React.ReactNode;
+  params: { locale: LocaleCode };
 }) {
-    if (!locales.includes(locale)) {
-        notFound();
-        return null;
-    }
+  if (!locales.includes(locale)) {
+    notFound();
+    return null;
+  }
 
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <Providers locale={locale}>{children}</Providers>
-        </Suspense>
-    );
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BaseProvider>{children}</BaseProvider>
+    </Suspense>
+  );
 }

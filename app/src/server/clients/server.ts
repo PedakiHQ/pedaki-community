@@ -14,7 +14,7 @@ export const api = experimental_createTRPCNextAppDirServer<typeof appRouter>({
       transformer: SuperJSON,
       links: [
         loggerLink({
-          enabled: () => true,
+          enabled: () => false,
         }),
         experimental_nextCacheLink({
           // requests are cached for 5 seconds
