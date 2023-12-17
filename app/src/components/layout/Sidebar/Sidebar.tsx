@@ -21,11 +21,10 @@ const Sidebar = () => {
       )}
       data-collapsed={collapsed}
     >
-      <div className="relative flex h-full w-full flex-col">
-        <SidebarHeader />
+      <div className="relative flex h-full w-full flex-col p-4">
+        <SidebarHeader setCollapsed={setCollapsed} collapsed={collapsed} />
         <SidebarContent />
         <SidebarFooter />
-        <button onClick={() => setCollapsed(!collapsed)}>Toggle</button>
       </div>
     </aside>
   );

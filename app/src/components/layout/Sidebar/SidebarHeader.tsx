@@ -1,21 +1,40 @@
+import { Button } from '@pedaki/design/ui/button';
+import { IconPanelLeftClose, IconPanelLeftOpen } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
+import { cn } from '@pedaki/design/utils';
 import Logo from '~/components/logo.tsx';
 import React from 'react';
 
-const SidebarHeader = () => {
+interface SidebarHeaderProps {
+  collapsed: boolean;
+  setCollapsed: (collapsed: boolean) => void;
+}
+
+const SidebarHeader = ({ collapsed, setCollapsed }: SidebarHeaderProps) => {
   return (
-    <div className="flex flex-col gap-2 p-4 group-data-[collapsed=true]/sidebar:items-center">
-      <div className="rounded-md  p-4 hover:bg-weak">
-        <div className="flex h-10 items-center gap-4">
-          <div className="h-8 w-8">
+    <div className={cn('flex flex-col gap-2', collapsed && 'items-center')}>
+      <div className="relative rounded-md p-4">
+        <div className={cn('flex h-10 items-center gap-4', collapsed && 'hidden')}>
+          <div className="h-8 w-8 shrink-0">
             <Logo />
           </div>
-          <div className="space-y-1 group-data-[collapsed=true]/sidebar:hidden">
+          <div className="space-y-1">
             <p className="text-label-sm font-medium">Demo</p>
-            <p className="w-[20ch] overflow-hidden overflow-ellipsis text-p-xs text-sub">
-              Selection de workspace
-            </p>
           </div>
+        </div>
+        <div className={cn(collapsed ? '' : 'absolute right-0 top-0')}>
+          <Button
+            onlyIcon="true"
+            size="xs"
+            variant="stroke-primary-main"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {collapsed ? (
+              <IconPanelLeftOpen className="h-4 w-4" />
+            ) : (
+              <IconPanelLeftClose className="h-4 w-4" />
+            )}
+          </Button>
         </div>
       </div>
       <Separator />

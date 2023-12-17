@@ -12,7 +12,13 @@ const nextConfig = {
   transpilePackages: ['@pedaki/api', '@pedaki/auth'],
 
   images: {
-    domains: ['static.pedaki.fr'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'static.pedaki.fr',
+        pathname: '**',
+      },
+    ],
   },
 
   eslint: {
