@@ -44,7 +44,11 @@ const items = [
 
 const SidebarContent = () => {
   return (
-    <div className="flex flex-1 flex-col gap-1" role="navigation" suppressHydrationWarning>
+    <div
+      className="hidden flex-1 flex-col gap-1 group-data-[mobile-open=true]/sidebar:flex sm:flex"
+      role="navigation"
+      suppressHydrationWarning
+    >
       {items.map((item, index) => (
         <SidebarLink key={index} {...item} />
       ))}

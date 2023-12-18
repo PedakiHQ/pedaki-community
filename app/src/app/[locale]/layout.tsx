@@ -6,7 +6,7 @@ import { getI18n, getStaticParams } from '~/locales/server';
 import { locales } from '~/locales/shared';
 import { fixLocale } from '~/locales/utils';
 import { COOKIE_NAME } from '~/store/constants.ts';
-import type {GlobalStore} from '~/store/global.store.ts';
+import type { GlobalStore } from '~/store/global.store.ts';
 import StoreProvider from '~/store/StoreProvider.tsx';
 import { setStaticParamsLocale } from 'next-international/server';
 import { cookies } from 'next/headers';

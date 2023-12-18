@@ -11,6 +11,8 @@ import {
 import type { IconType } from '@pedaki/design/ui/icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
+import { useGlobalStore } from '~/store/global.store.ts';
+import { useIsSmall } from '~/utils.ts';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import React from 'react';
@@ -58,7 +60,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
 
   return (
     <div>
-      <div className="hidden group-data-[collapsed=true]/sidebar:block">
+      <div className="hidden group-data-[collapsed=true]/sidebar:sm:block">
         <DropdownMenu>
           <DropdownMenuTrigger className="focus-ring w-full">
             <SidebarMenuItem
@@ -83,7 +85,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="group-data-[collapsed=true]/sidebar:hidden">
+      <div className="group-data-[collapsed=true]/sidebar:sm:hidden">
         <Collapsible defaultOpen={active}>
           <CollapsibleTrigger className="focus-ring w-full">
             <SidebarMenuItem
@@ -143,15 +145,17 @@ const SidebarMenuItem = ({
   onClick?: () => void;
 }) => {
   const Component = href ? Link : 'div';
+  const isSmall = useIsSmall();
+  const collapsed = useGlobalStore(state => state.collapsed);
 
   return (
-    <Tooltip>
+    <Tooltip open={collapsed && !isSmall ? undefined : false}>
       <TooltipTrigger asChild>
         <Component href={href} className={cn(className, 'group')} onClick={onClick}>
           <Icon className={cn('h-5 w-5', active && 'text-primary-base')} />
           <span
             className={cn(
-              'text-label-sm font-medium group-data-[collapsed=true]/sidebar:hidden',
+              'text-label-sm font-medium group-data-[collapsed=true]/sidebar:sm:hidden',
               active && 'text-main',
             )}
           >

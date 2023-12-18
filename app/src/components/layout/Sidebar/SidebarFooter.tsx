@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 
 const SidebarFooter = () => {
   return (
-    <div>
+    <div className="hidden sm:block">
       <Separator />
       <Suspense fallback={<div>Loading...</div>}>
         <SidebarFooterUser />

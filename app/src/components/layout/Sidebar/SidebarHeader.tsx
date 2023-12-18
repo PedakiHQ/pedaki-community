@@ -16,9 +16,9 @@ const SidebarHeader = ({ collapsed }: SidebarHeaderProps) => {
   const setCollapsed = useGlobalStore(state => state.setCollapsed);
 
   return (
-    <div className={'flex flex-col gap-2  group-data-[collapsed=true]/sidebar:items-center'}>
+    <div className="hidden flex-col gap-2 group-data-[collapsed=true]/sidebar:items-center sm:flex">
       <div className="flex justify-between rounded-md p-4 pb-2">
-        <div className={'flex h-10 items-center gap-4 group-data-[collapsed=true]/sidebar:hidden'}>
+        <div className="flex h-10 items-center gap-4 group-data-[collapsed=true]/sidebar:hidden">
           <div className="h-8 w-8 shrink-0">
             <Logo />
           </div>

@@ -7,9 +7,9 @@ import React from 'react';
 export default function MainLayout({ children, params }: LayoutType) {
   return (
     <AuthProvider>
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col sm:flex-row">
         <Sidebar locale={params.locale} />
-        <main className="ml-[17rem] min-h-screen w-full gap-6 p-2 pl-0 peer-data-[collapsed=true]:ml-20">
+        <main className="mt-[4rem] min-h-screen w-full gap-6 p-2 sm:ml-[17rem] sm:mt-0 sm:pl-0 peer-data-[collapsed=true]:sm:ml-20">
           <div className="grid h-full grid-cols-12 rounded-2xl border bg-white p-8 shadow-lg">
             <I18nProviderClient locale={params.locale} fallback={'locale fallback'}>
               {children}

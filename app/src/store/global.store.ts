@@ -4,7 +4,9 @@ import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface GlobalStore {
+  mobileOpen: boolean;
   collapsed: boolean;
+  setMobileOpen: (collapsed: boolean) => void;
   setCollapsed: (collapsed: boolean) => void;
 }
 
@@ -31,10 +33,14 @@ const writeCookie = (state: GlobalStore) => {
 export const initializeStore = (preloadedState: Partial<GlobalStore> = {}) => {
   return createStore<GlobalStore>((set, get) => ({
     collapsed: false,
+    mobileOpen: false,
     ...preloadedState,
     setCollapsed: (collapsed: boolean) => {
       set({ collapsed });
       writeCookie(get());
+    },
+    setMobileOpen: (mobileOpen: boolean) => {
+      set({ mobileOpen });
     },
   }));
 };
