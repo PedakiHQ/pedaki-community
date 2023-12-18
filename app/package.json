@@ -43,7 +43,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
-    "sharp": "^0.33.0",
+    "sharp": "^0.33.1",
     "sonner": "^1.2.4",
     "superjson": "^2.2.1",
     "zod": "^3.22.4",

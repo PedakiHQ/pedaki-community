@@ -117,7 +117,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
 const SidebarDecoration = () => {
   return (
     <div className="absolute inset-y-0 left-5">
-      <div className="absolute h-full w-px -translate-y-1/3 scale-110 bg-soft"></div>
+      <div className="absolute h-full w-px translate-y-[-70%] scale-150 bg-soft"></div>
     </div>
   );
 };

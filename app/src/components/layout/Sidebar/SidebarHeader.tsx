@@ -5,7 +5,7 @@ import { IconPanelLeftClose, IconPanelLeftOpen } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import Logo from '~/components/logo.tsx';
-import { useLayoutStore } from '~/store/layout.store.ts';
+import { useGlobalStore } from '~/store/global.store.ts';
 import React from 'react';
 
 interface SidebarHeaderProps {
@@ -13,7 +13,7 @@ interface SidebarHeaderProps {
 }
 
 const SidebarHeader = ({ collapsed }: SidebarHeaderProps) => {
-  const setCollapsed = useLayoutStore(state => state.setCollapsed);
+  const setCollapsed = useGlobalStore(state => state.setCollapsed);
 
   return (
     <div className={'flex flex-col gap-2  group-data-[collapsed=true]/sidebar:items-center'}>

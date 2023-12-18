@@ -7,7 +7,7 @@ import SidebarContent from '~/components/layout/Sidebar/SidebarContent.tsx';
 import SidebarFooter from '~/components/layout/Sidebar/SidebarFooter.tsx';
 import SidebarHeader from '~/components/layout/Sidebar/SidebarHeader.tsx';
 import { I18nProviderClient } from '~/locales/client';
-import { useLayoutStore } from '~/store/layout.store.ts';
+import { useGlobalStore } from '~/store/global.store.ts';
 import React from 'react';
 
 interface SidebarProps {
@@ -15,7 +15,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ locale }: SidebarProps) => {
-  const collapsed = useLayoutStore(state => state.collapsed);
+  const collapsed = useGlobalStore(state => state.collapsed);
 
   return (
     <aside
