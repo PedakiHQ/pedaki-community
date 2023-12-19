@@ -22,10 +22,11 @@ const Sidebar = ({ locale }: SidebarProps) => {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 sm:bg-transparent',
+        'fixed left-0 top-0 sm:bg-transparent',
         'z-20',
         'peer shrink-0',
         'w-full sm:w-[17rem] data-[collapsed=true]:sm:w-20',
+        'data-[mobile-open=true]:inset-y-0 sm:inset-y-0',
         'group/sidebar',
         mobileOpen && 'bg-weak',
       )}
