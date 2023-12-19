@@ -62,7 +62,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
     <div>
       <div className="hidden group-data-[collapsed=true]/sidebar:sm:block">
         <DropdownMenu>
-          <DropdownMenuTrigger className="focus-ring w-full">
+          <DropdownMenuTrigger className="focus-ring w-full rounded-md">
             <SidebarMenuItem
               icon={Icon}
               title={title}
@@ -87,7 +87,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
       </div>
       <div className="group-data-[collapsed=true]/sidebar:sm:hidden">
         <Collapsible defaultOpen={active}>
-          <CollapsibleTrigger className="focus-ring w-full">
+          <CollapsibleTrigger className="focus-ring w-full rounded-md">
             <SidebarMenuItem
               icon={Icon}
               title={title}
