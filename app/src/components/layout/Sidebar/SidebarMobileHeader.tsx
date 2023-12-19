@@ -17,6 +17,9 @@ const SidebarMobileHeader = ({ collapsed }: SidebarHeaderProps) => {
     <div className="-m-2 flex flex-col gap-2 rounded-2xl border bg-white p-2 sm:hidden ">
       <div className="flex items-center justify-between gap-2">
         <Burger active={collapsed} onClick={() => setCollapsed?.(!collapsed)} />
+        <div className="flex-1 space-y-1 overflow-hidden overflow-ellipsis whitespace-nowrap text-left">
+          <p className="text-label-sm font-medium">Demo</p>
+        </div>
         <Suspense>
           <User />
         </Suspense>
