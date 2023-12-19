@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarImage } from '@pedaki/design/ui/avatar';
 import { Burger } from '@pedaki/design/ui/burger';
+import SideBarUserDropdown from '~/components/layout/Sidebar/SideBarUserDropdown';
 import { useGlobalStore } from '~/store/global.store.ts';
 import { useSession } from 'next-auth/react';
 import React, { Suspense } from 'react';
@@ -23,9 +24,11 @@ const SidebarMobileHeader = ({ collapsed }: SidebarHeaderProps) => {
             Demo
           </span>
         </div>
-        <Suspense>
-          <User />
-        </Suspense>
+        <SideBarUserDropdown align="end" side="bottom">
+          <Suspense>
+            <User />
+          </Suspense>
+        </SideBarUserDropdown>
       </div>
     </div>
   );
