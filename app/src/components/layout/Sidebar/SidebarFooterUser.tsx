@@ -12,8 +12,8 @@ const SidebarFooterUser = () => {
   return (
     <div className="flex flex-col gap-2 group-data-[collapsed=true]/sidebar:items-center">
       <div className="rounded-md p-4">
-        <SideBarUserDropdown triggerClassName="w-full">
-          <div className="flex h-10 items-center gap-4">
+        <SideBarUserDropdown>
+          <button className="flex h-10 w-full items-center gap-4">
             <Avatar className="h-8 w-8 shrink-0">
               <AvatarImage src={data?.user.image} alt={data?.user.name ?? 'user'} />
             </Avatar>
@@ -33,7 +33,7 @@ const SidebarFooterUser = () => {
                 </>
               )}
             </div>
-          </div>
+          </button>
         </SideBarUserDropdown>
       </div>
     </div>

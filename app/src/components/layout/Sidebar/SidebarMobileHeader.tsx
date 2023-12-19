@@ -25,9 +25,11 @@ const SidebarMobileHeader = ({ collapsed }: SidebarHeaderProps) => {
           </span>
         </div>
         <SideBarUserDropdown align="end" side="bottom">
-          <Suspense>
-            <User />
-          </Suspense>
+          <button>
+            <Suspense>
+              <User />
+            </Suspense>
+          </button>
         </SideBarUserDropdown>
       </div>
     </div>

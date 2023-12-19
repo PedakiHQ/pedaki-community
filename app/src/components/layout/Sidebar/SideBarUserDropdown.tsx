@@ -7,7 +7,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
-import { cn } from '@pedaki/design/utils';
 import { useScopedI18n } from '~/locales/client';
 import { signOut } from 'next-auth/react';
 import React from 'react';
@@ -16,10 +15,8 @@ const SideBarUserDropdown = ({
   children,
   align = 'center',
   side = 'right',
-  triggerClassName = '',
 }: {
   children: React.ReactNode;
-  triggerClassName?: string;
   align?: React.ComponentProps<typeof DropdownMenuContent>['align'];
   side?: React.ComponentProps<typeof DropdownMenuContent>['side'];
 }) => {
@@ -27,7 +24,7 @@ const SideBarUserDropdown = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className={cn('focus-ring rounded-md', triggerClassName)}>
+      <DropdownMenuTrigger className="focus-ring rounded-md" asChild>
         {children}
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} side={side}>
