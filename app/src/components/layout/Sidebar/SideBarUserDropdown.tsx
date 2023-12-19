@@ -9,6 +9,7 @@ import {
 } from '@pedaki/design/ui/dropdown-menu';
 import { cn } from '@pedaki/design/utils';
 import { useScopedI18n } from '~/locales/client';
+import { signOut } from 'next-auth/react';
 import React from 'react';
 
 const SideBarUserDropdown = ({
@@ -31,12 +32,9 @@ const SideBarUserDropdown = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} side={side}>
         <DropdownMenuLabel>{t('dropdown.label')}</DropdownMenuLabel>
-        {/* TODO: make signout work */}
         <DropdownMenuItem
-          onClick={() => {
-            console.log('signout');
-            // 'use server';
-            // await signOut();
+          onClick={async () => {
+            await signOut();
           }}
         >
           {t('dropdown.signout')}
