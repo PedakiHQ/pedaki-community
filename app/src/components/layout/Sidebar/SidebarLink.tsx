@@ -38,7 +38,7 @@ type SidebarLinkWithoutChildren = SidebarLink & {
 export type SidebarLinkProps = SidebarLinkWithChildren | SidebarLinkWithoutChildren;
 
 const baseItemClass =
-  'flex items-center w-full gap-2 px-3 py-2 rounded-md text-sub hover:bg-white focus-ring';
+  'flex items-center w-full gap-2 px-3 py-2 rounded-md text-sub hover:bg-white focus-ring group-data-[collapsed=true]/sidebar:sm:justify-center';
 const subItemClass = (active: boolean | undefined) =>
   cn(baseItemClass, 'border text-sub', active ? 'z-[1] bg-white shadow-sm' : 'border-transparent');
 

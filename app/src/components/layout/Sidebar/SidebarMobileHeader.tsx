@@ -15,7 +15,7 @@ const SidebarMobileHeader = ({ collapsed }: SidebarHeaderProps) => {
   const setCollapsed = useGlobalStore(state => state.setMobileOpen);
 
   return (
-    <div className="-m-2 flex flex-col gap-2 rounded-2xl border bg-white p-2 sm:hidden ">
+    <div className="-m-2 flex flex-col gap-2 rounded-2xl border bg-white px-4 py-2 sm:hidden ">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Burger active={collapsed} onClick={() => setCollapsed?.(!collapsed)} />
@@ -25,11 +25,9 @@ const SidebarMobileHeader = ({ collapsed }: SidebarHeaderProps) => {
           </span>
         </div>
         <SideBarUserDropdown align="end" side="bottom">
-          <button>
-            <Suspense>
-              <User />
-            </Suspense>
-          </button>
+          <Suspense>
+            <User />
+          </Suspense>
         </SideBarUserDropdown>
       </div>
     </div>
