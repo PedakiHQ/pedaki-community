@@ -82,8 +82,8 @@ const SidebarLinkWithChildren = ({
               const href = child.href;
               const active = href.startsWith(`/${segment}`) || href === `/${segment ?? ''}`;
               return (
-                <DropdownMenuItem key={index} disabled={active}>
-                  {child.title}
+                <DropdownMenuItem key={index} disabled={active} asChild className="w-full">
+                  <Link href={href}>{child.title}</Link>
                 </DropdownMenuItem>
               );
             })}
@@ -160,7 +160,7 @@ const SidebarMenuItem = ({
         <Component
           href={href}
           className={cn(className, 'group')}
-          onClick={() => setMobileOpen?.(false)}
+          onClick={() => href && setMobileOpen?.(false)}
         >
           <div className="flex h-5 w-5 items-center justify-center">
             <Icon className={cn('h-5 w-5', active && 'text-primary-base', iconClassName)} />
