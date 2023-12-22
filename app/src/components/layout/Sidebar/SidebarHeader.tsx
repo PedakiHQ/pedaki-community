@@ -15,7 +15,7 @@ interface SidebarHeaderProps {
 
 const SidebarHeader = ({ collapsed }: SidebarHeaderProps) => {
   const setCollapsed = useGlobalStore(state => state.setCollapsed);
-  const workspaceName = useWorkspaceStore(state => state.settings.NAME);
+  const workspaceName = useWorkspaceStore(state => state.settings.name);
 
   return (
     <div className="hidden flex-col gap-2 group-data-[collapsed=true]/sidebar:items-center sm:flex">

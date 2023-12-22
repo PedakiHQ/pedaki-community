@@ -1,58 +1,53 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { wrapWithLoading } from '@pedaki/common/utils/wrap-with-loading';
+import { Button } from '@pedaki/design/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@pedaki/design/ui/form';
+import { IconSpinner } from '@pedaki/design/ui/icons';
+import { Input } from '@pedaki/design/ui/input';
 import type { PageType } from '~/app/types.ts';
 import { api } from '~/server/clients/client.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
+import type { OutputType } from '~api/router/router.ts';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
-// TODO: move this in a shared package
 const SettingsFormSchema = z.object({
-  email: z
-    .string()
-    .nonempty({ message: "L'adresse email est requise" })
-    .email("L'adresse email n'est pas valide"),
-  password: z.string().nonempty({ message: 'Le mot de passe est requis' }),
+  name: z.string(), // TODO
 });
-type LoginFormValues = z.infer<typeof LoginFormSchema>;
+type SettingsFormValues = z.infer<typeof SettingsFormSchema>;
 
-export default async function Bidule({ params }: PageType) {
-  const updateSetting = useWorkspaceStore(state => state.updateSetting);
+export default function Page({ params }: PageType) {
+  const { settings, updateSetting } = useWorkspaceStore(state => state);
 
-  const changeSettingsMutation = api.workspace.setSetting.useMutation();
+  const changeSettingsMutation = api.workspace.setSettings.useMutation();
 
-  const handleChange = (value: string) => {
-    // todo c'est un test
-    changeSettingsMutation
-      .mutateAsync({
-        key: 'NAME',
-        value,
-      })
-      .then(() => {
-        updateSetting('NAME', value);
-      });
-  };
-
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginFormSchema),
+  const form = useForm<SettingsFormValues>({
+    resolver: zodResolver(SettingsFormSchema),
     mode: 'onChange',
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: settings,
   });
 
   const { isSubmitting } = form.formState;
 
-  function onSubmit(values: LoginFormValues) {
+  function onSubmit(values: SettingsFormValues) {
     return wrapWithLoading(
       async () => {
-        await signIn('credentials', {
-          email: values.email,
-          password: values.password,
-          callbackUrl: '/',
-        });
+        await changeSettingsMutation.mutateAsync(
+          Object.entries(values).map(([k, v]) => ({
+            key: k as keyof OutputType['workspace']['getSettings'],
+            value: v,
+          })),
+        );
       },
       {
         loadingProps: null,
@@ -70,40 +65,22 @@ export default async function Bidule({ params }: PageType) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
           control={form.control}
-          name="email"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Nom du workspace</FormLabel>
               <FormControl>
                 <Input
-                  icon={IconMail}
-                  placeholder="tony@parker.com"
-                  type="email"
+                  placeholder="shrek"
+                  type="text"
                   autoCapitalize="none"
-                  autoComplete="email"
                   autoCorrect="off"
                   disabled={isSubmitting}
                   {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Mot de passe</FormLabel>
-              <FormControl>
-                <Input
-                  icon={IconLock}
-                  placeholder="********"
-                  type="password"
-                  autoComplete="current-password"
-                  disabled={isSubmitting}
-                  {...field}
+                  onChange={e => {
+                    updateSetting('name', e.target.value);
+                    field.onChange(e);
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -113,27 +90,8 @@ export default async function Bidule({ params }: PageType) {
 
         <Button variant="filled-primary" type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-          Se connecter
+          Sauvegarder
         </Button>
-
-        <div className="flex items-center justify-between">
-          <StyledLink
-            href="/auth/forgot-password"
-            className="text-p-xs"
-            decoration="underline"
-            variant="gray"
-          >
-            Mot de passe oublié ?
-          </StyledLink>
-          <StyledLink
-            href="/auth/register"
-            className="text-p-xs"
-            decoration="underline"
-            variant="gray"
-          >
-            Première connexion ?
-          </StyledLink>
-        </div>
       </form>
     </Form>
   );

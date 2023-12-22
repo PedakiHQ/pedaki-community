@@ -54,7 +54,6 @@ export default async function Layout({
   }
 
   const settings = await getWorkspaceSettings();
-  console.log('layout', { settings });
 
   const cookieStore = cookies().get(COOKIE_NAME);
   const storeValue = cookieStore ? (JSON.parse(cookieStore.value) as GlobalStore) : {};
