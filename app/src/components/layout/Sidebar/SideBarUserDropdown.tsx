@@ -30,7 +30,7 @@ const SideBarUserDropdown = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus-ring rounded-md sm:w-full">
-        <Tooltip open={collapsed && !isSmall ? undefined : false} asChild>
+        <Tooltip open={collapsed && !isSmall ? undefined : false}>
           <TooltipTrigger asChild>{children}</TooltipTrigger>
           <TooltipContent side="right" align="center">
             {t('dropdown.label')}
