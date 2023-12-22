@@ -3,7 +3,7 @@
 import { Avatar, AvatarImage } from '@pedaki/design/ui/avatar';
 import { Burger } from '@pedaki/design/ui/burger';
 import SideBarUserDropdown from '~/components/layout/Sidebar/SideBarUserDropdown';
-import { useGlobalStore } from '~/store/global.store.ts';
+import { useGlobalStore } from '~/store/global/global.store.ts';
 import { useSession } from 'next-auth/react';
 import React, { Suspense } from 'react';
 

@@ -8,7 +8,7 @@ import SidebarFooter from '~/components/layout/Sidebar/SidebarFooter.tsx';
 import SidebarHeader from '~/components/layout/Sidebar/SidebarHeader.tsx';
 import SidebarMobileHeader from '~/components/layout/Sidebar/SidebarMobileHeader.tsx';
 import { I18nProviderClient } from '~/locales/client';
-import { useGlobalStore } from '~/store/global.store.ts';
+import { useGlobalStore } from '~/store/global/global.store.ts';
 import React from 'react';
 
 interface SidebarProps {

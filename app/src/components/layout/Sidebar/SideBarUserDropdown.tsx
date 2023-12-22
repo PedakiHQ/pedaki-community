@@ -9,7 +9,7 @@ import {
 } from '@pedaki/design/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import { useScopedI18n } from '~/locales/client';
-import { useGlobalStore } from '~/store/global.store.ts';
+import { useGlobalStore } from '~/store/global/global.store.ts';
 import { useIsSmall } from '~/utils.ts';
 import { signOut } from 'next-auth/react';
 import React from 'react';

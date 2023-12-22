@@ -14,8 +14,7 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
   const t = await getI18n();
 
   return {
-    title: { absolute: t('metadata.title') },
-    description: t('metadata.description'),
+    title: { absolute: t('metadata.title') }
   };
 };
 

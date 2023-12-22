@@ -11,7 +11,7 @@ import {
 import type { IconType } from '@pedaki/design/ui/icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
-import { useGlobalStore } from '~/store/global.store.ts';
+import { useGlobalStore } from '~/store/global/global.store.ts';
 import { useIsSmall } from '~/utils.ts';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
