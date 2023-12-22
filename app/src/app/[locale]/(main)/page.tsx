@@ -26,7 +26,7 @@ export default async function Bidule({ params }: PageType) {
   const nameSetting = (await getWorkspaceSettings()).NAME;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <>
       <TestAPI />
       <p>{env.NEXT_PUBLIC_TESTVALUE}</p>
       <p>bidule</p>
@@ -41,6 +41,6 @@ export default async function Bidule({ params }: PageType) {
       </div>
       <TestAuthComponent />
       <TestSettingComponent />
-    </main>
+    </>
   );
 }
