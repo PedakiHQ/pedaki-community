@@ -11,9 +11,9 @@ const SidebarFooterUser = () => {
 
   return (
     <div className="flex flex-col gap-2 group-data-[collapsed=true]/sidebar:items-center">
-      <div className="rounded-md p-4">
-        <SideBarUserDropdown>
-          <button className="flex h-10 w-full items-center gap-4">
+      <div className="rounded-md py-4">
+        <SideBarUserDropdown align="end">
+          <button className="flex h-10 w-full items-center gap-4 rounded-md px-4 hover:bg-white data-[state=open]:bg-white">
             <Avatar className="h-8 w-8 shrink-0">
               <AvatarImage src={data?.user.image} alt={data?.user.name ?? 'user'} />
             </Avatar>
