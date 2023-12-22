@@ -1,7 +1,7 @@
 'use server';
 
+import { api } from '~/server/clients/server.ts';
+
 export const getWorkspaceSettings = () => {
-  return {
-    name: 'pedaki',
-  };
+  return api.workspace.getSettings.query();
 };
