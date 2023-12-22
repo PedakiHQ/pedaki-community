@@ -31,7 +31,7 @@
     "cross-env": "^7.0.3",
     "dotenv-cli": "latest",
     "execa": "^8.0.1",
-    "ora": "^7.0.1"
+    "ora": "^8.0.0"
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
