@@ -1,9 +1,7 @@
 import { prisma } from '@pedaki/db';
 import { internalProcedure, privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
-import { WorkspaceSettingKey as PrismaWorkspaceSettingKey } from '.prisma/client';
-
-type WorkspaceSettingKey = Lowercase<PrismaWorkspaceSettingKey>;
+import { WorkspaceSettingKey } from '.prisma/client';
 
 export const workspaceRouter = router({
   getSettings: internalProcedure.query(async () => {
@@ -11,7 +9,7 @@ export const workspaceRouter = router({
     console.log('getSettings', { settings });
     return settings.reduce(
       (acc, cur) => {
-        acc[cur.key.toLowerCase() as WorkspaceSettingKey] = cur.value;
+        acc[cur.key] = cur.value;
         return acc;
       },
       {} as Record<WorkspaceSettingKey, string>,
@@ -21,21 +19,15 @@ export const workspaceRouter = router({
     .input(
       z.array(
         z.object({
-          key: z.custom<WorkspaceSettingKey>(
-            value => (value as string).toUpperCase() in PrismaWorkspaceSettingKey,
-          ),
+          key: z.nativeEnum(WorkspaceSettingKey),
           value: z.string(),
         }),
       ),
     )
     .mutation(async ({ input }) => {
-      const newInput = input.map(({ key, value }) => ({
-        key: key.toUpperCase() as PrismaWorkspaceSettingKey,
-        value,
-      }));
       await prisma.workspaceSetting.deleteMany({
-        where: { key: { in: newInput.map(({ key }) => key) } },
+        where: { key: { in: input.map(({ key }) => key) } },
       });
-      await prisma.workspaceSetting.createMany({ data: newInput, skipDuplicates: true });
+      await prisma.workspaceSetting.createMany({ data: input, skipDuplicates: true });
     }),
 });
