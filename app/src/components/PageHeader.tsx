@@ -28,17 +28,19 @@ const PageHeader = ({
     <>
       <header className="flex justify-between pb-5">
         <div className="flex items-center gap-4">
-          <div className="size-12 shrink-0 rounded-full border bg-weak p-3.5 text-sub">
-            {image && (
-              <Avatar>
-                <AvatarImage src={image} alt={alt} className="size-5" />
-                <AvatarFallback>
-                  <Skeleton className="size-12 bg-neutral-300">&nbsp;</Skeleton>
-                </AvatarFallback>
-              </Avatar>
-            )}
-            {Icon && <Icon className="size-5" />}
-          </div>
+          {image && (
+            <Avatar className="flex size-12 items-center justify-center object-cover">
+              <AvatarImage src={image} alt={alt} className="size-12" />
+              <AvatarFallback>
+                <Skeleton className="size-12 bg-neutral-300">&nbsp;</Skeleton>
+              </AvatarFallback>
+            </Avatar>
+          )}
+          {Icon && (
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-full border bg-weak p-3.5 text-sub">
+              <Icon className="size-5" />
+            </div>
+          )}
           <div>
             <h1 className="text-label-lg font-medium text-main">{title}</h1>
             <p className="text-p-sm text-sub">{description}</p>
