@@ -1,12 +1,12 @@
 import { prisma } from '@pedaki/db';
-import {internalProcedure, privateProcedure, router} from '~api/router/trpc.ts';
+import { internalProcedure, privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 import { WorkspaceSettingKey } from '.prisma/client';
 
 export const workspaceRouter = router({
   getSettings: internalProcedure.query(async () => {
     const settings = await prisma.workspaceSetting.findMany({ select: { value: true, key: true } });
-    console.log("getSettings", {settings});
+    console.log('getSettings', { settings });
     return settings.reduce(
       (acc, cur) => {
         acc[cur.key] = cur.value;
@@ -23,7 +23,7 @@ export const workspaceRouter = router({
       }),
     )
     .mutation(async ({ input }) => {
-      console.log(input)
+      console.log(input);
       return await prisma.workspaceSetting.upsert({
         where: { key: input.key },
         update: { value: input.value },

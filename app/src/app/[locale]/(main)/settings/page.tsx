@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import type {PageType} from '~/app/types.ts';
-import {useWorkspaceStore} from "~/store/workspace/workspace.store.ts";
-import {api} from "~/server/clients/client.ts";
-import React from "react";
+import type { PageType } from '~/app/types.ts';
+import { api } from '~/server/clients/client.ts';
+import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import z from "zod";
+import z from 'zod';
 
 // TODO: move this in a shared package
 const SettingsFormSchema = z.object({
-
   email: z
     .string()
     .nonempty({ message: "L'adresse email est requise" })
@@ -19,19 +18,21 @@ const SettingsFormSchema = z.object({
 type LoginFormValues = z.infer<typeof LoginFormSchema>;
 
 export default async function Bidule({ params }: PageType) {
-  const updateSetting = useWorkspaceStore(state => state.updateSetting)
+  const updateSetting = useWorkspaceStore(state => state.updateSetting);
 
   const changeSettingsMutation = api.workspace.setSetting.useMutation();
 
   const handleChange = (value: string) => {
     // todo c'est un test
-    changeSettingsMutation.mutateAsync({
-      key: 'NAME',
-      value
-    }).then(() => {
-      updateSetting('NAME', value)
-    });
-  }
+    changeSettingsMutation
+      .mutateAsync({
+        key: 'NAME',
+        value,
+      })
+      .then(() => {
+        updateSetting('NAME', value);
+      });
+  };
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginFormSchema),

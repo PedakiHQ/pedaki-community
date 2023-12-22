@@ -6,8 +6,8 @@ import { Separator } from '@pedaki/design/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import Logo from '~/components/logo.tsx';
 import { useGlobalStore } from '~/store/global/global.store.ts';
+import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import React from 'react';
-import {useWorkspaceStore} from "~/store/workspace/workspace.store.ts";
 
 interface SidebarHeaderProps {
   collapsed: boolean;
@@ -15,7 +15,7 @@ interface SidebarHeaderProps {
 
 const SidebarHeader = ({ collapsed }: SidebarHeaderProps) => {
   const setCollapsed = useGlobalStore(state => state.setCollapsed);
-  const workspaceName = useWorkspaceStore(state => state.settings.NAME)
+  const workspaceName = useWorkspaceStore(state => state.settings.NAME);
 
   return (
     <div className="hidden flex-col gap-2 group-data-[collapsed=true]/sidebar:items-center sm:flex">

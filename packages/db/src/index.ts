@@ -1,3 +1,4 @@
+// @ts-ignore
 import { logger } from '@pedaki/logger';
 import PrismaClientPkg from '@prisma/client';
 import { fieldEncryptionExtension } from 'prisma-field-encryption';
@@ -15,7 +16,7 @@ const prismaClientSingleton = () => {
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,
-        decryptionKeys: env.PRISMA_DECRYPTION_KEY ? [env.PRISMA_DECRYPTION_KEY] : undefined,
+        // decryptionKeys: env.PRISMA_DECRYPTION_KEY ? [env.PRISMA_DECRYPTION_KEY] : undefined,
       }),
     );
   }
