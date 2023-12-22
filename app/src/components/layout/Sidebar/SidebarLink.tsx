@@ -20,6 +20,7 @@ import React from 'react';
 interface SidebarLink {
   icon: IconType;
   title: string;
+  iconClassName?: string;
 }
 
 type SidebarLinkSubItem = Omit<SidebarLink, 'icon'> & {
@@ -52,7 +53,12 @@ const SidebarLink = ({ items, href, ...props }: SidebarLinkProps) => {
   return null;
 };
 
-const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithChildren) => {
+const SidebarLinkWithChildren = ({
+  icon: Icon,
+  title,
+  items,
+  iconClassName,
+}: SidebarLinkWithChildren) => {
   const segment = useSelectedLayoutSegment();
   const active = items.some(
     item => item.href.startsWith(`/${segment}`) || item.href === `/${segment ?? ''}`,
@@ -69,6 +75,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
               href=""
               active={active}
               className={baseItemClass}
+              iconClassName={iconClassName}
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="right">
@@ -94,6 +101,7 @@ const SidebarLinkWithChildren = ({ icon: Icon, title, items }: SidebarLinkWithCh
               href=""
               active={active}
               className={baseItemClass}
+              iconClassName={iconClassName}
             />
           </CollapsibleTrigger>
           <CollapsibleContent animate className="p-1 pl-0">
@@ -138,6 +146,7 @@ const SidebarMenuItem = ({
   title,
   active = false,
   className,
+  iconClassName,
   onClick,
 }: SidebarLinkWithoutChildren & {
   active?: boolean;
@@ -152,7 +161,9 @@ const SidebarMenuItem = ({
     <Tooltip open={collapsed && !isSmall ? undefined : false}>
       <TooltipTrigger asChild>
         <Component href={href} className={cn(className, 'group')} onClick={onClick}>
-          <Icon className={cn('h-5 w-5', active && 'text-primary-base')} />
+          <div className="flex h-5 w-5 items-center justify-center">
+            <Icon className={cn('h-5 w-5', active && 'text-primary-base', iconClassName)} />
+          </div>
           <span
             className={cn(
               'text-label-sm font-medium group-data-[collapsed=true]/sidebar:sm:hidden',
