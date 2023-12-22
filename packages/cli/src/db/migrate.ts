@@ -1,4 +1,5 @@
 import { prisma } from '@pedaki/db';
+// @ts-expect-error: The migrations files are not always present
 import { migrate } from '@pedaki/db/encryption/migrations/index.js';
 import { logger } from '@pedaki/logger';
 import { checkEnvVariables, DOLLAR, handleBaseFlags, label } from '~/help.ts';
@@ -62,6 +63,7 @@ class DbMigrateCommand implements Command {
       spinner.info('Database tables deployed');
 
       if (process.env.PRISMA_DECRYPTION_KEY) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await migrate(prisma);
         spinner.succeed('Encryption keys migrated');
       } else {
