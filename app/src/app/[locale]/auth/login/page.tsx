@@ -1,6 +1,6 @@
 import AuthWrapper from '~/app/[locale]/auth/auth-wrapper.tsx';
 import type { PageType } from '~/app/types.ts';
-import { setStaticParamsLocale } from 'next-international/server';
+import { setStaticParamsLocale } from '~/locales/utils';
 import React from 'react';
 import LoginForm from './login-form';
 

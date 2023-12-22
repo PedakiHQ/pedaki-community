@@ -1,8 +1,13 @@
+import { fallbackLocale } from '~/locales/shared';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // See [locale]/layout.tsx for more details
+  // TODO: not possible atm, but we should change the lang to the current locale
   return (
-    <html>
-      <body>{children}</body>
+    <html lang={fallbackLocale} dir="ltr" suppressHydrationWarning>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

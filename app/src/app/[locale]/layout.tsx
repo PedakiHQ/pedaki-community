@@ -1,21 +1,28 @@
-import { Inter } from 'next/font/google';
 import './globals.css';
 import '@pedaki/design/tailwind/index.css';
 import { Providers } from '~/app/[locale]/providers';
 import { getI18n, getStaticParams } from '~/locales/server';
 import type { LocaleCode } from '~/locales/server';
 import { locales } from '~/locales/shared';
+import { fixLocale } from '~/locales/utils';
+import { setStaticParamsLocale } from 'next-international/server';
 import { notFound } from 'next/navigation';
 import React from 'react';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const generateMetadata = async () => {
+export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
+  const locale = fixLocale(params.locale);
+  setStaticParamsLocale(locale);
   const t = await getI18n();
 
   return {
-    title: t('metadata.title'),
+    title: {
+      template: `%s - ${t('metadata.title')}`,
+      default: t('metadata.title'),
+    },
     description: t('metadata.description'),
+    openGraph: {
+      locale: locale,
+    },
     icons: [
       { rel: 'icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
       { rel: 'apple-touch-icon', url: 'https://static.pedaki.fr/logo/apple-touch-icon.png' },
@@ -29,7 +36,7 @@ export function generateStaticParams() {
   return getStaticParams();
 }
 
-export default function RootLayout({
+export default function Layout({
   children,
   params: { locale },
 }: {
@@ -37,14 +44,9 @@ export default function RootLayout({
   params: { locale: LocaleCode };
 }) {
   if (!locales.includes(locale)) {
-    return notFound();
+    notFound();
+    return null;
   }
 
-  return (
-    <html lang={locale}>
-      <body className={inter.className}>
-        <Providers locale={locale}>{children}</Providers>
-      </body>
-    </html>
-  );
+  return <Providers locale={locale}>{children}</Providers>;
 }

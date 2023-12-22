@@ -108,7 +108,6 @@ sudo -E docker compose -f docker-compose.yml up -d web
 
 echo "[pedaki] Waiting for the app to be ready..."
 echo "[pedaki] This can take a few minutes..."
-# TODO: call /_health endpoint
-bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost)" != "200" ]]; do sleep 5; done'
+bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost/api/health)" != "200" ]]; do sleep 5; done'
 echo "[pedaki] App is ready!"
 echo "Open https://$DOMAIN to access your Pedaki instance."
