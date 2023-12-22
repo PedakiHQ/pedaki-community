@@ -19,12 +19,8 @@ const items = [
         href: '/students',
       },
       {
-        title: 'Child 2',
-        href: '/a',
-      },
-      {
-        title: 'Child 3',
-        href: '/b',
+        title: "Schéma d'élèves",
+        href: '/students/schema',
       },
     ],
   },
@@ -33,16 +29,12 @@ const items = [
     title: 'Classes',
     items: [
       {
-        title: 'Child 1',
-        href: '/',
+        title: 'Liste des classes',
+        href: '/classes',
       },
       {
-        title: 'Child 2',
-        href: '/c',
-      },
-      {
-        title: 'Child 3',
-        href: '/d',
+        title: 'Générer les classes',
+        href: '/classes/generate',
       },
     ],
   },
