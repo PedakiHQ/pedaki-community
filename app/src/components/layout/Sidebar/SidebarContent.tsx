@@ -1,12 +1,17 @@
-import { IconBookUser, IconUserGroups } from '@pedaki/design/ui/icons';
+import { IconBookUser, IconHome, IconUserGroups } from '@pedaki/design/ui/icons';
 import type { SidebarLinkProps } from '~/components/layout/Sidebar/SidebarLink.tsx';
 import SidebarLink from '~/components/layout/Sidebar/SidebarLink.tsx';
 import React from 'react';
 
 const items = [
   {
+    icon: IconHome,
+    title: 'Accueil',
+    href: '/',
+  },
+  {
     icon: IconUserGroups,
-    iconClassName: 'h-4 w-4',
+    iconClassName: 'h-[1.1rem] w-[1.1rem]',
     title: 'Eleves',
     items: [
       {
