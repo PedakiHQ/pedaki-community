@@ -1,13 +1,17 @@
 import './globals.css';
 import '@pedaki/design/tailwind/index.css';
-import { Providers } from '~/app/[locale]/providers';
-import { getI18n, getStaticParams } from '~/locales/server';
+import { BaseProvider } from '~/app/[locale]/baseProvider.tsx';
 import type { LocaleCode } from '~/locales/server';
+import { getI18n, getStaticParams } from '~/locales/server';
 import { locales } from '~/locales/shared';
 import { fixLocale } from '~/locales/utils';
+import { COOKIE_NAME } from '~/store/constants.ts';
+import type { GlobalStore } from '~/store/global.store.ts';
+import StoreProvider from '~/store/StoreProvider.tsx';
 import { setStaticParamsLocale } from 'next-international/server';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   const locale = fixLocale(params.locale);
@@ -48,5 +52,14 @@ export default function Layout({
     return null;
   }
 
-  return <Providers locale={locale}>{children}</Providers>;
+  const cookieStore = cookies().get(COOKIE_NAME);
+  const storeValue = cookieStore ? (JSON.parse(cookieStore.value) as GlobalStore) : {};
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BaseProvider>
+        <StoreProvider {...storeValue}>{children}</StoreProvider>
+      </BaseProvider>
+    </Suspense>
+  );
 }

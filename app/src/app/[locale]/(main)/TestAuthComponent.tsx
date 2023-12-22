@@ -1,15 +1,10 @@
-import { auth, signOut } from '@pedaki/auth/edge.ts';
+import { signOut } from '@pedaki/auth/edge.ts';
 import { Button } from '@pedaki/design/ui/button';
 import React from 'react';
 
-const TestAuthComponent = async () => {
-  const session = await auth();
-
+const TestAuthComponent = () => {
   return (
-    <div>
-      <div className="max-w-screen-lg overflow-auto">
-        <pre>{JSON.stringify(session, null, 2)}</pre>
-      </div>
+    <div className="bg-red-base">
       <form
         action={async () => {
           'use server';
