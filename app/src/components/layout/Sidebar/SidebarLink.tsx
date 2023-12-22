@@ -12,7 +12,7 @@ import type { IconType } from '@pedaki/design/ui/icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
 import { useGlobalStore } from '~/store/global/global.store.ts';
-import { useIsSmall } from '~/utils.ts';
+import { isActive, useIsSmall } from '~/utils.ts';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import React from 'react';
@@ -60,9 +60,7 @@ const SidebarLinkWithChildren = ({
   iconClassName,
 }: SidebarLinkWithChildren) => {
   const segment = useSelectedLayoutSegment();
-  const active = items.some(
-    item => item.href.startsWith(`/${segment}`) || item.href === `/${segment ?? ''}`,
-  );
+  const active = items.some(item => isActive(segment, item.href));
 
   return (
     <div>
@@ -147,12 +145,11 @@ const SidebarMenuItem = ({
   active = false,
   className,
   iconClassName,
-  onClick,
 }: SidebarLinkWithoutChildren & {
   active?: boolean;
   className: string;
-  onClick?: () => void;
 }) => {
+  const setMobileOpen = useGlobalStore(state => state.setMobileOpen);
   const Component = href ? Link : 'div';
   const isSmall = useIsSmall();
   const collapsed = useGlobalStore(state => state.collapsed);
@@ -160,7 +157,11 @@ const SidebarMenuItem = ({
   return (
     <Tooltip open={collapsed && !isSmall ? undefined : false}>
       <TooltipTrigger asChild>
-        <Component href={href} className={cn(className, 'group')} onClick={onClick}>
+        <Component
+          href={href}
+          className={cn(className, 'group')}
+          onClick={() => setMobileOpen?.(false)}
+        >
           <div className="flex h-5 w-5 items-center justify-center">
             <Icon className={cn('h-5 w-5', active && 'text-primary-base', iconClassName)} />
           </div>
@@ -185,9 +186,11 @@ const SidebarMenuItem = ({
 };
 
 const SidebarLinkSubItem = ({ href, title, active }: SidebarLinkSubItem & { active?: boolean }) => {
+  const setMobileOpen = useGlobalStore(state => state.setMobileOpen);
+
   return (
     <div className="pl-7">
-      <Link href={href} className={cn(subItemClass(active))} tabIndex={2}>
+      <Link href={href} className={cn(subItemClass(active))} onClick={() => setMobileOpen?.(false)}>
         <span className={cn('text-label-sm font-medium', active && 'text-main')}>{title}</span>
       </Link>
     </div>
