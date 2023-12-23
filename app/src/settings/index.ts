@@ -1,7 +1,12 @@
 'use server';
 
+import { env } from '~/env.ts';
 import { api } from '~/server/clients/internal.ts';
 
-export const getWorkspaceSettings = () => {
-  return api.workspace.getSettings.query();
+export const getWorkspaceSettings = async () => {
+  const response = await api.workspace.getSettings.query();
+
+  // set default values
+  if (!response.name) response.name = env.NEXT_PUBLIC_PEDAKI_NAME;
+  return response;
 };

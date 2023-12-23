@@ -67,7 +67,7 @@ pedaki="node --no-warnings=ExperimentalWarning $TARGET/packages/cli/dist/index.j
 cd ..
 
 echo "[pedaki] Generating environment variables..."
-$pedaki env generate --domain "$DOMAIN" --tag "$PEDAKI_TAG"  --email-domain "$EMAIL_DOMAIN"
+$pedaki env generate --name "$WORKSPACE_NAME" --domain "$WORKSPACE_DOMAIN" --tag "$PEDAKI_TAG"  --email-domain "$EMAIL_DOMAIN"
 export $(grep -v '^#' .env.production.local | xargs)
 
 # Add caddyfile (https://caddyserver.com/docs/automatic-https)
