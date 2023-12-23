@@ -26,7 +26,7 @@
     "@47ng/cloak": "^1.1.0",
     "@pedaki/common": "0.4.3-beta.0",
     "@pedaki/logger": "workspace:*",
-    "@pedaki/mailer": "0.4.3-beta.0",
+    "@pedaki/mailer": "0.4.3-beta.1",
     "@pedaki/db": "workspace:*",
     "@pedaki/services": "workspace:*",
     "dotenv": "^16.3.1",
