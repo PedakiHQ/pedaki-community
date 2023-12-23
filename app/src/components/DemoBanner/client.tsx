@@ -31,6 +31,7 @@ const DemoBannerComponent = () => {
               <p className="hidden text-p-sm lg:block">
                 Certaines fonctionnalités sont désactivées
               </p>
+              <p className="hidden lg:block">∙</p>
               <StyledLink
                 href="#"
                 decoration="underline"
