@@ -25,7 +25,8 @@ jobs:
         run: bash ./bin/deploy
         env:
           IS_CI: true
-          DOMAIN: localhost
+          WORKSPACE_DOMAIN: localhost
+          WORKSPACE_NAME: demo
           PEDAKI_TAG: latest
           ADMIN_EMAIL: developers@pedaki.fr
           ADMIN_PASSWORD: password

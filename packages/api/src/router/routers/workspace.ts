@@ -25,9 +25,14 @@ export const workspaceRouter = router({
       ),
     )
     .mutation(async ({ input }) => {
-      await prisma.workspaceSetting.deleteMany({
-        where: { key: { in: input.map(({ key }) => key) } },
-      });
-      await prisma.workspaceSetting.createMany({ data: input, skipDuplicates: true });
+      await prisma.$transaction(
+        input.map(setting => {
+          return prisma.workspaceSetting.upsert({
+            where: { key: setting.key },
+            create: { key: setting.key, value: setting.value },
+            update: { value: setting.value },
+          });
+        }),
+      );
     }),
 });
