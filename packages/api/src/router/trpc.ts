@@ -5,3 +5,4 @@ import { isLogged } from './middleware/session.middleware.ts';
 export const router = t.router;
 export const publicProcedure = t.procedure.use(withTelemetry);
 export const privateProcedure = publicProcedure.use(isLogged);
+export const internalProcedure = publicProcedure; // todo

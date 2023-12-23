@@ -84,7 +84,7 @@ model WorkspaceSetting {
 }
 
 enum WorkspaceSettingKey {
-  NAME
+  name
 }
 
 enum TokenType {

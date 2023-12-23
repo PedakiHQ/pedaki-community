@@ -1,4 +1,4 @@
-import { COOKIE_NAME } from '~/store/constants.ts';
+import { COOKIE_NAME } from '~/store/global/constants.ts';
 import { setCookie } from 'cookies-next';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';

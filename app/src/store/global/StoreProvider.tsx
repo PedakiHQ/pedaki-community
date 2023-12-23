@@ -1,7 +1,7 @@
 'use client';
 
-import type { GlobalStore, GlobalStoreType } from '~/store/global.store.ts';
-import { initializeStore, Provider } from '~/store/global.store.ts';
+import type { GlobalStore, GlobalStoreType } from '~/store/global/global.store.ts';
+import { initializeStore, Provider } from '~/store/global/global.store.ts';
 import type { PropsWithChildren } from 'react';
 import React, { useRef } from 'react';
 
