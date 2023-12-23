@@ -65,9 +65,7 @@ export default async function Layout({
         <GlobalStoreProvider {...storeValue}>
           <DemoBanner />
           <div className="relative h-full peer-data-[visible=true]:mt-12">
-              <WorkspaceStoreProvider settings={settings}>
-                  {children}
-              </WorkspaceStoreProvider>
+            <WorkspaceStoreProvider settings={settings}>{children}</WorkspaceStoreProvider>
           </div>
         </GlobalStoreProvider>
       </BaseProvider>

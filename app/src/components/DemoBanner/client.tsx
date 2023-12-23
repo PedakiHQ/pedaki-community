@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
-import { useGlobalStore } from '~/store/global.store.ts';
+import { useGlobalStore } from '~/store/global/global.store';
 import React from 'react';
 
 const DemoBannerComponent = () => {
