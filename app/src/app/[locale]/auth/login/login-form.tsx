@@ -14,6 +14,7 @@ import {
 import { IconLock, IconMail, IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
 import { StyledLink } from '@pedaki/design/ui/styled-link';
+import { env } from '~/env.ts';
 import { signIn } from 'next-auth/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -34,8 +35,8 @@ const LoginForm = () => {
     resolver: zodResolver(LoginFormSchema),
     mode: 'onChange',
     defaultValues: {
-      email: '',
-      password: '',
+      email: env.NEXT_PUBLIC_IS_DEMO ? 'demo@pedaki.fr' : '',
+      password: env.NEXT_PUBLIC_IS_DEMO ? 'demo' : '',
     },
   });
 
