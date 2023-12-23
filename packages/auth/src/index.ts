@@ -57,7 +57,7 @@ export const baseAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        domain: env.NODE_ENV === 'production' ? env.PEDAKI_DOMAIN : undefined,
+        domain: env.NODE_ENV === 'production' ? env.NEXT_PUBLIC_PEDAKI_DOMAIN : undefined,
         secure: useSecureCookies,
       },
     },
