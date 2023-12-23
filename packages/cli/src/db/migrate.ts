@@ -62,7 +62,6 @@ class DbMigrateCommand implements Command {
       spinner.info('Database tables deployed');
 
       if (process.env.PRISMA_DECRYPTION_KEY) {
-         
         await migrate(prisma);
         spinner.succeed('Encryption keys migrated');
       } else {
