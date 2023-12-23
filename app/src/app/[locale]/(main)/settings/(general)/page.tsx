@@ -26,7 +26,7 @@ const SettingsFormSchema = z.object({
 });
 type SettingsFormValues = z.infer<typeof SettingsFormSchema>;
 
-export default function Page({ params }: PageType) {
+export default function GeneralSettingsPage({ params }: PageType) {
   const { settings, updateSetting } = useWorkspaceStore(state => state);
 
   const changeSettingsMutation = api.workspace.setSettings.useMutation();
