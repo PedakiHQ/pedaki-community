@@ -18,8 +18,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
     "typecheck": "tsc --noEmit --declaration"
   },
   "dependencies": {
