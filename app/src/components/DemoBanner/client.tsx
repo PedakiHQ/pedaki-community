@@ -24,10 +24,10 @@ const DemoBannerComponent = () => {
       <div className="z-1 fixed inset-x-0 m-1 rounded-sm bg-surface px-4 py-2 text-white">
         <div className="flex items-center justify-between">
           <div className="flex flex-1 items-center justify-center gap-2">
-            <IconInfoCircleFill className="h-5 w-5" />
+            <IconInfoCircleFill className="hidden h-5 w-5 sm:block" />
             <p className="text-label-sm font-medium">Version de démonstration</p>
             <p>∙</p>
-            <p className="text-p-sm">Certaines fonctionnalités sont désactivées</p>
+            <p className="hidden text-p-sm lg:block">Certaines fonctionnalités sont désactivées</p>
             <StyledLink
               href="#"
               decoration="underline"
