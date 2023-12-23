@@ -21,7 +21,7 @@ const DemoBannerComponent = () => {
 
   return (
     <div className="peer" data-visible={demoBannerVisible}>
-      <div className="z-1 fixed inset-x-0 bg-weak">
+      <div className="fixed inset-x-0 z-[21] bg-weak">
         <div className="m-1 rounded-sm bg-surface px-4 py-2 text-white">
           <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center justify-center gap-2">
