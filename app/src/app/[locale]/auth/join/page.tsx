@@ -23,7 +23,7 @@ export default async function AcceptInvitePage({
 
   return (
     <AuthWrapper
-      title={`Tu as été invité à rejoindre ${settings.NAME}`}
+      title={`Tu as été invité à rejoindre ${settings.name}`}
       description="Avant d'accéder au workspace, choisis un mot de passe"
     >
       <JoinForm email={userData.email} token={token} />

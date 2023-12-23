@@ -1,15 +1,20 @@
 'use server';
 
-import * as process from 'process';
+import { logger } from '@pedaki/logger';
 import { env } from '~/env.ts';
 import { api } from '~/server/clients/internal.ts';
+import type { OutputType } from '~api/router/router.ts';
 
 export const getWorkspaceSettings = async () => {
-  if (process.env.CI) {
-    return {};
+  let response: OutputType['workspace']['getSettings'];
+  try {
+    response = await api.workspace.getSettings.query();
+  } catch (error) {
+    logger.error('getWorkspaceSettings', error);
+    response = {
+      name: env.NEXT_PUBLIC_PEDAKI_NAME,
+    };
   }
-
-  const response = await api.workspace.getSettings.query();
 
   // set default values
   if (!response.name) response.name = env.NEXT_PUBLIC_PEDAKI_NAME;
