@@ -4,6 +4,8 @@ import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface GlobalStore {
+  demoBannerVisible: boolean;
+  setDemoBannerVisible: (visible: boolean) => void;
   mobileOpen: boolean;
   collapsed: boolean;
   setMobileOpen: (collapsed: boolean) => void;
@@ -34,6 +36,7 @@ export const initializeStore = (preloadedState: Partial<GlobalStore> = {}) => {
   return createStore<GlobalStore>((set, get) => ({
     collapsed: false,
     mobileOpen: false,
+    demoBannerVisible: true,
     ...preloadedState,
     setCollapsed: (collapsed: boolean) => {
       set({ collapsed });
@@ -41,6 +44,9 @@ export const initializeStore = (preloadedState: Partial<GlobalStore> = {}) => {
     },
     setMobileOpen: (mobileOpen: boolean) => {
       set({ mobileOpen });
+    },
+    setDemoBannerVisible: (demoBannerVisible: boolean) => {
+      set({ demoBannerVisible });
     },
   }));
 };

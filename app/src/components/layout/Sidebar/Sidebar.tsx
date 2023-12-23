@@ -18,16 +18,18 @@ interface SidebarProps {
 const Sidebar = ({ locale }: SidebarProps) => {
   const collapsed = useGlobalStore(state => state.collapsed);
   const mobileOpen = useGlobalStore(state => state.mobileOpen);
+  const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
 
   return (
     <aside
       className={cn(
         'fixed left-0 top-0 sm:bg-transparent',
         'z-20',
-        'peer shrink-0',
+        'peer',
         'w-full sm:w-[17rem] data-[collapsed=true]:sm:w-20',
         'data-[mobile-open=true]:inset-y-0 sm:inset-y-0',
         'group/sidebar',
+        demoBannerVisible && 'mt-12',
         mobileOpen && 'bg-weak',
       )}
       data-collapsed={collapsed}
