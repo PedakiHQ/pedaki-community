@@ -1,16 +1,10 @@
 'use client';
 
 import { DropdownMenuItem, DropdownMenuLabel } from '@pedaki/design/ui/dropdown-menu';
-import type { IconType } from '@pedaki/design/ui/icons';
-import { IconFlagFR, IconFlagGB } from '@pedaki/design/ui/icons';
+import { LocaleIcon } from '~/components/LanguageSelector/LocaleIcon.tsx';
 import { useChangeLocale, useCurrentLocale } from '~/locales/client';
 import type { LocaleCode } from '~/locales/server';
 import React from 'react';
-
-const LocaleIcon: Record<LocaleCode, IconType> = {
-  fr: IconFlagFR,
-  en: IconFlagGB,
-};
 
 export const LocaleItem = ({ locale }: { locale: LocaleCode }) => {
   const activeLocale = useCurrentLocale();

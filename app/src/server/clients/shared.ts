@@ -1,7 +1,10 @@
-// import { env } from '~/env.mjs';
+import { env } from '~/env';
 
-const baseUrl = 'http://localhost:3000';
+const isLocal = env.NEXT_PUBLIC_PEDAKI_DOMAIN.includes('localhost');
+export const BASE_URL = isLocal
+  ? 'http://localhost:3000'
+  : `https://${env.NEXT_PUBLIC_PEDAKI_DOMAIN}.pedaki.fr`;
 
 export const getUrl = () => {
-  return baseUrl + '/api/t';
+  return BASE_URL + '/api/t';
 };

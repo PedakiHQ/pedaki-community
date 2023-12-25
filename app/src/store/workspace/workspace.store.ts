@@ -1,13 +1,12 @@
-import type { AppRouter, OutputType } from '~api/router/router.ts';
+import type { OutputType } from '~api/router/router.ts';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
+type Settings = OutputType['workspace']['getSettings'];
+
 export interface WorkspaceStore {
-  settings: OutputType['workspace']['getSettings'];
-  updateSetting: (key: keyof OutputType['workspace']['getSettings'], value: string) => void;
-  updateSettings: (
-    settings: { key: keyof OutputType['workspace']['getSettings']; value: string }[],
-  ) => void;
+  settings: Settings;
+  updateSetting: <T extends keyof Settings>(key: T, value: Settings[T]) => void;
 }
 
 export type WorkspaceStoreType = ReturnType<typeof initializeStore>;
@@ -34,11 +33,6 @@ export const initializeStore = (preloadedState: Pick<WorkspaceStore, 'settings'>
           [key]: value,
         },
       }); // TODO faire mieuw les copies c'est apas bien
-    },
-    updateSettings: settings => {
-      set({
-        settings: Object.assign(get().settings, settings),
-      });
     },
   }));
 };

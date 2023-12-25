@@ -1,22 +1,29 @@
 'use server';
 
+import { cache } from '@pedaki/common/cache';
 import { logger } from '@pedaki/logger';
-import { env } from '~/env.ts';
 import { api } from '~/server/clients/internal.ts';
+import { CACHE_KEY } from '~/settings/constants.ts';
 import type { OutputType } from '~api/router/router.ts';
 
 export const getWorkspaceSettings = async () => {
-  let response: OutputType['workspace']['getSettings'];
-  try {
-    response = await api.workspace.getSettings.query();
-  } catch (error) {
-    logger.error('getWorkspaceSettings', error);
-    response = {
-      name: env.NEXT_PUBLIC_PEDAKI_NAME,
-    };
-  }
+  return await cache(async () => {
+    let response: OutputType['workspace']['getSettings'];
+    try {
+      response = await api.workspace.getSettings.query();
+    } catch (error) {
+      logger.error('getWorkspaceSettings', error);
+      response = {
+        name: '',
+        logoUrl: '',
+        defaultLanguage: 'fr',
+        contactEmail: '',
+        contactName: '',
+        currentMaintenanceWindow: '',
+        maintenanceWindow: '',
+      };
+    }
 
-  // set default values
-  if (!response.name) response.name = env.NEXT_PUBLIC_PEDAKI_NAME;
-  return response;
+    return response;
+  }, CACHE_KEY);
 };

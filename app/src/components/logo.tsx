@@ -1,23 +1,21 @@
+'use client';
+
 import { cn } from '@pedaki/design/utils';
+import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-
-// TODO: load custom logo from db
 
 const Logo: React.FC<{
   width?: number;
   height?: number;
   className?: string;
 }> = ({ className }) => {
+  const logoUrl = useWorkspaceStore(state => state.settings.logoUrl);
+
   return (
     <Link className={cn('flex select-none items-center hover:opacity-75', className)} href="/">
-      <Image
-        src="https://static.pedaki.fr/logo/apple-touch-icon.png"
-        alt="Pedaki"
-        height={180}
-        width={180}
-      />
+      <Image src={logoUrl} alt="Pedaki" height={180} width={180} fetchPriority="high" />
     </Link>
   );
 };

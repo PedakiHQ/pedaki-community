@@ -51,6 +51,21 @@ CREATE TABLE `tokens` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `settings` (
+    `id` INTEGER NOT NULL DEFAULT 1,
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `name` VARCHAR(30) NOT NULL,
+    `contact_email` VARCHAR(255) NULL,
+    `contact_name` VARCHAR(128) NULL,
+    `logo_url` VARCHAR(1024) NOT NULL,
+    `default_language` CHAR(3) NOT NULL,
+    `current_maintenance_window` VARCHAR(128) NULL,
+    `maintenance_window` VARCHAR(128) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `accounts` ADD CONSTRAINT `accounts_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 

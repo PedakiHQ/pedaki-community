@@ -4,7 +4,7 @@ import meow from 'meow';
 
 const commands = {
   migrate: () => import('./migrate.ts').then(mod => mod.default),
-  init: () => import('./init.ts').then(mod => mod.default),
+  init: () => import('./init/index.ts').then(mod => mod.default),
   reset: () => import('./reset.ts').then(mod => mod.default),
 };
 
