@@ -10,9 +10,9 @@ const SidebarFooterUser = () => {
   const { data } = useSession();
 
   return (
-    <div className="rounded-md py-4">
+    <div className="rounded-md pt-2">
       <SideBarUserDropdown align="end">
-        <div className="flex h-10 w-full items-center gap-4 rounded-md px-4 hover:bg-white data-[state=open]:bg-white group-data-[collapsed=true]/sidebar:justify-center">
+        <div className="flex w-full items-center gap-4 rounded-md px-4 py-2 hover:bg-white data-[state=open]:bg-white group-data-[collapsed=true]/sidebar:justify-center">
           <Avatar className="h-8 w-8 shrink-0">
             <AvatarImage src={data?.user.image} alt={data?.user.name ?? 'user'} />
             <AvatarFallback>
