@@ -10,7 +10,7 @@ import meow from 'meow';
 import ora from 'ora';
 import z from 'zod';
 
-class DbInitCommand implements Command {
+class DbInitAdminCommand implements Command {
   #email = '';
   #name = '';
 
@@ -20,7 +20,7 @@ class DbInitCommand implements Command {
     const cli = meow(
       `
     ${label('Usage')}
-        ${DOLLAR} pedaki db init [options]
+        ${DOLLAR} pedaki db init admin [options]
         
     ${label('Options')}
         --email, -e       Email address for the admin user
@@ -216,5 +216,5 @@ class DbInitCommand implements Command {
   }
 }
 
-const cmd = new DbInitCommand();
+const cmd = new DbInitAdminCommand();
 export default cmd;

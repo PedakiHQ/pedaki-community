@@ -75,16 +75,18 @@ model Token {
 }
 
 model WorkspaceSetting {
+  id        Int      @id @default(1) // useless but required by prisma
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  key   WorkspaceSettingKey @id @unique
-  value String
+  // These informations are cloned on api.pedaki.fr (not on self-host)
+  name            String @db.VarChar(50)
+  logoUrl         String @map("logo_url") @db.VarChar(1024) // maybe too big but we'll see
+  defaultLanguage String @map("default_language") @db.Char(3) // iso code of the language
 
+  // end cloned informations
+
+  // end settings
   @@map("settings")
-}
-
-enum WorkspaceSettingKey {
-  name
 }
 
 enum TokenType {
