@@ -40,7 +40,8 @@ class DbInitSettingsCommand implements Command {
 
     const settingsDiff = Object.keys(newSettings).reduce(
       (acc, key) => {
-        if (!currentSettings || currentSettings[key] === null) {
+        // @ts-expect-error: weird typing
+        if (currentSettings[key] === null) {
           // @ts-expect-error: weird typing
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           acc[key] = newSettings[key];

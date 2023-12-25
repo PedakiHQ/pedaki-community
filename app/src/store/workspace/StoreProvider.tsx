@@ -14,7 +14,6 @@ const StoreProvider = ({
 
   if (!storeRef.current) {
     storeRef.current = initializeStore(props);
-    console.log({ props });
   }
 
   return <Provider value={storeRef.current}>{children}</Provider>;
