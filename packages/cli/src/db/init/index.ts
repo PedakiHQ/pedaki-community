@@ -24,7 +24,7 @@ class DbInitCommand implements Command {
     );
     handleBaseFlags(cli);
 
-    await execOrShowHelp(cli, 1, commands);
+    await execOrShowHelp(cli, 2, commands);
   }
 }
 

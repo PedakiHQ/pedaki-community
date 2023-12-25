@@ -5,8 +5,6 @@ import meow from 'meow';
 import ora from 'ora';
 
 class DbInitSettingsCommand implements Command {
-  #name = '';
-
   async handle() {
     const cli = meow(
       `
@@ -34,14 +32,14 @@ class DbInitSettingsCommand implements Command {
     });
 
     const newSettings = {
-      name: this.#name,
+      name: process.env.NEXT_PUBLIC_PEDAKI_NAME ?? 'Pedaki',
       logoUrl: 'https://static.pedaki.fr/logo/apple-touch-icon.png',
       defaultLanguage: 'fr',
     };
 
     const settingsDiff = Object.keys(newSettings).reduce(
       (acc, key) => {
-        if (currentSettings[key] === null) {
+        if (!currentSettings || currentSettings[key] === null) {
           // @ts-expect-error: weird typing
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           acc[key] = newSettings[key];
