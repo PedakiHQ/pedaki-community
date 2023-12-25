@@ -79,9 +79,14 @@ model WorkspaceSetting {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   // These informations are cloned on api.pedaki.fr (not on self-host)
-  name            String @db.VarChar(50)
-  logoUrl         String @map("logo_url") @db.VarChar(1024) // maybe too big but we'll see
-  defaultLanguage String @map("default_language") @db.Char(3) // iso code of the language
+  // some of them are only used for the hosted version
+  name                     String  @db.VarChar(50)
+  contactEmail             String? @map("contact_email") @db.VarChar(255) // Might be different from the stripe email (null on self-host)
+  contactName              String? @map("contact_name") @db.VarChar(128) // Might be different from the stripe name (null on self-host)
+  logoUrl                  String  @map("logo_url") @db.VarChar(1024) // maybe too big but we'll see
+  defaultLanguage          String  @map("default_language") @db.Char(3) // iso code of the language
+  currentMaintenanceWindow String? @map("current_maintenance_window") @db.VarChar(128) // "SAT:02:00-SAT:05:00" for example (null on self-host)
+  maintenanceWindow        String? @map("maintenance_window") @db.VarChar(128) // will be applied on the next maintenance window (null on self-host)
 
   // end cloned informations
 

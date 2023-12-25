@@ -14,6 +14,10 @@ export const getWorkspaceSettings = async () => {
       name: '',
       logoUrl: '',
       defaultLanguage: 'fr',
+      contactEmail: null,
+      contactName: null,
+      maintenanceWindow: null,
+      currentMaintenanceWindow: null,
     };
   }
 

@@ -11,14 +11,17 @@ class WorkspaceService {
       },
       select: {
         name: true,
+        contactEmail: true,
+        contactName: true,
         logoUrl: true,
         defaultLanguage: true,
+        maintenanceWindow: true,
+        currentMaintenanceWindow: true,
       },
     });
 
     return {
-      name: settings.name,
-      logoUrl: settings.logoUrl,
+      ...settings,
       defaultLanguage: settings.defaultLanguage as WorkspaceProperties['defaultLanguage'],
     };
   }
@@ -30,8 +33,12 @@ class WorkspaceService {
       },
       data: {
         name: settings.name,
+        contactEmail: settings.contactEmail,
+        contactName: settings.contactName,
         logoUrl: settings.logoUrl,
         defaultLanguage: settings.defaultLanguage,
+        maintenanceWindow: settings.maintenanceWindow,
+        currentMaintenanceWindow: settings.currentMaintenanceWindow,
       },
     });
   }

@@ -6,7 +6,12 @@ export const SelfHostWorkspacePropertiesSchema = z.object({
   defaultLanguage: z.enum(['en', 'fr']),
 });
 
-export const HostedWorkspacePropertiesSchema = z.object({});
+export const HostedWorkspacePropertiesSchema = z.object({
+  contactEmail: z.string().email().nullable(),
+  contactName: z.string().max(128).nullable(),
+  currentMaintenanceWindow: z.string().nullable(),
+  maintenanceWindow: z.string().nullable(),
+});
 
 export const WorkspacePropertiesSchema = SelfHostWorkspacePropertiesSchema.merge(
   HostedWorkspacePropertiesSchema,
