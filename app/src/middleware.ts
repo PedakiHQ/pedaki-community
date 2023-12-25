@@ -1,15 +1,26 @@
 import { auth } from '@pedaki/auth/edge.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { fallbackLocale, locales } from '~/locales/shared';
+import { BASE_URL } from '~/server/clients/shared.ts';
 import { createI18nMiddleware } from 'next-international/middleware';
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-const I18nMiddleware = createI18nMiddleware({
-  locales,
-  defaultLocale: 'fr',
-  urlMappingStrategy: 'rewriteDefault',
-});
+const I18nMiddlewareCache = new Map<string, ReturnType<typeof createI18nMiddleware>>();
+
+const getI18nMiddleware = (locale: LocaleCode) => {
+  if (!I18nMiddlewareCache.has(locale)) {
+    const I18nMiddleware = createI18nMiddleware({
+      locales,
+      defaultLocale: locale,
+      urlMappingStrategy: 'rewriteDefault',
+    });
+    I18nMiddlewareCache.set(locale, I18nMiddleware);
+  }
+
+  return I18nMiddlewareCache.get(locale)!;
+};
+const DEFAULT_LOCALE = 'fr';
 
 const withoutAuth = [
   '/auth/forgot-password',
@@ -19,8 +30,15 @@ const withoutAuth = [
   '/auth/join',
 ];
 
-const i18nMiddleware = function middleware(req: NextRequest) {
-  return I18nMiddleware(req);
+const i18nMiddleware = async function middleware(req: NextRequest) {
+  const settings = (await fetch(`${BASE_URL}/api/locale`).then(res => res.json())) as {
+    defaultLanguage: string;
+  };
+  let locale = settings.defaultLanguage;
+  if (!locale || !locales.includes(locale as LocaleCode)) {
+    locale = DEFAULT_LOCALE;
+  }
+  return getI18nMiddleware(locale as LocaleCode)(req);
 };
 
 export async function middleware(request: NextRequest) {

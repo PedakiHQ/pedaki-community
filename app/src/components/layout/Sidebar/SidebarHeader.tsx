@@ -25,7 +25,9 @@ const SidebarHeader = ({ collapsed }: SidebarHeaderProps) => {
             <Logo />
           </div>
           <div className="space-y-1">
-            <p className="text-label-sm font-medium">{workspaceName}</p>
+            <p className="max-w-[12ch] overflow-hidden break-words text-label-sm font-medium">
+              {workspaceName}
+            </p>
           </div>
         </div>
         <Tooltip>

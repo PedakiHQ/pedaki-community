@@ -4,6 +4,18 @@ import type { WorkspaceProperties } from '~/workspace/workspace.model.ts';
 const SETTINGS_ID = 1;
 
 class WorkspaceService {
+  async getDefaultLanguage(): Promise<WorkspaceProperties['defaultLanguage']> {
+    const settings = await prisma.workspaceSetting.findFirstOrThrow({
+      where: {
+        id: SETTINGS_ID,
+      },
+      select: {
+        defaultLanguage: true,
+      },
+    });
+
+    return settings.defaultLanguage as WorkspaceProperties['defaultLanguage'];
+  }
   async getSettings(): Promise<WorkspaceProperties> {
     const settings = await prisma.workspaceSetting.findFirstOrThrow({
       where: {
