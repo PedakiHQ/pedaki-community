@@ -20,7 +20,6 @@ const getI18nMiddleware = (locale: LocaleCode) => {
 
   return I18nMiddlewareCache.get(locale)!;
 };
-const DEFAULT_LOCALE = 'fr';
 
 const withoutAuth = [
   '/auth/forgot-password',
@@ -36,7 +35,7 @@ const i18nMiddleware = async function middleware(req: NextRequest) {
   };
   let locale = settings.defaultLanguage;
   if (!locale || !locales.includes(locale as LocaleCode)) {
-    locale = DEFAULT_LOCALE;
+    locale = fallbackLocale;
   }
   return getI18nMiddleware(locale as LocaleCode)(req);
 };

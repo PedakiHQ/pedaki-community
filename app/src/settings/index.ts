@@ -2,6 +2,7 @@
 
 import { cache } from '@pedaki/common/cache';
 import { logger } from '@pedaki/logger';
+import { fallbackLocale } from '~/locales/shared.ts';
 import { api } from '~/server/clients/internal.ts';
 import { CACHE_KEY } from '~/settings/constants.ts';
 import type { OutputType } from '~api/router/router.ts';
@@ -16,7 +17,7 @@ export const getWorkspaceSettings = async () => {
       response = {
         name: '',
         logoUrl: '',
-        defaultLanguage: 'fr',
+        defaultLanguage: fallbackLocale,
         contactEmail: '',
         contactName: '',
         currentMaintenanceWindow: '',
