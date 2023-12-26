@@ -20,10 +20,7 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
 export default function GeneralSettingsPage({ params }: PageType) {
   return (
     <div className="flex flex-col gap-5">
-      <SettingRow
-        title="Général"
-        description="Paramètres généraux du workspace. Ces informations sont partagées avec pedaki."
-      >
+      <SettingRow title="Général" description="Paramètres généraux du workspace.">
         <GeneralForm />
       </SettingRow>
       <Separator />
