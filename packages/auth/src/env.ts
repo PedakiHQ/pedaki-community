@@ -7,7 +7,7 @@ export const env = createEnv({
 
     AUTH_SECRET: z.string().min(2),
 
-    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string().min(2),
+    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string().default('localhost'), // without protocol
 
     PASSWORD_SALT: z.string().min(2),
   },

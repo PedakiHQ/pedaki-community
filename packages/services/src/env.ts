@@ -10,7 +10,7 @@ export const env = createEnv({
     RESEND_API_KEY: z.string(),
     RESEND_EMAIL_DOMAIN: z.string(),
 
-    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string(),
+    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string().default('localhost'), // without protocol
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

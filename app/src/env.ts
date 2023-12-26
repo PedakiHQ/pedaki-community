@@ -9,12 +9,12 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_TESTVALUE: z.string().default('testvalue'),
     NEXT_PUBLIC_IS_DEMO: z.coerce.boolean().default(false),
-    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string(), // without protocol
+    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string().default('localhost'), // without protocol
     NEXT_PUBLIC_PEDAKI_VERSION: z.string(),
     NEXT_PUBLIC_PEDAKI_NAME: z.string(),
 
-    NEXT_PUBLIC_PUBLIC_FILES_HOST: z.string(), // with protocol
-    NEXT_PUBLIC_ENCRYPTED_FILES_HOST: z.string(), // with protocol
+    NEXT_PUBLIC_PUBLIC_FILES_HOST: z.string().default('http://localhost:3000'), // with protocol
+    NEXT_PUBLIC_ENCRYPTED_FILES_HOST: z.string().default('http://localhost:3000'), // with protocol
   },
 
   runtimeEnv: {

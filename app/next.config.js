@@ -1,4 +1,4 @@
-const fileHost = process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST;
+const fileHost = process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST ?? 'http://localhost:3000';
 const fileHostProtocol = fileHost.startsWith('https') ? 'https' : 'http';
 const fileHostWithoutProtocol = fileHost.replace(fileHostProtocol + '://', '').replace(/:.*$/, '');
 
