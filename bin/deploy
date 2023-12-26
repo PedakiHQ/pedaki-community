@@ -101,6 +101,12 @@ cd pedaki-community
 $pedaki db migrate
 $pedaki db init admin --email "$ADMIN_EMAIL" --password "$ADMIN_PASSWORD" --name "$ADMIN_NAME"
 $pedaki db init settings
+
+echo "[pedaki] Download base images..."
+mkdir -p ./public/logo
+wget -q https://static.pedaki.fr/logo/android-chrome-192x192.png -O ./public/logo/logo-192x192.png
+wget -q https://static.pedaki.fr/logo/favicon-32x32.png -O ./public/logo/favicon-32x32.png
+
 cd ..
 
 echo "[pedaki] Starting app..."

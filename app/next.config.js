@@ -18,7 +18,12 @@ const nextConfig = {
                 hostname: 'static.pedaki.fr',
                 pathname: '**',
             },
-            // TODO: add custom domain and s3 bucket
+            {
+                protocol: 'https',
+                hostname: 'files.pedaki.fr',
+                pathname: `/w/**`,
+            },
+            // TODO: add workspace id in path
         ],
     },
 
