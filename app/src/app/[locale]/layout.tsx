@@ -2,6 +2,7 @@ import './globals.css';
 import '@pedaki/design/tailwind/index.css';
 import { BaseProvider } from '~/app/[locale]/baseProvider.tsx';
 import DemoBanner from '~/components/DemoBanner/wrapper';
+import { FAVICON_URL } from '~/constants.ts';
 import type { LocaleCode } from '~/locales/server';
 import { getI18n, getStaticParams } from '~/locales/server';
 import { locales } from '~/locales/shared';
@@ -29,12 +30,7 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
     openGraph: {
       locale: locale,
     },
-    icons: [
-      { rel: 'icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
-      { rel: 'apple-touch-icon', url: 'https://static.pedaki.fr/logo/apple-touch-icon.png' },
-      { rel: 'mask-icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
-      { rel: 'image/x-icon', url: 'https://static.pedaki.fr/logo/favicon.ico' },
-    ],
+    icons: [{ rel: 'icon', type: 'image/png', sizes: '32x32', url: FAVICON_URL }],
   };
 };
 

@@ -452,6 +452,8 @@ class EnvGenerateCommand implements Command {
 NEXT_PUBLIC_PEDAKI_NAME=${this.#name}
 NEXT_PUBLIC_PEDAKI_VERSION=${this.#tag}
 NEXT_PUBLIC_PEDAKI_DOMAIN=${this.#domain}
+NEXT_PUBLIC_PUBLIC_FILES_HOST=https://${this.#domain}
+NEXT_PUBLIC_ENCRYPTED_FILES_HOST=https://${this.#domain}
 
 DATABASE_URL=mysql://pedaki:pedaki@127.0.0.1:3306/pedaki
 PRISMA_ENCRYPTION_KEY=${this.#key}

@@ -1,5 +1,4 @@
 import { prisma } from '@pedaki/db';
-import { DEFAULT_LOGO_URL } from '@pedaki/services/workspace/constants.js';
 import { checkEnvVariables, DOLLAR, handleBaseFlags, label } from '~/help.ts';
 import type { Command } from '~/types.ts';
 import meow from 'meow';
@@ -34,7 +33,6 @@ class DbInitSettingsCommand implements Command {
 
     const newSettings = {
       name: process.env.NEXT_PUBLIC_PEDAKI_NAME ?? 'Pedaki',
-      logoUrl: DEFAULT_LOGO_URL,
       defaultLanguage: 'fr',
     };
 

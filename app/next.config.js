@@ -1,3 +1,7 @@
+const fileHost = process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST;
+const fileHostProtocol = fileHost.startsWith('https') ? 'https' : 'http';
+const fileHostWithoutProtocol = fileHost.replace(fileHostProtocol + '://', '').replace(/:.*$/, '');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
@@ -19,11 +23,10 @@ const nextConfig = {
                 pathname: '**',
             },
             {
-                protocol: 'https',
-                hostname: 'files.pedaki.fr',
-                pathname: `/w/**`,
-            },
-            // TODO: add workspace id in path
+                protocol: fileHostProtocol,
+                hostname: fileHostWithoutProtocol,
+                pathname: `**`,
+            }
         ],
     },
 
