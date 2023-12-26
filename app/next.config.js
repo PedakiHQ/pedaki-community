@@ -1,6 +1,4 @@
-const fileHost = process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST ?? 'http://localhost:3000';
-const fileHostProtocol = fileHost.startsWith('https') ? 'https' : 'http';
-const fileHostWithoutProtocol = fileHost.replace(fileHostProtocol + '://', '').replace(/:.*$/, '');
+const {join} = require("path");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -10,7 +8,7 @@ const nextConfig = {
     output: 'standalone',
 
     experimental: {
-        instrumentationHook: true,
+        instrumentationHook: true
     },
 
     transpilePackages: ['@pedaki/api', '@pedaki/auth'],
@@ -23,8 +21,13 @@ const nextConfig = {
                 pathname: '**',
             },
             {
-                protocol: fileHostProtocol,
-                hostname: fileHostWithoutProtocol,
+                protocol: "https",
+                hostname: "files.pedaki.fr",
+                pathname: `**`,
+            },
+            {
+                protocol: "https",
+                hostname: "{{{NEXT_PUBLIC_PEDAKI_HOSTNAME}}}",
                 pathname: `**`,
             }
         ],

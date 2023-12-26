@@ -1,10 +1,14 @@
 import { env } from '~/env';
 
-const isLocal = env.NEXT_PUBLIC_PEDAKI_DOMAIN?.includes('localhost') ?? true;
-export const BASE_URL = isLocal
-  ? 'http://localhost:3000'
-  : `https://${env.NEXT_PUBLIC_PEDAKI_DOMAIN}`;
-
 export const getUrl = () => {
-  return BASE_URL + '/api/t';
+  console.log('IN BASE_URL', getBaseUrl(), env.NEXT_PUBLIC_PEDAKI_HOSTNAME);
+  return getBaseUrl() + '/api/t';
+};
+
+export const isLocal = () => {
+  return env.NEXT_PUBLIC_PEDAKI_HOSTNAME === 'localhost';
+};
+
+export const getBaseUrl = () => {
+  return isLocal() ? 'http://localhost:3000' : `https://${env.NEXT_PUBLIC_PEDAKI_HOSTNAME}`;
 };

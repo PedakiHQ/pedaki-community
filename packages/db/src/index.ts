@@ -10,7 +10,7 @@ const prismaClientSingleton = () => {
     log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn', 'info'] : ['error'],
   });
 
-  if (env.PRISMA_ENCRYPTION_KEY) {
+  if (env.PRISMA_ENCRYPTION_KEY && !env.PRISMA_ENCRYPTION_KEY.startsWith('{{{')) {
     // @ts-expect-error: extends breaks the type
     client = client.$extends(
       fieldEncryptionExtension({

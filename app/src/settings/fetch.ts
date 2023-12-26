@@ -1,7 +1,7 @@
-import { BASE_URL } from '~/server/clients/shared.ts';
+import { getBaseUrl } from '~/server/clients/shared.ts';
 
 export const fetchSettings = async () => {
-  return (await fetch(`${BASE_URL}/api/settings`, {
+  return (await fetch(`${getBaseUrl()}/api/settings`, {
     next: {
       revalidate: 5,
     },

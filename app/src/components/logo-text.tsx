@@ -3,8 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-// TODO: load custom logo from db
-
 const LogoText: React.FC<{
   width?: number;
   height?: number;

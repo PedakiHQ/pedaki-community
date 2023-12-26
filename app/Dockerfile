@@ -34,6 +34,11 @@ COPY packages/services ./packages/services
 
 COPY scripts ./scripts
 
+COPY .env.production .env
+# Weird bug, we need to have the .env file (not .env.production) and in both the root and app folder
+# maybe related to https://github.com/vercel/next.js/issues/46296
+COPY .env.production app/.env
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV SKIP_ENV_VALIDATION 1
@@ -61,8 +66,11 @@ COPY --from=builder /app/app/.next/standalone/node_modules ./node_modules
 COPY --from=builder /app/packages/logger/package.json ./node_modules/@pedaki/package.json
 
 COPY app/entrypoint.sh .
-COPY .env.production .
+COPY .env.production .env.production.tmp
+RUN chown nextjs:nodejs .env.production.tmp
+RUN touch .env.production && chown nextjs:nodejs .env.production
 RUN chmod +x ./entrypoint.sh
+
 ENTRYPOINT ["bash", "./entrypoint.sh"]
 
 USER nextjs

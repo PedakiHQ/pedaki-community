@@ -9,9 +9,9 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_TESTVALUE: z.string().default('testvalue'),
     NEXT_PUBLIC_IS_DEMO: z.coerce.boolean().default(false),
-    NEXT_PUBLIC_PEDAKI_DOMAIN: z.string().default('localhost'), // without protocol
-    NEXT_PUBLIC_PEDAKI_VERSION: z.string(),
-    NEXT_PUBLIC_PEDAKI_NAME: z.string(),
+    NEXT_PUBLIC_PEDAKI_HOSTNAME: z.string().default('localhost'), // without protocol
+    NEXT_PUBLIC_PEDAKI_VERSION: z.string().default('0.0.0'),
+    NEXT_PUBLIC_PEDAKI_NAME: z.string().default('pedaki'),
 
     NEXT_PUBLIC_PUBLIC_FILES_HOST: z.string().default('http://localhost:3000'), // with protocol
     NEXT_PUBLIC_ENCRYPTED_FILES_HOST: z.string().default('http://localhost:3000'), // with protocol
@@ -22,7 +22,7 @@ export const env = createEnv({
 
     NEXT_PUBLIC_TESTVALUE: process.env.NEXT_PUBLIC_TESTVALUE,
     NEXT_PUBLIC_IS_DEMO: process.env.NEXT_PUBLIC_IS_DEMO,
-    NEXT_PUBLIC_PEDAKI_DOMAIN: process.env.NEXT_PUBLIC_PEDAKI_DOMAIN,
+    NEXT_PUBLIC_PEDAKI_HOSTNAME: process.env.NEXT_PUBLIC_PEDAKI_HOSTNAME,
     NEXT_PUBLIC_PEDAKI_VERSION: process.env.NEXT_PUBLIC_PEDAKI_VERSION,
     NEXT_PUBLIC_PEDAKI_NAME: process.env.NEXT_PUBLIC_PEDAKI_NAME,
     NEXT_PUBLIC_PUBLIC_FILES_HOST: process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST,

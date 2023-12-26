@@ -119,6 +119,7 @@ const LoginForm = () => {
             className="text-p-xs"
             decoration="underline"
             variant="gray"
+            prefetch={false}
           >
             Mot de passe oublié ?
           </StyledLink>
@@ -127,6 +128,7 @@ const LoginForm = () => {
             className="text-p-xs"
             decoration="underline"
             variant="gray"
+            prefetch={false}
           >
             Première connexion ?
           </StyledLink>

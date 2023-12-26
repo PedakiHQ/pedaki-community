@@ -1,7 +1,6 @@
 import { auth } from '@pedaki/auth/edge.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { fallbackLocale, locales } from '~/locales/shared';
-import { BASE_URL } from '~/server/clients/shared.ts';
 import { fetchSettings } from '~/settings/fetch.ts';
 import { createI18nMiddleware } from 'next-international/middleware';
 import type { NextRequest } from 'next/server';

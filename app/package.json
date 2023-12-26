@@ -23,7 +23,7 @@
     "typecheck": "tsc --noEmit --declaration"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.3.2",
+    "@hookform/resolvers": "^3.3.3",
     "@pedaki/api": "workspace:*",
     "@pedaki/auth": "workspace:*",
     "@pedaki/common": "0.4.3-beta.3",
@@ -45,7 +45,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
     "sharp": "^0.33.1",
-    "sonner": "^1.2.4",
+    "sonner": "^1.3.1",
     "superjson": "^2.2.1",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
