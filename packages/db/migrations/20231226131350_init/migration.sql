@@ -58,7 +58,6 @@ CREATE TABLE `settings` (
     `name` VARCHAR(30) NOT NULL,
     `contact_email` VARCHAR(255) NULL,
     `contact_name` VARCHAR(128) NULL,
-    `logo_url` VARCHAR(1024) NOT NULL,
     `default_language` CHAR(3) NOT NULL,
     `current_maintenance_window` VARCHAR(128) NULL,
     `maintenance_window` VARCHAR(128) NULL,
