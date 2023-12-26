@@ -4,10 +4,11 @@ import { BaseProvider } from '~/app/[locale]/baseProvider.tsx';
 import DemoBanner from '~/components/DemoBanner/wrapper';
 import { FAVICON_URL } from '~/constants.ts';
 import type { LocaleCode } from '~/locales/server';
-import { getI18n, getStaticParams } from '~/locales/server';
+import { getStaticParams } from '~/locales/server';
 import { locales } from '~/locales/shared';
 import { fixLocale } from '~/locales/utils';
 import { getWorkspaceSettings } from '~/settings';
+import { fetchSettings } from '~/settings/fetch.ts';
 import { COOKIE_NAME } from '~/store/global/constants.ts';
 import type { GlobalStore } from '~/store/global/global.store.ts';
 import GlobalStoreProvider from '~/store/global/StoreProvider.tsx';
@@ -20,12 +21,13 @@ import React, { Suspense } from 'react';
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   const locale = fixLocale(params.locale);
   setStaticParamsLocale(locale);
-  const t = await getI18n();
+
+  const settings = await fetchSettings();
 
   return {
     title: {
-      template: `%s - ${t('metadata.title')}`,
-      default: t('metadata.title'),
+      template: `%s - ${settings.name}`,
+      default: settings.name,
     },
     openGraph: {
       locale: locale,
