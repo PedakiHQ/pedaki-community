@@ -25,6 +25,8 @@ services:
         condition: service_healthy
       caddy:
         condition: service_healthy
+    volumes:
+      - ./public:/public
 
   caddy:
     image: caddy:2.7.6

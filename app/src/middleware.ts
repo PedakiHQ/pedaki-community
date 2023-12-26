@@ -2,6 +2,7 @@ import { auth } from '@pedaki/auth/edge.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { fallbackLocale, locales } from '~/locales/shared';
 import { BASE_URL } from '~/server/clients/shared.ts';
+import { fetchSettings } from '~/settings/fetch.ts';
 import { createI18nMiddleware } from 'next-international/middleware';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
@@ -30,9 +31,7 @@ const withoutAuth = [
 ];
 
 const i18nMiddleware = async function middleware(req: NextRequest) {
-  const settings = (await fetch(`${BASE_URL}/api/locale`).then(res => res.json())) as {
-    defaultLanguage: string;
-  };
+  const settings = await fetchSettings();
   let locale = settings.defaultLanguage;
   if (!locale || !locales.includes(locale as LocaleCode)) {
     locale = fallbackLocale;

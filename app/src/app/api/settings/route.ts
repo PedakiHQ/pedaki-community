@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
   }, CACHE_KEY);
 
   return Response.json({
+    name: settings.name,
     defaultLanguage: settings.defaultLanguage,
   });
 }

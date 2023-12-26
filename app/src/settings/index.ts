@@ -16,7 +16,6 @@ export const getWorkspaceSettings = async () => {
       logger.error('getWorkspaceSettings', error);
       response = {
         name: '',
-        logoUrl: '',
         defaultLanguage: fallbackLocale,
         contactEmail: '',
         contactName: '',

@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const SelfHostWorkspacePropertiesSchema = z.object({
   name: z.string().max(30).nonempty(),
-  logoUrl: z.string().url().max(1024),
   defaultLanguage: z.enum(['en', 'fr']),
 });
 

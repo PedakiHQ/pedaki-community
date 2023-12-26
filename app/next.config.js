@@ -1,3 +1,7 @@
+const fileHost = process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST;
+const fileHostProtocol = fileHost.startsWith('https') ? 'https' : 'http';
+const fileHostWithoutProtocol = fileHost.replace(fileHostProtocol + '://', '').replace(/:.*$/, '');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
@@ -18,7 +22,11 @@ const nextConfig = {
                 hostname: 'static.pedaki.fr',
                 pathname: '**',
             },
-            // TODO: add custom domain and s3 bucket
+            {
+                protocol: fileHostProtocol,
+                hostname: fileHostWithoutProtocol,
+                pathname: `**`,
+            }
         ],
     },
 

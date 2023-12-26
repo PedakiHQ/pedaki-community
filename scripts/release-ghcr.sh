@@ -12,10 +12,16 @@ if [ -z "$VERSION" ]; then
   VERSION=$(cat app/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d ' ')
 fi
 
+TAG='latest'
+if [[ $VERSION == *"-beta"* ]]; then
+  TAG='beta'
+fi
+
 echo "Version: ${VERSION}"
+echo "Tag: ${TAG}"
 
-docker build . --tag $IMAGE_NAME:latest -f $DOCKERFILE
+docker build . --tag $IMAGE_NAME:$TAG -f $DOCKERFILE
 
-docker push $IMAGE_NAME:latest
-docker tag $IMAGE_NAME:latest $IMAGE_NAME:${VERSION}
+docker push $IMAGE_NAME:$TAG
+docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:${VERSION}
 docker push $IMAGE_NAME:${VERSION}

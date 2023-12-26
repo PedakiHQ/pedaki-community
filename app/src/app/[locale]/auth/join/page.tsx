@@ -2,10 +2,21 @@ import AuthWrapper from '~/app/[locale]/auth/auth-wrapper.tsx';
 import JoinForm from '~/app/[locale]/auth/join/join-form.tsx';
 import type { PageType } from '~/app/types.ts';
 import AuthErrorPage from '~/components/ErrorPage/AuthErrorPage.tsx';
+import { getI18n } from '~/locales/server.ts';
+import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
 import { api } from '~/server/clients/server';
 import { getWorkspaceSettings } from '~/settings';
 import React from 'react';
+
+export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
+  setStaticParamsLocale(params.locale);
+  const t = await getI18n();
+
+  return {
+    title: t('metadata.title'),
+  };
+};
 
 export default async function AcceptInvitePage({
   params,
