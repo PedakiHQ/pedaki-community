@@ -1,7 +1,6 @@
 import { LOGO_FIELD } from '~/app/api/upload/logo/constants.ts';
 
 export const updateLogo = async (file: File) => {
-  console.log('updateLogo', file);
   const formData = new FormData();
   formData.append(LOGO_FIELD, file);
   const res = await fetch('/api/upload/logo', {
@@ -12,5 +11,5 @@ export const updateLogo = async (file: File) => {
   if (!res.ok) {
     throw new Error('Failed to upload logo');
   }
-  return await res.json();
+  await res.json();
 };

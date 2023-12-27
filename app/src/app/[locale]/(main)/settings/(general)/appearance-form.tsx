@@ -59,7 +59,6 @@ const AppearanceForm = () => {
 
   function onSubmit(values: FormValues) {
     if (!values.logo) return;
-    console.log('submit', values.logo);
 
     return wrapWithLoading(() => wait(updateLogo(values.logo!), 500), {
       loadingProps: {

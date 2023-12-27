@@ -15,7 +15,12 @@ export const fileRouter = router({
 
       const results: FileUploadResult[] = [];
       for (const file of input) {
-        results.push(await storage.uploadFile(file));
+        results.push(
+          await storage.uploadFile({
+            ...file,
+            buffer: file.buffer as Buffer,
+          }),
+        );
       }
 
       return results;
