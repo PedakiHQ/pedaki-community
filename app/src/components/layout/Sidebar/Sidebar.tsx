@@ -7,6 +7,7 @@ import SidebarContent from '~/components/layout/Sidebar/SidebarContent.tsx';
 import SidebarFooter from '~/components/layout/Sidebar/SidebarFooter.tsx';
 import SidebarHeader from '~/components/layout/Sidebar/SidebarHeader.tsx';
 import SidebarMobileHeader from '~/components/layout/Sidebar/SidebarMobileHeader.tsx';
+import { env } from '~/env.ts';
 import { I18nProviderClient } from '~/locales/client';
 import { useGlobalStore } from '~/store/global/global.store.ts';
 import React from 'react';
@@ -29,7 +30,7 @@ const Sidebar = ({ locale }: SidebarProps) => {
         'w-full sm:w-[17rem] data-[collapsed=true]:sm:w-20',
         'data-[mobile-open=true]:inset-y-0 sm:inset-y-0',
         'group/sidebar',
-        demoBannerVisible && 'mt-12',
+        demoBannerVisible && env.NEXT_PUBLIC_IS_DEMO && 'mt-12',
         mobileOpen && 'bg-weak',
       )}
       data-collapsed={collapsed}
