@@ -82,7 +82,7 @@ class EnvGenerateCommand implements Command {
       this.#tag = await this.askForTag(cli.flags);
       await this.checkoutTag(this.#tag);
       console.log();
-      this.#name = await this.askForDomain(cli.flags);
+      this.#name = await this.askForName(cli.flags);
       this.#domain = await this.askForDomain(cli.flags);
       this.#key = await this.askForEncryptionKey(cli.flags);
       this.#salt = await this.askForPasswordSalt(cli.flags);
