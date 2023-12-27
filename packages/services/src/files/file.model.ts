@@ -17,7 +17,9 @@ export const FileUploadSchema = z.object({
   path: z.string().min(2).endsWith('/').optional(), // where the file will be stored, if not provided, it will be stored in the root directory
 });
 
-export type FileUpload = z.infer<typeof FileUploadSchema>;
+export type FileUpload = Omit<z.infer<typeof FileUploadSchema>, 'buffer'> & {
+  buffer: ArrayBuffer;
+};
 
 export const FileUploadResultSchema = z.object({
   name: z.string(),

@@ -1,4 +1,4 @@
-import { generateToken } from '@pedaki/common/utils/random';
+import { generateToken } from '@pedaki/common/utils/random.js';
 import type { FileUpload } from '~/files/file.model.ts';
 import mime from 'mime-types';
 
