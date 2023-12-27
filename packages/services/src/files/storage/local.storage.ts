@@ -27,6 +27,3 @@ export class LocalStorage implements Storage {
     });
   }
 }
-
-const localStorage = new LocalStorage();
-export { localStorage };

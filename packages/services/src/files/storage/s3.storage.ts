@@ -34,6 +34,3 @@ export class S3Storage implements Storage {
     };
   }
 }
-
-const s3Storage = new S3Storage();
-export { s3Storage };
