@@ -27,10 +27,10 @@ import { LocaleIcon } from '~/components/LanguageSelector/LocaleIcon.tsx';
 import { locales } from '~/locales/shared.ts';
 import { api } from '~/server/clients/client.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import type z from 'zod';
+import {useHasChanged} from "~/app/[locale]/(main)/settings/useHasChanged.ts";
 
 const SettingsFormSchema = WorkspacePropertiesSchema.pick({
   name: true,
@@ -56,17 +56,7 @@ const GeneralForm = () => {
 
   const { isSubmitting } = form.formState;
 
-  const hasChanges = React.useRef(false);
-
-  useEffect(() => {
-    return () => {
-      if (hasChanges.current) {
-        toast.warning("Les changements n'ont pas été sauvegardés.", {
-          id: 'settings-unsaved-changes',
-        });
-      }
-    };
-  }, []);
+  const setHasChanged = useHasChanged();
 
   function onSubmit(values: SettingsFormValues) {
     return wrapWithLoading(() => wait(changeSettingsMutation.mutateAsync(values), 200), {
@@ -87,7 +77,7 @@ const GeneralForm = () => {
       throwOnError: true,
     })
       .then(() => {
-        hasChanges.current = false;
+          setHasChanged(false);
         if (initialValues.current.defaultLanguage !== values.defaultLanguage) {
           window.location.reload();
         }
@@ -119,7 +109,7 @@ const GeneralForm = () => {
                   disabled={isSubmitting}
                   {...field}
                   onChange={e => {
-                    hasChanges.current = true;
+                      setHasChanged(true);
                     field.onChange(e);
                     // TODO: this double trigger is a hack to make sure that we only update the setting if the form is valid
                     void form.trigger('name').then(() => {
