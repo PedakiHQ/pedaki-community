@@ -9,7 +9,7 @@ export const FileUploadSchema = z.object({
     .regex(/^[a-zA-Z0-9-_]+$/)
     .optional(), // if not provided, the name will be generated
   extension: z.string().optional(), // if not provided, the extension will be extracted from the mimeType
-  buffer: z.any(), // arrayBuffer
+  buffer: z.any(), // Buffer
   mimeType: z.string(),
   size: z.number().int().positive(),
 
@@ -18,7 +18,7 @@ export const FileUploadSchema = z.object({
 });
 
 export type FileUpload = Omit<z.infer<typeof FileUploadSchema>, 'buffer'> & {
-  buffer: ArrayBuffer;
+  buffer: Buffer;
 };
 
 export const FileUploadResultSchema = z.object({

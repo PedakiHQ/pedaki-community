@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@pedaki/design/ui/select';
 import { WorkspacePropertiesSchema } from '@pedaki/services/workspace/workspace.model.js';
+import { useHasChanged } from '~/app/[locale]/(main)/settings/useHasChanged.ts';
 import { LocaleIcon } from '~/components/LanguageSelector/LocaleIcon.tsx';
 import { locales } from '~/locales/shared.ts';
 import { api } from '~/server/clients/client.ts';
@@ -30,7 +31,6 @@ import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import type z from 'zod';
-import {useHasChanged} from "~/app/[locale]/(main)/settings/useHasChanged.ts";
 
 const SettingsFormSchema = WorkspacePropertiesSchema.pick({
   name: true,
@@ -77,7 +77,7 @@ const GeneralForm = () => {
       throwOnError: true,
     })
       .then(() => {
-          setHasChanged(false);
+        setHasChanged(false);
         if (initialValues.current.defaultLanguage !== values.defaultLanguage) {
           window.location.reload();
         }
@@ -109,7 +109,7 @@ const GeneralForm = () => {
                   disabled={isSubmitting}
                   {...field}
                   onChange={e => {
-                      setHasChanged(true);
+                    setHasChanged(true);
                     field.onChange(e);
                     // TODO: this double trigger is a hack to make sure that we only update the setting if the form is valid
                     void form.trigger('name').then(() => {
