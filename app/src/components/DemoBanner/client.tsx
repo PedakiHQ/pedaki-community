@@ -37,7 +37,7 @@ const DemoBannerComponent = () => {
                 decoration="underline"
                 variant="white"
                 offset={2}
-                className="text-p-sm font-medium"
+                className="text-p-sm font-medium ring-offset-neutral-700"
               >
                 En savoir plus
               </StyledLink>
