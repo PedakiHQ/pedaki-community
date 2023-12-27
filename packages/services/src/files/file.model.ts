@@ -23,7 +23,6 @@ export const FileUploadResultSchema = z.object({
   name: z.string(),
   mimeType: z.string(),
   size: z.number().int().positive(),
-  altUrl: z.string().optional(),
   url: z.string(),
   availability: AvailabilitySchema,
 });

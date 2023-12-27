@@ -1,13 +1,29 @@
+import fs from 'fs';
+import { env } from '~/env.ts';
 import type { FileUpload, FileUploadResult } from '~/files/file.model.ts';
+import { prepareFile } from '~/files/storage/utils.ts';
 import type { Storage } from './storage.ts';
 
 export class LocalStorage implements Storage {
-  uploadFile(file: FileUpload): Promise<FileUploadResult> {
+  uploadFile(rawFile: FileUpload): Promise<FileUploadResult> {
+    const file = prepareFile(rawFile);
+
+    const folder =
+      file.availability === 'public'
+        ? env.FILE_STORAGE_LOCAL_PUBLIC_PATH
+        : env.FILE_STORAGE_LOCAL_PRIVATE_PATH;
+
+    const key = `${file.path}${file.name}.${file.extension}`;
+
+    // Docker base folder is /app
+    fs.writeFileSync(`/app/${folder}/${key}`, Buffer.from(file.buffer));
+
     return Promise.resolve({
-      ...file,
-      name: 'local-' + file.name,
-      extension: 'local-' + file.extension,
-      path: 'local-' + file.path,
+      name: file.name,
+      mimeType: file.mimeType,
+      size: file.size,
+      url: `https://${env.NEXT_PUBLIC_PEDAKI_HOSTNAME}/${key}`,
+      availability: file.availability,
     });
   }
 }

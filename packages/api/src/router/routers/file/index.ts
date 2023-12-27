@@ -1,17 +1,16 @@
-import {
-  FileUploadResult,
-  FileUploadResultSchema,
-  FileUploadSchema,
-} from '@pedaki/services/files/file.model.js';
+import type { FileUploadResult } from '@pedaki/services/files/file.model.js';
+import { FileUploadResultSchema, FileUploadSchema } from '@pedaki/services/files/file.model.js';
 import { getStorage } from '@pedaki/services/files/storage/factory.js';
-import { privateProcedure, router } from '~api/router/trpc.ts';
+import { publicProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
 export const fileRouter = router({
-  upload: privateProcedure
+  upload: publicProcedure
     .input(z.array(FileUploadSchema))
     .output(z.array(FileUploadResultSchema))
     .mutation(async ({ input }) => {
+      // TODO: check if the user has the right to upload files in the given folder
+      // TODO: the logo folder should contain only images and only the logo/favicons
       const storage = await getStorage();
 
       const results: FileUploadResult[] = [];

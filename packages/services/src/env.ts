@@ -18,7 +18,8 @@ export const env = createEnv({
 
     FILE_STORAGE: z.enum(['local', 's3']).default('local'),
 
-    FILE_STORAGE_LOCAL_PATH: z.string().optional(),
+    FILE_STORAGE_LOCAL_PUBLIC_PATH: z.string().optional(),
+    FILE_STORAGE_LOCAL_PRIVATE_PATH: z.string().optional(),
 
     FILE_STORAGE_S3_REGION: z.string().optional(),
     FILE_STORAGE_S3_PUBLIC_BUCKET: z.string().optional(),

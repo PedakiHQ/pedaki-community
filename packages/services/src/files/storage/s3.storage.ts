@@ -29,7 +29,6 @@ export class S3Storage implements Storage {
       name: file.name,
       mimeType: file.mimeType,
       size: file.size,
-      altUrl: `https://s3.${env.FILE_STORAGE_S3_REGION}.amazonaws.com/${bucket}/${key}`,
       url: `https://${bucket}/${key}`,
       availability: file.availability,
     };

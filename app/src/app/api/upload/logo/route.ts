@@ -6,12 +6,12 @@ import sharp from 'sharp';
 
 export async function POST(req: NextRequest) {
   const ctx = await createContext({ req });
-  if (!ctx.session?.user) {
-    return Response.json({
-      status: 401,
-      statusText: 'UNAUTHORIZED',
-    });
-  }
+  // if (!ctx.session?.user) {
+  //   return Response.json({
+  //     status: 401,
+  //     statusText: 'UNAUTHORIZED',
+  //   });
+  // }
   // TODO: check permissions
 
   const formData = await req.formData();
@@ -25,7 +25,9 @@ export async function POST(req: NextRequest) {
     });
 
     const buffer = await file.file.arrayBuffer();
+
     const favicon = await sharp(buffer).resize(32, 32).png().toBuffer();
+    const logo = await sharp(buffer).resize(192, 192).png().toBuffer();
 
     const caller = appRouter.createCaller(ctx);
     const response = await caller.file.upload([
@@ -33,9 +35,9 @@ export async function POST(req: NextRequest) {
         // SEE LOGO_URL in app/src/constants.ts
         name: 'logo-192x192',
         extension: 'png',
-        buffer: buffer,
+        buffer: logo,
         mimeType: file.mimetype,
-        size: file.size,
+        size: logo.byteLength,
         path: 'logo/',
         availability: 'public',
       },
@@ -55,7 +57,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return Response.json({
       status: 400,
-      message: JSON.parse((error as Error).message),
+      message: (error as Error).message,
     });
   }
 }

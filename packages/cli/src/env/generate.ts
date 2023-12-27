@@ -465,7 +465,8 @@ RESEND_API_KEY=${this.#resendApiKey}
 RESEND_EMAIL_DOMAIN=${this.#emailDomain}
 
 FILE_STORAGE=local
-FILE_STORAGE_LOCAL_PATH=/uploads
+FILE_STORAGE_LOCAL_PUBLIC_PATH=public
+FILE_STORAGE_LOCAL_PRIVATE_PATH=uploads
 `;
 
     // remove first and last line
