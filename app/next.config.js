@@ -1,5 +1,3 @@
-const {join} = require("path");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
@@ -25,12 +23,18 @@ const nextConfig = {
                 hostname: "files.pedaki.fr",
                 pathname: `**`,
             },
+            process.env.NODE_ENV === 'development' && {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: "3000",
+                pathname: '**',
+            },
             {
                 protocol: "https",
                 hostname: "{{{NEXT_PUBLIC_PEDAKI_HOSTNAME}}}",
                 pathname: `**`,
             }
-        ],
+        ].filter(Boolean),
     },
 
     eslint: {

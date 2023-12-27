@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     logger.info('Cache miss for GET /api/settings');
     const ctx = await createContext({ req });
     const caller = appRouter.createCaller(ctx);
-    return await caller.workspace.getSettings();
+    return await caller.settings.getSettings();
   }, CACHE_KEY);
 
   return Response.json({

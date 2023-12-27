@@ -2,7 +2,7 @@ import type { OutputType } from '~api/router/router.ts';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
-type Settings = OutputType['workspace']['getSettings'];
+type Settings = OutputType['settings']['getSettings'];
 
 export interface WorkspaceStore {
   settings: Settings;

@@ -1,1 +1,1 @@
-export const CACHE_KEY = 'workspaceRouter.getSettings';
+export const CACHE_KEY = 'workspaceSettingsRouter.getSettings';
