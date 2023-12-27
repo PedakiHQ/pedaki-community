@@ -1,3 +1,5 @@
+import { logger } from '@pedaki/logger';
+import { LOGO_FIELD, LOGO_MAX_SIZE, LOGO_TYPES } from '~/app/api/upload/logo/constants.ts';
 import { getFile } from '~/app/api/upload/utils.ts';
 import { createContext } from '~api/router/context.ts';
 import { appRouter } from '~api/router/router.ts';
@@ -7,10 +9,12 @@ import sharp from 'sharp';
 export async function POST(req: NextRequest) {
   const ctx = await createContext({ req });
   if (!ctx.session?.user) {
-    return Response.json({
-      status: 401,
-      statusText: 'UNAUTHORIZED',
-    });
+    return new Response(
+      JSON.stringify({
+        message: 'UNAUTHORIZED',
+      }),
+      { status: 401 },
+    );
   }
   // TODO: check permissions
 
@@ -19,9 +23,9 @@ export async function POST(req: NextRequest) {
   try {
     const file = getFile({
       form: formData,
-      sizeLimit: 1024 * 1024 * 10, // 10 MB
-      allowedMimeTypes: ['image/jpeg', 'image/png'],
-      field: 'file',
+      sizeLimit: LOGO_MAX_SIZE,
+      allowedMimeTypes: LOGO_TYPES,
+      field: LOGO_FIELD,
     });
 
     const buffer = await file.file.arrayBuffer();
@@ -55,9 +59,7 @@ export async function POST(req: NextRequest) {
 
     return Response.json(response);
   } catch (error) {
-    return Response.json({
-      status: 400,
-      message: (error as Error).message,
-    });
+    logger.error('Failed to upload logo', error);
+    return new Response('Failed to upload logo', { status: 400 });
   }
 }

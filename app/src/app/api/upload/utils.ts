@@ -9,7 +9,7 @@ interface UploadResult {
 interface UploadOptions {
   form: FormData;
   sizeLimit: number;
-  allowedMimeTypes: string[];
+  allowedMimeTypes: readonly string[];
   field: string;
 }
 

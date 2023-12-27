@@ -7,6 +7,7 @@ import { Button } from '@pedaki/design/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -42,7 +43,7 @@ const GeneralForm = () => {
   const updateSetting = useWorkspaceStore(state => state.updateSetting);
   const initialValues = useRef(settings);
 
-  const changeSettingsMutation = api.workspace.setSettings.useMutation();
+  const changeSettingsMutation = api.settings.setSettings.useMutation();
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(SettingsFormSchema),
@@ -128,7 +129,9 @@ const GeneralForm = () => {
                   }}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage>
+                <FormDescription>blabla sidebar et onglets</FormDescription>
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -165,14 +168,16 @@ const GeneralForm = () => {
                     })}
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage>
+                  <FormDescription>Blabla uniquement celle de base</FormDescription>
+                </FormMessage>
               </FormItem>
             );
           }}
         />
 
         <div>
-          <Button variant="filled-primary" type="submit" disabled={isSubmitting}>
+          <Button variant="filled-primary" type="submit" disabled={isSubmitting} size="sm">
             {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
             Sauvegarder
           </Button>
