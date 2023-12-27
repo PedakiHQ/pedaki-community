@@ -14,10 +14,7 @@ export const FileUploadSchema = z.object({
   size: z.number().int().positive(),
 
   availability: AvailabilitySchema,
-  path: z.string()
-      .min(2)
-      .endsWith('/')
-      .optional(), // where the file will be stored, if not provided, it will be stored in the root directory
+  path: z.string().min(2).endsWith('/').optional(), // where the file will be stored, if not provided, it will be stored in the root directory
 });
 
 export type FileUpload = z.infer<typeof FileUploadSchema>;

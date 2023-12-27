@@ -2,6 +2,7 @@ import { getFile } from '~/app/api/upload/utils.ts';
 import { createContext } from '~api/router/context.ts';
 import { appRouter } from '~api/router/router.ts';
 import type { NextRequest } from 'next/server';
+import sharp from 'sharp';
 
 export async function POST(req: NextRequest) {
   const ctx = await createContext({ req });
@@ -11,6 +12,7 @@ export async function POST(req: NextRequest) {
       statusText: 'UNAUTHORIZED',
     });
   }
+  // TODO: check permissions
 
   const formData = await req.formData();
 
@@ -23,6 +25,7 @@ export async function POST(req: NextRequest) {
     });
 
     const buffer = await file.file.arrayBuffer();
+    const favicon = await sharp(buffer).resize(32, 32).png().toBuffer();
 
     const caller = appRouter.createCaller(ctx);
     const response = await caller.file.upload([
@@ -33,6 +36,16 @@ export async function POST(req: NextRequest) {
         buffer: buffer,
         mimeType: file.mimetype,
         size: file.size,
+        path: 'logo/',
+        availability: 'public',
+      },
+      {
+        // SEE FAVICON_URL in app/src/constants.ts
+        name: 'favicon-32x32',
+        extension: 'png',
+        buffer: favicon,
+        mimeType: file.mimetype,
+        size: favicon.byteLength,
         path: 'logo/',
         availability: 'public',
       },
