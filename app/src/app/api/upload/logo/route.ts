@@ -6,12 +6,12 @@ import sharp from 'sharp';
 
 export async function POST(req: NextRequest) {
   const ctx = await createContext({ req });
-  // if (!ctx.session?.user) {
-  //   return Response.json({
-  //     status: 401,
-  //     statusText: 'UNAUTHORIZED',
-  //   });
-  // }
+  if (!ctx.session?.user) {
+    return Response.json({
+      status: 401,
+      statusText: 'UNAUTHORIZED',
+    });
+  }
   // TODO: check permissions
 
   const formData = await req.formData();
