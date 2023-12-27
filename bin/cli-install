@@ -2,7 +2,8 @@
 
 set -e # exit on error
 
-NODE_MAJOR=18
+export NODE_MAJOR=18
+export NODE_ENV=production
 
 echo "[pedaki] Installing pedaki cli"
 
