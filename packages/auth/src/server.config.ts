@@ -47,7 +47,7 @@ export const authOptions: NextAuthConfig = {
 
       return session;
     },
-    signIn: ({ user, account }) => {
+    signIn: () => {
       // Use the signIn() callback to control if a user is allowed to sign in.
       // console.log('Sign In Callback', { user, account });
 

@@ -1,3 +1,4 @@
+import { env } from '~/env.ts';
 import { COOKIE_NAME } from '~/store/global/constants.ts';
 import { setCookie } from 'cookies-next';
 import { createContext, useContext } from 'react';
@@ -36,7 +37,7 @@ export const initializeStore = (preloadedState: Partial<GlobalStore> = {}) => {
   return createStore<GlobalStore>((set, get) => ({
     collapsed: false,
     mobileOpen: false,
-    demoBannerVisible: true,
+    demoBannerVisible: env.NEXT_PUBLIC_IS_DEMO,
     ...preloadedState,
     setCollapsed: (collapsed: boolean) => {
       set({ collapsed });

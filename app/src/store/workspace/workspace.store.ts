@@ -1,10 +1,14 @@
+import { LOGO_URL } from '~/constants.ts';
 import type { OutputType } from '~api/router/router.ts';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
-type Settings = OutputType['workspace']['getSettings'];
+type Settings = OutputType['settings']['getSettings'];
 
 export interface WorkspaceStore {
+  logoUrl: string; // Only used to make the update settings page more reactive
+  updateLogoUrl: (url: string) => void;
+
   settings: Settings;
   updateSetting: <T extends keyof Settings>(key: T, value: Settings[T]) => void;
 }
@@ -26,6 +30,10 @@ export const useWorkspaceStore = <T>(selector: (state: WorkspaceStore) => T) => 
 export const initializeStore = (preloadedState: Pick<WorkspaceStore, 'settings'>) => {
   return createStore<WorkspaceStore>((set, get) => ({
     ...preloadedState,
+    logoUrl: LOGO_URL,
+    updateLogoUrl: url => {
+      set({ logoUrl: url });
+    },
     updateSetting: (key, value) => {
       set({
         settings: {

@@ -6,6 +6,7 @@ import { env } from '~/env.ts';
 import { getI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
+import { Suspense } from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
@@ -28,10 +29,10 @@ export default async function Bidule({ params }: PageType) {
       <p>rebidule</p>
       <div>
         <p>{t('test')}</p>
-        <div>
+        <Suspense>
           <LocaleButton locale="en" />
           <LocaleButton locale="fr" />
-        </div>
+        </Suspense>
       </div>
       <TestAuthComponent />
     </>

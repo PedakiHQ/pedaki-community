@@ -1,7 +1,6 @@
 import { env } from '~/env';
 
 export const getUrl = () => {
-  console.log('IN BASE_URL', getBaseUrl(), env.NEXT_PUBLIC_PEDAKI_HOSTNAME);
   return getBaseUrl() + '/api/t';
 };
 

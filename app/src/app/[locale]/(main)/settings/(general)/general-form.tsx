@@ -7,6 +7,7 @@ import { Button } from '@pedaki/design/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,13 +23,13 @@ import {
   SelectValue,
 } from '@pedaki/design/ui/select';
 import { WorkspacePropertiesSchema } from '@pedaki/services/workspace/workspace.model.js';
+import { useHasChanged } from '~/app/[locale]/(main)/settings/useHasChanged.ts';
 import { LocaleIcon } from '~/components/LanguageSelector/LocaleIcon.tsx';
 import { locales } from '~/locales/shared.ts';
 import { api } from '~/server/clients/client.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import type z from 'zod';
 
 const SettingsFormSchema = WorkspacePropertiesSchema.pick({
@@ -42,7 +43,7 @@ const GeneralForm = () => {
   const updateSetting = useWorkspaceStore(state => state.updateSetting);
   const initialValues = useRef(settings);
 
-  const changeSettingsMutation = api.workspace.setSettings.useMutation();
+  const changeSettingsMutation = api.settings.setSettings.useMutation();
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(SettingsFormSchema),
@@ -55,17 +56,7 @@ const GeneralForm = () => {
 
   const { isSubmitting } = form.formState;
 
-  const hasChanges = React.useRef(false);
-
-  useEffect(() => {
-    return () => {
-      if (hasChanges.current) {
-        toast.warning("Les changements n'ont pas été sauvegardés.", {
-          id: 'settings-unsaved-changes',
-        });
-      }
-    };
-  }, []);
+  const setHasChanged = useHasChanged();
 
   function onSubmit(values: SettingsFormValues) {
     return wrapWithLoading(() => wait(changeSettingsMutation.mutateAsync(values), 200), {
@@ -86,7 +77,7 @@ const GeneralForm = () => {
       throwOnError: true,
     })
       .then(() => {
-        hasChanges.current = false;
+        setHasChanged(false);
         if (initialValues.current.defaultLanguage !== values.defaultLanguage) {
           window.location.reload();
         }
@@ -118,7 +109,7 @@ const GeneralForm = () => {
                   disabled={isSubmitting}
                   {...field}
                   onChange={e => {
-                    hasChanges.current = true;
+                    setHasChanged(true);
                     field.onChange(e);
                     // TODO: this double trigger is a hack to make sure that we only update the setting if the form is valid
                     void form.trigger('name').then(() => {
@@ -128,7 +119,9 @@ const GeneralForm = () => {
                   }}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage>
+                <FormDescription>blabla sidebar et onglets</FormDescription>
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -165,14 +158,16 @@ const GeneralForm = () => {
                     })}
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage>
+                  <FormDescription>Blabla uniquement celle de base</FormDescription>
+                </FormMessage>
               </FormItem>
             );
           }}
         />
 
         <div>
-          <Button variant="filled-primary" type="submit" disabled={isSubmitting}>
+          <Button variant="filled-primary" type="submit" disabled={isSubmitting} size="sm">
             {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
             Sauvegarder
           </Button>

@@ -45,6 +45,9 @@ ENV SKIP_ENV_VALIDATION 1
 
 RUN pnpm build --filter @pedaki/community
 
+# https://github.com/vercel/next.js/issues/59346
+RUN cp -r node_modules/@img app/.next/standalone/node_modules
+
 FROM base AS runner
 WORKDIR /app
 
@@ -70,6 +73,9 @@ COPY .env.production .env.production.tmp
 RUN chown nextjs:nodejs .env.production.tmp
 RUN touch .env.production && chown nextjs:nodejs .env.production
 RUN chmod +x ./entrypoint.sh
+
+RUN mkdir -p /app/public && chown -R nextjs:nodejs /app/public
+RUN mkdir -p /app/uploads && chown -R nextjs:nodejs /app/uploads
 
 ENTRYPOINT ["bash", "./entrypoint.sh"]
 

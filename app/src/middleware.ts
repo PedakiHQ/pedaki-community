@@ -35,6 +35,12 @@ const i18nMiddleware = async function middleware(req: NextRequest) {
   if (!locale || !locales.includes(locale as LocaleCode)) {
     locale = fallbackLocale;
   }
+
+  if (!req.cookies.get('Next-Locale')) {
+    // Workaround to have to cookie available in the first request
+    req.cookies.set('Next-Locale', locale);
+  }
+
   return getI18nMiddleware(locale as LocaleCode)(req);
 };
 
@@ -44,8 +50,6 @@ export async function middleware(request: NextRequest) {
   localePath = localePath && locales.includes(localePath) ? localePath : undefined;
 
   const locale = request.cookies.get('Next-Locale')?.value ?? localePath ?? fallbackLocale;
-  // Workaround to have to cookie available in the first request
-  request.cookies.set('Next-Locale', locale);
 
   const pathnameWithoutLocale = localePath ? pathname.replace(`/${localePath}`, '') : pathname;
 
@@ -65,6 +69,7 @@ export async function middleware(request: NextRequest) {
     // If no user, redirect to login page
     return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.nextUrl));
   }
+
   return i18nMiddleware(request);
 }
 

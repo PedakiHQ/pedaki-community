@@ -11,6 +11,20 @@ export const env = createEnv({
     RESEND_EMAIL_DOMAIN: z.string(),
 
     NEXT_PUBLIC_PEDAKI_HOSTNAME: z.string().default('localhost'), // without protocol
+
+    AWS_ACCESS_KEY_ID: z.string().optional(),
+    AWS_SECRET_ACCESS_KEY: z.string().optional(),
+    AWS_SESSION_TOKEN: z.string().optional(),
+
+    FILE_STORAGE: z.enum(['local', 's3']).default('local'),
+
+    FILE_STORAGE_LOCAL_PUBLIC_PATH: z.string().optional(),
+    FILE_STORAGE_LOCAL_PRIVATE_PATH: z.string().optional(),
+
+    FILE_STORAGE_S3_REGION: z.string().optional(),
+    FILE_STORAGE_S3_PUBLIC_BUCKET: z.string().optional(),
+    FILE_STORAGE_S3_PRIVATE_BUCKET: z.string().optional(),
+    FILE_STORAGE_S3_PREFIX: z.string().optional(),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

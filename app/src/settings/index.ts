@@ -9,9 +9,9 @@ import type { OutputType } from '~api/router/router.ts';
 
 export const getWorkspaceSettings = async () => {
   return await cache(async () => {
-    let response: OutputType['workspace']['getSettings'];
+    let response: OutputType['settings']['getSettings'];
     try {
-      response = await api.workspace.getSettings.query();
+      response = await api.settings.getSettings.query();
     } catch (error) {
       logger.error('getWorkspaceSettings', error);
       response = {

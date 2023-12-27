@@ -3,7 +3,7 @@ import { WorkspacePropertiesSchema } from '@pedaki/services/workspace/workspace.
 import { workspaceService } from '@pedaki/services/workspace/workspace.service.js';
 import { internalProcedure, privateProcedure, router } from '~api/router/trpc.ts';
 
-export const workspaceRouter = router({
+export const settingsRouter = router({
   getLocale: internalProcedure
     .output(WorkspacePropertiesSchema.pick({ defaultLanguage: true }))
     .query(async () => {
@@ -18,7 +18,7 @@ export const workspaceRouter = router({
   setSettings: privateProcedure
     .input(WorkspacePropertiesSchema.partial())
     .mutation(async ({ input }) => {
-      revalidate('workspaceRouter.getSettings'); // TODO: not a good idea to use memory-cache here + not using the constant
+      revalidate('workspaceSettingsRouter.getSettings'); // TODO: not a good idea to use memory-cache here + not using the constant
       await workspaceService.updateSettings({ settings: input });
     }),
 });

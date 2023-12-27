@@ -52,8 +52,6 @@ const LoginForm = () => {
         });
       },
       {
-        loadingProps: null,
-        successProps: null,
         errorProps: error => ({
           title: error.message,
         }),
