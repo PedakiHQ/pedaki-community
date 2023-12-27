@@ -25,6 +25,9 @@ export const env = createEnv({
     FILE_STORAGE_S3_PUBLIC_BUCKET: z.string().optional(),
     FILE_STORAGE_S3_PRIVATE_BUCKET: z.string().optional(),
     FILE_STORAGE_S3_PREFIX: z.string().optional(),
+
+    CLOUDFLARE_ZONE_ID: z.string().optional(),
+    CLOUDFLARE_API_TOKEN: z.string().optional(),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

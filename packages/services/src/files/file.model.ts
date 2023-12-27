@@ -25,7 +25,8 @@ export const FileUploadResultSchema = z.object({
   name: z.string(),
   mimeType: z.string(),
   size: z.number().int().positive(),
-  url: z.string(),
+  altUrl: z.string(), // url without proxy (direct s3 url)
+  url: z.string(), // Url with proxy (ex: cloudflare cache)
   availability: AvailabilitySchema,
 });
 

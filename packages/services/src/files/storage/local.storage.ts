@@ -22,6 +22,7 @@ export class LocalStorage implements Storage {
       name: file.name,
       mimeType: file.mimeType,
       size: file.size,
+      altUrl: `https://${env.NEXT_PUBLIC_PEDAKI_HOSTNAME}/${key}`,
       url: `https://${env.NEXT_PUBLIC_PEDAKI_HOSTNAME}/${key}`,
       availability: file.availability,
     });

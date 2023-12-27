@@ -15,7 +15,7 @@ const Logo: React.FC<{
 
   return (
     <Link className={cn('flex select-none items-center hover:opacity-75', className)} href="/">
-      <Image src={logoUrl} alt="Pedaki" height={180} width={180} fetchPriority="high" />
+      <Image src={logoUrl} alt="Pedaki" height={180} width={180} fetchPriority="high" unoptimized />
     </Link>
   );
 };
