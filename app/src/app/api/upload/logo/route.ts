@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const file = getFile({
       form: formData,
       sizeLimit: 1024 * 1024 * 10, // 10 MB
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+      allowedMimeTypes: ['image/jpeg', 'image/png'],
       field: 'file',
     });
 
@@ -27,10 +27,13 @@ export async function POST(req: NextRequest) {
     const caller = appRouter.createCaller(ctx);
     const response = await caller.file.upload([
       {
-        name: file.fileName,
+        // SEE LOGO_URL in app/src/constants.ts
+        name: 'logo-192x192',
+        extension: 'png',
         buffer: buffer,
         mimeType: file.mimetype,
         size: file.size,
+        path: 'logo/',
         availability: 'public',
       },
     ]);
@@ -39,7 +42,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return Response.json({
       status: 400,
-      statusText: (error as Error).message,
+      message: JSON.parse((error as Error).message),
     });
   }
 }

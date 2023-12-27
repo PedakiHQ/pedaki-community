@@ -14,17 +14,20 @@ export const FileUploadSchema = z.object({
   size: z.number().int().positive(),
 
   availability: AvailabilitySchema,
-  path: z.string().optional(), // where the file will be stored, if not provided, it will be stored in the root directory
+  path: z.string()
+      .min(2)
+      .endsWith('/')
+      .optional(), // where the file will be stored, if not provided, it will be stored in the root directory
 });
 
 export type FileUpload = z.infer<typeof FileUploadSchema>;
 
 export const FileUploadResultSchema = z.object({
   name: z.string(),
-  extension: z.string(),
   mimeType: z.string(),
   size: z.number().int().positive(),
-  path: z.string(),
+  altUrl: z.string().optional(),
+  url: z.string(),
   availability: AvailabilitySchema,
 });
 
