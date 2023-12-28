@@ -25,8 +25,12 @@ export const fileRouter = router({
         );
       }
 
-      const promises = results.map(result => cache.map(c => c.clearCacheUrl(result.url)));
-      await Promise.all(promises.flat());
+      const promises = results.map(result => {
+        if (result.availability === 'public') {
+          return cache.map(c => c.clearCacheUrl(result.url));
+        }
+      });
+      await Promise.all(promises.flat().filter(Boolean));
 
       return results;
     }),
