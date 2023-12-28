@@ -37,4 +37,5 @@ next-env.d.ts
 
 public/*
 !public/.keep
+!public/robots.txt
 

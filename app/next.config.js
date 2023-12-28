@@ -37,6 +37,16 @@ const nextConfig = {
         ].filter(Boolean),
     },
 
+    rewrites() {
+      return [
+          process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST.startsWith('http') && {
+              source: '/favicon.ico',
+              destination: `${process.env.NEXT_PUBLIC_PUBLIC_FILES_HOST}/logo/favicon-32x32.png`, // Same as in src/constants.ts
+              locale: false
+          }
+      ].filter(Boolean);
+    },
+
     eslint: {
         // Already checked in ci
         ignoreDuringBuilds: true,
