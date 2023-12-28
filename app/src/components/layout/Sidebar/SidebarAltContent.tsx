@@ -7,7 +7,7 @@ const SidebarAltContent = () => {
   const t = useScopedI18n('main.layout.sidebar.alt');
   return (
     <div className="hidden flex-col group-data-[mobile-open=true]/sidebar:flex sm:flex">
-      <SidebarLink href="/settings" icon={IconSettings} title={t('settings')} segment="(general)" />
+      <SidebarLink href="/settings" icon={IconSettings} title={t('settings')} segment="settings" />
       <SidebarLink
         href="https://docs.pedaki.fr"
         icon={IconBookText}
