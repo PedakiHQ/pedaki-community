@@ -8,33 +8,40 @@ const items = [
     icon: IconHome,
     title: 'Accueil',
     href: '/',
+    segment: undefined,
   },
   {
     icon: IconUserGroups,
     iconClassName: 'h-[1.1rem] w-[1.1rem]',
     title: 'Eleves',
+    segment: 'students',
     items: [
       {
         title: 'Liste des eleves',
         href: '/students',
+        segment: '(list)',
       },
       {
         title: "Schéma d'élèves",
         href: '/students/schema',
+        segment: 'schema',
       },
     ],
   },
   {
     icon: IconBookUser,
     title: 'Classes',
+    segment: 'classes',
     items: [
       {
         title: 'Liste des classes',
         href: '/classes',
+        segment: '(list)',
       },
       {
         title: 'Générer les classes',
         href: '/classes/generate',
+        segment: 'generate',
       },
     ],
   },

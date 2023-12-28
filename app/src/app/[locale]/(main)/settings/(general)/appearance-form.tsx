@@ -98,7 +98,7 @@ const AppearanceForm = () => {
           render={({ field: { onChange, ...rest } }) => (
             <FormItem>
               <FormLabel>Logo du workspace</FormLabel>
-              <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-end">
+              <div className="flex w-full flex-row items-end gap-2">
                 <div>
                   <Avatar className="flex size-24 items-center justify-center rounded-sm border object-cover">
                     <AvatarImage src={logoUrl} alt={'alt'} className="size-24" />
