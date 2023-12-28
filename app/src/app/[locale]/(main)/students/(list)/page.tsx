@@ -1,7 +1,10 @@
+import { IconUserGroups } from '@pedaki/design/ui/icons';
 import type { PageType } from '~/app/types.ts';
+import PageHeader from '~/components/PageHeader.tsx';
 import { getI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
+import React from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
@@ -17,7 +20,11 @@ export default function StudentsListPage({ params }: PageType) {
 
   return (
     <>
-      <p>StudentsListPage</p>
+      <PageHeader
+        title="Liste des élèves"
+        description="Gérer les paramètres de votre workspace."
+        icon={IconUserGroups}
+      />
     </>
   );
 }
