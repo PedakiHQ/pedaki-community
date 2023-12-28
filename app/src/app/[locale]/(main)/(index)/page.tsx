@@ -1,7 +1,9 @@
+import Header from '~/app/[locale]/(main)/(index)/header.tsx';
 import type { PageType } from '~/app/types.ts';
-import { getI18n } from '~/locales/server.ts';
+import dayjs from '~/locales/dayjs.ts';
 import type { LocaleCode } from '~/locales/server.ts';
-import { setStaticParamsLocale } from '~/locales/utils';
+import { getI18n } from '~/locales/server.ts';
+import { setStaticParamsLocale } from '~/locales/utils.ts';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
@@ -17,7 +19,7 @@ export default function IndexPage({ params }: PageType) {
 
   return (
     <>
-      <p>IndexPage</p>
+      <Header description={dayjs().format('LL')} />
     </>
   );
 }

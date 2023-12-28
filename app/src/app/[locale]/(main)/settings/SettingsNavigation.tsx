@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
 import { cn } from '@pedaki/design/utils';
-import { isActive, useIsSmall } from '~/utils.ts';
+import { isActive } from '~/utils.ts';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import React from 'react';

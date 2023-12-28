@@ -1,6 +1,6 @@
 'use client';
 
-import { DropdownMenuItem, DropdownMenuLabel } from '@pedaki/design/ui/dropdown-menu';
+import { DropdownMenuItem } from '@pedaki/design/ui/dropdown-menu';
 import { LocaleIcon } from '~/components/LanguageSelector/LocaleIcon.tsx';
 import { useChangeLocale, useCurrentLocale } from '~/locales/client';
 import type { LocaleCode } from '~/locales/server';

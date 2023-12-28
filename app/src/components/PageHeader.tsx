@@ -5,7 +5,7 @@ import { Skeleton } from '@pedaki/design/ui/skeleton';
 import React from 'react';
 
 export type PageHeaderProps = {
-  title: string;
+  title: string | React.ReactNode;
   description: string;
   children?: React.ReactNode; // Right section
   divider?: boolean;
@@ -13,7 +13,7 @@ export type PageHeaderProps = {
   image?: string;
   icon?: IconType;
   alt?: string;
-} & ({ image: string; alt: string } | { icon: IconType });
+} & ({ image: string; alt: string } | { icon: IconType } | {});
 
 const PageHeader = ({
   title,
@@ -26,9 +26,9 @@ const PageHeader = ({
 }: PageHeaderProps) => {
   return (
     <>
-      <header className="flex justify-between pb-5">
+      <header className="flex h-14 justify-between pb-3">
         <div className="flex items-center gap-4">
-          {image && (
+          {image != undefined && (
             <Avatar className="flex size-12 items-center justify-center object-cover">
               <AvatarImage src={image} alt={alt} className="size-12" />
               <AvatarFallback>

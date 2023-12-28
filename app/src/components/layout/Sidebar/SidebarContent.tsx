@@ -8,7 +8,7 @@ const items = [
     icon: IconHome,
     title: 'Accueil',
     href: '/',
-    segment: undefined,
+    segment: '(index)',
   },
   {
     icon: IconUserGroups,
