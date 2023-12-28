@@ -4,16 +4,20 @@ import type { LayoutType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
-import { fetchSettings } from '~/settings/fetch.ts';
+import type { ResolvingMetadata } from 'next';
 import React from 'react';
 
-export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
+export const generateMetadata = async (
+  { params }: { params: { locale: LocaleCode } },
+  parent: ResolvingMetadata,
+) => {
   setStaticParamsLocale(params.locale); // TODO: check if we need to put it in every page
-  const settings = await fetchSettings();
+
+  const parentMetadata = await parent;
 
   return {
     title: {
-      template: `%s - settings - ${settings.name}`,
+      template: `%s - settings - ${parentMetadata.applicationName}`,
     },
   };
 };
