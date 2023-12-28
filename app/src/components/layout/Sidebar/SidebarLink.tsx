@@ -12,14 +12,15 @@ import type { IconType } from '@pedaki/design/ui/icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
 import { useGlobalStore } from '~/store/global/global.store.ts';
-import { isActive, useIsSmall } from '~/utils.ts';
+import { useIsSmall } from '~/utils.ts';
 import Link from 'next/link';
-import { useSelectedLayoutSegment } from 'next/navigation';
+import { useSelectedLayoutSegments } from 'next/navigation';
 import React from 'react';
 
 interface SidebarLink {
   icon: IconType;
   title: string;
+  segment: string | undefined;
   iconClassName?: string;
 }
 
@@ -58,9 +59,11 @@ const SidebarLinkWithChildren = ({
   title,
   items,
   iconClassName,
+  segment,
 }: SidebarLinkWithChildren) => {
-  const segment = useSelectedLayoutSegment();
-  const active = items.some(item => isActive(segment, item.href));
+  const segments = useSelectedLayoutSegments();
+  const currentSegmentIndex = segment ? segments.indexOf(segment) : -1;
+  const active = currentSegmentIndex !== -1;
 
   return (
     <div>
@@ -74,16 +77,18 @@ const SidebarLinkWithChildren = ({
               active={active}
               className={baseItemClass}
               iconClassName={iconClassName}
+              segment={segment}
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="right">
             <DropdownMenuLabel>{title}</DropdownMenuLabel>
             {items.map((child, index) => {
-              const href = child.href;
-              const active = href.startsWith(`/${segment}`) || href === `/${segment ?? ''}`;
+              const childSegmentIndex = child.segment ? segments.indexOf(child.segment) : -1;
+              const active =
+                childSegmentIndex !== -1 && childSegmentIndex === currentSegmentIndex + 1;
               return (
                 <DropdownMenuItem key={index} disabled={active} asChild className="w-full">
-                  <Link href={href}>{child.title}</Link>
+                  <Link href={child.href}>{child.title}</Link>
                 </DropdownMenuItem>
               );
             })}
@@ -100,13 +105,15 @@ const SidebarLinkWithChildren = ({
               active={active}
               className={baseItemClass}
               iconClassName={iconClassName}
+              segment={segment}
             />
           </CollapsibleTrigger>
           <CollapsibleContent animate className="p-1 pl-0">
             <ul className="flex flex-col gap-1.5 pt-1">
               {items?.map((child, index) => {
-                const href = child.href;
-                const active = href.startsWith(`/${segment}`) || href === `/${segment ?? ''}`;
+                const childSegmentIndex = child.segment ? segments.indexOf(child.segment) : -1;
+                const active =
+                  childSegmentIndex !== -1 && childSegmentIndex === currentSegmentIndex + 1;
                 return (
                   <ol className="relative" key={index}>
                     <SidebarDecoration />
@@ -130,11 +137,19 @@ const SidebarDecoration = () => {
   );
 };
 
-const SidebarLinkWithoutChildren = ({ href, ...props }: SidebarLinkWithoutChildren) => {
-  const segment = useSelectedLayoutSegment();
-  const active = href.startsWith(`/${segment}`) || href === `/${segment ?? ''}`;
+const SidebarLinkWithoutChildren = ({ href, segment, ...props }: SidebarLinkWithoutChildren) => {
+  const segments = useSelectedLayoutSegments();
+  const currentSegmentIndex = segment ? segments.indexOf(segment) : -1;
+  const active = currentSegmentIndex !== -1 || (segments.length === 0 && segment === undefined);
+
   return (
-    <SidebarMenuItem href={href} {...props} active={active} className={subItemClass(active)} />
+    <SidebarMenuItem
+      href={href}
+      {...props}
+      active={active}
+      segment={segment}
+      className={subItemClass(active)}
+    />
   );
 };
 

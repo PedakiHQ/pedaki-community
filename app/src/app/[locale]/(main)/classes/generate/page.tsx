@@ -12,12 +12,12 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
   };
 };
 
-export default function IndexPage({ params }: PageType) {
+export default function ClassesGeneratePage({ params }: PageType) {
   setStaticParamsLocale(params.locale);
 
   return (
     <>
-      <p>IndexPage</p>
+      <p>ClassesGeneratePage</p>
     </>
   );
 }

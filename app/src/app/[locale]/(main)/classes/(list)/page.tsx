@@ -1,7 +1,7 @@
 import type { PageType } from '~/app/types.ts';
 import { getI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
-import { setStaticParamsLocale } from '~/locales/utils';
+import { setStaticParamsLocale } from '~/locales/utils.ts';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
@@ -12,12 +12,12 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
   };
 };
 
-export default function IndexPage({ params }: PageType) {
+export default function ClassesListPage({ params }: PageType) {
   setStaticParamsLocale(params.locale);
 
   return (
     <>
-      <p>IndexPage</p>
+      <p>ClassesListPage</p>
     </>
   );
 }
