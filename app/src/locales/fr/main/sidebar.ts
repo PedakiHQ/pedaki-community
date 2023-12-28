@@ -6,6 +6,8 @@ export default {
   user: {
     dropdown: {
       label: 'Utilisateur',
+      settings: 'Paramètres',
+      language: 'Changer de langue',
       signout: 'Se déconnecter',
     },
   },

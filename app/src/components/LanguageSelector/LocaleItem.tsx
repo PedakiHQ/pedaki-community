@@ -16,9 +16,9 @@ export const LocaleItem = ({ locale }: { locale: LocaleCode }) => {
 
   return (
     <DropdownMenuItem disabled={isActive} key={locale} onClick={() => changeLocale(locale)}>
-      <Icon className="h-6 w-6 rounded-lg" />
+      <Icon className="h-4 w-5 rounded-sm" />
       {/*<DropdownMenuLabel>{languageT(locale)}</DropdownMenuLabel>*/}
-      <DropdownMenuLabel>{locale}</DropdownMenuLabel>
+      <span>{locale}</span>
     </DropdownMenuItem>
   );
 };
