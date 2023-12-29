@@ -1,4 +1,8 @@
-import { SIDEBAR_SETTINGS_BUTTON } from '~/store/tutorial/data/appearance/constants.ts';
+import {
+  APPEARANCE_FORM,
+  SIDEBAR_SETTINGS_BUTTON,
+  TUTORIAL_ID,
+} from '~/store/tutorial/data/appearance/constants.ts';
 import {
   getNextStepIndex,
   isCompleted,
@@ -7,20 +11,26 @@ import {
 } from '~/store/tutorial/data/utils.ts';
 import type { Tutorial, TutorialStep } from '~/store/tutorial/type.ts';
 
-const id = 'appearance';
 export const appearanceTutorial: Tutorial = {
-  id,
+  id: TUTORIAL_ID,
   callback: methods => props => {
     if (isExited(props.status, props.action)) {
       methods.setTutorial(null);
       return;
     }
     if (isCompleted(props.status)) {
-      methods.addCompleted(id);
+      methods.addCompleted(TUTORIAL_ID);
       return;
     }
 
     if (isNextStep(props.type)) {
+      const nextStepIndex = getNextStepIndex(props.index, props.action);
+      if (nextStepIndex === 1) {
+        methods.setPaused(true);
+        methods.push('/settings');
+        return;
+      }
+
       methods.setStepIndex(getNextStepIndex(props.index, props.action));
     }
   },
@@ -33,9 +43,15 @@ export const appearanceTutorial: Tutorial = {
         disableBeacon: true,
       },
       {
-        target: `body`,
+        target: `#main-content`,
         content: 'main',
-        placement: 'center',
+        placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: `#${APPEARANCE_FORM}`,
+        content: 'main',
+        placement: 'bottom',
         disableBeacon: true,
       },
     ];

@@ -15,6 +15,8 @@ export interface Tutorial {
   options?: BaseProps;
   steps: (locale: string) => TutorialStep[];
   callback?: (
-    props: Pick<TutorialStore, 'setTutorial' | 'setStepIndex' | 'setPaused' | 'addCompleted'>,
+    props: Pick<TutorialStore, 'setTutorial' | 'setStepIndex' | 'setPaused' | 'addCompleted'> & {
+      push: (url: string) => void;
+    },
   ) => (props: CallBackProps) => void;
 }

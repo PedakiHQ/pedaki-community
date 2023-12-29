@@ -2,10 +2,10 @@ import { Separator } from '@pedaki/design/ui/separator';
 import AppearanceForm from '~/app/[locale]/(main)/settings/(general)/appearance-form.tsx';
 import GeneralForm from '~/app/[locale]/(main)/settings/(general)/general-form.tsx';
 import SettingRow from '~/app/[locale]/(main)/settings/SettingRow.tsx';
-import type { PageType } from '~/app/types.ts';
 import { getI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
+import { APPEARANCE_FORM } from '~/store/tutorial/data/appearance/constants.ts';
 import React from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
@@ -17,14 +17,18 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
   };
 };
 
-export default function GeneralSettingsPage({ params }: PageType) {
+export default function GeneralSettingsPage() {
   return (
     <div className="flex flex-col gap-5">
       <SettingRow title="Général" description="Paramètres généraux du workspace.">
         <GeneralForm />
       </SettingRow>
       <Separator />
-      <SettingRow title="Apparence" description="Paramètres d'apparence du workspace.">
+      <SettingRow
+        title="Apparence"
+        description="Paramètres d'apparence du workspace."
+        id={APPEARANCE_FORM}
+      >
         <AppearanceForm />
       </SettingRow>
     </div>

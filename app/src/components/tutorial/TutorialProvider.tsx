@@ -2,6 +2,7 @@
 
 import { tutorialLocale } from '~/store/tutorial/data/locale.ts';
 import { useTutorialStore } from '~/store/tutorial/tutorial.store.ts';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import Joyride from 'react-joyride';
 
@@ -20,6 +21,7 @@ const TutorialProvider = ({ locale }: TutorialProviderProps) => {
     addCompleted: state.addCompleted,
     setTutorial: state.setTutorial,
   }));
+  const router = useRouter();
 
   if (!tutorial) return null;
 
@@ -29,7 +31,8 @@ const TutorialProvider = ({ locale }: TutorialProviderProps) => {
 
   return (
     <Joyride
-      callback={callback?.(methods)}
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      callback={callback?.({ ...methods, push: router.push })}
       continuous
       {...restOptions}
       run={!paused}
