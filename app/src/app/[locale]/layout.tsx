@@ -10,6 +10,7 @@ import { getWorkspaceSettings } from '~/settings';
 import { COOKIE_NAME } from '~/store/global/constants.ts';
 import type { GlobalStore } from '~/store/global/global.store.ts';
 import GlobalStoreProvider from '~/store/global/StoreProvider.tsx';
+import TutorialStoreProvider from '~/store/tutorial/StoreProvider.tsx';
 import WorkspaceStoreProvider from '~/store/workspace/StoreProvider.tsx';
 import type { ResolvingMetadata } from 'next';
 import { setStaticParamsLocale } from 'next-international/server';
@@ -60,7 +61,9 @@ export default async function Layout({
         <GlobalStoreProvider {...storeValue}>
           <DemoBanner />
           <div className="relative h-full peer-data-[visible=true]:mt-12">
-            <WorkspaceStoreProvider settings={settings}>{children}</WorkspaceStoreProvider>
+            <WorkspaceStoreProvider settings={settings}>
+              <TutorialStoreProvider>{children}</TutorialStoreProvider>
+            </WorkspaceStoreProvider>
           </div>
         </GlobalStoreProvider>
       </BaseProvider>

@@ -22,7 +22,7 @@ const PageHeader = ({
   icon: Icon,
   image,
   alt,
-  divider = true,
+  divider = false,
 }: PageHeaderProps) => {
   return (
     <>
@@ -49,7 +49,7 @@ const PageHeader = ({
 
         {children && <div className="flex items-center gap-4">{children}</div>}
       </header>
-      {divider && <Separator />}
+      <Separator className={!divider ? 'invisible' : ''} />
     </>
   );
 };
