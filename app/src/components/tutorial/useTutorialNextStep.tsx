@@ -12,9 +12,7 @@ export const useTutorialNextStep = (tutorialId: string, expectedStep: number) =>
     if (tutorial.id !== tutorialId) return;
     if (stepIndex !== expectedStep) return;
 
-    setTimeout(() => {
-      setPaused(false);
-      setStepIndex(stepIndex + 1);
-    }, 150);
+    setPaused(false);
+    setStepIndex(stepIndex + 1);
   }, [tutorial, stepIndex, tutorialId, expectedStep, setPaused, setStepIndex]);
 };
