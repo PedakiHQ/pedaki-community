@@ -31,7 +31,13 @@ export const appearanceTutorial: Tutorial = {
         return;
       }
 
-      methods.setStepIndex(getNextStepIndex(props.index, props.action));
+      if (nextStepIndex === 0) {
+        methods.push('/');
+        methods.setTutorial(null); // Exit tutorial
+        return;
+      }
+
+      methods.setStepIndex(nextStepIndex);
     }
   },
   steps(locale: string): TutorialStep[] {
