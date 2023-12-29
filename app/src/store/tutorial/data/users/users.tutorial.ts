@@ -53,7 +53,7 @@ export const usersTutorial: Tutorial = {
       {
         target: `#${SETTINGS_NAVIGATION}`,
         content: 'vous pouvez changer de page en utilisatn la barre de navigation',
-        placement: 'bottom',
+        placement: 'bottom-start',
       },
       {
         target: `#${SETTINGS_NAVIGATION_USERS}`,
