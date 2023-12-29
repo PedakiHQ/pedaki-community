@@ -8,6 +8,7 @@ import {
   getNextStepIndex,
   isCompleted,
   isExited,
+  isForward,
   isNextStep,
 } from '~/store/tutorial/data/utils.ts';
 import type { Tutorial } from '~/store/tutorial/type.ts';
@@ -16,26 +17,18 @@ export const appearanceTutorial: Tutorial = {
   id: TUTORIAL_ID,
   callback: methods => props => {
     if (isExited(props.status, props.action)) {
+      if (isCompleted(props.status)) {
+        methods.addCompleted(TUTORIAL_ID);
+      }
       methods.setTutorial(null);
-      return;
-    }
-
-    if (isCompleted(props.status)) {
-      methods.addCompleted(TUTORIAL_ID);
       return;
     }
 
     if (isNextStep(props.type)) {
       const nextStepIndex = getNextStepIndex(props.index, props.action);
-      if (nextStepIndex === 1) {
+      if (isForward(props.action) && nextStepIndex === 1) {
         methods.setPaused(true);
         methods.push('/settings');
-        return;
-      }
-
-      if (nextStepIndex === 0) {
-        methods.push('/');
-        methods.setTutorial(null); // Exit tutorial
         return;
       }
 

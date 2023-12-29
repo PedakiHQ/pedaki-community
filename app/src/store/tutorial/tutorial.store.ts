@@ -40,7 +40,7 @@ export const initializeStore = (preloadedState: Partial<TutorialStore> = {}) => 
     ...preloadedState,
     setPaused: (paused: boolean) => set({ paused }),
     setStepIndex: (stepIndex: number) => set({ stepIndex }),
-    setTutorial: (tutorial: Tutorial | null) => set({ tutorial, stepIndex: 0 }),
+    setTutorial: (tutorial: Tutorial | null) => set({ tutorial, stepIndex: 0, paused: false }),
     addCompleted: (id: string) => set({ completed: [...get().completed, id] }),
     setCompleted: (ids: string[]) => set({ completed: ids }),
   }));
