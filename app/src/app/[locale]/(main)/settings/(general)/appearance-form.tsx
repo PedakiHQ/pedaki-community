@@ -21,7 +21,7 @@ import { useHasChanged } from '~/app/[locale]/(main)/settings/useHasChanged.ts';
 import { LOGO_MAX_SIZE, LOGO_TYPES } from '~/app/api/upload/logo/constants.ts';
 import { updateLogo } from '~/app/api/upload/logo/fetch.ts';
 import { useTutorialNextStep } from '~/components/tutorial/useTutorialNextStep.tsx';
-import { TUTORIAL_ID } from '~/store/tutorial/data/appearance/constants.ts';
+import { TUTORIAL_ID as AppearanceTutorialId } from '~/store/tutorial/data/appearance/constants.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -46,7 +46,7 @@ type FormValues = z.infer<typeof FormSchema>;
 // TODO: color picker
 
 const AppearanceForm = () => {
-  useTutorialNextStep(TUTORIAL_ID, 0);
+  useTutorialNextStep(AppearanceTutorialId, 0);
 
   const logoUrl = useWorkspaceStore(state => state.logoUrl);
   const updateLogoUrl = useWorkspaceStore(state => state.updateLogoUrl);

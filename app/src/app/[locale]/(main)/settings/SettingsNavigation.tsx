@@ -7,6 +7,9 @@ import {
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
 import { cn } from '@pedaki/design/utils';
+import { useTutorialNextStep } from '~/components/tutorial/useTutorialNextStep.tsx';
+import { SETTINGS_NAVIGATION, SETTINGS_NAVIGATION_USERS } from '~/store/tutorial/data/constants.ts';
+import { TUTORIAL_ID as UserTutorialId } from '~/store/tutorial/data/users/constants.ts';
 import { isActive } from '~/utils.ts';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
@@ -27,6 +30,7 @@ const items = [
     title: 'Utilisateurs',
     href: '/settings/users',
     segment: 'users',
+    id: SETTINGS_NAVIGATION_USERS,
   },
   {
     title: 'Mon compte',
@@ -39,11 +43,14 @@ interface NavigationItem {
   title: string;
   href: string;
   segment: string | null;
+  id?: string;
 }
 
 const SettingsNavigation = () => {
+  useTutorialNextStep(UserTutorialId, 0);
+
   return (
-    <nav className="flex items-center gap-6 border-b">
+    <nav className="flex items-center gap-6 border-b" id={SETTINGS_NAVIGATION}>
       <MobileNavigation />
       <DesktopNavigation />
     </nav>
@@ -84,12 +91,12 @@ const DesktopNavigation = () => {
   );
 };
 
-const Item = ({ title, href, segment }: NavigationItem) => {
+const Item = ({ title, href, segment, id }: NavigationItem) => {
   const selectedSegment = useSelectedLayoutSegment();
   const active = isActive(selectedSegment, segment);
 
   return (
-    <Link className="group relative hidden py-3 @sm/main:block" href={href}>
+    <Link className="group relative hidden py-3 @sm/main:block" href={href} id={id}>
       <span
         className={cn(
           'text-p-sm font-medium text-sub ',
