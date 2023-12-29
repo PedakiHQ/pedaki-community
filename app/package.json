@@ -26,7 +26,7 @@
     "@hookform/resolvers": "^3.3.3",
     "@pedaki/api": "workspace:*",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.1",
+    "@pedaki/common": "0.5.2-beta.2",
     "@pedaki/design": "0.5.2-beta.1",
     "@pedaki/logger": "workspace:*",
     "@pedaki/services": "workspace:*",
