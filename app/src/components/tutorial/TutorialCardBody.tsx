@@ -3,6 +3,7 @@
 import { IconCircle } from '@pedaki/design/ui/icons';
 import IconCheck from '@pedaki/design/ui/icons/IconCheck';
 import { cn } from '@pedaki/design/utils';
+import { useGlobalStore } from '~/store/global/global.store.ts';
 import { tutorials } from '~/store/tutorial/data';
 import { useTutorialStore } from '~/store/tutorial/tutorial.store.ts';
 import type { Tutorial } from '~/store/tutorial/type.ts';
@@ -12,6 +13,7 @@ import { toast } from 'sonner';
 
 const TutorialCardBody = () => {
   const completed = useTutorialStore(state => state.completed);
+  const setCollapsed = useGlobalStore(state => state.setCollapsed);
   const setTutorial = useTutorialStore(state => state.setTutorial);
   const isSmall = useIsSmall();
 
@@ -20,6 +22,7 @@ const TutorialCardBody = () => {
       toast.error('Tutorials are not available on mobile devices');
       return;
     }
+    setCollapsed(false);
     setTutorial(tutorial);
   };
 
