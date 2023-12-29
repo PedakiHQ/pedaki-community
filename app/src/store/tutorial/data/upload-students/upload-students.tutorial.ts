@@ -1,5 +1,5 @@
-import { APPEARANCE_FORM, TUTORIAL_ID } from '~/store/tutorial/data/appearance/constants.ts';
-import { MAIN_CONTENT, SIDEBAR_SETTINGS_BUTTON } from '~/store/tutorial/data/constants.ts';
+import { MAIN_CONTENT, SIDEBAR_STUDENTS_BUTTON } from '~/store/tutorial/data/constants.ts';
+import { TUTORIAL_ID } from '~/store/tutorial/data/upload-students/constants.ts';
 import {
   getNextStepIndex,
   isCompleted,
@@ -9,7 +9,7 @@ import {
 } from '~/store/tutorial/data/utils.ts';
 import type { Tutorial } from '~/store/tutorial/type.ts';
 
-export const appearanceTutorial: Tutorial = {
+export const uploadStudentsTutorial: Tutorial = {
   id: TUTORIAL_ID,
   callback: methods => props => {
     if (isExited(props.status, props.action)) {
@@ -22,9 +22,19 @@ export const appearanceTutorial: Tutorial = {
 
     if (isNextStep(props.type)) {
       const nextStepIndex = getNextStepIndex(props.index, props.action);
+
+      // Open collapsible
       if (isForward(props.action) && nextStepIndex === 1) {
+        const button = document.querySelector(props.step.target as string)!.parentElement!;
+        const isOpen = button.getAttribute('data-state') === 'open';
+        if (!isOpen) {
+          button.click();
+        }
+      }
+
+      if (isForward(props.action) && nextStepIndex === 2) {
         methods.setPaused(true);
-        methods.push('/settings');
+        methods.push('/students');
         return;
       }
 
@@ -34,21 +44,21 @@ export const appearanceTutorial: Tutorial = {
   steps(locale) {
     return [
       {
-        target: `#${SIDEBAR_SETTINGS_BUTTON}`,
+        target: `#${SIDEBAR_STUDENTS_BUTTON}`,
         content: locale,
         placement: 'right-end',
         disableBeacon: true,
       },
       {
-        target: `#${MAIN_CONTENT}`,
-        content: 'main',
-        placement: 'bottom',
+        target: `#${SIDEBAR_STUDENTS_BUTTON}-list`,
+        content: locale,
+        placement: 'right',
         disableBeacon: true,
       },
       {
-        target: `#${APPEARANCE_FORM}`,
-        content: 'main',
-        placement: 'bottom',
+        target: `#${MAIN_CONTENT}`,
+        content: locale,
+        placement: 'center',
         disableBeacon: true,
       },
     ];

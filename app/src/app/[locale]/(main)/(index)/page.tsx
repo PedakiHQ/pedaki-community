@@ -5,6 +5,7 @@ import dayjs from '~/locales/dayjs.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { getI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
+import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
@@ -22,7 +23,7 @@ export default function IndexPage({ params }: PageType) {
     <>
       <Header description={dayjs().format('LL')} />
 
-      <div className="grid grid-cols-12 gap-6 pt-6">
+      <div className="grid grid-cols-12 gap-6 pt-6" id={MAIN_CONTENT}>
         <div className="col-span-12 @4xl/main:col-span-6">
           <TutorialStatusCard />
         </div>

@@ -55,14 +55,7 @@ const SidebarLink = ({ items, href, ...props }: SidebarLinkProps) => {
   return null;
 };
 
-const SidebarLinkWithChildren = ({
-  icon: Icon,
-  title,
-  items,
-  iconClassName,
-  segment,
-  ...props
-}: SidebarLinkWithChildren) => {
+const SidebarLinkWithChildren = ({ items, segment, ...props }: SidebarLinkWithChildren) => {
   const segments = useSelectedLayoutSegments();
   const currentSegmentIndex = segment ? segments.indexOf(segment) : -1;
   const active = currentSegmentIndex !== -1;
@@ -73,17 +66,16 @@ const SidebarLinkWithChildren = ({
         <DropdownMenu>
           <DropdownMenuTrigger className="focus-ring w-full rounded-md">
             <SidebarMenuItem
-              icon={Icon}
-              title={title}
               href=""
               active={active}
               className={baseItemClass}
-              iconClassName={iconClassName}
               segment={segment}
+              {...props}
+              id={`${props.id}-dropdown`}
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="right">
-            <DropdownMenuLabel>{title}</DropdownMenuLabel>
+            <DropdownMenuLabel>{props.title}</DropdownMenuLabel>
             {items.map((child, index) => {
               const childSegmentIndex = child.segment ? segments.indexOf(child.segment) : -1;
               const active =
@@ -101,23 +93,21 @@ const SidebarLinkWithChildren = ({
         <Collapsible defaultOpen={active}>
           <CollapsibleTrigger className="focus-ring w-full rounded-md">
             <SidebarMenuItem
-              icon={Icon}
-              title={title}
               href=""
               active={active}
               className={baseItemClass}
-              iconClassName={iconClassName}
               segment={segment}
+              {...props}
             />
           </CollapsibleTrigger>
           <CollapsibleContent animate className="p-1 pl-0">
             <ul className="flex flex-col gap-1.5 pt-1">
-              {items?.map((child, index) => {
+              {items?.map(child => {
                 const childSegmentIndex = child.segment ? segments.indexOf(child.segment) : -1;
                 const active =
                   childSegmentIndex !== -1 && childSegmentIndex === currentSegmentIndex + 1;
                 return (
-                  <ol className="relative" key={index}>
+                  <ol className="relative" key={child.segment}>
                     <SidebarDecoration />
                     <SidebarLinkSubItem {...child} active={active} />
                   </ol>
@@ -204,11 +194,17 @@ const SidebarMenuItem = ({
   );
 };
 
-const SidebarLinkSubItem = ({ href, title, active }: SidebarLinkSubItem & { active?: boolean }) => {
+const SidebarLinkSubItem = ({
+  href,
+  title,
+  active,
+  id,
+}: SidebarLinkSubItem & { active?: boolean }) => {
   const setMobileOpen = useGlobalStore(state => state.setMobileOpen);
+  console.log('id', id);
 
   return (
-    <div className="pl-7">
+    <div className="pl-7" id={id}>
       <Link href={href} className={cn(subItemClass(active))} onClick={() => setMobileOpen?.(false)}>
         <span className={cn('text-label-sm font-medium', active && 'text-main')}>{title}</span>
       </Link>

@@ -1,6 +1,10 @@
 import { IconBookUser, IconHome, IconUserGroups } from '@pedaki/design/ui/icons';
 import type { SidebarLinkProps } from '~/components/layout/Sidebar/SidebarLink.tsx';
 import SidebarLink from '~/components/layout/Sidebar/SidebarLink.tsx';
+import {
+  SIDEBAR_CLASSES_BUTTON,
+  SIDEBAR_STUDENTS_BUTTON,
+} from '~/store/tutorial/data/constants.ts';
 import React from 'react';
 
 const items = [
@@ -15,16 +19,19 @@ const items = [
     iconClassName: 'h-[1.1rem] w-[1.1rem]',
     title: 'Eleves',
     segment: 'students',
+    id: SIDEBAR_STUDENTS_BUTTON,
     items: [
       {
         title: 'Liste des eleves',
         href: '/students',
         segment: '(list)',
+        id: `${SIDEBAR_STUDENTS_BUTTON}-list`,
       },
       {
         title: "Schéma d'élèves",
         href: '/students/schema',
         segment: 'schema',
+        id: `${SIDEBAR_STUDENTS_BUTTON}-schema`,
       },
     ],
   },
@@ -32,16 +39,19 @@ const items = [
     icon: IconBookUser,
     title: 'Classes',
     segment: 'classes',
+    id: SIDEBAR_CLASSES_BUTTON,
     items: [
       {
         title: 'Liste des classes',
         href: '/classes',
         segment: '(list)',
+        id: `${SIDEBAR_CLASSES_BUTTON}-list`,
       },
       {
         title: 'Générer les classes',
         href: '/classes/generate',
         segment: 'generate',
+        id: `${SIDEBAR_CLASSES_BUTTON}-generate`,
       },
     ],
   },
