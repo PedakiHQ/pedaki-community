@@ -22,6 +22,7 @@ interface SidebarLink {
   title: string;
   segment: string | undefined;
   iconClassName?: string;
+  id?: string;
 }
 
 type SidebarLinkSubItem = Omit<SidebarLink, 'icon'> & {
@@ -60,6 +61,7 @@ const SidebarLinkWithChildren = ({
   items,
   iconClassName,
   segment,
+  ...props
 }: SidebarLinkWithChildren) => {
   const segments = useSelectedLayoutSegments();
   const currentSegmentIndex = segment ? segments.indexOf(segment) : -1;
@@ -160,6 +162,7 @@ const SidebarMenuItem = ({
   active = false,
   className,
   iconClassName,
+  ...props
 }: SidebarLinkWithoutChildren & {
   active?: boolean;
   className: string;
@@ -176,6 +179,7 @@ const SidebarMenuItem = ({
           href={href}
           className={cn(className, 'group')}
           onClick={() => href && setMobileOpen?.(false)}
+          id={props.id}
         >
           <div className="flex h-5 w-5 items-center justify-center">
             <Icon className={cn('h-5 w-5', active && 'text-primary-base', iconClassName)} />

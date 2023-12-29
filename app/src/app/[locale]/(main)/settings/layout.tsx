@@ -31,7 +31,9 @@ export default function SettingsLayout({ children, params }: LayoutType) {
         icon={IconSettings}
       />
       <SettingsNavigation />
-      <div className="pt-6">{children}</div>
+      <div className="pt-6" id="main-content">
+        {children}
+      </div>
     </>
   );
 }
