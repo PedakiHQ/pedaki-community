@@ -49,6 +49,7 @@ const TutorialProvider = ({ locale }: TutorialProviderProps) => {
       locale={tutorialLocale(locale)}
       disableOverlayClose
       disableScrolling
+      showProgress
     />
   );
 };

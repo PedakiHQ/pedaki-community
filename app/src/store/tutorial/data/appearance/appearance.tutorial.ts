@@ -3,13 +3,14 @@ import {
   SIDEBAR_SETTINGS_BUTTON,
   TUTORIAL_ID,
 } from '~/store/tutorial/data/appearance/constants.ts';
+import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import {
   getNextStepIndex,
   isCompleted,
   isExited,
   isNextStep,
 } from '~/store/tutorial/data/utils.ts';
-import type { Tutorial, TutorialStep } from '~/store/tutorial/type.ts';
+import type { Tutorial } from '~/store/tutorial/type.ts';
 
 export const appearanceTutorial: Tutorial = {
   id: TUTORIAL_ID,
@@ -18,6 +19,7 @@ export const appearanceTutorial: Tutorial = {
       methods.setTutorial(null);
       return;
     }
+
     if (isCompleted(props.status)) {
       methods.addCompleted(TUTORIAL_ID);
       return;
@@ -40,7 +42,7 @@ export const appearanceTutorial: Tutorial = {
       methods.setStepIndex(nextStepIndex);
     }
   },
-  steps(locale: string): TutorialStep[] {
+  steps(locale) {
     return [
       {
         target: `#${SIDEBAR_SETTINGS_BUTTON}`,
@@ -49,7 +51,7 @@ export const appearanceTutorial: Tutorial = {
         disableBeacon: true,
       },
       {
-        target: `#main-content`,
+        target: `#${MAIN_CONTENT}`,
         content: 'main',
         placement: 'bottom',
         disableBeacon: true,

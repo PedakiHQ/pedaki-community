@@ -6,13 +6,20 @@ import { cn } from '@pedaki/design/utils';
 import { tutorials } from '~/store/tutorial/data';
 import { useTutorialStore } from '~/store/tutorial/tutorial.store.ts';
 import type { Tutorial } from '~/store/tutorial/type.ts';
+import { useIsSmall } from '~/utils.ts';
 import React from 'react';
+import { toast } from 'sonner';
 
 const TutorialCardBody = () => {
   const completed = useTutorialStore(state => state.completed);
   const setTutorial = useTutorialStore(state => state.setTutorial);
+  const isSmall = useIsSmall();
 
   const handleTutorialClick = (tutorial: Tutorial) => {
+    if (isSmall) {
+      toast.error('Tutorials are not available on mobile devices');
+      return;
+    }
     setTutorial(tutorial);
   };
 

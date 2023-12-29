@@ -4,6 +4,7 @@ import type { LayoutType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
+import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import type { ResolvingMetadata } from 'next';
 import React from 'react';
 
@@ -22,7 +23,7 @@ export const generateMetadata = async (
   };
 };
 
-export default function SettingsLayout({ children, params }: LayoutType) {
+export default function SettingsLayout({ children }: LayoutType) {
   return (
     <>
       <PageHeader
@@ -31,7 +32,7 @@ export default function SettingsLayout({ children, params }: LayoutType) {
         icon={IconSettings}
       />
       <SettingsNavigation />
-      <div className="pt-6" id="main-content">
+      <div className="pt-6" id={MAIN_CONTENT}>
         {children}
       </div>
     </>
