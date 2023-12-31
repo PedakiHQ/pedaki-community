@@ -109,9 +109,7 @@ const Item = ({ name, href, segment, id }: NavigationItem) => {
           active ? 'text-main' : 'group-hover:text-main',
         )}
       >
-        {/* We can tolerate the error here, because in case of invalid name we would
-        still get the error in MobileNavigation */}
-        {/* @ts-expect-error */}
+        {/* @ts-expect-error We can tolerate the error here, because in case of invalid name we would still get the error in MobileNavigation */}
         {t(`${name}.label`)}
       </span>
       {active && (

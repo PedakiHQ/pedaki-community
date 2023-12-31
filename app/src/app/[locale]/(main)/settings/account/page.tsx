@@ -14,6 +14,7 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
 };
 
 export default function AccountSettingsPage({ params }: PageType) {
+  setStaticParamsLocale(params.locale);
   return (
     <>
       <p>AccountSettingsPage</p>
