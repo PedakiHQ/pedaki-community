@@ -185,10 +185,7 @@ const SidebarMenuItem = ({
         </Component>
       </TooltipTrigger>
       <TooltipContent side="right" align="center">
-        <p>
-          {/*TODO translate*/}
-          {title}
-        </p>
+        <p>{title}</p>
       </TooltipContent>
     </Tooltip>
   );
