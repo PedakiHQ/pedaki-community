@@ -31,9 +31,6 @@ export default {
     documentation: 'Documentation',
   },
   user: {
-    header: {
-      name: 'Bonjour {name} !',
-    },
     dropdown: {
       label: 'Utilisateur',
       settings: 'Paramètres',

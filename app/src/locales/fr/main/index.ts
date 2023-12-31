@@ -9,4 +9,7 @@ export default {
   layout: {
     sidebar: sidebar,
   },
+  header: {
+    name: 'Bonjour {name} !',
+  },
 } as const;

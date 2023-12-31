@@ -2,7 +2,7 @@ import ActivateForm from '~/app/[locale]/auth/activate/activate-form.tsx';
 import AuthWrapper from '~/app/[locale]/auth/auth-wrapper.tsx';
 import type { PageType } from '~/app/types.ts';
 import AuthErrorPage from '~/components/ErrorPage/AuthErrorPage.tsx';
-import { getI18n } from '~/locales/server.ts';
+import { getScopedI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
 import { api } from '~/server/clients/server';
@@ -10,7 +10,7 @@ import React from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
-  const t = await getI18n();
+  const t = await getScopedI18n('auth.activate');
 
   return {
     title: t('metadata.title'),
@@ -23,6 +23,7 @@ export default async function ActivateAccountPage({
   searchParams,
 }: PageType & { searchParams: Record<string, unknown> }) {
   setStaticParamsLocale(params.locale);
+  const t = await getScopedI18n('auth.activate');
 
   const token = searchParams.token as string;
   if (!token) {
@@ -34,8 +35,8 @@ export default async function ActivateAccountPage({
 
   return (
     <AuthWrapper
-      title={`Salut ${userData.name}`}
-      description="Avant d'accéder au workspace, choisis un mot de passe"
+      title={t('wrapper.title', { name: userData.name })}
+      description={t('wrapper.description')}
     >
       <ActivateForm email={userData.email} token={token} />
     </AuthWrapper>
