@@ -3,8 +3,7 @@ import sidebar from '~/locales/fr/main/sidebar.ts';
 
 export default {
   metadata: {
-    title: 'Titre',
-    description: 'Lorem ipsum fr',
+    title: 'Accueil',
   },
   demoBanner: demoBanner,
   layout: {

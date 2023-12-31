@@ -1,7 +1,6 @@
 export default {
   metadata: {
     title: { template: '%s - Paramètres - {applicationName}' },
-    description: 'Gérer les paramètres de votre workspace.',
   },
   header: {
     title: 'Paramètres',
