@@ -1,5 +1,4 @@
 import { env } from '~/env.ts';
-import { I18nProviderClient } from '~/locales/client';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -14,11 +13,7 @@ const DemoBanner = ({ locale }: DemoBannerProps) => {
     return null;
   }
 
-  return (
-    <I18nProviderClient locale={locale}>
-      <DemoBannerComponent />
-    </I18nProviderClient>
-  );
+  return <DemoBannerComponent locale={locale} />;
 };
 
 export default DemoBanner;
