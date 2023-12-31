@@ -13,9 +13,7 @@ const TutorialProvider = dynamic(() => import('~/components/tutorial/TutorialPro
 export default function MainLayout({ children, params }: LayoutType) {
   return (
     <>
-      <I18nProviderClient locale={params.locale}>
-        <DemoBanner />
-      </I18nProviderClient>
+      <DemoBanner locale={params.locale} />
 
       <div className="relative h-full peer-data-[visible=true]:mt-12">
         <AuthProvider>
