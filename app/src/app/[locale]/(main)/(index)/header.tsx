@@ -12,7 +12,7 @@ interface HeaderProps {
 
 const Header = ({ description }: HeaderProps) => {
   const { data } = useSession();
-  const t = useScopedI18n('main.layout.sidebar.user.header');
+  const t = useScopedI18n('main.header');
 
   return (
     <PageHeader
