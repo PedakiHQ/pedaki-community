@@ -8,11 +8,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
-import { useScopedI18n } from '~/locales/client';
+import { I18nProviderClient, useScopedI18n } from '~/locales/client';
 import { useGlobalStore } from '~/store/global/global.store';
 import React from 'react';
 
-const DemoBannerComponent = () => {
+interface DemoBannerComponentProps {
+  locale: string;
+}
+
+const DemoBannerComponent = ({ locale }: DemoBannerComponentProps) => {
+  return (
+    <I18nProviderClient locale={locale}>
+      <DemoBannerComponentContent />
+    </I18nProviderClient>
+  );
+};
+
+const DemoBannerComponentContent = () => {
   const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
   const setDemoBannerVisible = useGlobalStore(state => state.setDemoBannerVisible);
   const t = useScopedI18n('main.demoBanner');
