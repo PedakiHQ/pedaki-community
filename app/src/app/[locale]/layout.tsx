@@ -1,7 +1,6 @@
 import './globals.css';
 import '@pedaki/design/tailwind/index.css';
 import { BaseProvider } from '~/app/[locale]/baseProvider.tsx';
-import DemoBanner from '~/components/DemoBanner/wrapper';
 import type { LocaleCode } from '~/locales/server';
 import { getStaticParams } from '~/locales/server';
 import { locales } from '~/locales/shared';
@@ -59,12 +58,9 @@ export default async function Layout({
     <Suspense fallback={<div>Loading...</div>}>
       <BaseProvider>
         <GlobalStoreProvider {...storeValue}>
-          <DemoBanner />
-          <div className="relative h-full peer-data-[visible=true]:mt-12">
-            <WorkspaceStoreProvider settings={settings}>
-              <TutorialStoreProvider>{children}</TutorialStoreProvider>
-            </WorkspaceStoreProvider>
-          </div>
+          <WorkspaceStoreProvider settings={settings}>
+            <TutorialStoreProvider>{children}</TutorialStoreProvider>
+          </WorkspaceStoreProvider>
         </GlobalStoreProvider>
       </BaseProvider>
     </Suspense>
