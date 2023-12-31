@@ -2,8 +2,8 @@ import { IconSettings } from '@pedaki/design/ui/icons';
 import SettingsNavigation from '~/app/[locale]/(main)/settings/SettingsNavigation.tsx';
 import type { LayoutType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
-import { getScopedI18n  } from '~/locales/server.ts';
-import type {LocaleCode} from '~/locales/server.ts';
+import { getScopedI18n } from '~/locales/server.ts';
+import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import type { ResolvingMetadata } from 'next';
@@ -21,7 +21,6 @@ export const generateMetadata = async (
     title: {
       template: t('metadata.title.template', { applicationName: parentMetadata.applicationName }),
     },
-    description: t('metadata.description'),
   };
 };
 

@@ -109,7 +109,7 @@ const Item = ({ name, href, segment, id }: NavigationItem) => {
           active ? 'text-main' : 'group-hover:text-main',
         )}
       >
-        {/* @ts-expect-error We can tolerate the error here, because in case of invalid name we would still get the error in MobileNavigation */}
+        {/* @ts-expect-error If the key exist we won't get any errors */}
         {t(`${name}.label`)}
       </span>
       {active && (
