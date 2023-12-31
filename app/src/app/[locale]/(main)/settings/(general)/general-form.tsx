@@ -25,7 +25,8 @@ import {
 import { WorkspacePropertiesSchema } from '@pedaki/services/workspace/workspace.model.js';
 import { useHasChanged } from '~/app/[locale]/(main)/settings/useHasChanged.ts';
 import { LocaleIcon } from '~/components/LanguageSelector/LocaleIcon.tsx';
-import { locales } from '~/locales/shared.ts';
+import { useScopedI18n } from '~/locales/client';
+import { locales, localesLabels } from '~/locales/shared.ts';
 import { api } from '~/server/clients/client.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import React, { useRef } from 'react';
@@ -42,6 +43,7 @@ const GeneralForm = () => {
   const settings = useWorkspaceStore(state => state.settings);
   const updateSetting = useWorkspaceStore(state => state.updateSetting);
   const initialValues = useRef(settings);
+  const t = useScopedI18n('settings.general.rows.general.form');
 
   const changeSettingsMutation = api.settings.setSettings.useMutation();
 
@@ -61,17 +63,17 @@ const GeneralForm = () => {
   function onSubmit(values: SettingsFormValues) {
     return wrapWithLoading(() => wait(changeSettingsMutation.mutateAsync(values), 200), {
       loadingProps: {
-        // TODO title and description
-        title: "Création de l'invitation en cours",
+        title: t('submit.loading.title'),
+        description: t('submit.loading.description'),
       },
       successProps: {
-        // TODO title and description
-        title: '🎉 Invitation créée avec succès',
+        title: t('submit.success.title'),
+        description: t('submit.success.description'),
       },
-      errorProps: error => {
-        const title = "Une erreur est survenue lors de la création de l'invitation";
+      errorProps: _error => {
         return {
-          title,
+          title: t('submit.error.title'),
+          description: t('submit.error.description'),
         };
       },
       throwOnError: true,
@@ -99,7 +101,7 @@ const GeneralForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom du workspace</FormLabel>
+              <FormLabel>{t('fields.name.label')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder="shrek"
@@ -120,7 +122,7 @@ const GeneralForm = () => {
                 />
               </FormControl>
               <FormMessage>
-                <FormDescription>blabla sidebar et onglets</FormDescription>
+                <FormDescription>{t('fields.name.description')}</FormDescription>
               </FormMessage>
             </FormItem>
           )}
@@ -132,11 +134,11 @@ const GeneralForm = () => {
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Langue de l&apos;application</FormLabel>
+                <FormLabel>{t('fields.defaultLanguage.label')}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez une langue" />
+                      <SelectValue placeholder={t('fields.defaultLanguage.placeholder')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -151,15 +153,14 @@ const GeneralForm = () => {
                             className: 'w-6 rounded-sm',
                           }}
                         >
-                          {/*TODO: full name*/}
-                          {locale}
+                          {localesLabels[locale]}
                         </SelectItem>
                       );
                     })}
                   </SelectContent>
                 </Select>
                 <FormMessage>
-                  <FormDescription>Blabla uniquement celle de base</FormDescription>
+                  <FormDescription>{t('fields.defaultLanguage.description')}</FormDescription>
                 </FormMessage>
               </FormItem>
             );
@@ -169,7 +170,7 @@ const GeneralForm = () => {
         <div>
           <Button variant="filled-primary" type="submit" disabled={isSubmitting} size="sm">
             {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-            Sauvegarder
+            {t('submit.label')}
           </Button>
         </div>
       </form>

@@ -21,6 +21,7 @@ import { useHasChanged } from '~/app/[locale]/(main)/settings/useHasChanged.ts';
 import { LOGO_MAX_SIZE, LOGO_TYPES } from '~/app/api/upload/logo/constants.ts';
 import { updateLogo } from '~/app/api/upload/logo/fetch.ts';
 import { useTutorialNextStep } from '~/components/tutorial/useTutorialNextStep.tsx';
+import { useScopedI18n } from '~/locales/client';
 import { TUTORIAL_ID as AppearanceTutorialId } from '~/store/tutorial/data/appearance/constants.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import React from 'react';
@@ -50,6 +51,7 @@ const AppearanceForm = () => {
 
   const logoUrl = useWorkspaceStore(state => state.logoUrl);
   const updateLogoUrl = useWorkspaceStore(state => state.updateLogoUrl);
+  const t = useScopedI18n('settings.general.rows.appearance.form');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -66,21 +68,17 @@ const AppearanceForm = () => {
 
     return wrapWithLoading(() => wait(updateLogo(values.logo!), 500), {
       loadingProps: {
-        // TODO title and description
-        title: "Création de l'invitation en cours",
+        title: t('submit.loading.title'),
+        description: t('submit.loading.description'),
       },
       successProps: {
-        // TODO title and description
-        title: '🎉 Logo mis à jour avec succès',
+        title: t('submit.success.title'),
+        description: t('submit.success.description'),
       },
-      errorProps: error => {
-        // TODO title and description
-        const title =
-          error.message === 'ALREADY_EXISTS'
-            ? 'Une invitation existe déjà avec cette adresse email'
-            : "Une erreur est survenue lors de la création de l'invitation";
+      errorProps: _error => {
         return {
-          title,
+          title: t('submit.error.title'),
+          description: t('submit.error.description'),
         };
       },
       throwOnError: true,
@@ -101,7 +99,7 @@ const AppearanceForm = () => {
           name="logo"
           render={({ field: { onChange, ...rest } }) => (
             <FormItem>
-              <FormLabel>Logo du workspace</FormLabel>
+              <FormLabel>{t('fields.logo.label')}</FormLabel>
               <div className="flex w-full flex-row items-end gap-2">
                 <div>
                   <Avatar className="flex size-24 items-center justify-center rounded-sm border object-cover">
@@ -134,7 +132,7 @@ const AppearanceForm = () => {
                   </FormControl>
                   <FormMessage>
                     <FormDescription>
-                      blabla la preview peut changer (taille recommendée 200x200)
+                      {t('fields.logo.description', { width: 200, height: 200 })}
                     </FormDescription>
                   </FormMessage>
                 </div>
@@ -146,7 +144,7 @@ const AppearanceForm = () => {
         <div>
           <Button variant="filled-primary" type="submit" disabled={isSubmitting} size="sm">
             {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-            Sauvegarder
+            {t('submit.label')}
           </Button>
         </div>
       </form>

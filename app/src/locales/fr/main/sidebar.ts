@@ -1,5 +1,32 @@
 export default {
-  alt: {
+  content: {
+    home: {
+      title: 'Accueil',
+    },
+    classes: {
+      title: 'Classes',
+      items: {
+        list: {
+          title: 'Liste des classes',
+        },
+        generate: {
+          title: 'Générer les classes',
+        },
+      },
+    },
+    students: {
+      title: 'Elèves',
+      items: {
+        list: {
+          title: 'Liste des élèves',
+        },
+        schema: {
+          title: "Schéma d'élèves",
+        },
+      },
+    },
+  },
+  altContent: {
     settings: 'Paramètres',
     documentation: 'Documentation',
   },
