@@ -14,6 +14,7 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
 };
 
 export default function BillingSettingsPage({ params }: PageType) {
+  setStaticParamsLocale(params.locale);
   // TODO: move to premium
   return (
     <>
