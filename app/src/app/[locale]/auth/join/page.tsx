@@ -15,6 +15,7 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
 
   return {
     title: t('metadata.title'),
+    description: t('metadata.description'),
   };
 };
 
