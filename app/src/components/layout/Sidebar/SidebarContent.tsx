@@ -40,7 +40,7 @@ const SidebarContent = () => {
     },
     {
       icon: IconBookUser,
-      title: t('students.title'),
+      title: t('classes.title'),
       segment: 'classes',
       id: SIDEBAR_CLASSES_BUTTON,
       items: [
