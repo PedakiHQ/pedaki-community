@@ -7,7 +7,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig((options: Options) => ({
   treeshake: true,
   splitting: true,
-  entry: ['src/*.(tsx|ts|cjs)'],
+  entry: ['src/**/*.(tsx|ts|cjs)'],
   format: ['esm'], // ESM only as .js files are needed for build
   dts: process.env.NODE_ENV !== 'production',
   sourcemap: process.env.NODE_ENV !== 'production',
