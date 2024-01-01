@@ -44,6 +44,9 @@ interface ActivateFormProps {
 }
 
 const ActivateForm = ({ email, token }: ActivateFormProps) => {
+  // TODO: i18n
+  // const t = useScopedI18n('auth.activate');
+
   const form = useForm<ActivateAccountFormValues>({
     resolver: zodResolver(ActivateAccountForm),
     mode: 'onChange',

@@ -11,6 +11,7 @@ export default {
           name: {
             label: 'Nom du workspace',
             description: 'blabla sidebar et onglets',
+            placeholder: 'Saisissez un nom',
           },
           defaultLanguage: {
             label: "Langue de l'application",

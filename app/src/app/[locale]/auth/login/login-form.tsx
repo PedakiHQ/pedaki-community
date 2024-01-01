@@ -15,6 +15,7 @@ import { IconLock, IconMail, IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
 import { StyledLink } from '@pedaki/design/ui/styled-link';
 import { env } from '~/env.ts';
+import { useScopedI18n } from '~/locales/client';
 import { signIn } from 'next-auth/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -31,6 +32,8 @@ const LoginFormSchema = z.object({
 type LoginFormValues = z.infer<typeof LoginFormSchema>;
 
 const LoginForm = () => {
+  const t = useScopedI18n('auth.login');
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginFormSchema),
     mode: 'onChange',
@@ -68,11 +71,11 @@ const LoginForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('fields.email.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconMail}
-                  placeholder="tony@parker.com"
+                  placeholder={t('fields.email.placeholder')}
                   type="email"
                   autoCapitalize="none"
                   autoComplete="email"
@@ -90,7 +93,7 @@ const LoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mot de passe</FormLabel>
+              <FormLabel>{t('fields.password.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -108,7 +111,7 @@ const LoginForm = () => {
 
         <Button variant="filled-primary" type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-          Se connecter
+          {t('submit.label')}
         </Button>
 
         <div className="flex items-center justify-between">
@@ -119,7 +122,7 @@ const LoginForm = () => {
             variant="gray"
             prefetch={false}
           >
-            Mot de passe oublié ?
+            {t('forgotPassword.label')}
           </StyledLink>
           <StyledLink
             href="/auth/register"
@@ -128,7 +131,7 @@ const LoginForm = () => {
             variant="gray"
             prefetch={false}
           >
-            Première connexion ?
+            {t('register.label')}
           </StyledLink>
         </div>
       </form>
