@@ -104,7 +104,7 @@ const GeneralForm = () => {
               <FormLabel>{t('fields.name.label')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shrek"
+                  placeholder={t('fields.name.placeholder')}
                   type="text"
                   autoCapitalize="none"
                   autoCorrect="off"

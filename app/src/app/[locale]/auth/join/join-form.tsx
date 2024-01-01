@@ -45,6 +45,9 @@ interface JoinFormProps {
 }
 
 const JoinForm = ({ email, token }: JoinFormProps) => {
+  // TODO: i18n
+  // const t = useScopedI18n('auth.join');
+
   const form = useForm<ActivateAccountFormValues>({
     resolver: zodResolver(ActivateAccountForm),
     mode: 'onChange',
