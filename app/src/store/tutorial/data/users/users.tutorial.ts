@@ -42,28 +42,28 @@ export const usersTutorial: Tutorial = {
       methods.setStepIndex(nextStepIndex);
     }
   },
-  steps(locale) {
+  steps(t) {
     return [
       {
         target: `#${SIDEBAR_SETTINGS_BUTTON}`,
-        content: locale,
+        content: t(`${TUTORIAL_ID}.steps.settings.content`),
         placement: 'right',
         disableBeacon: true,
       },
       {
         target: `#${SETTINGS_NAVIGATION}`,
-        content: 'vous pouvez changer de page en utilisatn la barre de navigation',
+        content: t(`${TUTORIAL_ID}.steps.navigation.content`),
         placement: 'bottom-start',
       },
       {
         target: `#${SETTINGS_NAVIGATION_USERS}`,
-        content: 'rejoindre la page des utilisateurs',
+        content: t(`${TUTORIAL_ID}.steps.navigationUsers.content`),
         placement: 'bottom',
         disableBeacon: true,
       },
       {
         target: `#${MAIN_CONTENT}`,
-        content: 'main',
+        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
         placement: 'bottom',
         disableBeacon: true,
       },

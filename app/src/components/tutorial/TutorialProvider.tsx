@@ -1,16 +1,13 @@
 'use client';
 
+import { useScopedI18n } from '~/locales/client';
 import { tutorialLocale } from '~/store/tutorial/data/locale.ts';
 import { useTutorialStore } from '~/store/tutorial/tutorial.store.ts';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import Joyride from 'react-joyride';
 
-interface TutorialProviderProps {
-  locale: string;
-}
-
-const TutorialProvider = ({ locale }: TutorialProviderProps) => {
+const TutorialProvider = () => {
   const tutorial = useTutorialStore(state => state.tutorial);
   const paused = useTutorialStore(state => state.paused);
   const stepIndex = useTutorialStore(state => state.stepIndex);
@@ -22,6 +19,7 @@ const TutorialProvider = ({ locale }: TutorialProviderProps) => {
     setTutorial: state.setTutorial,
   }));
   const router = useRouter();
+  const t = useScopedI18n('tutorial');
 
   if (!tutorial) return null;
 
@@ -37,7 +35,7 @@ const TutorialProvider = ({ locale }: TutorialProviderProps) => {
       {...restOptions}
       run={!paused}
       stepIndex={stepIndex}
-      steps={steps(locale)}
+      steps={steps(t)}
       styles={{
         options: {
           zIndex: 10000,
@@ -46,7 +44,7 @@ const TutorialProvider = ({ locale }: TutorialProviderProps) => {
         },
         ...restStyles,
       }}
-      locale={tutorialLocale(locale)}
+      locale={tutorialLocale(t)}
       disableOverlayClose
       disableScrolling
       showProgress

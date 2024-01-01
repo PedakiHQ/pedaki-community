@@ -26,7 +26,9 @@ export default function MainLayout({ children, params }: LayoutType) {
             </main>
           </div>
         </AuthProvider>
-        <TutorialProvider locale={params.locale} />
+        <I18nProviderClient locale={params.locale}>
+          <TutorialProvider />
+        </I18nProviderClient>
       </div>
     </>
   );
