@@ -92,7 +92,6 @@ jobs:
         run: bash ./bin/init-test
 
       - name: Run tests
-        if: always()
         run: pnpm test:coverage
 
       - name: 'Report Coverage'
