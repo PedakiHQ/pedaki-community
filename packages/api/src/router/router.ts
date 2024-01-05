@@ -1,5 +1,5 @@
 import type { inferRouterOutputs } from '@trpc/server';
-import { authRouter } from '~api/router/routers/auth.ts';
+import { authRouter } from '~api/router/routers/auth/index.ts';
 import { fileRouter } from '~api/router/routers/file/index.ts';
 import { helloRouter } from '~api/router/routers/hello.ts';
 import { settingsRouter } from '~api/router/routers/settings/index.ts';
