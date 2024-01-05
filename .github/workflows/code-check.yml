@@ -93,7 +93,7 @@ jobs:
 
       - name: Run tests
         if: always()
-        run: pnpm test -- --coverage --runInBand
+        run: pnpm test:coverage
 
       - name: 'Report Coverage'
         if: always() # Also generate the report if tests are failing
