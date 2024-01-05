@@ -88,11 +88,12 @@ jobs:
         if: always()
         run: pnpm build --filter "./packages/*"
 
+      - name: Init database
+        run: bash ./bin/init-test
+
       - name: Run tests
         if: always()
-        run: |
-          bash ./bin/init-test
-          pnpm test -- --coverage --runInBand
+        run: pnpm test -- --coverage --runInBand
 
       - name: 'Report Coverage'
         if: always() # Also generate the report if tests are failing

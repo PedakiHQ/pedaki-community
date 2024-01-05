@@ -1,4 +1,4 @@
-name: pedaki-test
+name: pedaki_test
 services:
   db:
     image: mysql:8.2.0
