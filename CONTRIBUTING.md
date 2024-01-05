@@ -29,17 +29,16 @@ Open two terminals:
 
 ### Useful commands
 
-| Command              | Description                                                            |
-|----------------------|------------------------------------------------------------------------|
-| `pnpm build`         | Build the project                                                      |
-| `pnpm build:watch`   | Build the project                                                      |
-| `pnpm dev`           | Start the development server                                           |
-| `pnpm mail:dev`      | Start the mail preview server, alias for `pnpm dev --filter mailer`    |
-| `pnpm test`          | Run the tests                                                          |
-| `pnpm test:watch`    | Run the tests                                                          |
-| `pnpm test:coverage` | Run the tests                                                          |
-| `pnpm lint`          | Run the linter                                                         |
-| `pnpm check`         | Run the tests and the linter                                           |
+| Command              | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `pnpm build`         | Build the project   <br/>(add --filter [package] to build only one package) |
+| `pnpm build:watch`   | Build the project   (add --filter [package] to build only one package)      |
+| `pnpm dev`           | Start the development server                                                |
+| `pnpm test`          | Run the tests                                                               |
+| `pnpm test:watch`    | Run the tests                                                               |
+| `pnpm test:coverage` | Run the tests                                                               |
+| `pnpm lint`          | Run the linter                                                              |
+| `pnpm check`         | Run the tests and the linter                                                |
 
 ### Usefull scripts
 
