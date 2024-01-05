@@ -29,18 +29,21 @@ Open two terminals:
 
 ### Useful commands
 
-| Command              | Description                                                            |
-|----------------------|------------------------------------------------------------------------|
-| `pnpm build`         | Build the project                                                      |
-| `pnpm build:watch`   | Build the project                                                      |
-| `pnpm dev`           | Start the development server                                           |
-| `pnpm mail:dev`      | Start the mail preview server, alias for `pnpm dev --filter mailer`    |
-| `pnpm test`          | Run the tests                                                          |
-| `pnpm test:watch`    | Run the tests                                                          |
-| `pnpm test:coverage` | Run the tests                                                          |
-| `pnpm lint`          | Run the linter                                                         |
-| `pnpm check`         | Run the tests and the linter                                           |
-| `pnpm changeset`     | Create a changeset                                                     |
+| Command              | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `pnpm build`         | Build the project   <br/>(add --filter [package] to build only one package) |
+| `pnpm build:watch`   | Build the project   (add --filter [package] to build only one package)      |
+| `pnpm dev`           | Start the development server                                                |
+| `pnpm test`          | Run the tests                                                               |
+| `pnpm test:watch`    | Run the tests                                                               |
+| `pnpm test:coverage` | Run the tests                                                               |
+| `pnpm lint`          | Run the linter                                                              |
+| `pnpm check`         | Run the tests and the linter                                                |
+
+### Usefull scripts
+
+You can use the `./bin/init-test` script to create the db environment for the tests.
+Or manually start the docker-compose file and apply the migrations.
 
 ### Prerequisites
 
@@ -54,18 +57,6 @@ Check that your code passes the tests and linting:
 
 ```bash
 pnpm check
-```
-
-If your change should appear in the changelog:
-
-```bash
-pnpm changeset
-```
-
-and follow the instructions. Then, commit the changeset:
-
-```bash
-git add .changeset/*.md && git commit -m "chore: add changeset"
 ```
 
 Finally, push your changes and open a pull request.

@@ -1,6 +1,6 @@
 // Copied from pedaki repo, you should edit it there and copy it here
-const fs = require('fs');
-const path = require('path');
+import fs from "fs";
+import path from "path";
 
 const outDir = path.join('dist');
 

@@ -1,15 +1,11 @@
 import { auth } from '@pedaki/auth/server.ts';
-import type { Session } from 'next-auth';
+import { createInnerContext } from '~api/router/context-helper.ts';
 import type { NextRequest } from 'next/server';
 
-export interface Context {
-  session: Session | null;
-}
-
-export const createContext = async ({}: { req: NextRequest }): Promise<Context> => {
+export const createContext = async ({}: { req: NextRequest }) => {
   const session = await auth();
 
-  return {
-    session,
-  };
+  return createInnerContext(session);
 };
+
+export type Context = ReturnType<typeof createInnerContext>;
