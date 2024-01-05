@@ -11,8 +11,7 @@ concurrency:
 
 jobs:
   lint:
-    if: github.event.pull_request.draft == false
-    name: Code check
+    name: Code check (lint)
     env:
       SKIP_ENV_VALIDATION: true
       NEXT_TELEMETRY_DISABLED: 1
@@ -54,9 +53,47 @@ jobs:
         if: always()
         run: pnpm typecheck
 
-      # TODO: enable tests
-      # - name: Run tests
-      #   if: always()
-
       - name: Run build
         run: pnpm build
+
+
+  test:
+    name: Code check (test)
+    env:
+      SKIP_ENV_VALIDATION: true
+      NEXT_TELEMETRY_DISABLED: 1
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Build packages
+        if: always()
+        run: pnpm build --filter "./packages/*"
+
+      - name: Run tests
+        if: always()
+        run: |
+          bash ./bin/init-test
+          pnpm test -- --coverage --runInBand
+
+      - name: 'Report Coverage'
+        if: always() # Also generate the report if tests are failing
+        uses: davelosert/vitest-coverage-report-action@v2

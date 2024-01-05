@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+export MYSQL_DATABASE=pedaki_test
+export DATABASE_URL="mysql://pedaki:pedaki@127.0.0.1:3306/$MYSQL_DATABASE"
+docker-compose -f docker-compose.test.yml down
+docker-compose -f docker-compose.test.yml up -d
+sleep 8 # wait for mysql to start
+cd packages/db && pnpm prisma migrate deploy
+#cd packages/db && pnpm prisma db push
