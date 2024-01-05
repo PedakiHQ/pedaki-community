@@ -40,7 +40,11 @@ Open two terminals:
 | `pnpm test:coverage` | Run the tests                                                          |
 | `pnpm lint`          | Run the linter                                                         |
 | `pnpm check`         | Run the tests and the linter                                           |
-| `pnpm changeset`     | Create a changeset                                                     |
+
+### Usefull scripts
+
+You can use the `./bin/init-test` script to create the db environment for the tests.
+Or manually start the docker-compose file and apply the migrations.
 
 ### Prerequisites
 
@@ -54,18 +58,6 @@ Check that your code passes the tests and linting:
 
 ```bash
 pnpm check
-```
-
-If your change should appear in the changelog:
-
-```bash
-pnpm changeset
-```
-
-and follow the instructions. Then, commit the changeset:
-
-```bash
-git add .changeset/*.md && git commit -m "chore: add changeset"
 ```
 
 Finally, push your changes and open a pull request.
