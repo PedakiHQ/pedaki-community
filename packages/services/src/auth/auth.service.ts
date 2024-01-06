@@ -5,6 +5,8 @@ import { prisma } from '@pedaki/db';
 import { logger } from '@pedaki/logger';
 import type { TokenType } from '@prisma/client';
 import { env } from '~/env.ts';
+import { InvalidTokenError } from '~/errors/InvalidTokenError.ts';
+import { UserNotFoundError } from '~/errors/UserNotFoundError.ts';
 
 class AuthService {
   async createAccount(
@@ -95,7 +97,7 @@ class AuthService {
     token: string,
     type: TokenType,
   ): Promise<{ email: string; name: string }> {
-    if (!token || !type) throw new Error('Token or type not found');
+    if (!token || !type) throw new InvalidTokenError();
 
     const user = await prisma.token.findFirst({
       where: {
@@ -113,7 +115,7 @@ class AuthService {
     });
 
     if (!user?.user) {
-      throw new Error('User not found');
+      throw new UserNotFoundError();
     }
 
     return {

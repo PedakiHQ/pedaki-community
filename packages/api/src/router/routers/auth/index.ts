@@ -1,4 +1,5 @@
 import { authService } from '@pedaki/services/auth/auth.service.js';
+import { InvalidTokenError } from '@pedaki/services/errors/InvalidTokenError.js';
 import { TRPCError } from '@trpc/server';
 import { publicProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
@@ -14,14 +15,7 @@ export const authRouter = router({
     .query(async ({ input }) => {
       const { token } = input;
 
-      try {
-        return await authService.getAccountFromToken(token, 'ACTIVATE_ACCOUNT');
-      } catch (e) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'INVALID_TOKEN',
-        });
-      }
+      return await authService.getAccountFromToken(token, 'ACTIVATE_ACCOUNT');
     }),
 
   activateAccount: publicProcedure
@@ -39,10 +33,7 @@ export const authRouter = router({
       // check that the token is valid
       const tokenRecord = await authService.getAccountFromToken(token, 'ACTIVATE_ACCOUNT');
       if (tokenRecord.email !== email) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'INVALID_TOKEN',
-        });
+        throw new InvalidTokenError();
       }
 
       await authService.updatePassword(email, password);
@@ -65,10 +56,7 @@ export const authRouter = router({
       // check that the token is valid
       const tokenRecord = await authService.getAccountFromToken(token, 'ACTIVATE_ACCOUNT');
       if (tokenRecord.email !== email) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'INVALID_TOKEN',
-        });
+        throw new InvalidTokenError();
       }
 
       await authService.updatePassword(email, password);

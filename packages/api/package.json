@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.3",
+    "@pedaki/tests": "workspace:*",
     "next": "14.0.4",
     "typescript": "^5.3.3"
   },
