@@ -5,6 +5,8 @@ import { adminData } from '~api/tests/helpers/base-user.ts';
 import { getAnonymousSession, getUserSession } from '~api/tests/helpers/sessions.ts';
 import { describe, expect, test } from 'vitest';
 
+const password = 'password';
+
 describe('authRouter', () => {
   const anonymousSession = getAnonymousSession();
   const userSession = getUserSession();
@@ -95,7 +97,7 @@ describe('authRouter', () => {
           await api.auth.activateAccount({
             token: 'invalid-token',
             email: adminData.email,
-            password: 'password',
+            password: password,
           });
           expect.fail('should have thrown an error');
         } catch (e) {
@@ -113,7 +115,7 @@ describe('authRouter', () => {
           await api.auth.activateAccount({
             token,
             email: 'invalid-email',
-            password: 'password',
+            password: password,
           });
           expect.fail('should have thrown an error');
         } catch (e) {
@@ -131,12 +133,12 @@ describe('authRouter', () => {
         await api.auth.activateAccount({
           token,
           email: adminData.email,
-          password: 'password',
+          password: password,
         });
         const newPassword = (await getCurrentUser(adminData.email)).password;
         expect(initialPassword).not.toBe(newPassword);
-        expect(newPassword).not.toBe('password'); // hashed
-        await assertIsCurrentPassword(adminData.email, 'password');
+        expect(newPassword).not.toBe(password); // hashed
+        await assertIsCurrentPassword(adminData.email, password);
       },
     );
 
@@ -148,12 +150,12 @@ describe('authRouter', () => {
           await api.auth.activateAccount({
             token,
             email: adminData.email,
-            password: 'password',
+            password: password,
           });
           await api.auth.activateAccount({
             token,
             email: adminData.email,
-            password: 'password',
+            password: password,
           });
           expect.fail('should have thrown an error');
         } catch (e) {
@@ -203,7 +205,7 @@ describe('authRouter', () => {
           await api.auth.acceptInvite({
             token: 'invalid-token',
             email: adminData.email,
-            password: 'password',
+            password: password,
             name: 'name',
           });
           expect.fail('should have thrown an error');
@@ -222,7 +224,7 @@ describe('authRouter', () => {
           await api.auth.acceptInvite({
             token,
             email: 'invalid-email',
-            password: 'password',
+            password: password,
             name: 'name',
           });
           expect.fail('should have thrown an error');
@@ -241,13 +243,13 @@ describe('authRouter', () => {
         await api.auth.acceptInvite({
           token,
           email: adminData.email,
-          password: 'password',
+          password: password,
           name: 'name',
         });
         const newUser = await getCurrentUser(adminData.email);
         expect(newUser.password).not.toBe(initialUser.password);
-        expect(newUser.password).not.toBe('password'); // hashed
-        await assertIsCurrentPassword(adminData.email, 'password');
+        expect(newUser.password).not.toBe(password); // hashed
+        await assertIsCurrentPassword(adminData.email, password);
 
         expect(newUser.name).not.toBe(initialUser.name);
         expect(newUser.name).toBe('name');
@@ -262,13 +264,13 @@ describe('authRouter', () => {
           await api.auth.acceptInvite({
             token,
             email: adminData.email,
-            password: 'password',
+            password: password,
             name: 'name',
           });
           await api.auth.acceptInvite({
             token,
             email: adminData.email,
-            password: 'password',
+            password: password,
             name: 'name',
           });
           expect.fail('should have thrown an error');
