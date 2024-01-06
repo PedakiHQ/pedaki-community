@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { env } from '~api/env';
-import {isLogged} from "~api/router/middleware/session.middleware.ts";
+import { isLogged } from '~api/router/middleware/session.middleware.ts';
 
 const error = new TRPCError({
   code: 'UNAUTHORIZED',

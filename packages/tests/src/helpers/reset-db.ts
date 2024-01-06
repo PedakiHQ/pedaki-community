@@ -7,34 +7,36 @@ const resetDb = async () => {
     throw new Error('resetDb should not be run on a non-test database');
   }
 
-  await prisma.$transaction([prisma.user.deleteMany(), prisma.token.deleteMany()]);
-
   const newSettings = {
     name: process.env.NEXT_PUBLIC_PEDAKI_NAME ?? 'Pedaki',
     defaultLanguage: 'fr',
   };
 
   await prisma.$transaction([
+    prisma.user.deleteMany(),
+    prisma.token.deleteMany(),
+    prisma.workspaceSetting.deleteMany(),
+
     // create users
-    prisma.user.create({
-      data: {
-        email: 'admin@pedaki.fr',
-        name: 'Admin',
-        emailVerified: new Date(),
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'user@pedaki.fr',
-        name: 'User',
-      },
+    prisma.user.createMany({
+      data: [
+        {
+          email: 'admin@pedaki.fr',
+          name: 'Admin',
+          emailVerified: new Date(),
+        },
+        {
+          email: 'user@pedaki.fr',
+          name: 'User',
+        },
+      ],
     }),
 
-      prisma.workspaceSetting.upsert({
-        where: { id: 1 }, // we only have one row
-        update: newSettings,
-        create: newSettings,
-      }),
+    prisma.workspaceSetting.upsert({
+      where: { id: 1 }, // we only have one row
+      update: newSettings,
+      create: newSettings,
+    }),
   ]);
 };
 

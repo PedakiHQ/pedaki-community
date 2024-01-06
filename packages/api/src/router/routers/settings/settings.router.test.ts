@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { assertIsInternal } from '@pedaki/tests/middleware.js';
 import {
   getAnonymousSession,
@@ -38,15 +37,14 @@ describe('settingsRouter', () => {
     test('returns the settings', async () => {
       const { api } = internalSession;
       const settings = await api.settings.getSettings();
-      console.log(settings);
-      expect(settings).toMatchObject({
-        name: expect.any(String),
-        defaultLanguage: expect.stringMatching(/en|fr/),
-        // contactEmail: expect([null, expect.any(String)]),
-        // contactName: expect.any(String),
-        // currentMaintenanceWindow: expect.any(String),
-        // maintenanceWindow: expect.any(String),
-      });
+      expect(Object.keys(settings)).toEqual([
+        'name',
+        'defaultLanguage',
+        'contactEmail',
+        'contactName',
+        'currentMaintenanceWindow',
+        'maintenanceWindow',
+      ]);
     });
   });
 });
