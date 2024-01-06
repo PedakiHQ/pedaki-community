@@ -1,5 +1,6 @@
 import { authService } from '@pedaki/services/auth/auth.service';
-import { TRPCError } from '@trpc/server';
+import { assertTrpcError, assertZodError } from '@pedaki/tests/error.js';
+import { assertIsCurrentPassword, getCurrentPassword } from '@pedaki/tests/user.js';
 import { adminData } from '~api/tests/helpers/base-user.ts';
 import { getAnonymousSession, getUserSession } from '~api/tests/helpers/sessions.ts';
 import { describe, expect, test } from 'vitest';
@@ -12,21 +13,34 @@ describe('authRouter', () => {
     test.each([anonymousSession, userSession])(
       'throws an error if the payload is invalid - $type',
       async ({ api }) => {
-        // @ts-expect-error: we want to test the error
-        await expect(() => api.auth.getUserInfoFromActivationToken({})).rejects.toThrowError(
-          TRPCError,
-        );
+        try {
+          // @ts-expect-error: we want to test the error
+          await api.auth.getUserInfoFromActivationToken({});
+          expect.fail('should have thrown an error');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          assertZodError(e, [
+            {
+              path: ['token'],
+              message: 'Required',
+            },
+          ]);
+        }
       },
     );
 
     test.each([anonymousSession, userSession])(
       'throws an error if the token is invalid - $type',
       async ({ api }) => {
-        await expect(() =>
-          api.auth.getUserInfoFromActivationToken({
+        try {
+          await api.auth.getUserInfoFromActivationToken({
             token: 'invalid-token',
-          }),
-        ).rejects.toThrowError(TRPCError);
+          });
+          expect.fail('should have thrown an error');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          expect(e.message).toBe('USER_NOT_FOUND');
+        }
       },
     );
 
@@ -42,6 +56,110 @@ describe('authRouter', () => {
           email: userEmail,
           name: adminData.name,
         });
+      },
+    );
+  });
+
+  describe('activateAccount', () => {
+    test.each([anonymousSession, userSession])(
+      'throws an error if the payload is invalid - $type',
+      async ({ api }) => {
+        try {
+          // @ts-expect-error: we want to test the error
+          await api.auth.activateAccount({});
+          expect.fail('should have thrown an error');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          assertZodError(e, [
+            {
+              path: ['token'],
+              message: 'Required',
+            },
+            {
+              path: ['email'],
+              message: 'Required',
+            },
+            {
+              path: ['password'],
+              message: 'Required',
+            },
+          ]);
+        }
+      },
+    );
+
+    test.each([anonymousSession, userSession])(
+      'throws an error if the token is invalid - $type',
+      async ({ api }) => {
+        try {
+          await api.auth.activateAccount({
+            token: 'invalid-token',
+            email: adminData.email,
+            password: 'password',
+          });
+          expect.fail('should have thrown an error');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          expect(e.message).toBe('USER_NOT_FOUND');
+        }
+      },
+    );
+
+    test.each([anonymousSession, userSession])(
+      'throws an error if the email is not the same as the token - $type',
+      async ({ api }) => {
+        try {
+          const token = await authService.createToken(adminData.email, 'ACTIVATE_ACCOUNT');
+          await api.auth.activateAccount({
+            token,
+            email: 'invalid-email',
+            password: 'password',
+          });
+          expect.fail('should have thrown an error');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          expect(e.message).toBe('INVALID_TOKEN');
+        }
+      },
+    );
+
+    test.each([anonymousSession, userSession])(
+      'activates the account if the token is valid - $type',
+      async ({ api }) => {
+        const token = await authService.createToken(adminData.email, 'ACTIVATE_ACCOUNT');
+        const initialPassword = getCurrentPassword(adminData.email);
+        await api.auth.activateAccount({
+          token,
+          email: adminData.email,
+          password: 'password',
+        });
+        const newPassword = await getCurrentPassword(adminData.email);
+        expect(initialPassword).not.toBe(newPassword);
+        expect(newPassword).not.toBe('password'); // hashed
+        await assertIsCurrentPassword(adminData.email, 'password');
+      },
+    );
+
+    test.each([anonymousSession, userSession])(
+      'throws an error if the token is already used - $type',
+      async ({ api }) => {
+        try {
+          const token = await authService.createToken(adminData.email, 'ACTIVATE_ACCOUNT');
+          await api.auth.activateAccount({
+            token,
+            email: adminData.email,
+            password: 'password',
+          });
+          await api.auth.activateAccount({
+            token,
+            email: adminData.email,
+            password: 'password',
+          });
+          expect.fail('should have thrown an error');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          expect(e.message).toBe('USER_NOT_FOUND');
+        }
       },
     );
   });

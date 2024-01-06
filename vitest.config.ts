@@ -14,7 +14,7 @@ export default defineConfig({
                 "packages/**/*.ts",
             ],
             exclude: [
-                'packages/services/src/tests/helpers/**/*',
+                'packages/tests/src/helpers/**/*',
                 'packages/cli/*',
                 'packages/db/*',
                 'packages/**/env.ts',
@@ -22,7 +22,7 @@ export default defineConfig({
             ],
         },
         setupFiles: [
-            `packages/services/src/tests/helpers/setup.ts`
+            `packages/tests/src/helpers/setup.ts`
         ],
         include: [
             '**/*.test.ts',

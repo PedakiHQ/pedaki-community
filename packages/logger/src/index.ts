@@ -44,6 +44,7 @@ export const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       level: 'info',
+      silent: env.NODE_ENV === 'test',
       format: winston.format.printf(info => {
         return info.message ? `${info.message}` : '';
       }),
@@ -51,10 +52,12 @@ export const logger = winston.createLogger({
     new winston.transports.File({
       filename: 'error.log',
       level: 'error',
+      silent: env.NODE_ENV === 'test',
       format: combine(removeColors(), json()),
     }),
     new winston.transports.File({
       filename: 'combined.log',
+      silent: env.NODE_ENV === 'test',
       format: combine(removeColors(), json()),
     }),
   ],
