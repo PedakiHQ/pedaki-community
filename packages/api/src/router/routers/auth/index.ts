@@ -56,10 +56,7 @@ export const authRouter = router({
       // check that the token is valid
       const tokenRecord = await authService.getAccountFromToken(token, 'ACTIVATE_ACCOUNT');
       if (tokenRecord.email !== email) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'INVALID_TOKEN',
-        });
+        throw new InvalidTokenError();
       }
 
       await authService.updatePassword(email, password);

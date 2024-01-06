@@ -1,17 +1,16 @@
 import { matchPassword } from '@pedaki/common/utils/hash';
 import { prisma } from '@pedaki/db';
 
-export const getCurrentPassword = async (email: string) => {
-  const user = await prisma.user.findFirstOrThrow({
+export const getCurrentUser = async (email: string) => {
+  return await prisma.user.findFirstOrThrow({
     where: {
       email: email,
     },
     select: {
       password: true,
+      name: true,
     },
   });
-
-  return user.password;
 };
 
 export const assertIsCurrentPassword = async (email: string, password: string) => {
