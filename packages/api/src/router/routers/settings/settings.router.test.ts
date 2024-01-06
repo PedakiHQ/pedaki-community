@@ -47,4 +47,19 @@ describe('settingsRouter', () => {
       ]);
     });
   });
+
+  describe('setSettings', () => {
+    test.skip.each([anonymousSession, userSession])(
+      'need permission to use this route - $type',
+      async () => {},
+    );
+
+    test('updates the settings', async () => {
+      const { api } = internalSession;
+      const newSettings = { name: 'new name' };
+      await api.settings.setSettings(newSettings);
+      const updatedSettings = await api.settings.getSettings();
+      expect(updatedSettings.name).toBe(newSettings.name);
+    });
+  });
 });
