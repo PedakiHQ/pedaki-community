@@ -13,3 +13,11 @@ export const adminData = {
   email: 'admin@pedaki.fr',
   emailVerified: true,
 };
+
+export const internalData = {
+  id: '0',
+  name: 'Internal',
+  image: '',
+  email: 'developers@pedaki.fr',
+  emailVerified: true,
+};

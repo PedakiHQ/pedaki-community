@@ -9,6 +9,7 @@ export interface TestSession {
 
 let anonymousUserSession: Caller | null = null;
 let userSession: Caller | null = null;
+let expiredUserSession: Caller | null = null;
 let internalSession: Caller | null = null;
 // let adminSession: Caller | null = null;
 
@@ -34,6 +35,20 @@ const getUserSession = (): TestSession => {
   };
 };
 
+const getExpiredUserSession = (): TestSession => {
+  if (!expiredUserSession) {
+    expiredUserSession = createCallerSession({
+      user: userData,
+      expires: new Date('2000-01-01').toISOString(),
+    });
+  }
+
+  return {
+    api: expiredUserSession,
+    type: 'userSession',
+  };
+};
+
 const getInternalSession = (): TestSession => {
   if (!internalSession) {
     const headers = new Headers();
@@ -53,4 +68,4 @@ const getInternalSession = (): TestSession => {
   };
 };
 
-export { getAnonymousSession, getUserSession, getInternalSession };
+export { getAnonymousSession, getUserSession, getExpiredUserSession, getInternalSession };
