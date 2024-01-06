@@ -3,10 +3,10 @@ import type { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { expect } from 'vitest';
 import type { ZodIssue } from 'zod';
 
-export const assertTrpcError = (
+export function assertTrpcError (
   error: unknown,
   code: TRPC_ERROR_CODE_KEY,
-): asserts error is TRPCError => {
+): asserts error is TRPCError {
   expect(error).toBeInstanceOf(TRPCError);
 
   const trpcError = error as TRPCError;

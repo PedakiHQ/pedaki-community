@@ -9,6 +9,11 @@ const resetDb = async () => {
 
   await prisma.$transaction([prisma.user.deleteMany(), prisma.token.deleteMany()]);
 
+  const newSettings = {
+    name: process.env.NEXT_PUBLIC_PEDAKI_NAME ?? 'Pedaki',
+    defaultLanguage: 'fr',
+  };
+
   await prisma.$transaction([
     // create users
     prisma.user.create({
@@ -24,6 +29,12 @@ const resetDb = async () => {
         name: 'User',
       },
     }),
+
+      prisma.workspaceSetting.upsert({
+        where: { id: 1 }, // we only have one row
+        update: newSettings,
+        create: newSettings,
+      }),
   ]);
 };
 
