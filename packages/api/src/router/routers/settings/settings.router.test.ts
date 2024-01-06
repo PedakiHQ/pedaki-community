@@ -1,4 +1,4 @@
-import { assertIsInternal } from '@pedaki/tests/middleware.js';
+import { assertIsAuthenticated, assertIsInternal } from '@pedaki/tests/middleware.js';
 import {
   getAnonymousSession,
   getInternalSession,
@@ -12,10 +12,13 @@ describe('settingsRouter', () => {
   const internalSession = getInternalSession();
 
   describe('getLocale', () => {
-    test.each([anonymousSession, userSession])(
+    test.each([anonymousSession, userSession, internalSession])(
       'only internal session can use this route - $type',
       async ({ api, type }) => {
-        await assertIsInternal(api.settings.getLocale, type === 'userSession');
+        await assertIsInternal(api.settings.getLocale, {
+          isLogged: type !== 'anonymousUserSession',
+          shouldWork: type === 'internalSession',
+        });
       },
     );
 
@@ -27,10 +30,12 @@ describe('settingsRouter', () => {
   });
 
   describe('getSettings', () => {
-    test.each([anonymousSession, userSession])(
-      'only internal session can use this route - $type',
+    test.each([anonymousSession, userSession, internalSession])(
+      'need to be authenticated to use this route - $type',
       async ({ api, type }) => {
-        await assertIsInternal(api.settings.getSettings, type === 'userSession');
+        await assertIsAuthenticated(api.settings.getSettings, {
+          shouldWork: type !== 'anonymousUserSession',
+        });
       },
     );
 

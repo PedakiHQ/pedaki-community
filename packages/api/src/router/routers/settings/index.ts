@@ -11,7 +11,7 @@ export const settingsRouter = router({
         defaultLanguage: await workspaceService.getDefaultLanguage(),
       };
     }),
-  getSettings: internalProcedure.output(WorkspacePropertiesSchema).query(async () => {
+  getSettings: privateProcedure.output(WorkspacePropertiesSchema).query(async () => {
     return await workspaceService.getSettings();
   }),
 
