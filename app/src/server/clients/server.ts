@@ -3,6 +3,7 @@ import { loggerLink } from '@trpc/client';
 import { experimental_nextCacheLink } from '@trpc/next/app-dir/links/nextCache';
 import { experimental_createTRPCNextAppDirServer } from '@trpc/next/app-dir/server';
 import { appRouter } from '~api/router/router';
+import { headers } from 'next/headers';
 import SuperJSON from 'superjson';
 
 /**
@@ -23,6 +24,7 @@ export const api = experimental_createTRPCNextAppDirServer<typeof appRouter>({
           createContext: async () => {
             return {
               session: await auth(),
+              headers: headers(),
             };
           },
         }),

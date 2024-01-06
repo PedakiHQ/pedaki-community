@@ -4,11 +4,13 @@ import { createCallerSession } from './create-session';
 
 export interface TestSession {
   api: Caller;
-  type: 'anonymousUserSession' | 'userSession';
+  type: 'anonymousUserSession' | 'userSession' | 'internalSession';
 }
 
 let anonymousUserSession: Caller | null = null;
 let userSession: Caller | null = null;
+let expiredUserSession: Caller | null = null;
+let internalSession: Caller | null = null;
 // let adminSession: Caller | null = null;
 
 const getAnonymousSession = (): TestSession => {
@@ -33,4 +35,37 @@ const getUserSession = (): TestSession => {
   };
 };
 
-export { getAnonymousSession, getUserSession };
+const getExpiredUserSession = (): TestSession => {
+  if (!expiredUserSession) {
+    expiredUserSession = createCallerSession({
+      user: userData,
+      expires: new Date('2000-01-01').toISOString(),
+    });
+  }
+
+  return {
+    api: expiredUserSession,
+    type: 'userSession',
+  };
+};
+
+const getInternalSession = (): TestSession => {
+  if (!internalSession) {
+    const headers = new Headers();
+    headers.set('x-pedaki-secret', process.env.API_INTERNAL_SECRET!);
+    internalSession = createCallerSession(
+      {
+        user: userData,
+        expires: new Date().toISOString(),
+      },
+      headers,
+    );
+  }
+
+  return {
+    api: internalSession,
+    type: 'internalSession',
+  };
+};
+
+export { getAnonymousSession, getUserSession, getExpiredUserSession, getInternalSession };

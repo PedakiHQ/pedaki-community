@@ -18,7 +18,7 @@ export const isLogged = t.middleware(({ ctx, next }) => {
   if (!ctx.session?.user) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: 'You must be logged in',
+      message: 'AUTHENTICATION_REQUIRED',
     });
   }
 

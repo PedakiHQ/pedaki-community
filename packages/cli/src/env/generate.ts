@@ -460,6 +460,7 @@ PRISMA_ENCRYPTION_KEY=${this.#key}
 
 PASSWORD_SALT=${this.#salt}
 AUTH_SECRET=${this.#authSecret}
+API_INTERNAL_SECRET=${generateKey()}
 
 RESEND_API_KEY=${this.#resendApiKey}
 RESEND_EMAIL_DOMAIN=${this.#emailDomain}

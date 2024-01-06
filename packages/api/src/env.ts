@@ -10,6 +10,8 @@ export const env = createEnv({
     PASSWORD_SALT: z.string().min(2),
 
     LOGGER_SERVICE_NAME: z.string().default('pedaki'),
+
+    API_INTERNAL_SECRET: z.string().min(2),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
