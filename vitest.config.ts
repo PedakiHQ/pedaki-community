@@ -21,12 +21,16 @@ export default defineConfig({
                 'packages/**/constants.ts',
             ],
         },
+        passWithNoTests: true,
+        logHeapUsage: true,
         setupFiles: [
             `packages/tests/src/helpers/setup.ts`
         ],
         include: [
             '**/*.test.ts',
         ],
+        maxWorkers: 1, // We use the same database for all tests and setup can't be run in parallel
+        minWorkers: 1,
         sequence: {
             hooks: "list"
         }
