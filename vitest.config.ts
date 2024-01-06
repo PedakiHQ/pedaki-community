@@ -11,12 +11,9 @@ export default defineConfig({
             provider: 'v8',
             reporter: ['text', 'json-summary', 'json'],
             include: [
-                "packages/**/*.ts",
+                "packages/api/**/*.ts",
             ],
             exclude: [
-                'packages/tests/src/helpers/**/*',
-                'packages/cli/*',
-                'packages/db/*',
                 'packages/**/env.ts',
                 'packages/**/constants.ts',
             ],
