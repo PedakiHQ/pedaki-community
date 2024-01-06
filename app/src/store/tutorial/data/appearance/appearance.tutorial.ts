@@ -31,23 +31,23 @@ export const appearanceTutorial: Tutorial = {
       methods.setStepIndex(nextStepIndex);
     }
   },
-  steps(locale) {
+  steps(t) {
     return [
       {
         target: `#${SIDEBAR_SETTINGS_BUTTON}`,
-        content: locale,
+        content: t(`${TUTORIAL_ID}.steps.settings.content`),
         placement: 'right-end',
         disableBeacon: true,
       },
       {
         target: `#${MAIN_CONTENT}`,
-        content: 'main',
+        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
         placement: 'bottom',
         disableBeacon: true,
       },
       {
         target: `#${APPEARANCE_FORM}`,
-        content: 'main',
+        content: t(`${TUTORIAL_ID}.steps.appearanceForm.content`),
         placement: 'bottom',
         disableBeacon: true,
       },

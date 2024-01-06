@@ -2,6 +2,7 @@ import { IconSettings } from '@pedaki/design/ui/icons';
 import SettingsNavigation from '~/app/[locale]/(main)/settings/SettingsNavigation.tsx';
 import type { LayoutType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
+import { getScopedI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
@@ -12,23 +13,25 @@ export const generateMetadata = async (
   { params }: { params: { locale: LocaleCode } },
   parent: ResolvingMetadata,
 ) => {
-  setStaticParamsLocale(params.locale); // TODO: check if we need to put it in every page
-
+  setStaticParamsLocale(params.locale);
+  const t = await getScopedI18n('settings.main');
   const parentMetadata = await parent;
 
   return {
     title: {
-      template: `%s - settings - ${parentMetadata.applicationName}`,
+      template: t('metadata.title.template', { applicationName: parentMetadata.applicationName }),
     },
   };
 };
 
-export default function SettingsLayout({ children }: LayoutType) {
+export default async function SettingsLayout({ children }: LayoutType) {
+  const t = await getScopedI18n('settings.main');
+
   return (
     <>
       <PageHeader
-        title="Paramètres"
-        description="Gérer les paramètres de votre workspace."
+        title={t('header.title')}
+        description={t('header.description')}
         icon={IconSettings}
       />
       <SettingsNavigation />

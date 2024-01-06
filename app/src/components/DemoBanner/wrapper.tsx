@@ -4,12 +4,16 @@ import React from 'react';
 
 const DemoBannerComponent = dynamic(() => import('./client'), { ssr: true });
 
-const DemoBanner = () => {
+interface DemoBannerProps {
+  locale: string;
+}
+
+const DemoBanner = ({ locale }: DemoBannerProps) => {
   if (!env.NEXT_PUBLIC_IS_DEMO) {
     return null;
   }
 
-  return <DemoBannerComponent />;
+  return <DemoBannerComponent locale={locale} />;
 };
 
 export default DemoBanner;

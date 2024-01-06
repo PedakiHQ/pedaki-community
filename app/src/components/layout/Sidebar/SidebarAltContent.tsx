@@ -5,7 +5,7 @@ import { SIDEBAR_SETTINGS_BUTTON } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
 
 const SidebarAltContent = () => {
-  const t = useScopedI18n('main.layout.sidebar.alt');
+  const t = useScopedI18n('main.layout.sidebar.altContent');
   return (
     <div className="hidden flex-col group-data-[mobile-open=true]/sidebar:flex sm:flex">
       <SidebarLink

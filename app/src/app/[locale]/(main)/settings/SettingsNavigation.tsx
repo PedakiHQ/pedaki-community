@@ -8,6 +8,7 @@ import {
 } from '@pedaki/design/ui/dropdown-menu';
 import { cn } from '@pedaki/design/utils';
 import { useTutorialNextStep } from '~/components/tutorial/useTutorialNextStep.tsx';
+import { useScopedI18n } from '~/locales/client';
 import { SETTINGS_NAVIGATION, SETTINGS_NAVIGATION_USERS } from '~/store/tutorial/data/constants.ts';
 import { TUTORIAL_ID as UserTutorialId } from '~/store/tutorial/data/users/constants.ts';
 import { isActive } from '~/utils.ts';
@@ -17,30 +18,30 @@ import React from 'react';
 
 const items = [
   {
-    title: 'General',
+    name: 'general',
     href: '/settings',
     segment: '(general)',
   },
   {
-    title: 'Abonnement',
+    name: 'billing',
     href: '/settings/billing',
     segment: 'billing',
   },
   {
-    title: 'Utilisateurs',
+    name: 'users',
     href: '/settings/users',
     segment: 'users',
     id: SETTINGS_NAVIGATION_USERS,
   },
   {
-    title: 'Mon compte',
+    name: 'account',
     href: '/settings/account',
     segment: 'account',
   },
-] satisfies NavigationItem[];
+] as const satisfies NavigationItem[];
 
 interface NavigationItem {
-  title: string;
+  name: string;
   href: string;
   segment: string | null;
   id?: string;
@@ -60,11 +61,15 @@ const SettingsNavigation = () => {
 const MobileNavigation = () => {
   const selectedSegment = useSelectedLayoutSegment();
   const currentItem = items.find(item => isActive(selectedSegment, item.segment));
+  const t = useScopedI18n('settings.main.navigation.items');
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="block py-3 @sm/main:hidden">
         <div>
-          <span className="text-p-sm font-medium text-sub">{currentItem?.title ?? 'Settings'}</span>
+          <span className="text-p-sm font-medium text-sub">
+            {t(`${currentItem?.name ?? 'default'}.label`)}
+          </span>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" side="bottom">
@@ -72,7 +77,7 @@ const MobileNavigation = () => {
           const active = isActive(selectedSegment, item.segment);
           return (
             <DropdownMenuItem key={item.href} disabled={active} asChild className="w-full">
-              <Link href={item.href}>{item.title}</Link>
+              <Link href={item.href}>{t(`${item.name ?? 'default'}.label`)}</Link>
             </DropdownMenuItem>
           );
         })}
@@ -91,9 +96,10 @@ const DesktopNavigation = () => {
   );
 };
 
-const Item = ({ title, href, segment, id }: NavigationItem) => {
+const Item = ({ name, href, segment, id }: NavigationItem) => {
   const selectedSegment = useSelectedLayoutSegment();
   const active = isActive(selectedSegment, segment);
+  const t = useScopedI18n('settings.main.navigation.items');
 
   return (
     <Link className="group relative hidden py-3 @sm/main:block" href={href} id={id}>
@@ -103,7 +109,8 @@ const Item = ({ title, href, segment, id }: NavigationItem) => {
           active ? 'text-main' : 'group-hover:text-main',
         )}
       >
-        {title}
+        {/* @ts-expect-error If the key exist we won't get any errors */}
+        {t(`${name}.label`)}
       </span>
       {active && (
         <div className="absolute inset-x-0 -bottom-[0.065rem] h-0.5 bg-primary-base"></div>
