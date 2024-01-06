@@ -245,6 +245,9 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
+      '@pedaki/tests':
+        specifier: workspace:*
+        version: link:../tests/dist
       '@types/node':
         specifier: ^18.19.3
         version: 18.19.3
@@ -415,6 +418,29 @@ importers:
       tsup:
         specifier: ^8.0.1
         version: 8.0.1(typescript@5.3.3)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@pedaki/tests':
+        specifier: workspace:*
+        version: link:../tests/dist
+      '@prisma/client':
+        specifier: ^5.7.1
+        version: 5.7.1(prisma@5.7.1)
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
+    publishDirectory: dist
+
+  packages/tests:
+    dependencies:
+      '@pedaki/common':
+        specifier: 0.5.2-beta.2
+        version: 0.5.2-beta.2(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.4)(sonner@1.3.1)
+      '@pedaki/db':
+        specifier: workspace:*
+        version: link:../db/dist
       zod:
         specifier: ^3.22.4
         version: 3.22.4
