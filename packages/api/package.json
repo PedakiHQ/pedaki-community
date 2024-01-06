@@ -44,8 +44,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^18.19.3",
     "@pedaki/tests": "workspace:*",
+    "@types/node": "^18.19.4",
     "next": "14.0.4",
     "typescript": "^5.3.3"
   },
