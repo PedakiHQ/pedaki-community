@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitest/config'
+import {defineConfig} from 'vitest/config'
 import tsconfigPaths from "vite-tsconfig-paths";
 import * as path from "path";
-const helpersFolder = path.resolve(__dirname, 'packages/services/src/tests/helpers');
+
 
 export default defineConfig({
     plugins: [tsconfigPaths()],
@@ -10,10 +10,19 @@ export default defineConfig({
         coverage: {
             provider: 'v8',
             reporter: ['text', 'json-summary', 'json'],
-            include: ["packages/**/*.ts"],
+            include: [
+                "packages/**/*.ts",
+            ],
+            exclude: [
+                'packages/services/src/tests/helpers/**/*',
+                'packages/cli/*',
+                'packages/db/*',
+                'packages/**/env.ts',
+                'packages/**/constants.ts',
+            ],
         },
         setupFiles: [
-            `${helpersFolder}/setup.ts`
+            `packages/services/src/tests/helpers/setup.ts`
         ],
         include: [
             '**/*.test.ts',

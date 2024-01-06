@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import { auth } from '@pedaki/auth/server.ts';
 import { createInnerContext } from '~api/router/context-helper.ts';
 import type { NextRequest } from 'next/server';
