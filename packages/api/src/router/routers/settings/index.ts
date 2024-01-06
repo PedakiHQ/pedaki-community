@@ -1,16 +1,9 @@
 import { revalidate } from '@pedaki/common/cache/memory-cache.js';
 import { WorkspacePropertiesSchema } from '@pedaki/services/workspace/workspace.model.js';
 import { workspaceService } from '@pedaki/services/workspace/workspace.service.js';
-import { internalProcedure, privateProcedure, router } from '~api/router/trpc.ts';
+import { privateProcedure, router } from '~api/router/trpc.ts';
 
 export const settingsRouter = router({
-  getLocale: internalProcedure
-    .output(WorkspacePropertiesSchema.pick({ defaultLanguage: true }))
-    .query(async () => {
-      return {
-        defaultLanguage: await workspaceService.getDefaultLanguage(),
-      };
-    }),
   getSettings: privateProcedure.output(WorkspacePropertiesSchema).query(async () => {
     return await workspaceService.getSettings();
   }),
