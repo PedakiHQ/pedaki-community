@@ -20,3 +20,6 @@ export type GetI18nType = FirstLevelAwaited<ReturnType<typeof getI18n>>;
 export type GetScopedI18nType<T extends Parameters<typeof getScopedI18n>[0]> = FirstLevelAwaited<
   ReturnType<typeof getScopedI18n<T>>
 >;
+export type GetScopedI18nKeys<T extends Parameters<typeof getScopedI18n>[0]> = Parameters<
+  GetScopedI18nType<T>
+>[0];

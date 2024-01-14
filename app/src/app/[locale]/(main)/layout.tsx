@@ -1,8 +1,8 @@
 import AuthProvider from '~/app/[locale]/(main)/AuthProvider.tsx';
 import type { LayoutType } from '~/app/types.ts';
 import DemoBanner from '~/components/DemoBanner/wrapper';
+import I18nProviderClient from '~/components/I18nProviderClient';
 import Sidebar from '~/components/layout/Sidebar/Sidebar.tsx';
-import { I18nProviderClient } from '~/locales/client';
 import dynamic from 'next/dynamic';
 import React from 'react';
 

@@ -8,7 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
-import { I18nProviderClient, useScopedI18n } from '~/locales/client';
+import I18nProviderClient from '~/components/I18nProviderClient';
+import { useScopedI18n } from '~/locales/client';
 import { useGlobalStore } from '~/store/global/global.store';
 import React from 'react';
 

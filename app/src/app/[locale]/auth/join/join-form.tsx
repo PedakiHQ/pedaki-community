@@ -15,6 +15,7 @@ import {
 import { IconInfoCircleFill, IconLock, IconSpinner, IconUser } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
 import { useScopedI18n } from '~/locales/client';
+import { customErrorParams } from '~/locales/zod';
 import { api } from '~/server/clients/client.ts';
 import { signIn } from 'next-auth/react';
 import React from 'react';
@@ -24,18 +25,18 @@ import { z } from 'zod';
 // TODO: move this in a shared package
 const ActivateAccountForm = z
   .object({
-    name: z.string().nonempty({ message: 'Le nom est requis' }),
+    name: z.string().refine(v => v.length >= 1, { params: customErrorParams('name.required') }),
     password: z
       .string()
-      .nonempty({ message: 'Le mot de passe est requis' })
-      .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+      .refine(v => v.length >= 1, { params: customErrorParams('password.required') })
+      .refine(v => v.length >= 8, { params: customErrorParams('password.min', { count: 8 }) }),
     passwordConfirm: z
       .string()
-      .nonempty({ message: 'La confirmation du mot de passe est requise' })
-      .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+      .refine(v => v.length >= 1, { params: customErrorParams('passwordConfirm.required') })
+      .refine(v => v.length >= 8, { params: customErrorParams('password.min', { count: 8 }) }),
   })
   .refine(data => data.password === data.passwordConfirm, {
-    message: 'Les mots de passe ne correspondent pas',
+    params: customErrorParams('passwordConfirm.unmatched'),
     path: ['passwordConfirm'],
   });
 type ActivateAccountFormValues = z.infer<typeof ActivateAccountForm>;
