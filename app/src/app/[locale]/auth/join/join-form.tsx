@@ -14,6 +14,7 @@ import {
 } from '@pedaki/design/ui/form';
 import { IconInfoCircleFill, IconLock, IconSpinner, IconUser } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
+import { useScopedI18n } from '~/locales/client';
 import { api } from '~/server/clients/client.ts';
 import { signIn } from 'next-auth/react';
 import React from 'react';
@@ -45,8 +46,7 @@ interface JoinFormProps {
 }
 
 const JoinForm = ({ email, token }: JoinFormProps) => {
-  // TODO: i18n
-  // const t = useScopedI18n('auth.join');
+  const t = useScopedI18n('auth.join');
 
   const form = useForm<ActivateAccountFormValues>({
     resolver: zodResolver(ActivateAccountForm),
@@ -76,21 +76,17 @@ const JoinForm = ({ email, token }: JoinFormProps) => {
         ),
       {
         loadingProps: {
-          // TODO title and description
-          title: "Création de l'invitation en cours",
+          title: t('submit.loading.title'),
+          description: t('submit.loading.description'),
         },
         successProps: {
-          // TODO title and description
-          title: '🎉 Invitation créée avec succès',
+          title: t('submit.success.title'),
+          description: t('submit.success.description'),
         },
-        errorProps: error => {
-          // TODO title and description
-          const title =
-            error.message === 'ALREADY_EXISTS'
-              ? 'Une invitation existe déjà avec cette adresse email'
-              : "Une erreur est survenue lors de la création de l'invitation";
+        errorProps: _error => {
           return {
-            title,
+            title: t('submit.error.title'),
+            description: t('submit.error.description'),
           };
         },
         throwOnError: true,
@@ -116,11 +112,11 @@ const JoinForm = ({ email, token }: JoinFormProps) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom</FormLabel>
+              <FormLabel>{t('fields.name.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconUser}
-                  placeholder="Nathan"
+                  placeholder={t('fields.name.placeholder')}
                   type="text"
                   autoComplete="given-name"
                   disabled={isSubmitting}
@@ -129,7 +125,7 @@ const JoinForm = ({ email, token }: JoinFormProps) => {
               </FormControl>
               <FormMessage className="flex items-center space-x-1">
                 <IconInfoCircleFill className="h-4 w-4" />
-                <span className="text-p-sm">Ce n&apos;est pas votre identifiant</span>
+                <span className="text-p-sm">{t('wrongId.label')}</span>
               </FormMessage>
             </FormItem>
           )}
@@ -139,7 +135,7 @@ const JoinForm = ({ email, token }: JoinFormProps) => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mot de passe</FormLabel>
+              <FormLabel>{t('fields.password.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -159,7 +155,7 @@ const JoinForm = ({ email, token }: JoinFormProps) => {
           name="passwordConfirm"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmation du mot de passe</FormLabel>
+              <FormLabel>{t('fields.passwordConfirm.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -177,7 +173,7 @@ const JoinForm = ({ email, token }: JoinFormProps) => {
 
         <Button variant="filled-primary" type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-          Créer mon compte
+          {t('submit.label')}
         </Button>
       </form>
     </Form>

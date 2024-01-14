@@ -14,6 +14,7 @@ import {
 } from '@pedaki/design/ui/form';
 import { IconLock, IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
+import { useScopedI18n } from '~/locales/client';
 import { api } from '~/server/clients/client.ts';
 import { signIn } from 'next-auth/react';
 import React from 'react';
@@ -44,8 +45,7 @@ interface ActivateFormProps {
 }
 
 const ActivateForm = ({ email, token }: ActivateFormProps) => {
-  // TODO: i18n
-  // const t = useScopedI18n('auth.activate');
+  const t = useScopedI18n('auth.activate');
 
   const form = useForm<ActivateAccountFormValues>({
     resolver: zodResolver(ActivateAccountForm),
@@ -73,21 +73,17 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
         ),
       {
         loadingProps: {
-          // TODO title and description
-          title: "Création de l'invitation en cours",
+          title: t('submit.loading.title'),
+          description: t('submit.loading.description'),
         },
         successProps: {
-          // TODO title and description
-          title: '🎉 Invitation créée avec succès',
+          title: t('submit.success.title'),
+          description: t('submit.success.description'),
         },
-        errorProps: error => {
-          // TODO title and description
-          const title =
-            error.message === 'ALREADY_EXISTS'
-              ? 'Une invitation existe déjà avec cette adresse email'
-              : "Une erreur est survenue lors de la création de l'invitation";
+        errorProps: _error => {
           return {
-            title,
+            title: t('submit.error.title'),
+            description: t('submit.error.description'),
           };
         },
         throwOnError: true,
@@ -113,7 +109,7 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mot de passe</FormLabel>
+              <FormLabel>{t('fields.password.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -133,7 +129,7 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
           name="passwordConfirm"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmation du mot de passe</FormLabel>
+              <FormLabel>{t('fields.passwordConfirm.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -151,7 +147,7 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
 
         <Button variant="filled-primary" type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-          Créer mon compte
+          {t('submit.label')}
         </Button>
       </form>
     </Form>
