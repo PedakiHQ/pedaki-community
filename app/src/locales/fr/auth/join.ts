@@ -4,8 +4,8 @@ export default {
     description: ' ',
   },
   wrapper: {
-    title: 'Tu as été invité à rejoindre {name}',
-    description: "Avant d'accéder au workspace, choisis un mot de passe",
+    title: 'Vous avez été invité à rejoindre {name}',
+    description: "Avant d'accéder au workspace, choisissez un mot de passe",
   },
   fields: {
     name: {

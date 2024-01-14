@@ -6,7 +6,6 @@ import students from '~/locales/fr/students';
 import tutorial from '~/locales/fr/tutorial';
 
 export default {
-  test: 'test_fr',
   auth: auth,
   tutorial: tutorial,
   classes: classes,

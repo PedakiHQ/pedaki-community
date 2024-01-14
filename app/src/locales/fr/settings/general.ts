@@ -10,12 +10,12 @@ export default {
         fields: {
           name: {
             label: 'Nom du workspace',
-            description: 'blabla sidebar et onglets',
+            description: "Le nom du workspace est utilisé à plusieurs endroit de l'interface.",
             placeholder: 'Saisissez un nom',
           },
           defaultLanguage: {
             label: "Langue de l'application",
-            description: 'Blabla uniquement celle de base',
+            description: 'La seule langue disponible pour le moment est le français.',
             placeholder: 'Sélectionnez une langue',
           },
         },
@@ -43,7 +43,8 @@ export default {
         fields: {
           logo: {
             label: 'Logo du workspace',
-            description: 'blabla la preview peut changer (taille recommendée {width}x{height}})',
+            description:
+              "L'affichage peut être différent en fonction de l'emplacement. (taille recommendée {width}x{height})",
           },
         },
         submit: {
