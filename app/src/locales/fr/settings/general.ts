@@ -15,7 +15,7 @@ export default {
           },
           defaultLanguage: {
             label: "Langue de l'application",
-            description: 'La seule langue disponible pour le moment est le français.',
+            description: "Ce choix affecte la langue par défaut de l'application.",
             placeholder: 'Sélectionnez une langue',
           },
         },
