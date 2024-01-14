@@ -27,17 +27,17 @@
   "author": "pedaki",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
-    "@auth/prisma-adapter": "^1.0.13",
+    "@auth/prisma-adapter": "^1.0.14",
     "@pedaki/common": "0.5.2-beta.2",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
-    "@t3-oss/env-core": "^0.7.1",
+    "@t3-oss/env-core": "^0.7.3",
     "next-auth": "5.0.0-beta.4",
     "superjson": "^2.2.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^18.19.4",
+    "@types/node": "^18.19.6",
     "typescript": "^5.3.3"
   },
   "engines": {

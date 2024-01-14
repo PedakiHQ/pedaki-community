@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@opentelemetry/api": "^1.7.0",
-    "@t3-oss/env-core": "^0.7.1",
+    "@t3-oss/env-core": "^0.7.3",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
