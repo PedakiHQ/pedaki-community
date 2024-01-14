@@ -38,8 +38,8 @@
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
-    "@pedaki/eslint-config": "0.5.2-beta.2",
-    "@pedaki/prettier-config": "0.5.2-beta.2",
+    "@pedaki/eslint-config": "^0.5.2-beta.3",
+    "@pedaki/prettier-config": "^0.5.2-beta.3",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.6",
     "@vitest/coverage-v8": "^1.2.0",
