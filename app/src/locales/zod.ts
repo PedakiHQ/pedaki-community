@@ -19,9 +19,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 Footer
 */
-import { zodResolver } from '@hookform/resolvers/zod';
 import type { GetScopedI18nKeys, GetScopedI18nType } from '~/locales/server';
-import type { FieldErrors, FieldValues, Resolver } from 'react-hook-form';
 import type { z } from 'zod';
 import { ZodIssueCode, ZodParsedType } from 'zod';
 
@@ -37,11 +35,11 @@ export const getZodErrorMap = (t: GetScopedI18nType<'zod'>) => {
 
 export const ZOD_ERROR_PREFIX = 'ZOD_';
 export const customErrorParams = (
-  locale: GetScopedI18nKeys<'zod.custom'>,
+  key: GetScopedI18nKeys<'zod.custom'>,
   // TODO: get the right type for params ? will be able to remove the ts-expect-error in the custom case
   params: Record<string, any> | undefined = undefined,
 ) => ({
-  locale,
+  key,
   params,
 });
 
@@ -133,10 +131,10 @@ const generateZodErrorMap =
       case ZodIssueCode.custom:
         console.log(issue.params);
 
-        if (issue.params?.locale) {
+        if (issue.params?.key) {
           const params = issue.params as ReturnType<typeof customErrorParams>;
-          // @ts-expect-error As long as the locale is valid, it will be translated
-          message = t(`custom.${params.locale}`, params.params);
+          // @ts-expect-error As long as the key is valid, it will be translated
+          message = t(`custom.${params.key}`, params.params);
         } else {
           message = t('errors.custom');
         }

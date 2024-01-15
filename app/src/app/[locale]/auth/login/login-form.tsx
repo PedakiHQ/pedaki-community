@@ -16,6 +16,7 @@ import { Input } from '@pedaki/design/ui/input';
 import { StyledLink } from '@pedaki/design/ui/styled-link';
 import { env } from '~/env.ts';
 import { useScopedI18n } from '~/locales/client';
+import { customErrorParams } from '~/locales/zod';
 import { signIn } from 'next-auth/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -25,9 +26,13 @@ import { z } from 'zod';
 const LoginFormSchema = z.object({
   email: z
     .string()
+    // TODO i18n
     .nonempty({ message: "L'adresse email est requise" })
+    // .refine(v => v.length >= 1, { params: customErrorParams('email.required') })
     .email("L'adresse email n'est pas valide"),
-  password: z.string().nonempty({ message: 'Le mot de passe est requis' }),
+  password: z
+    .string()
+    .refine(v => v.length >= 1, { params: customErrorParams('password.required') }),
 });
 type LoginFormValues = z.infer<typeof LoginFormSchema>;
 

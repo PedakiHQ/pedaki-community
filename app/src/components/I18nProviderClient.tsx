@@ -13,15 +13,16 @@ export default function I18nProviderClient({
 }) {
   return (
     <OriginalI18nProviderClient locale={locale}>
-      <I18nProviderClientContent>{children}</I18nProviderClientContent>
+      <SetZodErrorMap />
+      {children}
     </OriginalI18nProviderClient>
   );
 }
 
-function I18nProviderClientContent({ children }: { children: React.ReactNode }) {
+function SetZodErrorMap() {
   const tZod = useScopedI18n('zod');
   const zodErrorMap = getZodErrorMap(tZod);
   z.setErrorMap(zodErrorMap);
 
-  return children;
+  return null;
 }

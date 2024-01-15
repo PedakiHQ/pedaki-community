@@ -157,6 +157,10 @@ export default {
     name: {
       required: 'Le nom est requis',
     },
+    email: {
+      required: "L'adresse email est requise",
+      invalid: "L'adresse email est invalide",
+    },
     password: {
       required: 'Le mot de passe est requis',
       min: 'Le mot de passe doit contenir au moins {count} caractères',
