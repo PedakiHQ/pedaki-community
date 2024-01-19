@@ -2,7 +2,7 @@ import AuthWrapper from '~/app/[locale]/auth/auth-wrapper.tsx';
 import JoinForm from '~/app/[locale]/auth/join/join-form.tsx';
 import type { PageType } from '~/app/types.ts';
 import AuthErrorPage from '~/components/ErrorPage/AuthErrorPage.tsx';
-import { getI18n } from '~/locales/server.ts';
+import { getScopedI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
 import { api } from '~/server/clients/server';
@@ -11,10 +11,11 @@ import React from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
-  const t = await getI18n();
+  const t = await getScopedI18n('auth.join');
 
   return {
     title: t('metadata.title'),
+    description: t('metadata.description'),
   };
 };
 
@@ -31,11 +32,12 @@ export default async function AcceptInvitePage({
   }
   const settings = await getWorkspaceSettings();
   const userData = await api.auth.getUserInfoFromActivationToken.query({ token });
+  const t = await getScopedI18n('auth.join');
 
   return (
     <AuthWrapper
-      title={`Tu as été invité à rejoindre ${settings.name}`}
-      description="Avant d'accéder au workspace, choisis un mot de passe"
+      title={t('wrapper.title', { name: settings.name })}
+      description={t('wrapper.description')}
     >
       <JoinForm email={userData.email} token={token} />
     </AuthWrapper>
