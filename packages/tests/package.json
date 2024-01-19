@@ -20,12 +20,12 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "zod": "^3.22.4",
+    "@pedaki/common": "0.5.2-beta.3",
     "@pedaki/db": "workspace:*",
-    "@pedaki/common": "^0.5.2-beta.3"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@prisma/client": "^5.8.0",
+    "@prisma/client": "^5.8.1",
     "@types/mime-types": "^2.1.4"
   },
   "engines": {

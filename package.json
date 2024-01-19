@@ -38,12 +38,12 @@
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
-    "@pedaki/eslint-config": "^0.5.2-beta.3",
-    "@pedaki/prettier-config": "^0.5.2-beta.3",
+    "@pedaki/eslint-config": "0.5.2-beta.3",
+    "@pedaki/prettier-config": "0.5.2-beta.3",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.19.6",
-    "@vitest/coverage-v8": "^1.2.0",
-    "@vitest/ui": "^1.2.0",
+    "@types/node": "^18.19.8",
+    "@vitest/coverage-v8": "^1.2.1",
+    "@vitest/ui": "^1.2.1",
     "chalk": "^5.3.0",
     "esbuild": "^0.19.11",
     "fs-extra": "^11.2.0",
@@ -55,8 +55,8 @@
     "throat": "^6.0.2",
     "turbo": "^1.11.3",
     "typescript": "^5.3.3",
-    "vite-tsconfig-paths": "^4.2.3",
-    "vitest": "^1.2.0"
+    "vite-tsconfig-paths": "^4.3.1",
+    "vitest": "^1.2.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
