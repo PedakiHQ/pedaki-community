@@ -3,13 +3,13 @@ import type { PageType } from '~/app/types.ts';
 import TutorialStatusCard from '~/components/tutorial/TutorialStatusCard';
 import dayjs from '~/locales/dayjs.ts';
 import type { LocaleCode } from '~/locales/server.ts';
-import { getI18n } from '~/locales/server.ts';
+import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
-  const t = await getI18n();
+  const t = await getScopedI18n('main');
 
   return {
     title: t('metadata.title'),

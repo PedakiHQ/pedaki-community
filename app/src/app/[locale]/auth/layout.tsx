@@ -1,7 +1,7 @@
 import type { LayoutType } from '~/app/types.ts';
+import I18nProviderClient from '~/components/I18nProviderClient';
 import LanguageSelector from '~/components/LanguageSelector';
 import LogoText from '~/components/logo-text.tsx';
-import { I18nProviderClient } from '~/locales/client';
 import React from 'react';
 
 export default function AuthLayout({ children, params }: LayoutType) {

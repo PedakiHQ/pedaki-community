@@ -45,23 +45,23 @@ export const generateClassesTutorial: Tutorial = {
       methods.setStepIndex(nextStepIndex);
     }
   },
-  steps(locale) {
+  steps(t) {
     return [
       {
         target: `#${SIDEBAR_CLASSES_BUTTON}`,
-        content: locale,
+        content: t(`${TUTORIAL_ID}.steps.sidebarSubmenu.content`),
         placement: 'right-end',
         disableBeacon: true,
       },
       {
         target: `#${SIDEBAR_CLASSES_BUTTON}-generate`,
-        content: locale,
+        content: t(`${TUTORIAL_ID}.steps.navigate.content`),
         placement: 'right',
         disableBeacon: true,
       },
       {
         target: `#${MAIN_CONTENT}`,
-        content: locale,
+        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
         placement: 'center',
         disableBeacon: true,
       },

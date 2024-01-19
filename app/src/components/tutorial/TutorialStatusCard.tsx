@@ -3,15 +3,18 @@ import { IconBookMarked } from '@pedaki/design/ui/icons';
 import { ScrollArea } from '@pedaki/design/ui/scroll-area';
 import { Separator } from '@pedaki/design/ui/separator';
 import TutorialCardBody from '~/components/tutorial/TutorialCardBody.tsx';
+import { getScopedI18n } from '~/locales/server';
 import React from 'react';
 
-const TutorialStatusCard = () => {
+const TutorialStatusCard = async () => {
+  const t = await getScopedI18n('tutorial');
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <IconBookMarked className="h-6 w-6 text-sub" />
-          <span>Besoin d&apos;aide ?</span>
+          <span>{t('main.title')}</span>
         </CardTitle>
       </CardHeader>
       <Separator />

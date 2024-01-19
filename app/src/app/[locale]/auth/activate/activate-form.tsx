@@ -14,6 +14,8 @@ import {
 } from '@pedaki/design/ui/form';
 import { IconLock, IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
+import { useScopedI18n } from '~/locales/client';
+import { customErrorParams } from '~/locales/zod';
 import { api } from '~/server/clients/client.ts';
 import { signIn } from 'next-auth/react';
 import React from 'react';
@@ -25,15 +27,15 @@ const ActivateAccountForm = z
   .object({
     password: z
       .string()
-      .nonempty({ message: 'Le mot de passe est requis' })
-      .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+      .refine(v => v.length >= 1, { params: customErrorParams('password.required') })
+      .refine(v => v.length >= 8, { params: customErrorParams('password.min', { count: 8 }) }),
     passwordConfirm: z
       .string()
-      .nonempty({ message: 'La confirmation du mot de passe est requise' })
-      .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+      .refine(v => v.length >= 1, { params: customErrorParams('passwordConfirm.required') })
+      .refine(v => v.length >= 8, { params: customErrorParams('password.min', { count: 8 }) }),
   })
   .refine(data => data.password === data.passwordConfirm, {
-    message: 'Les mots de passe ne correspondent pas',
+    params: customErrorParams('passwordConfirm.unmatched'),
     path: ['passwordConfirm'],
   });
 type ActivateAccountFormValues = z.infer<typeof ActivateAccountForm>;
@@ -44,6 +46,8 @@ interface ActivateFormProps {
 }
 
 const ActivateForm = ({ email, token }: ActivateFormProps) => {
+  const t = useScopedI18n('auth.activate');
+
   const form = useForm<ActivateAccountFormValues>({
     resolver: zodResolver(ActivateAccountForm),
     mode: 'onChange',
@@ -70,21 +74,17 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
         ),
       {
         loadingProps: {
-          // TODO title and description
-          title: "Création de l'invitation en cours",
+          title: t('submit.loading.title'),
+          description: t('submit.loading.description'),
         },
         successProps: {
-          // TODO title and description
-          title: '🎉 Invitation créée avec succès',
+          title: t('submit.success.title'),
+          description: t('submit.success.description'),
         },
-        errorProps: error => {
-          // TODO title and description
-          const title =
-            error.message === 'ALREADY_EXISTS'
-              ? 'Une invitation existe déjà avec cette adresse email'
-              : "Une erreur est survenue lors de la création de l'invitation";
+        errorProps: _error => {
           return {
-            title,
+            title: t('submit.error.title'),
+            description: t('submit.error.description'),
           };
         },
         throwOnError: true,
@@ -110,7 +110,7 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mot de passe</FormLabel>
+              <FormLabel>{t('fields.password.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -130,7 +130,7 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
           name="passwordConfirm"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmation du mot de passe</FormLabel>
+              <FormLabel>{t('fields.passwordConfirm.label')}</FormLabel>
               <FormControl>
                 <Input
                   icon={IconLock}
@@ -148,7 +148,7 @@ const ActivateForm = ({ email, token }: ActivateFormProps) => {
 
         <Button variant="filled-primary" type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-          Créer mon compte
+          {t('submit.label')}
         </Button>
       </form>
     </Form>

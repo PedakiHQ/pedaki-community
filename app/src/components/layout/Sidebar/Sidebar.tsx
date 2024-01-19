@@ -2,13 +2,13 @@
 
 import { TooltipProvider } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
+import I18nProviderClient from '~/components/I18nProviderClient';
 import SidebarAltContent from '~/components/layout/Sidebar/SidebarAltContent.tsx';
 import SidebarContent from '~/components/layout/Sidebar/SidebarContent.tsx';
 import SidebarFooter from '~/components/layout/Sidebar/SidebarFooter.tsx';
 import SidebarHeader from '~/components/layout/Sidebar/SidebarHeader.tsx';
 import SidebarMobileHeader from '~/components/layout/Sidebar/SidebarMobileHeader.tsx';
 import { env } from '~/env.ts';
-import { I18nProviderClient } from '~/locales/client';
 import { useGlobalStore } from '~/store/global/global.store.ts';
 import React from 'react';
 

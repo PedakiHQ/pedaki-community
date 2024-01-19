@@ -8,12 +8,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
+import I18nProviderClient from '~/components/I18nProviderClient';
+import { useScopedI18n } from '~/locales/client';
 import { useGlobalStore } from '~/store/global/global.store';
 import React from 'react';
 
-const DemoBannerComponent = () => {
+interface DemoBannerComponentProps {
+  locale: string;
+}
+
+const DemoBannerComponent = ({ locale }: DemoBannerComponentProps) => {
+  return (
+    <I18nProviderClient locale={locale}>
+      <DemoBannerComponentContent />
+    </I18nProviderClient>
+  );
+};
+
+const DemoBannerComponentContent = () => {
   const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
   const setDemoBannerVisible = useGlobalStore(state => state.setDemoBannerVisible);
+  const t = useScopedI18n('main.demoBanner');
 
   if (!demoBannerVisible) {
     return null;
@@ -26,11 +41,9 @@ const DemoBannerComponent = () => {
           <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center justify-center gap-2">
               <IconInfoCircleFill className="hidden h-5 w-5 sm:block" />
-              <p className="text-label-sm font-medium">Version de démonstration</p>
+              <p className="text-label-sm font-medium">{t('label')}</p>
               <p>∙</p>
-              <p className="hidden text-p-sm lg:block">
-                Certaines fonctionnalités sont désactivées
-              </p>
+              <p className="hidden text-p-sm lg:block">{t('description')}</p>
               <p className="hidden lg:block">∙</p>
               <StyledLink
                 href="#"
@@ -39,7 +52,7 @@ const DemoBannerComponent = () => {
                 offset={2}
                 className="text-p-sm font-medium ring-offset-neutral-700"
               >
-                En savoir plus
+                {t('button')}
               </StyledLink>
             </div>
             <TooltipProvider>
@@ -50,7 +63,7 @@ const DemoBannerComponent = () => {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" align="end">
-                  Fermer
+                  {t('close')}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
