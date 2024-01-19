@@ -7,6 +7,8 @@ export const createContext = async ({ req }: { req: NextRequest }) => {
   const session = await auth();
   const headers = req.headers;
 
+  console.log(headers);
+
   return createInnerContext(session, headers);
 };
 
