@@ -6,7 +6,7 @@ export default defineConfig((options: Options) => ({
   treeshake: true,
   splitting: true,
   // TODO: bug on windows with the migrations folder
-  entry: process.env.NODE_ENV !== 'production' ? ['src/*.(tsx|ts|cjs)'] : ['src/**/*.(tsx|ts|cjs)'],
+  entry: process.env.WINDOWS_ONLY_FIX ? ['src/*.(tsx|ts|cjs)'] : ['src/**/*.(tsx|ts|cjs)'],
   format: ['esm'], // ESM only as .js files are needed for build
   dts: process.env.NODE_ENV !== 'production',
   sourcemap: process.env.NODE_ENV !== 'production',
