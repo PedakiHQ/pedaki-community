@@ -18,10 +18,11 @@ import { IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
 import { Skeleton } from '@pedaki/design/ui/skeleton';
 import { useHasChanged } from '~/app/[locale]/(main)/settings/useHasChanged.ts';
-import { LOGO_MAX_SIZE, LOGO_TYPES } from '~/app/api/upload/logo/constants.ts';
+import { LOGO_MAX_SIZE, LOGO_MAX_SIZE_MB, LOGO_TYPES } from '~/app/api/upload/logo/constants.ts';
 import { updateLogo } from '~/app/api/upload/logo/fetch.ts';
 import { useTutorialNextStep } from '~/components/tutorial/useTutorialNextStep.tsx';
 import { useScopedI18n } from '~/locales/client';
+import { customErrorParams } from '~/locales/zod';
 import { TUTORIAL_ID as AppearanceTutorialId } from '~/store/tutorial/data/appearance/constants.ts';
 import { useWorkspaceStore } from '~/store/workspace/workspace.store.ts';
 import React from 'react';
@@ -31,14 +32,12 @@ import z from 'zod';
 const FormSchema = z.object({
   logo: z
     .custom<File>()
-    .refine(file => file instanceof File, {
-      message: 'Le fichier doit être une image.',
-    })
+    .refine(file => file instanceof File, { params: customErrorParams('file.mustBeImage') })
     .refine(file => LOGO_TYPES.includes(file.type), {
-      message: 'Le fichier doit être au format PNG ou JPG.',
+      params: customErrorParams('file.mustBeImage'),
     })
     .refine(file => file.size < LOGO_MAX_SIZE, {
-      message: 'Le fichier doit être inférieur à 2 Mo.',
+      params: customErrorParams('file.size', { size: LOGO_MAX_SIZE_MB * 100 + ' Ko' }),
     })
     .optional(),
 });

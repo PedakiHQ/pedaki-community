@@ -41,7 +41,7 @@ export default {
     not_multiple_of: 'Le nombre doit être un multiple de {multipleOf}',
     not_finite: 'Le nombre doit être fini',
     invalid_string: {
-      email: '{validation} non valide',
+      email: "L'{validation} n'est pas valide",
       url: '{validation} non valide',
       ulid: '{validation} non valide',
       uuid: '{validation} non valide',
@@ -157,10 +157,6 @@ export default {
     name: {
       required: 'Le nom est requis',
     },
-    email: {
-      required: "L'adresse email est requise",
-      invalid: "L'adresse email est invalide",
-    },
     password: {
       required: 'Le mot de passe est requis',
       min: 'Le mot de passe doit contenir au moins {count} caractères',
@@ -168,6 +164,10 @@ export default {
     passwordConfirm: {
       required: 'La confirmation de mot de passe est requise',
       unmatched: 'Les mots de passe ne correspondent pas',
+    },
+    file: {
+      mustBeImage: "L'image doit être au format PNG ou JPG.",
+      size: 'Le fichier doit être inférieur à {size}.',
     },
   },
 } as const;

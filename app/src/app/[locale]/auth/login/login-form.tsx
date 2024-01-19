@@ -24,12 +24,7 @@ import { z } from 'zod';
 
 // TODO: move this in a shared package
 const LoginFormSchema = z.object({
-  email: z
-    .string()
-    // TODO i18n
-    .nonempty({ message: "L'adresse email est requise" })
-    // .refine(v => v.length >= 1, { params: customErrorParams('email.required') })
-    .email("L'adresse email n'est pas valide"),
+  email: z.string().email(),
   password: z
     .string()
     .refine(v => v.length >= 1, { params: customErrorParams('password.required') }),
