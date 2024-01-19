@@ -1,4 +1,4 @@
-import type { useScopedI18n, UseScopedI18nType } from '~/locales/client';
+import type { UseScopedI18nType } from '~/locales/client';
 import type { TutorialStore } from '~/store/tutorial/tutorial.store.ts';
 import type { BaseProps, CallBackProps, Step } from 'react-joyride';
 

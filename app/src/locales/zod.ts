@@ -132,6 +132,7 @@ const generateZodErrorMap =
         console.log(issue.params);
 
         if (issue.params?.key) {
+           
           const params = issue.params as ReturnType<typeof customErrorParams>;
           // @ts-expect-error As long as the key is valid, it will be translated
           message = t(`custom.${params.key}`, params.params);
