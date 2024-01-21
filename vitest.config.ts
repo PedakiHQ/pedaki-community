@@ -16,7 +16,10 @@ export default defineConfig({
             exclude: [
                 'packages/**/env.ts',
                 'packages/**/constants.ts',
-                './db/**'
+                '**/node_modules/**',
+                '**/dist/**',
+                '.git',
+                '**/db/**',
             ],
         },
         passWithNoTests: true,
