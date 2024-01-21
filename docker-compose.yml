@@ -2,7 +2,7 @@ version: "3.8"
 name: pedaki
 services:
   db:
-    image: postgres:13.13
+    image: postgres:16.1
     restart: on-failure
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-pedaki}
