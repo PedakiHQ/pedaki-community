@@ -5,9 +5,9 @@ export DATABASE_URL="postgresql://pedaki:pedaki@127.0.0.1:5432/$POSTGRES_DB"
 docker compose -f docker-compose.test.yml down
 docker compose -f docker-compose.test.yml up -d
 
-# it's for testing purpose
+# it's for testing purpose !!!
 sudo mkdir -p ./db
-sudo chmod -R +r ./db
+sudo chmod -R 777 ./db
 
 sleep 8 # wait for mysql to start
 cd packages/db && pnpm prisma migrate deploy
