@@ -14,7 +14,7 @@ class WorkspaceService {
       },
     });
 
-    return settings.defaultLanguage as WorkspaceProperties['defaultLanguage'];
+    return settings.defaultLanguage.trim() as WorkspaceProperties['defaultLanguage'];
   }
   async getSettings(): Promise<WorkspaceProperties> {
     const settings = await prisma.workspaceSetting.findFirstOrThrow({
@@ -33,7 +33,7 @@ class WorkspaceService {
 
     return {
       ...settings,
-      defaultLanguage: settings.defaultLanguage as WorkspaceProperties['defaultLanguage'],
+      defaultLanguage: settings.defaultLanguage.trim() as WorkspaceProperties['defaultLanguage'],
     };
   }
 
