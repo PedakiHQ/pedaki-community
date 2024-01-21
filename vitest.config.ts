@@ -16,10 +16,6 @@ export default defineConfig({
             exclude: [
                 'packages/**/env.ts',
                 'packages/**/constants.ts',
-                '**/node_modules/**',
-                '**/dist/**',
-                '.git',
-                '**/db/**',
             ],
         },
         passWithNoTests: true,
@@ -29,6 +25,12 @@ export default defineConfig({
         ],
         include: [
             '**/*.test.ts',
+        ],
+        exclude: [
+            '**/node_modules/**',
+            '**/dist/**',
+            '.git',
+            '**/db/**',
         ],
         maxWorkers: 1, // We use the same database for all tests and setup can't be run in parallel
         minWorkers: 1,

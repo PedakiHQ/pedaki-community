@@ -3,10 +3,6 @@
 export POSTGRES_DB=pedaki_test
 export DATABASE_URL="postgresql://pedaki:pedaki@127.0.0.1:5432/$POSTGRES_DB"
 
-# it's for testing purpose !!!
-sudo mkdir -p ./db
-sudo chmod -R 777 ./db
-
 docker compose -f docker-compose.test.yml down
 docker compose -f docker-compose.test.yml up -d
 
