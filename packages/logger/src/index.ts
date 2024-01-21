@@ -4,9 +4,9 @@ import { env } from '~/env.ts';
 import { VERSION } from '~/version.ts';
 import winston from 'winston';
 
-export const INSTANCE_ID = crypto.randomBytes(8).toString('hex');
+export const INSTANCE_ID = crypto.randomBytes(8).toString('hex'); // Used to identify a same instance in logs
 
-const { combine, json, simple } = winston.format;
+const { combine, json, simple, errors } = winston.format;
 
 const removeColors = winston.format(info => {
   if (info.message && typeof info.message === 'string') {
@@ -15,8 +15,53 @@ const removeColors = winston.format(info => {
   return info;
 });
 
+const transports: winston.transport[] = [];
+
+if (env.NODE_ENV !== 'test') {
+  if (env.TRANSPORTERS.includes('file')) {
+    transports.push(
+      new winston.transports.File({
+        filename: 'error.log',
+        level: 'error',
+        format: combine(removeColors(), json()),
+      }),
+    );
+    transports.push(
+      new winston.transports.File({
+        level: 'info',
+        filename: 'combined.log',
+        format: combine(removeColors(), json()),
+      }),
+    );
+  }
+
+  if (env.TRANSPORTERS.includes('console')) {
+    transports.push(
+      new winston.transports.Console({
+        format: winston.format.printf(info => {
+          return info.message ? `${info.message}` : '';
+        }),
+      }),
+    );
+  }
+
+  if (env.TRANSPORTERS.includes('other')) {
+    // In production we are using a third party service to collect logs
+  }
+}
+
 export const logger = winston.createLogger({
-  level: env.LOGGER_LEVEL,
+  level: 'debug',
+  defaultMeta: {
+    service: {
+      name: env.LOGGER_SERVICE_NAME,
+      namespace: env.LOGGER_NAMESPACE,
+      version: VERSION,
+    },
+    pedaki: {
+      instanceId: INSTANCE_ID,
+    },
+  },
   format: combine(
     winston.format(info => {
       const span = api.trace.getActiveSpan();
@@ -25,40 +70,13 @@ export const logger = winston.createLogger({
         info.traceId = span.spanContext().traceId;
       }
 
-      // Meta data
-      info.service = {
-        name: env.LOGGER_SERVICE_NAME,
-        namespace: env.LOGGER_NAMESPACE,
-        version: VERSION,
-      };
-      info.pedaki = {
-        instanceId: INSTANCE_ID,
-        community: true,
-      };
-
       return info;
     })(),
+    errors({ stack: true }),
     simple(),
   ),
   exitOnError: false,
-  transports: [
-    new winston.transports.Console({
-      level: 'info',
-      silent: env.NODE_ENV === 'test',
-      format: winston.format.printf(info => {
-        return info.message ? `${info.message}` : '';
-      }),
-    }),
-    new winston.transports.File({
-      filename: 'error.log',
-      level: 'error',
-      silent: env.NODE_ENV === 'test',
-      format: combine(removeColors(), json()),
-    }),
-    new winston.transports.File({
-      filename: 'combined.log',
-      silent: env.NODE_ENV === 'test',
-      format: combine(removeColors(), json()),
-    }),
-  ],
+  transports: transports,
+  rejectionHandlers: transports,
+  exceptionHandlers: transports,
 });

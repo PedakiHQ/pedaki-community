@@ -7,7 +7,17 @@ export const env = createEnv({
 
     LOGGER_NAMESPACE: z.string().default('community'),
     LOGGER_SERVICE_NAME: z.string().default('pedaki'),
-    LOGGER_LEVEL: z.enum(['error', 'warn', 'info', 'verbose', 'debug', 'silly']).default('info'),
+
+    TRANSPORTERS: z.enum(['console', 'other', 'otlp', 'file']).array().default(['console']),
+
+    OTLP_ENDPOINT: z.string().optional(),
+    OTLP_HEADERS: z
+      .string()
+      .transform(value => {
+        if (!value) return {};
+        return JSON.parse(value) as Record<string, string>;
+      })
+      .optional(),
   },
   runtimeEnv: process.env,
 });

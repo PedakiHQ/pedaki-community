@@ -15,8 +15,6 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 fi
 
 
-
-
 # Deps
 echo "[pedaki] Installing dependencies..."
 
@@ -69,6 +67,7 @@ cd ..
 echo "[pedaki] Generating environment variables..."
 $pedaki env generate --name "$WORKSPACE_NAME" --domain "$WORKSPACE_DOMAIN" --tag "$PEDAKI_TAG"  --email-domain "$EMAIL_DOMAIN"
 export $(grep -v '^#' .env.production.local | xargs)
+DOMAIN=$NEXT_PUBLIC_PEDAKI_HOSTNAME
 
 # Add caddyfile (https://caddyserver.com/docs/automatic-https)
 # TODO: use production letsencrypt

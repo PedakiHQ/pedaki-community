@@ -27,6 +27,7 @@
   "dependencies": {
     "@pedaki/logger": "workspace:*",
     "@prisma/client": "^5.8.1",
+    "@prisma/instrumentation": "^5.8.1",
     "cpy": "^11.0.0",
     "prisma-field-encryption": "^1.5.1",
     "tsup": "^8.0.1"
