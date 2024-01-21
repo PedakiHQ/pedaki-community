@@ -455,7 +455,7 @@ NEXT_PUBLIC_PEDAKI_HOSTNAME=${this.#domain}
 NEXT_PUBLIC_PUBLIC_FILES_HOST=https://${this.#domain}
 NEXT_PUBLIC_ENCRYPTED_FILES_HOST=https://${this.#domain}
 
-DATABASE_URL=mysql://pedaki:pedaki@127.0.0.1:3306/pedaki
+DATABASE_URL=postgresql://pedaki:pedaki@127.0.0.1:5432/pedaki
 PRISMA_ENCRYPTION_KEY=${this.#key}
 
 PASSWORD_SALT=${this.#salt}
