@@ -2,4 +2,4 @@ dist
 *.md
 package.json
 coverage
-.yalc
+**/.yalc
