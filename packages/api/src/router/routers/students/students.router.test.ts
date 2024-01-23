@@ -108,8 +108,8 @@ describe('studentsRouter', () => {
 
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
-        expect(data[0].firstName).toBe('Nathan');
-        expect(data[0].properties.math_level).toBe('15');
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
       },
     );
   });
@@ -165,7 +165,7 @@ describe('studentsRouter', () => {
       expect(student.firstName).toBe('John');
       expect(student.lastName).toBe('Doe');
       expect(student.birthDate.toISOString()).toBe('2001-01-01T00:00:00.000Z');
-      expect(student.properties.shrek).toBe('is love');
+      expect(student.properties!.shrek).toBe('is love');
 
       const student2 = await api.students.getOne({ id: student.id });
       expect(student2).toBeDefined();
@@ -173,7 +173,7 @@ describe('studentsRouter', () => {
       expect(student2.firstName).toBe('John');
       expect(student2.lastName).toBe('Doe');
       expect(student2.birthDate.toISOString()).toBe('2001-01-01T00:00:00.000Z');
-      expect(student2.properties.shrek).toBe('is love');
+      expect(student2.properties!.shrek).toBe('is love');
     });
   });
 
@@ -212,12 +212,12 @@ describe('studentsRouter', () => {
       expect(student2).toBeDefined();
       expect(student2.id).toBe(oldStudent.id);
       expect(student2.firstName).toBe('John');
-      expect(student2.properties.shrek).toBe('is life');
-      expect(student2.properties.random).toBe(randomValue);
+      expect(student2.properties!.shrek).toBe('is life');
+      expect(student2.properties!.random).toBe(randomValue);
 
       // Old values should not have changed
       expect(student2.lastName).toBe(oldStudent.lastName);
-      expect(student2.properties.math_level).toBe(oldStudent.properties.math_level);
+      expect(student2.properties!.math_level).toBe(oldStudent.properties!.math_level);
     });
   });
 

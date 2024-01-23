@@ -1,5 +1,6 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
+import type { Student } from '@pedaki/services/students/student.model.js';
 import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
@@ -8,7 +9,6 @@ import {
 } from '@pedaki/services/students/student.model.js';
 import { studentService } from '@pedaki/services/students/student.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
-import { z } from 'zod';
 
 export const studentsRouter = router({
   getMany: privateProcedure
@@ -18,10 +18,12 @@ export const studentsRouter = router({
       // TODO valid operator/value based on schema
 
       const queryData = studentService.buildSelectPreparedQuery(input, {
+        withPagination: true,
         selectFields: input.fields,
       });
       const queryCount = studentService.buildSelectPreparedQuery(input, {
         withPagination: false,
+        // @ts-expect-error: TODO add count in selectFields
         selectFields: ['COUNT(*) AS count'],
       });
 
@@ -67,7 +69,7 @@ export const studentsRouter = router({
         throw new Error('Student not found');
       }
 
-      return student;
+      return student as Student;
     }),
 
   createOne: privateProcedure
@@ -81,29 +83,23 @@ export const studentsRouter = router({
         },
       });
 
-      return student;
+      return student as Student;
     }),
 
-  updateOne: privateProcedure
-    .input(UpdateOneStudentInputSchema)
-    .output(z.boolean())
-    .mutation(async ({ input }) => {
-      const updateStudentQuery = studentService.buildUpdatePreparedQuery(input);
-      console.log(updateStudentQuery);
-
-      await prisma.$queryRawUnsafe<Record<string, any>[]>(updateStudentQuery);
-
-      return true;
-    }),
+  updateOne: privateProcedure.input(UpdateOneStudentInputSchema).mutation(async ({ input }) => {
+    const updateStudentQuery = studentService.buildUpdatePreparedQuery(input);
+    await prisma.$queryRawUnsafe<Record<string, any>[]>(updateStudentQuery);
+  }),
 
   deleteOne: privateProcedure
     .input(StudentSchema.pick({ id: true }))
-    .output(z.boolean())
     .mutation(async ({ input }) => {
+      // TODO: check prisma query to see if the select is needed (the goal is to return the least amount of data)
       await prisma.student.delete({
         where: { id: input.id },
+        select: {
+          id: true,
+        },
       });
-
-      return true;
     }),
 });

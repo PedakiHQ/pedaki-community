@@ -14,6 +14,7 @@ export const StudentSchema = z.object({
 
   properties: z.record(z.union([z.string(), z.number()])).optional(),
 });
+export type Student = z.infer<typeof StudentSchema>;
 
 const KnownPropertiesMapping = [
   'id',
