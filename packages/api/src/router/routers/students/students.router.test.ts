@@ -4,8 +4,7 @@ import {
   getInternalSession,
   getUserSession,
 } from '~api/tests/helpers/sessions.ts';
-import { beforeEach } from 'node:test';
-import { beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 describe('studentsRouter', () => {
   const anonymousSession = getAnonymousSession();
@@ -130,6 +129,51 @@ describe('studentsRouter', () => {
 
       expect(student).toBeDefined();
       expect(student.id).toBe(1);
+    });
+  });
+
+  describe('createOne', () => {
+    test.each([anonymousSession, userSession, internalSession])(
+      'need to be authenticated to use this route - $type',
+      async ({ api, type }) => {
+        await assertIsAuthenticated(
+          () =>
+            api.students.createOne({
+              firstName: 'John',
+              lastName: 'Doe',
+              birthDate: new Date('2001-01-01'),
+            }),
+          {
+            shouldWork: type !== 'anonymousUserSession',
+          },
+        );
+      },
+    );
+
+    test.each([userSession, internalSession])('creates a student - $type', async ({ api }) => {
+      const student = await api.students.createOne({
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: new Date('2001-01-01'),
+        properties: {
+          shrek: 'is love',
+        },
+      });
+
+      expect(student).toBeDefined();
+      expect(student.id).toBeDefined();
+      expect(student.firstName).toBe('John');
+      expect(student.lastName).toBe('Doe');
+      expect(student.birthDate.toISOString()).toBe('2001-01-01T00:00:00.000Z');
+      expect(student.properties.shrek).toBe('is love');
+
+      const student2 = await api.students.getOne({ id: student.id });
+      expect(student2).toBeDefined();
+      expect(student2.id).toBe(student.id);
+      expect(student2.firstName).toBe('John');
+      expect(student2.lastName).toBe('Doe');
+      expect(student2.birthDate.toISOString()).toBe('2001-01-01T00:00:00.000Z');
+      expect(student2.properties.shrek).toBe('is love');
     });
   });
 });

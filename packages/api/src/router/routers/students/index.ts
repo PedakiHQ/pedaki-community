@@ -4,11 +4,9 @@ import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
   StudentSchema,
-  UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
 import { studentService } from '@pedaki/services/students/student.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
-import { z } from 'zod';
 
 export const studentsRouter = router({
   getMany: privateProcedure
@@ -64,6 +62,20 @@ export const studentsRouter = router({
         // TODO custom error
         throw new Error('Student not found');
       }
+
+      return student;
+    }),
+
+  createOne: privateProcedure
+    .input(StudentSchema.omit({ id: true }))
+    .output(StudentSchema)
+    .mutation(async ({ input }) => {
+      const student = await prisma.student.create({
+        data: {
+          ...input,
+          properties: input.properties ?? {},
+        },
+      });
 
       return student;
     }),
