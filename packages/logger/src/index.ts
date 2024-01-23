@@ -17,37 +17,38 @@ const removeColors = winston.format(info => {
 
 const transports: winston.transport[] = [];
 
-if (env.NODE_ENV !== 'test') {
-  if (env.TRANSPORTERS.includes('file')) {
-    transports.push(
-      new winston.transports.File({
-        filename: 'error.log',
-        level: 'error',
-        format: combine(removeColors(), json()),
-      }),
-    );
-    transports.push(
-      new winston.transports.File({
-        level: 'info',
-        filename: 'combined.log',
-        format: combine(removeColors(), json()),
-      }),
-    );
-  }
+if (env.TRANSPORTERS.includes('file')) {
+  transports.push(
+    new winston.transports.File({
+      filename: 'error.log',
+      level: 'error',
+      silent: env.NODE_ENV === 'test',
+      format: combine(removeColors(), json()),
+    }),
+  );
+  transports.push(
+    new winston.transports.File({
+      level: 'info',
+      filename: 'combined.log',
+      silent: env.NODE_ENV === 'test',
+      format: combine(removeColors(), json()),
+    }),
+  );
+}
 
-  if (env.TRANSPORTERS.includes('console')) {
-    transports.push(
-      new winston.transports.Console({
-        format: winston.format.printf(info => {
-          return info.message ? `${info.message}` : '';
-        }),
+if (env.TRANSPORTERS.includes('console')) {
+  transports.push(
+    new winston.transports.Console({
+      silent: env.NODE_ENV === 'test',
+      format: winston.format.printf(info => {
+        return info.message ? `${info.message}` : '';
       }),
-    );
-  }
+    }),
+  );
+}
 
-  if (env.TRANSPORTERS.includes('other')) {
-    // In production we are using a third party service to collect logs
-  }
+if (env.TRANSPORTERS.includes('other')) {
+  // In production we are using a third party service to collect logs
 }
 
 export const logger = winston.createLogger({
