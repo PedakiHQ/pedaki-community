@@ -96,9 +96,7 @@ export const GetManyStudentsOutputSchema = z.object({
   meta: PaginationOutputSchema,
 });
 
-export const UpdateOneStudentInputSchema = z.object({
-  where: z.object({
-    id: z.number(),
-  }),
-  data: StudentSchema.partial(),
-});
+export const UpdateOneStudentInputSchema = StudentSchema.partial().merge(
+  StudentSchema.pick({ id: true }),
+);
+export type UpdateOneStudentInput = z.infer<typeof UpdateOneStudentInputSchema>;

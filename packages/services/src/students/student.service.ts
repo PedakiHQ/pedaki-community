@@ -1,6 +1,10 @@
-import { buildPaginationClause, prepareValue } from '~/shared/sql.ts';
+import { buildPaginationClause, escape, getJsonBType, prepareValue } from '~/shared/sql.ts';
 import { isKnownProperty, KnownPropertyToDb } from '~/students/student.model.ts';
-import type { Field, GetManyStudentsInput } from '~/students/student.model.ts';
+import type {
+  Field,
+  GetManyStudentsInput,
+  UpdateOneStudentInput,
+} from '~/students/student.model.ts';
 
 class StudentService {
   #buildWhereClause(filter: GetManyStudentsInput['filter']): string {
@@ -42,7 +46,7 @@ class StudentService {
     return `(${whereClauses.join(' AND ')})`;
   }
 
-  buildPreparedQuery(
+  buildSelectPreparedQuery(
     request: GetManyStudentsInput,
     {
       withPagination = true,
@@ -57,11 +61,40 @@ class StudentService {
         ? `${KnownPropertyToDb[field]} as "${field}"`
         : field.startsWith('properties.')
           ? // TODO cast
-            `properties ->> '${field.split('properties.', 2)[1]}'  as "${field}"`
+            `properties ->> '${field.split('properties.', 2)[1]}' as "${field}"`
           : field;
     });
 
     return `SELECT ${finalFields.join(', ')} FROM students ${whereClause.length > 0 ? 'WHERE' : ''} ${whereClause} ${paginationClause}`;
+  }
+
+  buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {
+    // flat properties
+    const finalFields = Object.entries(request)
+      .map(([key, value]) => {
+        if (key === 'id') return;
+        if (typeof value === 'undefined') return;
+
+        if (key === 'properties' && typeof value === 'object' && value !== null) {
+          const result: string[] = [];
+          for (const [k, v] of Object.entries(value)) {
+            if (typeof v === 'undefined') return;
+            let value = escape(v);
+            value = `to_jsonb(${value}::${getJsonBType(v)})`;
+
+            result.push(`jsonb_build_object('${k}', ${value})`);
+          }
+
+          return `properties = properties || ${result.join(' || ')}`;
+        }
+
+        if (isKnownProperty(key)) {
+          return `${KnownPropertyToDb[key]} = ${escape(value)}`;
+        }
+      })
+      .filter(Boolean);
+
+    return `UPDATE students SET ${finalFields.join(', ')} WHERE id = ${escape(request.id)}`;
   }
 }
 

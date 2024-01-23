@@ -34,7 +34,6 @@ export const assertIsAuthenticated = async (
   try {
     await method();
   } catch (e) {
-    console.log(e);
     assertTrpcError(e, 'UNAUTHORIZED');
     expect(e.message).toBe('AUTHENTICATION_REQUIRED');
     return;

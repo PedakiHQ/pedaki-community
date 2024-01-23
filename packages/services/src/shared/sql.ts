@@ -11,6 +11,19 @@ export const buildPaginationClause = (pagination: PaginationInput): string => {
   return `LIMIT ${limit} OFFSET ${offset}`;
 };
 
+export const escape = (value: any): string => {
+  return SqlString.escape(value);
+};
+
+export const getJsonBType = (value: unknown): string => {
+  if (typeof value === 'string') return 'text';
+  if (typeof value === 'number') return 'numeric';
+  if (typeof value === 'boolean') return 'boolean';
+  if (value instanceof Date) return 'timestamp';
+  if (Array.isArray(value)) return 'jsonb';
+  return 'jsonb';
+};
+
 export const prepareValue = ({
   operator,
   value,
@@ -18,12 +31,12 @@ export const prepareValue = ({
   switch (operator) {
     case 'like':
     case 'nlike':
-      return SqlString.escape(`%${value as string}%`);
+      return escape(`%${value as string}%`); //TODO remove % and put them directly in the value (to use startsWith and endsWith)
     case 'in':
     case 'nin':
-      return `(${SqlString.escape(value as string)})`;
+      return `(${escape(value)})`;
     default:
-      if (typeof value === 'number') return `'${SqlString.escape(value)}'`; // TODO: this is to avoid having to typecast
-      return SqlString.escape(value as string);
+      if (typeof value === 'number') return `'${escape(value)}'`; // TODO: this is to avoid having to typecast
+      return escape(value as string);
   }
 };

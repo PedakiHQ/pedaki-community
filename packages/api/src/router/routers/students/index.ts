@@ -4,9 +4,11 @@ import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
   StudentSchema,
+  UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
 import { studentService } from '@pedaki/services/students/student.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
+import { z } from 'zod';
 
 export const studentsRouter = router({
   getMany: privateProcedure
@@ -15,8 +17,10 @@ export const studentsRouter = router({
     .query(async ({ input }) => {
       // TODO valid operator/value based on schema
 
-      const queryData = studentService.buildPreparedQuery(input, { selectFields: input.fields });
-      const queryCount = studentService.buildPreparedQuery(input, {
+      const queryData = studentService.buildSelectPreparedQuery(input, {
+        selectFields: input.fields,
+      });
+      const queryCount = studentService.buildSelectPreparedQuery(input, {
         withPagination: false,
         selectFields: ['COUNT(*) AS count'],
       });
@@ -78,5 +82,17 @@ export const studentsRouter = router({
       });
 
       return student;
+    }),
+
+  updateOne: privateProcedure
+    .input(UpdateOneStudentInputSchema)
+    .output(z.boolean())
+    .mutation(async ({ input }) => {
+      const updateStudentQuery = studentService.buildUpdatePreparedQuery(input);
+      console.log(updateStudentQuery);
+
+      await prisma.$queryRawUnsafe<Record<string, any>[]>(updateStudentQuery);
+
+      return true;
     }),
 });

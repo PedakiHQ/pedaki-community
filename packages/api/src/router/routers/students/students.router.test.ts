@@ -176,4 +176,48 @@ describe('studentsRouter', () => {
       expect(student2.properties.shrek).toBe('is love');
     });
   });
+
+  describe('updateOne', () => {
+    test.each([anonymousSession, userSession, internalSession])(
+      'need to be authenticated to use this route - $type',
+      async ({ api, type }) => {
+        await assertIsAuthenticated(
+          () =>
+            api.students.updateOne({
+              id: 1,
+              firstName: 'John',
+            }),
+          {
+            shouldWork: type !== 'anonymousUserSession',
+          },
+        );
+      },
+    );
+
+    test.each([userSession, internalSession])('updates a student - $type', async ({ api }) => {
+      const oldStudent = await api.students.getOne({ id: 1 });
+
+      const randomValue = Math.random();
+      await api.students.updateOne({
+        id: 1,
+        firstName: 'John',
+        properties: {
+          shrek: 'is life',
+          random: randomValue,
+        },
+      });
+
+      const student2 = await api.students.getOne({ id: 1 });
+
+      expect(student2).toBeDefined();
+      expect(student2.id).toBe(oldStudent.id);
+      expect(student2.firstName).toBe('John');
+      expect(student2.properties.shrek).toBe('is life');
+      expect(student2.properties.random).toBe(randomValue);
+
+      // Old values should not have changed
+      expect(student2.lastName).toBe(oldStudent.lastName);
+      expect(student2.properties.math_level).toBe(oldStudent.properties.math_level);
+    });
+  });
 });
