@@ -220,4 +220,38 @@ describe('studentsRouter', () => {
       expect(student2.properties.math_level).toBe(oldStudent.properties.math_level);
     });
   });
+
+  describe('deleteOne', () => {
+    test.each([anonymousSession, userSession, internalSession])(
+      'need to be authenticated to use this route - $type',
+      async ({ api, type }) => {
+        await assertIsAuthenticated(() => api.students.deleteOne({ id: 1 }), {
+          shouldWork: type !== 'anonymousUserSession',
+        });
+      },
+    );
+
+    test.each([userSession, internalSession])('deletes a student - $type', async ({ api }) => {
+      const student = await api.students.createOne({
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: new Date('2001-01-01'),
+        properties: {
+          shrek: 'is love',
+        },
+      });
+
+      const student2 = await api.students.getOne({ id: student.id });
+      expect(student2).toBeDefined();
+
+      await api.students.deleteOne({ id: student.id });
+
+      try {
+        await api.students.getOne({ id: student.id });
+        expect.fail('Expected an error to be thrown');
+      } catch (e) {
+        expect((e as Error).message).toBe('Student not found');
+      }
+    });
+  });
 });

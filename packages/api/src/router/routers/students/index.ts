@@ -95,4 +95,15 @@ export const studentsRouter = router({
 
       return true;
     }),
+
+  deleteOne: privateProcedure
+    .input(StudentSchema.pick({ id: true }))
+    .output(z.boolean())
+    .mutation(async ({ input }) => {
+      await prisma.student.delete({
+        where: { id: input.id },
+      });
+
+      return true;
+    }),
 });
