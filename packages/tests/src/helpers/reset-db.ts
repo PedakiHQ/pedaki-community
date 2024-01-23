@@ -39,6 +39,19 @@ const resetDb = async () => {
   };
 
   const baseStudent = fakeStudents();
+  const newStudent = {
+    ...baseStudent,
+    id: 1,
+    // to test the filter
+    firstName: 'Nathan',
+    lastName: 'Dupont',
+    otherName: null,
+    birthDate: new Date('2001-01-01'),
+    properties: {
+      ...baseStudent.properties,
+      math_level: 15,
+    },
+  };
 
   await prisma.$transaction([
     prisma.user.deleteMany(),
@@ -75,19 +88,10 @@ const resetDb = async () => {
     prisma.student.createMany({
       data: Array.from({ length: 200 }, fakeStudents),
     }),
-    prisma.student.create({
-      data: {
-        ...baseStudent,
-        // to test the filter
-        firstName: 'Nathan',
-        lastName: 'Dupont',
-        otherName: null,
-        birthDate: new Date('2001-01-01'),
-        properties: {
-          ...baseStudent.properties,
-          math_level: 15,
-        },
-      },
+    prisma.student.upsert({
+      where: { id: 1 },
+      update: newStudent,
+      create: newStudent,
     }),
   ]);
 };

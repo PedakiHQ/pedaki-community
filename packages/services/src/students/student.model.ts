@@ -4,15 +4,15 @@ import { z } from 'zod';
 export const StudentSchema = z.object({
   id: z.number().min(0),
 
-  identifier: z.string().min(0).max(255).optional(),
+  identifier: z.string().min(0).max(255).nullable(),
 
   firstName: z.string().min(0).max(255),
   lastName: z.string().min(0).max(255),
-  otherName: z.string().min(0).max(255).optional(),
+  otherName: z.string().min(0).max(255).nullable(),
 
   birthDate: z.coerce.date(),
 
-  properties: z.record(z.string()),
+  properties: z.record(z.union([z.string(), z.number()])).optional(),
 });
 
 const KnownPropertiesMapping = [
@@ -83,25 +83,22 @@ export type Properties = z.infer<typeof PropertiesSchema>;
 export const GetManyStudentsInputSchema = z.object({
   fields: FieldSchema.array().min(1),
   filter: z.array(PropertiesSchema),
-  pagination: PaginationInputSchema.optional(),
+  pagination: PaginationInputSchema.optional().default({
+    page: 1,
+    limit: 10,
+  }),
 });
 
 export type GetManyStudentsInput = z.infer<typeof GetManyStudentsInputSchema>;
 
 export const GetManyStudentsOutputSchema = z.object({
-  data: z.array(
-    z.object({
-      id: z.number().optional(),
-      identifier: z.string().optional(),
-
-      firstName: z.string().optional(),
-      lastName: z.string().optional(),
-      otherName: z.string().optional(),
-
-      birthDate: z.coerce.date().optional(),
-
-      properties: z.record(z.string()).optional(),
-    }),
-  ),
+  data: z.array(StudentSchema.partial()),
   meta: PaginationOutputSchema,
+});
+
+export const UpdateOneStudentInputSchema = z.object({
+  where: z.object({
+    id: z.number(),
+  }),
+  data: StudentSchema.partial(),
 });

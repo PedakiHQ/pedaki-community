@@ -3,7 +3,7 @@ import { isKnownProperty, KnownPropertyToDb } from '~/students/student.model.ts'
 import type { Field, GetManyStudentsInput } from '~/students/student.model.ts';
 
 class StudentService {
-  buildWhereClause(filter: GetManyStudentsInput['filter']): string {
+  #buildWhereClause(filter: GetManyStudentsInput['filter']): string {
     if (filter.length === 0) return '';
 
     // Here we suppose that the input is correct
@@ -49,8 +49,8 @@ class StudentService {
       selectFields,
     }: { withPagination: boolean | undefined; selectFields: Field[] },
   ): string {
-    const whereClause = this.buildWhereClause(request.filter);
-    const paginationClause = withPagination ? buildPaginationClause(request.pagination!) : '';
+    const whereClause = this.#buildWhereClause(request.filter);
+    const paginationClause = withPagination ? buildPaginationClause(request.pagination) : '';
 
     const finalFields = selectFields.map(field => {
       return isKnownProperty(field)

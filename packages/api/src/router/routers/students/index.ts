@@ -3,9 +3,12 @@ import { preparePagination } from '@pedaki/services/shared/utils.js';
 import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
+  StudentSchema,
+  UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
 import { studentService } from '@pedaki/services/students/student.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
+import { z } from 'zod';
 
 export const studentsRouter = router({
   getMany: privateProcedure
@@ -47,5 +50,21 @@ export const studentsRouter = router({
         data: finalData,
         meta: pagination,
       };
+    }),
+
+  getOne: privateProcedure
+    .input(StudentSchema.pick({ id: true }))
+    .output(StudentSchema)
+    .query(async ({ input }) => {
+      const student = await prisma.student.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!student) {
+        // TODO custom error
+        throw new Error('Student not found');
+      }
+
+      return student;
     }),
 });
