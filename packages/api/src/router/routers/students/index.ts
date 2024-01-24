@@ -1,6 +1,6 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
-import type { Student } from '@pedaki/services/students/student.model.js';
+import type { Field, Student } from '@pedaki/services/students/student.model.js';
 import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
@@ -17,20 +17,32 @@ export const studentsRouter = router({
     .query(async ({ input }) => {
       // TODO valid operator/value based on schema
 
+      const baseFields = input.fields.filter(field => !field.startsWith('class.'));
+      const joinFields = input.fields.filter(field => field.startsWith('class.'));
+
       const queryData = studentService.buildSelectPreparedQuery(input, {
         withPagination: true,
-        selectFields: input.fields,
+        selectFields: baseFields,
       });
       const queryCount = studentService.buildSelectPreparedQuery(input, {
         withPagination: false,
-        // @ts-expect-error: TODO add count in selectFields
-        selectFields: ['COUNT(*) AS count'],
+        selectFields: ['count'],
       });
 
       const [data, meta] = await Promise.all([
-        prisma.$queryRawUnsafe<Record<string, any>[]>(queryData),
+        prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData),
         prisma.$queryRawUnsafe<{ count: BigInt }[]>(queryCount),
       ]);
+
+      let joinData: { id: number; [key: string]: any }[] | null = null;
+      if (joinFields.length > 0) {
+        const ids = data.map(student => student.id);
+        const queryJoin = studentService.buildSelectJoinQuery(joinFields, ids);
+        if (queryJoin !== null) {
+          joinData = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryJoin);
+        }
+      }
+
       const pagination = preparePagination(
         Number(meta[0]!.count),
         input.pagination.page,
@@ -42,10 +54,17 @@ export const studentsRouter = router({
         // properties starts with properties.
         const properties = data.filter(([key]) => key.startsWith('properties.'));
         const otherData = data.filter(([key]) => !key.startsWith('properties.'));
+        const joinDataStudent = joinData?.find(joinStudent => joinStudent.id === student.id);
+        const classData = joinDataStudent
+          ? Object.entries(joinDataStudent).filter(([key]) => key.startsWith('class.'))
+          : [];
         return {
           ...Object.fromEntries(otherData),
           properties: Object.fromEntries(
             properties.map(([key, value]) => [key.split('properties.')[1], value]),
+          ) as Record<string, any>,
+          class: Object.fromEntries(
+            classData.map(([key, value]) => [key.split('class.')[1], value]),
           ) as Record<string, any>,
         };
       });

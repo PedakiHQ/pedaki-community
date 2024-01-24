@@ -41,7 +41,6 @@ const resetDb = async () => {
   const baseStudent = fakeStudents();
   const newStudent = {
     ...baseStudent,
-    id: 1,
     // to test the filter
     firstName: 'Nathan',
     lastName: 'Dupont',
@@ -54,10 +53,15 @@ const resetDb = async () => {
   };
 
   await prisma.$transaction([
-    prisma.user.deleteMany(),
-    prisma.token.deleteMany(),
-    prisma.property.deleteMany(),
-    prisma.student.deleteMany(),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE users RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE tokens RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE properties RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE students RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE classes RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE class_branches RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE class_levels RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE academic_years RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE teachers RESTART IDENTITY CASCADE'),
 
     // create users
     prisma.user.createMany({
@@ -80,18 +84,133 @@ const resetDb = async () => {
       create: newSettings,
     }),
 
-    // Create students
-    // properties
+    // Create academic years
+    prisma.academicYear.createMany({
+      data: [
+        {
+          name: '2021-2022',
+          startDate: new Date('2021-09-01'),
+          endDate: new Date('2022-06-30'),
+        },
+        {
+          name: '2022-2023',
+          startDate: new Date('2022-09-01'),
+          endDate: new Date('2023-06-30'),
+        },
+      ],
+    }),
+
+    // Create branches
+    prisma.classBranch.createMany({
+      data: [
+        {
+          name: 'Info',
+          color: '#FF0000',
+        },
+        {
+          name: 'Maths',
+          color: '#00FF00',
+        },
+      ],
+    }),
+
+    // Create levels
+    prisma.classLevel.createMany({
+      data: [
+        {
+          name: '6ème',
+          color: '#0000FF',
+        },
+        {
+          name: '5ème',
+          color: '#0000FF',
+        },
+      ],
+    }),
+
+    // // Create teachers
+    prisma.teacher.createMany({
+      data: [
+        {
+          name: 'Teacher 1',
+        },
+        {
+          name: 'Teacher 2',
+        },
+        {
+          name: 'Teacher 3',
+        },
+      ],
+    }),
+
+    // Create classes
+    prisma.class.create({
+      data: {
+        name: '6ème A',
+        description: 'Class A',
+        // mainTeacher: {
+        //     connect: {id: 1},
+        // },
+        level: {
+          connect: { id: 1 },
+        },
+        academicYear: {
+          connect: { id: 1 },
+        },
+        teachers: {
+          connect: [{ id: 1 }, { id: 2 }],
+        },
+      },
+    }),
+    prisma.class.create({
+      data: {
+        name: '6ème B',
+        description: 'Class B',
+        mainTeacher: {
+          connect: { id: 2 },
+        },
+        level: {
+          connect: { id: 2 },
+        },
+        academicYear: {
+          connect: { id: 1 },
+        },
+        teachers: {
+          connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        },
+      },
+    }),
+    prisma.class.create({
+      data: {
+        name: '5ème A',
+        description: 'Class A',
+        mainTeacher: {
+          connect: { id: 3 },
+        },
+        level: {
+          connect: { id: 1 },
+        },
+        academicYear: {
+          connect: { id: 2 },
+        },
+        teachers: {
+          connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        },
+      },
+    }),
+
+    // Create properties
     prisma.property.createMany({
       data: newProperties,
     }),
+
+    // for the filter
+    prisma.student.create({
+      data: { ...newStudent, classes: { connect: { id: 2 } } },
+    }),
+    // Create students
     prisma.student.createMany({
       data: Array.from({ length: 200 }, fakeStudents),
-    }),
-    prisma.student.upsert({
-      where: { id: 1 },
-      update: newStudent,
-      create: newStudent,
     }),
   ]);
 };

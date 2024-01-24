@@ -40,3 +40,36 @@ export const prepareValue = ({
       return escape(value as string);
   }
 };
+
+export const buildWhereClause = (
+  whereField: string,
+  operator: Properties['operator'],
+  value: Properties['value'],
+): string => {
+  const cleanValue = prepareValue({ operator, value });
+  const isNull = value === null;
+  switch (operator) {
+    case 'eq':
+      return isNull ? `${whereField} is null` : `${whereField} = ${cleanValue}`;
+    case 'neq':
+      return isNull
+        ? `${whereField} is not null`
+        : `(${whereField} != ${cleanValue} OR ${whereField} IS NULL)`;
+    case 'gt':
+      return `${whereField} > ${cleanValue}`;
+    case 'gte':
+      return `${whereField} >= ${cleanValue}`;
+    case 'lt':
+      return `${whereField} < ${cleanValue}`;
+    case 'lte':
+      return `${whereField} <= ${cleanValue}`;
+    case 'in':
+      return `${whereField} IN ${cleanValue}`;
+    case 'nin':
+      return `${whereField} NOT IN ${cleanValue}`;
+    case 'like':
+      return `${whereField} ILIKE ${cleanValue}`;
+    case 'nlike':
+      return `${whereField} NOT ILIKE ${cleanValue}`;
+  }
+};

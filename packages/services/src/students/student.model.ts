@@ -16,45 +16,91 @@ export const StudentSchema = z.object({
 });
 export type Student = z.infer<typeof StudentSchema>;
 
-const KnownPropertiesMapping = [
-  'id',
-  'identifier',
-  'first_name',
-  'last_name',
-  'other_name',
-  'birth_date',
-] as const;
-const KnownProperties = [
+// postgres cast
+const KnownFields = {
+  count: {
+    type: z.number(),
+    mappping: 'COUNT(*)',
+    cast: 'int',
+  },
+  id: {
+    type: StudentSchema.shape.id,
+    mappping: 'students.id',
+    cast: 'int',
+  },
+  identifier: {
+    type: StudentSchema.shape.identifier,
+    mappping: 'identifier',
+    cast: 'text',
+  },
+  firstName: {
+    type: StudentSchema.shape.firstName,
+    mappping: 'first_name',
+    cast: 'text',
+  },
+  lastName: {
+    type: StudentSchema.shape.lastName,
+    mappping: 'last_name',
+    cast: 'text',
+  },
+  otherName: {
+    type: StudentSchema.shape.otherName,
+    mappping: 'other_name',
+    cast: 'text',
+  },
+  birthDate: {
+    type: StudentSchema.shape.birthDate,
+    mappping: 'birth_date',
+    cast: 'date',
+  },
+  'class.academicYearId': {
+    type: z.number(),
+    mappping: 'class.academic_year_id',
+    cast: 'int',
+  },
+  'class.name': {
+    type: z.string(),
+    mappping: 'class.name',
+    cast: 'text',
+  },
+  'class.levelId': {
+    type: z.number(),
+    mappping: 'class.level_id',
+    cast: 'int',
+  },
+  'class.mainTeacherId': {
+    type: z.number(),
+    mappping: 'class.main_teacher_id',
+    cast: 'int',
+  },
+  'class.teachers.id': {
+    type: z.number(),
+    mappping: 'class.teachers.id',
+    cast: 'int',
+  },
+} as const;
+
+const KnownFieldsKeys = [
+  'count',
   'id',
   'identifier',
   'firstName',
   'lastName',
   'otherName',
   'birthDate',
+  'class.academicYearId',
+  'class.name',
+  'class.levelId',
+  'class.mainTeacherId',
+  'class.teachers.id',
 ] as const;
-type KnownProperty = (typeof KnownProperties)[number];
 
-export const KnownPropertyFromDb = KnownPropertiesMapping.reduce(
-  (acc, k, i) => ({
-    ...acc,
-    [k]: KnownProperties[i],
-  }),
-  {} as Record<(typeof KnownPropertiesMapping)[number], KnownProperty>,
-);
-export const KnownPropertyToDb = KnownProperties.reduce(
-  (acc, k, i) => ({
-    ...acc,
-    [k]: KnownPropertiesMapping[i],
-  }),
-  {} as Record<KnownProperty, (typeof KnownPropertiesMapping)[number]>,
-);
-
-export const isKnownProperty = (property: unknown): property is KnownProperty => {
-  return KnownProperties.includes(property as KnownProperty);
+export const getKnownField = (key: string): (typeof KnownFields)[keyof typeof KnownFields] => {
+  return KnownFields[key as keyof typeof KnownFields];
 };
 
 export const FieldSchema = z.union([
-  z.enum(KnownProperties),
+  z.enum(KnownFieldsKeys),
   z.custom<`properties.${string}`>(key => {
     return (
       typeof key === 'string' &&
@@ -81,6 +127,8 @@ export const PropertiesSchema = z.object({
 });
 export type Properties = z.infer<typeof PropertiesSchema>;
 
+//
+
 export const GetManyStudentsInputSchema = z.object({
   fields: FieldSchema.array().min(1),
   filter: z.array(PropertiesSchema),
@@ -93,7 +141,7 @@ export const GetManyStudentsInputSchema = z.object({
 export type GetManyStudentsInput = z.infer<typeof GetManyStudentsInputSchema>;
 
 export const GetManyStudentsOutputSchema = z.object({
-  data: z.array(StudentSchema.partial()),
+  data: z.array(StudentSchema.partial().merge(z.object({ class: z.record(z.any()) }))),
   meta: PaginationOutputSchema,
 });
 

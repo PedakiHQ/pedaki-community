@@ -1,46 +1,24 @@
-import { buildPaginationClause, escape, getJsonBType, prepareValue } from '~/shared/sql.ts';
-import { isKnownProperty, KnownPropertyToDb } from '~/students/student.model.ts';
+import { buildPaginationClause, buildWhereClause, escape, getJsonBType } from '~/shared/sql.ts';
 import type {
   Field,
   GetManyStudentsInput,
   UpdateOneStudentInput,
 } from '~/students/student.model.ts';
+import { getKnownField } from '~/students/student.model.ts';
 
+// TODO: rename to StudentQueryService and add a new StudentService
 class StudentService {
   #buildWhereClause(filter: GetManyStudentsInput['filter']): string {
     if (filter.length === 0) return '';
 
     // Here we suppose that the input is correct
     const whereClauses = filter.map(({ field, operator, value }) => {
-      const whereField = isKnownProperty(field)
-        ? KnownPropertyToDb[field]
+      const knownField = getKnownField(field);
+      const whereField = knownField
+        ? `${knownField.mappping}::${knownField.cast}`
         : `properties ->> '${field.split('properties.', 2)[1]}'`;
-      const cleanValue = prepareValue({ operator, value });
-      const isNull = value === null;
-      switch (operator) {
-        case 'eq':
-          return isNull ? `${whereField} is null` : `${whereField} = ${cleanValue}`;
-        case 'neq':
-          return isNull
-            ? `${whereField} is not null`
-            : `(${whereField} != ${cleanValue} OR ${whereField} IS NULL)`;
-        case 'gt':
-          return `${whereField} > ${cleanValue}`;
-        case 'gte':
-          return `${whereField} >= ${cleanValue}`;
-        case 'lt':
-          return `${whereField} < ${cleanValue}`;
-        case 'lte':
-          return `${whereField} <= ${cleanValue}`;
-        case 'in':
-          return `${whereField} IN ${cleanValue}`;
-        case 'nin':
-          return `${whereField} NOT IN ${cleanValue}`;
-        case 'like':
-          return `${whereField} ILIKE ${cleanValue}`;
-        case 'nlike':
-          return `${whereField} NOT ILIKE ${cleanValue}`;
-      }
+
+      return buildWhereClause(whereField, operator, value);
     });
 
     return `(${whereClauses.join(' AND ')})`;
@@ -56,16 +34,46 @@ class StudentService {
     const whereClause = this.#buildWhereClause(request.filter);
     const paginationClause = withPagination ? buildPaginationClause(request.pagination) : '';
 
+    if (!selectFields.includes('id') && !selectFields.includes('count')) {
+      selectFields.push('id');
+    }
+
     const finalFields = selectFields.map(field => {
-      return isKnownProperty(field)
-        ? `${KnownPropertyToDb[field]} as "${field}"`
+      const knownField = getKnownField(field);
+      return knownField
+        ? `${knownField.mappping}::${knownField.cast} as "${field}"`
         : field.startsWith('properties.')
           ? // TODO cast
             `properties ->> '${field.split('properties.', 2)[1]}' as "${field}"`
           : field;
     });
 
-    return `SELECT ${finalFields.join(', ')} FROM students ${whereClause.length > 0 ? 'WHERE' : ''} ${whereClause} ${paginationClause}`;
+    const hasClassFields = request.filter.some(({ field }) => field.startsWith('class.'));
+    const joinClass = hasClassFields
+      ? `
+        INNER JOIN "_class_to_student" t1 ON students.id = t1."B"
+        INNER JOIN classes class ON class.id = t1."A"`
+      : '';
+
+    return `SELECT ${finalFields.join(', ')}
+                FROM students ${joinClass} ${whereClause.length > 0 ? 'WHERE' : ''}  ${whereClause} ${paginationClause}`;
+  }
+
+  buildSelectJoinQuery(fields: Field[], ids: number[]): string | null {
+    const finalFields = fields
+      .map(field => {
+        const knownField = getKnownField(field);
+        if (!knownField) return null;
+        return `${knownField.mappping}::${knownField.cast} as "${field}"`;
+      })
+      .filter(Boolean);
+
+    // TODO handle other join than class
+
+    return `SELECT ${finalFields.join(', ')}, "t"."B" as "id"
+        FROM "_class_to_student" t
+            INNER JOIN "classes" class ON "t"."A" = "class"."id"
+        WHERE "t"."B" IN (${ids.join(',')})`;
   }
 
   buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {
@@ -88,13 +96,16 @@ class StudentService {
           return `properties = properties || ${result.join(' || ')}`;
         }
 
-        if (isKnownProperty(key)) {
-          return `${KnownPropertyToDb[key]} = ${escape(value)}`;
+        const knownField = getKnownField(key);
+        if (knownField) {
+          return `${knownField.mappping} = ${escape(value)}`;
         }
       })
       .filter(Boolean);
 
-    return `UPDATE students SET ${finalFields.join(', ')} WHERE id = ${escape(request.id)}`;
+    return `UPDATE students
+                SET ${finalFields.join(', ')}
+                WHERE id = ${escape(request.id)}`;
   }
 }
 

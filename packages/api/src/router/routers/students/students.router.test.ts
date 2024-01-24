@@ -112,7 +112,81 @@ describe('studentsRouter', () => {
         expect(data[0]!.properties!.math_level).toBe('15');
       },
     );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join fields',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.name'],
+          filter: [],
+          pagination: {
+            page: 1,
+            limit: 10,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(10);
+        expect(data[0]!.class.name).toBeDefined();
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.class.name).toBe('6ème B');
+        expect(data[1]!.class).toBeDefined();
+        expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
+      },
+    );
   });
+
+  test.each([userSession, internalSession])(
+    'returns the 1st page - with join filters',
+    async ({ api }) => {
+      const { data, meta } = await api.students.getMany({
+        fields: ['firstName', 'properties.math_level'],
+        filter: [
+          {
+            field: 'class.name',
+            operator: 'eq',
+            value: '6ème B',
+          },
+        ],
+        pagination: {
+          page: 1,
+          limit: 1,
+        },
+      });
+
+      expect(meta.currentPage).toBe(1);
+      expect(data.length).toBe(1);
+      expect(data[0]!.firstName).toBe('Nathan');
+      expect(data[0]!.properties!.math_level).toBe('15');
+    },
+  );
+
+  test.each([userSession, internalSession])(
+    'returns the 1st page - with join fields and filters',
+    async ({ api }) => {
+      const { data, meta } = await api.students.getMany({
+        fields: ['firstName', 'properties.math_level', 'class.name'],
+        filter: [
+          {
+            field: 'class.name',
+            operator: 'eq',
+            value: '6ème B',
+          },
+        ],
+        pagination: {
+          page: 1,
+          limit: 1,
+        },
+      });
+
+      expect(meta.currentPage).toBe(1);
+      expect(data.length).toBe(1);
+      expect(data[0]!.firstName).toBe('Nathan');
+      expect(data[0]!.properties!.math_level).toBe('15');
+      expect(data[0]!.class.name).toBe('6ème B');
+    },
+  );
 
   describe('getOne', () => {
     test.each([anonymousSession, userSession, internalSession])(
