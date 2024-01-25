@@ -218,8 +218,8 @@ importers:
         specifier: workspace:*
         version: link:../services/dist
       '@t3-oss/env-core':
-        specifier: ^0.7.3
-        version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       '@tanstack/react-query':
         specifier: ^4.36.1
         version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
@@ -274,8 +274,8 @@ importers:
         specifier: workspace:*
         version: link:../logger/dist
       '@t3-oss/env-core':
-        specifier: ^0.7.3
-        version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       next-auth:
         specifier: 5.0.0-beta.4
         version: 5.0.0-beta.4(next@14.1.0)(react@18.2.0)
@@ -400,8 +400,8 @@ importers:
         specifier: ^1.20.0
         version: 1.20.0
       '@t3-oss/env-core':
-        specifier: ^0.7.3
-        version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       winston:
         specifier: ^3.11.0
         version: 3.11.0
@@ -428,8 +428,8 @@ importers:
         specifier: workspace:*
         version: link:../logger/dist
       '@t3-oss/env-core':
-        specifier: ^0.7.3
-        version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       esbuild-plugin-file-path-extensions:
         specifier: ^2.0.0
         version: 2.0.0
@@ -5520,19 +5520,6 @@ packages:
     resolution: {integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==}
     dependencies:
       tslib: 2.6.2
-
-  /@t3-oss/env-core@0.7.3(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-hhtj59TKC6TKVdwJ0CcbKsvkr9R8Pc/SNKd4IgGUIC9T9X6moB8EZZ3FTJdABA/h9UABCK4J+KsF8gzmvMvHPg==}
-    peerDependencies:
-      typescript: '>=4.7.2'
-      zod: ^3.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      typescript: 5.3.3
-      zod: 3.22.4
-    dev: false
 
   /@t3-oss/env-core@0.8.0(typescript@5.3.3)(zod@3.22.4):
     resolution: {integrity: sha512-Tc1pg0KH/tJeI0Z1s/Isp1VsGDj1N03ZAYFV8GjWgMxytF/ve0Dv+opjmTapHICRv8qiB1Y/fsTjkWNMpKPRCQ==}
