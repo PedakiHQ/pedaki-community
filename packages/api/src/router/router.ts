@@ -2,11 +2,13 @@ import type { inferRouterOutputs } from '@trpc/server';
 import { authRouter } from '~api/router/routers/auth/index.ts';
 import { fileRouter } from '~api/router/routers/file/index.ts';
 import { settingsRouter } from '~api/router/routers/settings/index.ts';
+import { studentsRouter } from '~api/router/routers/students/index.ts';
 import { router } from '~api/router/trpc.ts';
 
 export const appRouter = router({
   settings: settingsRouter,
-  file: fileRouter,
+  students: studentsRouter,
+  files: fileRouter,
   auth: authRouter,
 });
 

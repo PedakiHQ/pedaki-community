@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = []
 }
 
 generator fieldEncryptionMigrations {
@@ -140,6 +141,9 @@ model Teacher {
   // But can only be the main teacher of one class
   mainClass Class?  @relation("main_teacher")
 
+  name String? @db.VarChar(255) // Default if the teacher is not linked to a user
+
+  // A teacher can be linked to a user
   userId String? @unique @map("user_id") @db.VarChar(25)
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
@@ -152,9 +156,9 @@ model ClassLevel {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
-  color       String @db.Char(7) // Hexadecimal color
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
+  color       String  @db.Char(7) // Hexadecimal color
 
   classes          Class[]       @relation("class_to_level")
   possibleBranches ClassBranch[] @relation("branch_to_level")
@@ -162,19 +166,19 @@ model ClassLevel {
   @@map("class_levels")
 }
 
-// ex: 1A, 1B, 2A, 2B, ...
+// ex: Science, Math, ...
 model ClassBranch {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
-  color       String @db.Char(7) // Hexadecimal color
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
+  color       String  @db.Char(7) // Hexadecimal color
 
   possibleLevels ClassLevel[] @relation("branch_to_level")
 
-  classes Class[]
+  classes Class[] @relation("branch_to_class")
 
   @@map("class_branches")
 }
@@ -184,8 +188,8 @@ model Room {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
 
   // Relations
   classes Class[] @relation("class_to_room")
@@ -199,8 +203,10 @@ model AcademicYear {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
+  startDate DateTime @map("start_date") @db.Date
+  endDate   DateTime @map("end_date") @db.Date
+
+  name String @unique @db.VarChar(255) // Ex: 2020-2021
 
   // Relations
   classes Class[] @relation("class_to_academic_year")
@@ -213,8 +219,8 @@ model Class {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
 
   // A main teacher is the one who is in charge of the class (and is responsible for only one class)
   mainTeacherId Int?     @unique @map("main_teacher_id")
@@ -224,12 +230,10 @@ model Class {
   teachers Teacher[] @relation("class_to_teacher")
   students Student[] @relation("class_to_student")
 
-  levelId Int        @map("level_id")
+  levelId Int        @map("level_id") // ex: 1st year, 2nd year, 3rd year, ...
   level   ClassLevel @relation("class_to_level", fields: [levelId], references: [id], onDelete: Cascade)
 
-  // Can be null if the class is not linked to a branch
-  branchId Int?
-  branch   ClassBranch? @relation(fields: [branchId], references: [id])
+  branch ClassBranch[] @relation("branch_to_class")
 
   // If the class as assigned rooms, they will be listed here
   rooms Room[] @relation("class_to_room")
@@ -242,7 +246,7 @@ model Class {
   status ClassStatus @default(ACTIVE)
 
   @@unique([name])
-  @@index([academicYearId, levelId, branchId])
+  @@index([academicYearId, levelId])
   @@map("classes")
 }
 

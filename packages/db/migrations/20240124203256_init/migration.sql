@@ -99,6 +99,7 @@ CREATE TABLE "teachers" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" VARCHAR(255),
     "user_id" VARCHAR(25),
 
     CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")
@@ -110,7 +111,7 @@ CREATE TABLE "class_levels" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" VARCHAR(255) NOT NULL,
-    "description" VARCHAR(1000) NOT NULL,
+    "description" VARCHAR(1000),
     "color" CHAR(7) NOT NULL,
 
     CONSTRAINT "class_levels_pkey" PRIMARY KEY ("id")
@@ -122,7 +123,7 @@ CREATE TABLE "class_branches" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" VARCHAR(255) NOT NULL,
-    "description" VARCHAR(1000) NOT NULL,
+    "description" VARCHAR(1000),
     "color" CHAR(7) NOT NULL,
 
     CONSTRAINT "class_branches_pkey" PRIMARY KEY ("id")
@@ -134,7 +135,7 @@ CREATE TABLE "rooms" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" VARCHAR(255) NOT NULL,
-    "description" VARCHAR(1000) NOT NULL,
+    "description" VARCHAR(1000),
 
     CONSTRAINT "rooms_pkey" PRIMARY KEY ("id")
 );
@@ -144,8 +145,9 @@ CREATE TABLE "academic_years" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "start_date" DATE NOT NULL,
+    "end_date" DATE NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "description" VARCHAR(1000) NOT NULL,
 
     CONSTRAINT "academic_years_pkey" PRIMARY KEY ("id")
 );
@@ -156,10 +158,9 @@ CREATE TABLE "classes" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" VARCHAR(255) NOT NULL,
-    "description" VARCHAR(1000) NOT NULL,
+    "description" VARCHAR(1000),
     "main_teacher_id" INTEGER,
     "level_id" INTEGER NOT NULL,
-    "branchId" INTEGER,
     "academic_year_id" INTEGER NOT NULL,
     "status" "ClassStatus" NOT NULL DEFAULT 'ACTIVE',
 
@@ -180,6 +181,12 @@ CREATE TABLE "_class_to_teacher" (
 
 -- CreateTable
 CREATE TABLE "_class_to_student" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_branch_to_class" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -221,10 +228,13 @@ CREATE UNIQUE INDEX "properties_name_key" ON "properties"("name");
 CREATE UNIQUE INDEX "teachers_user_id_key" ON "teachers"("user_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "academic_years_name_key" ON "academic_years"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "classes_main_teacher_id_key" ON "classes"("main_teacher_id");
 
 -- CreateIndex
-CREATE INDEX "classes_academic_year_id_level_id_branchId_idx" ON "classes"("academic_year_id", "level_id", "branchId");
+CREATE INDEX "classes_academic_year_id_level_id_idx" ON "classes"("academic_year_id", "level_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "classes_name_key" ON "classes"("name");
@@ -248,6 +258,12 @@ CREATE UNIQUE INDEX "_class_to_student_AB_unique" ON "_class_to_student"("A", "B
 CREATE INDEX "_class_to_student_B_index" ON "_class_to_student"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_branch_to_class_AB_unique" ON "_branch_to_class"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_branch_to_class_B_index" ON "_branch_to_class"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_class_to_room_AB_unique" ON "_class_to_room"("A", "B");
 
 -- CreateIndex
@@ -269,9 +285,6 @@ ALTER TABLE "classes" ADD CONSTRAINT "classes_main_teacher_id_fkey" FOREIGN KEY 
 ALTER TABLE "classes" ADD CONSTRAINT "classes_level_id_fkey" FOREIGN KEY ("level_id") REFERENCES "class_levels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "classes" ADD CONSTRAINT "classes_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "class_branches"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "classes" ADD CONSTRAINT "classes_academic_year_id_fkey" FOREIGN KEY ("academic_year_id") REFERENCES "academic_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -291,6 +304,12 @@ ALTER TABLE "_class_to_student" ADD CONSTRAINT "_class_to_student_A_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "_class_to_student" ADD CONSTRAINT "_class_to_student_B_fkey" FOREIGN KEY ("B") REFERENCES "students"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_branch_to_class" ADD CONSTRAINT "_branch_to_class_A_fkey" FOREIGN KEY ("A") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_branch_to_class" ADD CONSTRAINT "_branch_to_class_B_fkey" FOREIGN KEY ("B") REFERENCES "class_branches"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_class_to_room" ADD CONSTRAINT "_class_to_room_A_fkey" FOREIGN KEY ("A") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
