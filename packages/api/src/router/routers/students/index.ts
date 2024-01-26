@@ -119,10 +119,10 @@ export const studentsRouter = router({
         return {
           ...Object.fromEntries(otherData),
           properties: Object.fromEntries(
-            properties.map(([key, value]) => [key.split('properties.')[1], value]),
+            properties.map(([key, value]) => [key.split('properties.', 2)[1], value]),
           ) as Record<string, any>,
           class: Object.fromEntries(
-            classData.map(([key, value]) => [key.split('class.')[1], value]),
+            classData.map(([key, value]) => [key.split('class.', 2)[1], value]),
           ) as Record<string, any>,
         };
       });
