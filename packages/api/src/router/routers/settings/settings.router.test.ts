@@ -38,7 +38,9 @@ describe('settingsRouter', () => {
   describe('setSettings', () => {
     test.skip.each([anonymousSession, userSession])(
       'need permission to use this route - $type',
-      async () => {},
+      async () => {
+        // TODO
+      },
     );
 
     test('updates the settings', async () => {
