@@ -31,7 +31,7 @@
     "@pedaki/common": "0.5.2-beta.3",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
-    "@t3-oss/env-core": "^0.7.3",
+    "@t3-oss/env-core": "^0.8.0",
     "next-auth": "5.0.0-beta.4",
     "superjson": "^2.2.1",
     "zod": "^3.22.4"
