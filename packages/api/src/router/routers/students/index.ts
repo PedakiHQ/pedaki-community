@@ -57,8 +57,6 @@ export const studentsRouter = router({
         selectFields: ['count'],
       });
 
-      console.log(queryData);
-
       const [data, meta] = await prisma.$transaction([
         prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData),
         prisma.$queryRawUnsafe<{ count: BigInt }[]>(queryCount),

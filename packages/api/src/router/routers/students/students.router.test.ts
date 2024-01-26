@@ -107,7 +107,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
       },
     );
 
