@@ -29,7 +29,7 @@ describe('studentsRouter', () => {
     );
 
     test.each([userSession, internalSession])(
-      'returns the 1st page - without filter',
+      'returns the 1st page - without filter - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['id'],
@@ -46,7 +46,7 @@ describe('studentsRouter', () => {
     );
 
     test.each([userSession, internalSession])(
-      'returns the 1st page - with filter',
+      'returns the 1st page - with filter - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['id'],
@@ -69,7 +69,7 @@ describe('studentsRouter', () => {
     );
 
     test.each([userSession, internalSession])(
-      'returns the 1st page - with many filter',
+      'returns the 1st page - with many filter - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.math_level'],
@@ -114,7 +114,7 @@ describe('studentsRouter', () => {
     );
 
     test.each([userSession, internalSession])(
-      'returns the 1st page - with join fields',
+      'returns the 1st page - with join field on one level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.math_level', 'class.name'],
@@ -135,58 +135,197 @@ describe('studentsRouter', () => {
         expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
       },
     );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join fields on one level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.name', 'class.academicYearId'],
+          filter: [],
+          pagination: {
+            page: 1,
+            limit: 10,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(10);
+        expect(data[0]!.class.name).toBeDefined();
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.class.name).toBe('6ème B');
+        expect(data[0]!.class.academicYearId).toBe(1);
+        expect(data[1]!.class).toBeDefined();
+        expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
+        expect(data[1]!.class.academicYearId).toBeUndefined();
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join filter on one level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level'],
+          filter: [
+            {
+              field: 'class.name',
+              operator: 'eq',
+              value: '6ème B',
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 1,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join filters on one level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level'],
+          filter: [
+            {
+              field: 'class.name',
+              operator: 'eq',
+              value: '6ème B',
+            },
+            {
+              field: 'class.academicYearId',
+              operator: 'eq',
+              value: 1,
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 1,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join fields and filters on one level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.name'],
+          filter: [
+            {
+              field: 'class.name',
+              operator: 'eq',
+              value: '6ème B',
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 1,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.class.name).toBe('6ème B');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join fields on two level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.teachers.id'],
+          filter: [
+            {
+              field: 'class.name',
+              operator: 'eq',
+              value: '6ème B',
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 1,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.class.teachers).toBeDefined();
+        expect(data[0]!.class.teachers).toHaveLength(3);
+        expect(data[0]!.class.teachers).toStrictEqual([{ id: 1 }, { id: 2 }, { id: 3 }]);
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join filter on two level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level'],
+          filter: [
+            {
+              field: 'class.teachers.id',
+              operator: 'in',
+              value: [1, 2],
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 1,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join filter and fields on two level - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
+          filter: [
+            {
+              field: 'class.teachers.id',
+              operator: 'in',
+              value: [1, 2],
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 1,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.firstName).toBe('Nathan');
+        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.class.teachers).toBeDefined();
+        expect(data[0]!.class.teachers).toHaveLength(2);
+        expect(data[0]!.class.teachers).toStrictEqual([
+          { name: 'Teacher 1' },
+          { name: 'Teacher 2' },
+        ]);
+      },
+    );
   });
-
-  test.each([userSession, internalSession])(
-    'returns the 1st page - with join filters',
-    async ({ api }) => {
-      const { data, meta } = await api.students.getMany({
-        fields: ['firstName', 'properties.math_level'],
-        filter: [
-          {
-            field: 'class.name',
-            operator: 'eq',
-            value: '6ème B',
-          },
-        ],
-        pagination: {
-          page: 1,
-          limit: 1,
-        },
-      });
-
-      expect(meta.currentPage).toBe(1);
-      expect(data.length).toBe(1);
-      expect(data[0]!.firstName).toBe('Nathan');
-      expect(data[0]!.properties!.math_level).toBe('15');
-    },
-  );
-
-  test.each([userSession, internalSession])(
-    'returns the 1st page - with join fields and filters',
-    async ({ api }) => {
-      const { data, meta } = await api.students.getMany({
-        fields: ['firstName', 'properties.math_level', 'class.name'],
-        filter: [
-          {
-            field: 'class.name',
-            operator: 'eq',
-            value: '6ème B',
-          },
-        ],
-        pagination: {
-          page: 1,
-          limit: 1,
-        },
-      });
-
-      expect(meta.currentPage).toBe(1);
-      expect(data.length).toBe(1);
-      expect(data[0]!.firstName).toBe('Nathan');
-      expect(data[0]!.properties!.math_level).toBe('15');
-      expect(data[0]!.class.name).toBe('6ème B');
-    },
-  );
 
   describe('getOne', () => {
     test.each([anonymousSession, userSession, internalSession])(

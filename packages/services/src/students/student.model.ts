@@ -75,8 +75,13 @@ const KnownFields = {
   },
   'class.teachers.id': {
     type: z.number(),
-    mappping: 'class.teachers.id',
+    mappping: 'teachers.id',
     cast: 'int',
+  },
+  'class.teachers.name': {
+    type: z.string(),
+    mappping: 'teachers.name',
+    cast: 'text',
   },
 } as const;
 
@@ -93,6 +98,7 @@ const KnownFieldsKeys = [
   'class.levelId',
   'class.mainTeacherId',
   'class.teachers.id',
+  'class.teachers.name',
 ] as const;
 
 export const getKnownField = (key: string): (typeof KnownFields)[keyof typeof KnownFields] => {

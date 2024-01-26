@@ -1,6 +1,6 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
-import type { Field, Student } from '@pedaki/services/students/student.model.js';
+import type { Student } from '@pedaki/services/students/student.model.js';
 import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
@@ -37,7 +37,7 @@ export const studentsRouter = router({
       let joinData: { id: number; [key: string]: any }[] | null = null;
       if (joinFields.length > 0) {
         const ids = data.map(student => student.id);
-        const queryJoin = studentService.buildSelectJoinQuery(joinFields, ids);
+        const queryJoin = studentService.buildSelectJoinQuery(input, ids);
         if (queryJoin !== null) {
           joinData = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryJoin);
         }
@@ -54,9 +54,38 @@ export const studentsRouter = router({
         // properties starts with properties.
         const properties = data.filter(([key]) => key.startsWith('properties.'));
         const otherData = data.filter(([key]) => !key.startsWith('properties.'));
-        const joinDataStudent = joinData?.find(joinStudent => joinStudent.id === student.id);
-        const classData = joinDataStudent
-          ? Object.entries(joinDataStudent).filter(([key]) => key.startsWith('class.'))
+        const joinDataStudent = joinData?.filter(joinStudent => joinStudent.id === student.id);
+        const joinDataStudentMap = joinDataStudent?.reduce(
+          (acc, curr) => {
+            Object.entries(curr).forEach(([key, value]) => {
+              if (key.startsWith('class.teachers')) {
+                const subKey = key.split('class.teachers.', 2)[1];
+                if (!subKey) return;
+
+                if (acc['class.teachers'] === undefined) {
+                  acc['class.teachers'] = [];
+                }
+                const teacherArray = acc['class.teachers'] as Record<string, any>[];
+
+                const index = teacherArray.length;
+
+                if (teacherArray[index] === undefined) {
+                  teacherArray[index] = {};
+                }
+                const teacherObject = teacherArray[index]!;
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                teacherObject[subKey] = value;
+              } else {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                acc[key] = value;
+              }
+            });
+            return acc;
+          },
+          {} as Record<string, any>,
+        );
+        const classData = joinDataStudentMap
+          ? Object.entries(joinDataStudentMap).filter(([key]) => key.startsWith('class.'))
           : [];
         return {
           ...Object.fromEntries(otherData),

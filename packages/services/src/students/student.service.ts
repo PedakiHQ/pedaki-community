@@ -54,12 +54,19 @@ class StudentService {
         INNER JOIN "_class_to_student" t1 ON students.id = t1."B"
         INNER JOIN classes class ON class.id = t1."A"`
       : '';
+    const hasTeachers = request.filter.some(({ field }) => field.startsWith('class.teachers.'));
+    const joinTeachers = hasTeachers
+      ? `
+        INNER JOIN "_class_to_teacher" t2 ON class.id = t2."A"
+        INNER JOIN teachers ON teachers.id = t2."B"`
+      : '';
 
     return `SELECT ${finalFields.join(', ')}
-                FROM students ${joinClass} ${whereClause.length > 0 ? 'WHERE' : ''}  ${whereClause} ${paginationClause}`;
+                FROM students ${joinClass} ${joinTeachers} ${whereClause.length > 0 ? 'WHERE' : ''}  ${whereClause} ${paginationClause}`;
   }
 
-  buildSelectJoinQuery(fields: Field[], ids: number[]): string | null {
+  buildSelectJoinQuery(input: GetManyStudentsInput, ids: number[]): string | null {
+    const fields = input.fields.filter(field => field.startsWith('class.'));
     const finalFields = fields
       .map(field => {
         const knownField = getKnownField(field);
@@ -70,10 +77,28 @@ class StudentService {
 
     // TODO handle other join than class
 
+    const hasTeachers = fields.some(field => field.startsWith('class.teachers.'));
+
+    const joinTeachers = hasTeachers
+      ? `
+        INNER JOIN "_class_to_teacher" t2 ON class.id = t2."A"
+        INNER JOIN teachers ON teachers.id = t2."B"`
+      : '';
+    const whereTeachers = hasTeachers
+      ? input.filter
+          .filter(({ field }) => field.startsWith('class.teachers.'))
+          .map(({ field, operator, value }) => {
+            const whereField = `teachers.${field.split('class.teachers.', 2)[1]}`;
+            return buildWhereClause(whereField, operator, value);
+          })
+          .join(' AND ')
+      : '';
+
     return `SELECT ${finalFields.join(', ')}, "t"."B" as "id"
         FROM "_class_to_student" t
             INNER JOIN "classes" class ON "t"."A" = "class"."id"
-        WHERE "t"."B" IN (${ids.join(',')})`;
+        ${joinTeachers}
+        WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers.length > 0 ? 'AND' : ''} ${whereTeachers}`;
   }
 
   buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {

@@ -45,8 +45,9 @@ export const buildWhereClause = (
   whereField: string,
   operator: Properties['operator'],
   value: Properties['value'],
+  raw = false,
 ): string => {
-  const cleanValue = prepareValue({ operator, value });
+  const cleanValue = raw ? (value as string) : prepareValue({ operator, value });
   const isNull = value === null;
   switch (operator) {
     case 'eq':
