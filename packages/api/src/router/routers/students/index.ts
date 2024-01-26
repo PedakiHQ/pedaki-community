@@ -21,11 +21,10 @@ export const studentsRouter = router({
       const joinFields = input.fields.filter(field => field.startsWith('class.'));
 
       const queryData = studentQueryService.buildSelectPreparedQuery(input, {
-        withPagination: true,
         selectFields: baseFields,
       });
+      console.log(queryData);
       const queryCount = studentQueryService.buildSelectPreparedQuery(input, {
-        withPagination: false,
         selectFields: ['count'],
       });
 

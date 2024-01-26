@@ -1,10 +1,9 @@
 import { buildPaginationClause, buildWhereClause, escape, getJsonBType } from '~/shared/sql.ts';
-import type {
-  Field,
-  GetManyStudentsInput,
-  UpdateOneStudentInput,
-} from '~/students/student.model.ts';
-import { getKnownField } from '~/students/student.model.ts';
+import { getKnownField } from '~/students/query.model.ts';
+import type { Field } from '~/students/query.model.ts';
+import type { GetManyStudentsInput, UpdateOneStudentInput } from '~/students/student.model.ts';
+
+// TODO make this cleaner
 
 class StudentQueryService {
   #buildWhereClause(filter: GetManyStudentsInput['filter']): string {
@@ -14,7 +13,7 @@ class StudentQueryService {
     const whereClauses = filter.map(({ field, operator, value }) => {
       const knownField = getKnownField(field);
       const whereField = knownField
-        ? `${knownField.mappping}::${knownField.cast}`
+        ? `${knownField.mappping}::${knownField.fieldType}`
         : `properties ->> '${field.split('properties.', 2)[1]}'`;
 
       return buildWhereClause(whereField, operator, value);
@@ -23,37 +22,60 @@ class StudentQueryService {
     return `(${whereClauses.join(' AND ')})`;
   }
 
+  #buildOrderByClause(orderBy: GetManyStudentsInput['orderBy']): string | null {
+    if (!orderBy || orderBy.length === 0) return null;
+
+    // Here we suppose that the input is correct
+    const orderByClauses = orderBy.map(([field, order]) => {
+      const knownField = getKnownField(field);
+      const orderByField = knownField
+        ? `${knownField.mappping}::${knownField.fieldType}`
+        : `properties ->> '${field.split('properties.', 2)[1]}'`;
+
+      return `${orderByField} ${order}`;
+    });
+    return `ORDER BY ${orderByClauses.join(', ')}`;
+  }
+
   buildSelectPreparedQuery(
     request: GetManyStudentsInput,
-    {
-      withPagination = true,
-      selectFields,
-    }: { withPagination: boolean | undefined; selectFields: Field[] },
+    { selectFields }: { selectFields: Field[] },
   ): string {
+    const isCount = selectFields.includes('count');
     const whereClause = this.#buildWhereClause(request.filter);
-    const paginationClause = withPagination ? buildPaginationClause(request.pagination) : '';
+    const paginationClause = !isCount ? buildPaginationClause(request.pagination) : '';
+    const orderByClause = !isCount ? this.#buildOrderByClause(request.orderBy) : '';
 
-    if (!selectFields.includes('id') && !selectFields.includes('count')) {
+    if (!selectFields.includes('id') && !isCount) {
       selectFields.push('id');
     }
 
     const finalFields = selectFields.map(field => {
       const knownField = getKnownField(field);
       return knownField
-        ? `${knownField.mappping}::${knownField.cast} as "${field}"`
+        ? `${knownField.mappping}::${knownField.fieldType} as "${field}"`
         : field.startsWith('properties.')
           ? // TODO cast
             `properties ->> '${field.split('properties.', 2)[1]}' as "${field}"`
           : field;
     });
 
-    const hasClassFields = request.filter?.some(({ field }) => field.startsWith('class.'));
+    const hasClassFields =
+      request.filter?.some(({ field }) => field.startsWith('class.')) ??
+      request.orderBy?.some(([field]) => field.startsWith('class.')) ??
+      request.fields.some(field => field.startsWith('class.')) ??
+      false;
+
     const joinClass = hasClassFields
       ? `
         INNER JOIN "_class_to_student" t1 ON students.id = t1."B"
         INNER JOIN classes class ON class.id = t1."A"`
       : '';
-    const hasTeachers = request.filter?.some(({ field }) => field.startsWith('class.teachers.'));
+    const hasTeachers =
+      request.filter?.some(({ field }) => field.startsWith('class.teachers.')) ??
+      request.orderBy?.some(([field]) => field.startsWith('class.teachers.')) ??
+      request.fields.some(field => field.startsWith('class.teachers.')) ??
+      false;
     const joinTeachers = hasTeachers
       ? `
         INNER JOIN "_class_to_teacher" t2 ON class.id = t2."A"
@@ -61,20 +83,18 @@ class StudentQueryService {
       : '';
 
     return `SELECT ${finalFields.join(', ')}
-                FROM students ${joinClass} ${joinTeachers} ${whereClause.length > 0 ? 'WHERE' : ''}  ${whereClause} ${paginationClause}`;
+                FROM students ${joinClass} ${joinTeachers} ${whereClause.length > 0 ? 'WHERE' : ''} ${whereClause} ${orderByClause} ${paginationClause} `;
   }
 
-  buildSelectJoinQuery(input: GetManyStudentsInput, ids: number[]): string | null {
-    const fields = input.fields.filter(field => field.startsWith('class.'));
+  buildSelectJoinQuery(request: GetManyStudentsInput, ids: number[]): string | null {
+    const fields = request.fields.filter(field => field.startsWith('class.'));
     const finalFields = fields
       .map(field => {
         const knownField = getKnownField(field);
         if (!knownField) return null;
-        return `${knownField.mappping}::${knownField.cast} as "${field}"`;
+        return `${knownField.mappping}::${knownField.fieldType} as "${field}"`;
       })
       .filter(Boolean);
-
-    // TODO handle other join than class
 
     const hasTeachers = fields.some(field => field.startsWith('class.teachers.'));
 
@@ -84,7 +104,7 @@ class StudentQueryService {
         INNER JOIN teachers ON teachers.id = t2."B"`
       : '';
     const whereTeachers = hasTeachers
-      ? input.filter
+      ? request.filter
           ?.filter(({ field }) => field.startsWith('class.teachers.'))
           .map(({ field, operator, value }) => {
             const whereField = `teachers.${field.split('class.teachers.', 2)[1]}`;
@@ -94,10 +114,10 @@ class StudentQueryService {
       : '';
 
     return `SELECT ${finalFields.join(', ')}, "t"."B" as "id"
-        FROM "_class_to_student" t
-            INNER JOIN "classes" class ON "t"."A" = "class"."id"
-        ${joinTeachers}
-        WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers ? 'AND' : ''} ${whereTeachers}`;
+                FROM "_class_to_student" t
+                         INNER JOIN "classes" class ON "t"."A" = "class"."id"
+                    ${joinTeachers}
+                WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers ? 'AND' : ''} ${whereTeachers}`;
   }
 
   buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {

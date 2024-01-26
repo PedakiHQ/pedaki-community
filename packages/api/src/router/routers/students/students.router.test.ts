@@ -325,6 +325,79 @@ describe('studentsRouter', () => {
         ]);
       },
     );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join filter and fields on two level and ordered - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
+          filter: [
+            {
+              field: 'properties.math_level',
+              operator: 'gte',
+              value: 5,
+            },
+          ],
+          orderBy: [['properties.math_level', 'asc']],
+          pagination: {
+            page: 1,
+            limit: 50,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(50);
+
+        let previousValue = 0;
+        data.forEach(student => {
+          const value = Number(student.properties!.math_level); // TODO: the cast should not be needed
+          expect(value).toBeGreaterThanOrEqual(previousValue);
+          expect(value).toBeGreaterThanOrEqual(5);
+          previousValue = value;
+        });
+      },
+    );
+
+    // test.each([userSession, internalSession])(
+    //   'returns the 1st page - with join filter and fields on two level and ordered twice - $type',
+    //   async ({ api }) => {
+    //     const { data, meta } = await api.students.getMany({
+    //       fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
+    //       filter: [
+    //         {
+    //           field: 'properties.math_level',
+    //           operator: 'nin',
+    //           value: [5, 6],
+    //         },
+    //       ],
+    //       orderBy: [
+    //         ['properties.math_level', 'asc'],
+    //         ['firstName', 'desc'],
+    //       ],
+    //       pagination: {
+    //         page: 1,
+    //         limit: 50,
+    //       },
+    //     });
+    //
+    //     expect(meta.currentPage).toBe(1);
+    //     expect(data.length).toBe(50);
+    //
+    //     let previousValue = 0;
+    //     let lastFirstName = '';
+    //     data.forEach(student => {
+    //       const value = Number(student.properties!.math_level); // TODO: the cast should not be needed
+    //       const firstName = student.firstName!;
+    //       expect(value).toBeGreaterThanOrEqual(previousValue);
+    //       expect(value).not.toBe(5);
+    //       expect(value).not.toBe(6);
+    //       expect(firstName <= lastFirstName).toBe(true);
+    //
+    //       lastFirstName = firstName;
+    //       previousValue = value;
+    //     });
+    //   },
+    // );
   });
 
   describe('getOne', () => {

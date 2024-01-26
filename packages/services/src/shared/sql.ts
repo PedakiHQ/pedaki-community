@@ -1,5 +1,5 @@
 import type { PaginationInput } from '~/shared/pagination.model.ts';
-import type { Properties } from '~/students/student.model.ts';
+import type { Properties } from '~/students/query.model.ts';
 import SqlString from 'sqlstring';
 
 export const buildPaginationClause = (pagination: PaginationInput): string => {
