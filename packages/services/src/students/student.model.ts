@@ -137,7 +137,8 @@ export type Properties = z.infer<typeof PropertiesSchema>;
 
 export const GetManyStudentsInputSchema = z.object({
   fields: FieldSchema.array().min(1),
-  filter: z.array(PropertiesSchema),
+  filter: z.array(PropertiesSchema).optional(),
+  orderBy: z.array(z.tuple([FieldSchema, z.enum(['asc', 'desc'])])).optional(),
   pagination: PaginationInputSchema.optional().default({
     page: 1,
     limit: 10,

@@ -1,5 +1,6 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
+import { studentQueryService } from '@pedaki/services/students/query.service.js';
 import type { Student } from '@pedaki/services/students/student.model.js';
 import {
   GetManyStudentsInputSchema,
@@ -7,7 +8,6 @@ import {
   StudentSchema,
   UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
-import { studentService } from '@pedaki/services/students/student.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
 export const studentsRouter = router({
@@ -20,11 +20,11 @@ export const studentsRouter = router({
       const baseFields = input.fields.filter(field => !field.startsWith('class.'));
       const joinFields = input.fields.filter(field => field.startsWith('class.'));
 
-      const queryData = studentService.buildSelectPreparedQuery(input, {
+      const queryData = studentQueryService.buildSelectPreparedQuery(input, {
         withPagination: true,
         selectFields: baseFields,
       });
-      const queryCount = studentService.buildSelectPreparedQuery(input, {
+      const queryCount = studentQueryService.buildSelectPreparedQuery(input, {
         withPagination: false,
         selectFields: ['count'],
       });
@@ -37,7 +37,7 @@ export const studentsRouter = router({
       let joinData: { id: number; [key: string]: any }[] | null = null;
       if (joinFields.length > 0) {
         const ids = data.map(student => student.id);
-        const queryJoin = studentService.buildSelectJoinQuery(input, ids);
+        const queryJoin = studentQueryService.buildSelectJoinQuery(input, ids);
         if (queryJoin !== null) {
           joinData = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryJoin);
         }
@@ -135,7 +135,7 @@ export const studentsRouter = router({
     }),
 
   updateOne: privateProcedure.input(UpdateOneStudentInputSchema).mutation(async ({ input }) => {
-    const updateStudentQuery = studentService.buildUpdatePreparedQuery(input);
+    const updateStudentQuery = studentQueryService.buildUpdatePreparedQuery(input);
     await prisma.$queryRawUnsafe<Record<string, any>[]>(updateStudentQuery);
   }),
 

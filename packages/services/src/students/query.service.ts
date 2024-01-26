@@ -6,10 +6,9 @@ import type {
 } from '~/students/student.model.ts';
 import { getKnownField } from '~/students/student.model.ts';
 
-// TODO: rename to StudentQueryService and add a new StudentService
-class StudentService {
+class StudentQueryService {
   #buildWhereClause(filter: GetManyStudentsInput['filter']): string {
-    if (filter.length === 0) return '';
+    if (!filter || filter.length === 0) return '';
 
     // Here we suppose that the input is correct
     const whereClauses = filter.map(({ field, operator, value }) => {
@@ -48,13 +47,13 @@ class StudentService {
           : field;
     });
 
-    const hasClassFields = request.filter.some(({ field }) => field.startsWith('class.'));
+    const hasClassFields = request.filter?.some(({ field }) => field.startsWith('class.'));
     const joinClass = hasClassFields
       ? `
         INNER JOIN "_class_to_student" t1 ON students.id = t1."B"
         INNER JOIN classes class ON class.id = t1."A"`
       : '';
-    const hasTeachers = request.filter.some(({ field }) => field.startsWith('class.teachers.'));
+    const hasTeachers = request.filter?.some(({ field }) => field.startsWith('class.teachers.'));
     const joinTeachers = hasTeachers
       ? `
         INNER JOIN "_class_to_teacher" t2 ON class.id = t2."A"
@@ -86,7 +85,7 @@ class StudentService {
       : '';
     const whereTeachers = hasTeachers
       ? input.filter
-          .filter(({ field }) => field.startsWith('class.teachers.'))
+          ?.filter(({ field }) => field.startsWith('class.teachers.'))
           .map(({ field, operator, value }) => {
             const whereField = `teachers.${field.split('class.teachers.', 2)[1]}`;
             return buildWhereClause(whereField, operator, value);
@@ -98,7 +97,7 @@ class StudentService {
         FROM "_class_to_student" t
             INNER JOIN "classes" class ON "t"."A" = "class"."id"
         ${joinTeachers}
-        WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers.length > 0 ? 'AND' : ''} ${whereTeachers}`;
+        WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers ? 'AND' : ''} ${whereTeachers}`;
   }
 
   buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {
@@ -134,5 +133,5 @@ class StudentService {
   }
 }
 
-const studentService = new StudentService();
-export { studentService };
+const studentQueryService = new StudentQueryService();
+export { studentQueryService };
