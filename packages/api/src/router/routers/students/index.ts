@@ -1,5 +1,6 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
+import { studentPropertiesService } from '@pedaki/services/students/properties.service.js';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
 import type { Student } from '@pedaki/services/students/student.model.js';
 import {
@@ -17,16 +18,46 @@ export const studentsRouter = router({
     .query(async ({ input }) => {
       // TODO valid operator/value based on schema
 
+      // validate fields
+      input.filter?.forEach(({ field, value, operator }) => {
+        if (field.startsWith('properties.')) {
+          const key = field.split('properties.', 2)[1];
+          if (!key) {
+            // TODO custom error
+            throw new Error(`Invalid field ${field}`);
+          }
+          const schema = studentPropertiesService.getPropertySchema(key);
+          if (schema === null) {
+            // TODO custom error
+            throw new Error(`Unknown property ${key}`);
+          }
+          // TODO: we are doing ~ the same thing in query.model.ts and here (base vs properties)
+          const isArray = Array.isArray(value);
+          if (isArray && !['in', 'nin'].includes(operator)) return false;
+          if (!isArray && ['in', 'nin'].includes(operator)) return false;
+          if (!isArray) {
+            schema.schema.parse(value, {
+              path: ['fields', field],
+            });
+          } else {
+            schema.schema.array().parse(value, {
+              path: ['fields', field],
+            });
+          }
+        }
+      });
+
       const baseFields = input.fields.filter(field => !field.startsWith('class.'));
       const joinFields = input.fields.filter(field => field.startsWith('class.'));
 
       const queryData = studentQueryService.buildSelectPreparedQuery(input, {
         selectFields: baseFields,
       });
-      console.log(queryData);
       const queryCount = studentQueryService.buildSelectPreparedQuery(input, {
         selectFields: ['count'],
       });
+
+      console.log(queryData);
 
       const [data, meta] = await prisma.$transaction([
         prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData),

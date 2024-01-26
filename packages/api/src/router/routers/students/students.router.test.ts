@@ -19,7 +19,6 @@ describe('studentsRouter', () => {
           () =>
             api.students.getMany({
               fields: ['id'],
-              filter: [],
             }),
           {
             shouldWork: type !== 'anonymousUserSession',
@@ -33,7 +32,6 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['id'],
-          filter: [],
           pagination: {
             page: 1,
             limit: 10,
@@ -129,7 +127,7 @@ describe('studentsRouter', () => {
         expect(data.length).toBe(10);
         expect(data[0]!.class.name).toBeDefined();
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
         expect(data[1]!.class).toBeDefined();
         expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
@@ -152,7 +150,7 @@ describe('studentsRouter', () => {
         expect(data.length).toBe(10);
         expect(data[0]!.class.name).toBeDefined();
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
         expect(data[0]!.class.academicYearId).toBe(1);
         expect(data[1]!.class).toBeDefined();
@@ -182,7 +180,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
       },
     );
 
@@ -212,7 +210,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
       },
     );
 
@@ -237,7 +235,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
       },
     );
@@ -263,7 +261,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
         expect(data[0]!.class.teachers).toBeDefined();
         expect(data[0]!.class.teachers).toHaveLength(3);
         expect(data[0]!.class.teachers).toStrictEqual([{ id: 1 }, { id: 2 }, { id: 3 }]);
@@ -291,7 +289,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
       },
     );
 
@@ -316,7 +314,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe('15');
+        expect(data[0]!.properties!.math_level).toBe(15);
         expect(data[0]!.class.teachers).toBeDefined();
         expect(data[0]!.class.teachers).toHaveLength(2);
         expect(data[0]!.class.teachers).toStrictEqual([
@@ -350,7 +348,7 @@ describe('studentsRouter', () => {
 
         let previousValue = 0;
         data.forEach(student => {
-          const value = Number(student.properties!.math_level); // TODO: the cast should not be needed
+          const value = student.properties!.math_level! as number;
           expect(value).toBeGreaterThanOrEqual(previousValue);
           expect(value).toBeGreaterThanOrEqual(5);
           previousValue = value;
@@ -358,46 +356,47 @@ describe('studentsRouter', () => {
       },
     );
 
-    // test.each([userSession, internalSession])(
-    //   'returns the 1st page - with join filter and fields on two level and ordered twice - $type',
-    //   async ({ api }) => {
-    //     const { data, meta } = await api.students.getMany({
-    //       fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
-    //       filter: [
-    //         {
-    //           field: 'properties.math_level',
-    //           operator: 'nin',
-    //           value: [5, 6],
-    //         },
-    //       ],
-    //       orderBy: [
-    //         ['properties.math_level', 'asc'],
-    //         ['firstName', 'desc'],
-    //       ],
-    //       pagination: {
-    //         page: 1,
-    //         limit: 50,
-    //       },
-    //     });
-    //
-    //     expect(meta.currentPage).toBe(1);
-    //     expect(data.length).toBe(50);
-    //
-    //     let previousValue = 0;
-    //     let lastFirstName = '';
-    //     data.forEach(student => {
-    //       const value = Number(student.properties!.math_level); // TODO: the cast should not be needed
-    //       const firstName = student.firstName!;
-    //       expect(value).toBeGreaterThanOrEqual(previousValue);
-    //       expect(value).not.toBe(5);
-    //       expect(value).not.toBe(6);
-    //       expect(firstName <= lastFirstName).toBe(true);
-    //
-    //       lastFirstName = firstName;
-    //       previousValue = value;
-    //     });
-    //   },
-    // );
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with join filter and fields on two level and ordered twice - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.students.getMany({
+          fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
+          filter: [
+            {
+              field: 'properties.math_level',
+              operator: 'nin',
+              value: [5, 6],
+            },
+          ],
+          orderBy: [
+            ['properties.math_level', 'asc'],
+            ['firstName', 'desc'],
+          ],
+          pagination: {
+            page: 1,
+            limit: 100,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(100);
+
+        let previousValue = 0;
+        let lastFirstName = '';
+        data.forEach(student => {
+          const value = student.properties!.math_level as number;
+          const firstName = student.firstName!;
+          expect(value).toBeGreaterThanOrEqual(previousValue);
+          expect(value).not.toBe(5);
+          expect(value).not.toBe(6);
+          if (value === previousValue && lastFirstName !== '') {
+            expect(firstName <= lastFirstName).toBe(true);
+          }
+          lastFirstName = firstName;
+          previousValue = value;
+        });
+      },
+    );
   });
 
   describe('getOne', () => {

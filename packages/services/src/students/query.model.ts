@@ -1,4 +1,3 @@
-import { StudentSchema } from '~/students/student.model.ts';
 import { z } from 'zod';
 
 export interface QueryFieldSchema {
@@ -23,32 +22,32 @@ const KnownFields: Record<string, QueryFieldSchema> = {
     fieldType: 'int',
   },
   id: {
-    type: StudentSchema.shape.id,
+    type: z.number(),
     mappping: 'students.id',
     fieldType: 'int',
   },
   identifier: {
-    type: StudentSchema.shape.identifier,
+    type: z.string(),
     mappping: 'identifier',
     fieldType: 'text',
   },
   firstName: {
-    type: StudentSchema.shape.firstName,
+    type: z.string(),
     mappping: 'first_name',
     fieldType: 'text',
   },
   lastName: {
-    type: StudentSchema.shape.lastName,
+    type: z.string(),
     mappping: 'last_name',
     fieldType: 'text',
   },
   otherName: {
-    type: StudentSchema.shape.otherName,
+    type: z.string(),
     mappping: 'other_name',
     fieldType: 'text',
   },
   birthDate: {
-    type: StudentSchema.shape.birthDate,
+    type: z.date(),
     mappping: 'birth_date',
     fieldType: 'date',
   },
@@ -149,16 +148,25 @@ export const PropertiesSchema = z
   .refine(
     ({ field, operator, value }) => {
       const knownField = getKnownField(field);
-      if (!knownField) return false;
+      if (!knownField) return true;
 
-      const allowedOperators = FieldAllowedOperators[knownField.fieldType];
-      if (!allowedOperators.includes(operator)) return false;
+      const isArray = Array.isArray(value);
+      if (isArray && !['in', 'nin'].includes(operator)) return false;
+      if (!isArray && ['in', 'nin'].includes(operator)) return false;
+      if (!isArray) {
+        const allowedOperators = FieldAllowedOperators[knownField.fieldType];
+        if (!allowedOperators.includes(operator)) return false;
+      }
 
       const type = knownField.type;
-      return type.safeParse(value).success;
+      if (isArray) {
+        return type.array().safeParse(value).success;
+      } else {
+        return type.safeParse(value).success;
+      }
     },
-    {
-      message: 'Invalid property',
-    },
+    ({ field, operator, value }) => ({
+      message: `Invalid value for ${field} with operator ${operator}: ${JSON.stringify(value)}`,
+    }),
   );
 export type Properties = z.infer<typeof PropertiesSchema>;

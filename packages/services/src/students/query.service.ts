@@ -1,4 +1,5 @@
 import { buildPaginationClause, buildWhereClause, escape, getJsonBType } from '~/shared/sql.ts';
+import { studentPropertiesService } from '~/students/properties.service.ts';
 import { getKnownField } from '~/students/query.model.ts';
 import type { Field } from '~/students/query.model.ts';
 import type { GetManyStudentsInput, UpdateOneStudentInput } from '~/students/student.model.ts';
@@ -11,10 +12,17 @@ class StudentQueryService {
 
     // Here we suppose that the input is correct
     const whereClauses = filter.map(({ field, operator, value }) => {
+      let whereField: string = field;
       const knownField = getKnownField(field);
-      const whereField = knownField
-        ? `${knownField.mappping}::${knownField.fieldType}`
-        : `properties ->> '${field.split('properties.', 2)[1]}'`;
+      if (knownField) {
+        whereField = `${knownField.mappping}::${knownField.fieldType}`;
+      } else if (field.startsWith('properties.')) {
+        const key = field.split('properties.', 2)[1]!;
+        const knownProperty = studentPropertiesService.getPropertySchema(key);
+        if (knownProperty) {
+          whereField = `(properties ->> '${key}')::${knownProperty.type}`;
+        }
+      }
 
       return buildWhereClause(whereField, operator, value);
     });
@@ -22,15 +30,22 @@ class StudentQueryService {
     return `(${whereClauses.join(' AND ')})`;
   }
 
-  #buildOrderByClause(orderBy: GetManyStudentsInput['orderBy']): string | null {
-    if (!orderBy || orderBy.length === 0) return null;
+  #buildOrderByClause(orderBy: GetManyStudentsInput['orderBy']): string {
+    if (!orderBy || orderBy.length === 0) return '';
 
     // Here we suppose that the input is correct
     const orderByClauses = orderBy.map(([field, order]) => {
+      let orderByField: string = field;
       const knownField = getKnownField(field);
-      const orderByField = knownField
-        ? `${knownField.mappping}::${knownField.fieldType}`
-        : `properties ->> '${field.split('properties.', 2)[1]}'`;
+      if (knownField) {
+        orderByField = `${knownField.mappping}::${knownField.fieldType}`;
+      } else if (field.startsWith('properties.')) {
+        const key = field.split('properties.', 2)[1]!;
+        const knownProperty = studentPropertiesService.getPropertySchema(key);
+        if (knownProperty) {
+          orderByField = `(properties ->> '${key}')::${knownProperty.type}`;
+        }
+      }
 
       return `${orderByField} ${order}`;
     });
@@ -52,12 +67,18 @@ class StudentQueryService {
 
     const finalFields = selectFields.map(field => {
       const knownField = getKnownField(field);
-      return knownField
-        ? `${knownField.mappping}::${knownField.fieldType} as "${field}"`
-        : field.startsWith('properties.')
-          ? // TODO cast
-            `properties ->> '${field.split('properties.', 2)[1]}' as "${field}"`
-          : field;
+      if (knownField) {
+        return `${knownField.mappping}::${knownField.fieldType} as "${field}"`;
+      }
+      if (field.startsWith('properties.')) {
+        const key = field.split('properties.', 2)[1]!;
+        const knownProperty = studentPropertiesService.getPropertySchema(key);
+        if (knownProperty) {
+          return `(properties ->> '${key}')::${knownProperty.type} as "${field}"`;
+        }
+      }
+
+      return field;
     });
 
     const hasClassFields =
