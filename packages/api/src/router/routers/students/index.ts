@@ -10,6 +10,7 @@ import {
   StudentSchema,
   UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
+import { TRPCError } from '@trpc/server';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
 export const studentsRouter = router({
@@ -17,36 +18,70 @@ export const studentsRouter = router({
     .input(GetManyStudentsInputSchema)
     .output(GetManyStudentsOutputSchema)
     .query(async ({ input }) => {
-      // validate fields
-      input.filter?.forEach(({ field, value, operator }) => {
-        if (field.startsWith('properties.')) {
-          const key = field.split('properties.', 2)[1];
-          if (!key) {
-            // TODO custom error
-            throw new Error(`Invalid field ${field}`);
+      try {
+        // validate fields
+        input.fields.forEach(field => {
+          if (field.startsWith('properties.')) {
+            const key = field.split('properties.', 2)[1];
+            if (!key) {
+              // TODO: custom error
+              throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: `Invalid field ${field}`,
+              });
+            }
+            const schema = studentPropertiesService.getPropertySchema(key);
+            if (schema === null) {
+              // TODO: custom error
+              throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: `Invalid field ${field}`,
+              });
+            }
           }
-          const schema = studentPropertiesService.getPropertySchema(key);
-          if (schema === null) {
-            // TODO custom error
-            throw new Error(`Unknown property ${key}`);
+        });
+
+        input.filter?.forEach(({ field, value, operator }, index) => {
+          if (field.startsWith('properties.')) {
+            const key = field.split('properties.', 2)[1];
+            if (!key) {
+              // TODO: custom error
+              throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: `Invalid field ${field}`,
+              });
+            }
+            const schema = studentPropertiesService.getPropertySchema(key);
+            if (schema === null) {
+              // TODO: custom error
+              throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: `Invalid field ${field}`,
+              });
+            }
+            // TODO: we are doing ~ the same thing in query.model.ts and here (base vs properties)
+            const allowedOperators = FieldAllowedOperators[schema.type];
+            if (!allowedOperators.includes(operator)) return false;
+            const isArray = Array.isArray(value);
+            if (isArray && !['in', 'nin'].includes(operator)) return false;
+            if (!isArray && ['in', 'nin'].includes(operator)) return false;
+            if (!isArray) {
+              schema.schema.parse(value, {
+                path: ['fields', index, 'value'],
+              });
+            } else {
+              schema.schema.array().parse(value, {
+                path: ['fields', index, 'value'],
+              });
+            }
           }
-          // TODO: we are doing ~ the same thing in query.model.ts and here (base vs properties)
-          const allowedOperators = FieldAllowedOperators[schema.type];
-          if (!allowedOperators.includes(operator)) return false;
-          const isArray = Array.isArray(value);
-          if (isArray && !['in', 'nin'].includes(operator)) return false;
-          if (!isArray && ['in', 'nin'].includes(operator)) return false;
-          if (!isArray) {
-            schema.schema.parse(value, {
-              path: ['fields', field],
-            });
-          } else {
-            schema.schema.array().parse(value, {
-              path: ['fields', field],
-            });
-          }
-        }
-      });
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: (error as Error).message,
+        });
+      }
 
       const baseFields = input.fields.filter(field => !field.startsWith('class.'));
       const joinFields = input.fields.filter(field => field.startsWith('class.'));

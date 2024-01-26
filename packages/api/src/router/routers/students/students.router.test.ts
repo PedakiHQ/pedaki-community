@@ -1,3 +1,4 @@
+import { assertTrpcError, assertZodError } from '@pedaki/tests/error';
 import { assertIsAuthenticated } from '@pedaki/tests/middleware.js';
 import {
   getAnonymousSession,
@@ -181,6 +182,117 @@ describe('studentsRouter', () => {
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
         expect(data[0]!.properties!.math_level).toBe(15);
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'fails with invalid property type - $type',
+      async ({ api }) => {
+        try {
+          await api.students.getMany({
+            fields: ['firstName', 'properties.math_level'],
+            filter: [
+              {
+                field: 'properties.math_level',
+                operator: 'eq',
+                value: 'a', // expect a integer
+              },
+            ],
+            pagination: {
+              page: 1,
+              limit: 1,
+            },
+          });
+          expect.fail('Expected an error to be thrown');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          assertZodError(e, [
+            {
+              path: ['fields', 0, 'value'],
+              message: 'Expected number, received string',
+            },
+          ]);
+        }
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'fails with unknown property - $type',
+      async ({ api }) => {
+        try {
+          await api.students.getMany({
+            fields: ['firstName', 'properties.unknown'],
+            pagination: {
+              page: 1,
+              limit: 1,
+            },
+          });
+          expect.fail('Expected an error to be thrown');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          // TODO error message
+        }
+
+        try {
+          await api.students.getMany({
+            fields: ['firstName'],
+            filter: [
+              {
+                field: 'properties.unknown',
+                operator: 'eq',
+                value: 'a',
+              },
+            ],
+            pagination: {
+              page: 1,
+              limit: 1,
+            },
+          });
+          expect.fail('Expected an error to be thrown');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          // TODO error message
+        }
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'fails with invalid key name - $type',
+      async ({ api }) => {
+        try {
+          await api.students.getMany({
+            fields: ['firstName', 'properties.'],
+            pagination: {
+              page: 1,
+              limit: 1,
+            },
+          });
+          expect.fail('Expected an error to be thrown');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          // TODO error message
+        }
+
+        try {
+          await api.students.getMany({
+            fields: ['firstName'],
+            filter: [
+              {
+                field: 'properties.',
+                operator: 'eq',
+                value: 'a',
+              },
+            ],
+            pagination: {
+              page: 1,
+              limit: 1,
+            },
+          });
+          expect.fail('Expected an error to be thrown');
+        } catch (e) {
+          assertTrpcError(e, 'BAD_REQUEST');
+          // TODO error message
+        }
       },
     );
 

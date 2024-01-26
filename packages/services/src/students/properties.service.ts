@@ -16,7 +16,7 @@ const PROPERTIES_VALIDATION: Readonly<Record<PropertyType, PropertySchema>> = {
 class StudentPropertiesService {
   #studentProperties: Record<string, PropertyType> | null = null;
 
-  getStudentProperties() {
+  getProperties() {
     if (this.#studentProperties === null) {
       // TODO: load from db
       this.#studentProperties = {
@@ -28,12 +28,12 @@ class StudentPropertiesService {
   }
 
   getPropertyType(property: string): PropertyType | null {
-    const studentProperties = this.getStudentProperties();
+    const studentProperties = this.getProperties();
     return studentProperties[property] ?? null;
   }
 
   getPropertySchema(property: string): PropertySchema | null {
-    const studentProperties = this.getStudentProperties();
+    const studentProperties = this.getProperties();
     const propertyType = studentProperties[property] ?? null;
     if (propertyType === null) return null;
     return PROPERTIES_VALIDATION[propertyType];
