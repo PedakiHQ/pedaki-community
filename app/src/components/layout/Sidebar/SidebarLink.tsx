@@ -198,7 +198,6 @@ const SidebarLinkSubItem = ({
   id,
 }: SidebarLinkSubItem & { active?: boolean }) => {
   const setMobileOpen = useGlobalStore(state => state.setMobileOpen);
-  console.log('id', id);
 
   return (
     <div className="z-1 pl-7" id={id}>
