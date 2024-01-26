@@ -6,6 +6,9 @@ export default {
     classes: {
       title: 'Classes',
       items: {
+        teacher: {
+          title: 'Gestion des professeurs',
+        },
         list: {
           title: 'Liste des classes',
         },
@@ -22,6 +25,14 @@ export default {
         },
         schema: {
           title: "Schéma d'élèves",
+        },
+      },
+    },
+    teachers: {
+      title: 'Professeurs',
+      items: {
+        list: {
+          title: 'Liste des professeurs',
         },
       },
     },

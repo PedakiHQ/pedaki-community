@@ -1,10 +1,11 @@
-import { IconBookUser, IconHome, IconUserGroups } from '@pedaki/design/ui/icons';
+import { IconBookUser, IconHome, IconUser, IconUserGroups } from '@pedaki/design/ui/icons';
 import type { SidebarLinkProps } from '~/components/layout/Sidebar/SidebarLink.tsx';
 import SidebarLink from '~/components/layout/Sidebar/SidebarLink.tsx';
 import { useScopedI18n } from '~/locales/client';
 import {
   SIDEBAR_CLASSES_BUTTON,
   SIDEBAR_STUDENTS_BUTTON,
+  SIDEBAR_TEACHERS_BUTTON,
 } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
 
@@ -58,13 +59,19 @@ const SidebarContent = () => {
         },
       ],
     },
+    {
+      icon: IconUser,
+      title: t('teachers.title'),
+      segment: 'teachers',
+      id: SIDEBAR_TEACHERS_BUTTON,
+      href: '/teachers',
+    },
   ] as SidebarLinkProps[];
 
   return (
     <div
       className="hidden flex-1 flex-col gap-1 group-data-[mobile-open=true]/sidebar:flex sm:flex"
       role="navigation"
-      suppressHydrationWarning
     >
       {items.map((item, index) => (
         <SidebarLink key={index} {...item} />
