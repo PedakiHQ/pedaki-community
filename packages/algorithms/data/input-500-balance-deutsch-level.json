@@ -1,0 +1,77 @@
+{
+	"constraints": {
+		"class_size_limit": 100,
+		"class_amount_limit": 5
+	},
+	"rules": [
+		{
+			"rule": "gather_attributes",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand"
+				}
+			]
+		},
+		{
+			"rule": "balance_count",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand",
+					"levels": 0
+				}
+			]
+		},
+		{
+			"rule": "balance_count",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand",
+					"levels": 1
+				}
+			]
+		},
+		{
+			"rule": "balance_count",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand",
+					"levels": 2
+				}
+			]
+		},
+		{
+			"rule": "balance_count",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand",
+					"levels": 3
+				}
+			]
+		},
+		{
+			"rule": "balance_count",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand",
+					"levels": 4
+				}
+			]
+		},
+		{
+			"rule": "balance_count",
+			"priority": 1,
+			"attributes": [
+				{
+					"options": "allemand",
+					"levels": 5
+				}
+			]
+		}
+	]
+}

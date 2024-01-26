@@ -1,0 +1,17 @@
+{
+  "constraints": {
+    "class_size_limit": 100,
+    "class_amount_limit": 5
+  },
+  "rules": [
+    {
+      "rule": "gather_attributes",
+      "priority": 1,
+      "attributes": [
+        {
+          "options": "allemand"
+        }
+      ]
+    }
+  ]
+}

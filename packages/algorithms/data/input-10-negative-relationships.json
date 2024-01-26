@@ -1,0 +1,12 @@
+{
+  "constraints": {
+    "class_size_limit": 5,
+    "class_amount_limit": 2
+  },
+  "rules": [
+    {
+      "rule": "negative_relationships",
+      "priority": 1
+    }
+  ]
+}

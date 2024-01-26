@@ -1,0 +1,8 @@
+tsconfig.json
+.gitignore
+tsup.config.ts
+src
+dist/*.map
+CHANGELOG.md
+.prettierignore
+.eslintrc.cjs
