@@ -1,9 +1,17 @@
 export default {
   metadata: {
-    title: 'Liste des classes',
+    title: 'Elèves',
   },
   header: {
-    title: 'Liste des classes',
-    description: ' ',
+    title: 'Elèves',
+    description: 'Liste des élèves',
+  },
+  headerActions: {
+    create: {
+      label: 'Ajouter des élèves',
+    },
+    import: {
+      label: 'Importer',
+    },
   },
 } as const;

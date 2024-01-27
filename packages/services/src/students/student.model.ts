@@ -16,9 +16,14 @@ export const GetManyStudentsInputSchema = z.object({
 export type GetManyStudentsInput = z.infer<typeof GetManyStudentsInputSchema>;
 
 export const GetManyStudentsOutputSchema = z.object({
-  data: z.array(StudentSchema.partial().merge(z.object({ class: z.record(z.any()) }))),
+  data: z.array(
+    StudentSchema.partial()
+      .merge(z.object({ class: z.record(z.any()) }))
+      .merge(StudentSchema.pick({ id: true })),
+  ),
   meta: PaginationOutputSchema,
 });
+export type GetManyStudentsOutput = z.infer<typeof GetManyStudentsOutputSchema>;
 
 export const UpdateOneStudentInputSchema = StudentSchema.partial().merge(
   StudentSchema.pick({ id: true }),
