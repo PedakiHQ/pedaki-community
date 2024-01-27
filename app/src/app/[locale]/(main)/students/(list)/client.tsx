@@ -1,49 +1,42 @@
 'use client';
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@pedaki/design/ui/select';
-import type { Field } from '@pedaki/services/students/query.model';
+import type { Field, FieldType } from '@pedaki/services/students/query.model';
 import type {
   StudentColumnDef,
   StudentData,
 } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
 import { generateColumns } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
 import { DataTable } from '~/app/[locale]/(main)/students/(list)/data-table.tsx';
+import Filters from '~/app/[locale]/(main)/students/(list)/filters.tsx';
+import Footer from '~/app/[locale]/(main)/students/(list)/footer.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
-import type { OutputType } from '~api/router/router.ts';
+import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import { useQueryState } from 'nuqs';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ColumnSelector } from './column-selector';
-import { PaginationElement } from './pagination';
-import type { PossiblePerPage } from './parameters';
-import { possiblesPerPage, searchParams, serialize } from './parameters';
+import { searchParams } from './parameters';
 
-const Client = ({
-  propertyMapping,
-  classMapping,
-  teacherMapping,
-}: {
-  propertyMapping: OutputType['students']['properties']['getMany'];
-  classMapping: OutputType['classes']['getMany'];
-  teacherMapping: OutputType['teachers']['getMany'];
-}) => {
+const Client = () => {
   const t = useScopedI18n('students.list.table');
 
-  const translatedColumns = React.useMemo(
-    () =>
-      generateColumns(t, {
-        propertyMapping,
-        classMapping,
-        teacherMapping,
-      }),
-    [propertyMapping, classMapping, teacherMapping],
-  );
+  const { setTranslatedColumns, propertyMapping, classMapping, teacherMapping } =
+    useStudentsListStore(store => ({
+      propertyMapping: store.propertyMapping,
+      classMapping: store.classMapping,
+      teacherMapping: store.teacherMapping,
+      setTranslatedColumns: store.setTranslatedColumns,
+    }));
+
+  const translatedColumns = useMemo(() => {
+    const result = generateColumns(t, {
+      propertyMapping,
+      classMapping,
+      teacherMapping,
+    });
+    setTranslatedColumns(result);
+    return result;
+  }, [t, propertyMapping, classMapping, teacherMapping, setTranslatedColumns]);
 
   // Loading state
   const [isTransitionLoading, startTransition] = React.useTransition();
@@ -55,6 +48,13 @@ const Client = ({
     'sorting',
     searchParams.sorting.withOptions({
       history: 'replace',
+      startTransition,
+    }),
+  );
+  const [filters, setFilters] = useQueryState(
+    'filter',
+    searchParams.filters.withOptions({
+      history: 'push',
       startTransition,
     }),
   );
@@ -92,6 +92,7 @@ const Client = ({
       sort.id.replace('_', '.') as Field,
       sort.desc ? 'desc' : ('asc' as const),
     ]),
+    where: filters,
     pagination: {
       page,
       limit: perPage,
@@ -109,27 +110,17 @@ const Client = ({
 
   const isLoading = isQueryLoading || isTransitionLoading;
 
-  const generateUrl = (data: {
-    page?: number;
-    perPage?: PossiblePerPage;
-    sorting?: { id: string; desc: boolean }[];
-    columns?: Record<string, boolean>;
-  }) => {
-    return serialize({
-      page: data.page ?? page,
-      perPage: data.perPage ?? perPage,
-      sorting: data.sorting ?? sorting,
-      columns: data.columns ?? columnVisibility,
-    });
-  };
-
   return (
     <div className="flex flex-col gap-4">
-      <ColumnSelector
-        columns={translatedColumns}
-        columnVisibility={columnVisibility}
-        setColumnVisibility={setColumnVisibility}
-      />
+      <div className="flex gap-4">
+        <Filters filters={filters} setFilters={setFilters} />
+        <ColumnSelector
+          columns={translatedColumns}
+          columnVisibility={columnVisibility}
+          setColumnVisibility={setColumnVisibility}
+        />
+      </div>
+
       <TableElement
         columns={translatedColumns}
         data={students}
@@ -140,44 +131,16 @@ const Client = ({
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
       />
-      <div className="grid grid-cols-12 items-center justify-between gap-4">
-        <span className="col-span-6 mx-auto text-p-sm text-sub lg:col-span-3 lg:ml-0">
-          {t('footer.showing', {
-            from: isLoading ? '0' : (page - 1) * perPage + 1,
-            to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
-            total: isLoading ? '0' : meta?.totalCount,
-          })}
-        </span>
-        <div className="order-last col-span-12 lg:order-none lg:col-span-6">
-          <PaginationElement
-            page={page}
-            setPage={setPage}
-            totalPages={meta?.pageCount}
-            generateUrl={generateUrl}
-          />
-        </div>
-        <div className="col-span-6 mx-auto flex items-center gap-2 lg:col-span-3 lg:mr-0">
-          <span className="text-p-sm text-sub">{t('footer.perPage')}</span>
-          <Select
-            onValueChange={async value => {
-              const newValue = Number(value) as PossiblePerPage;
-              if (newValue === perPage) return;
-              await setPerPage(newValue);
-            }}
-          >
-            <SelectTrigger className="w-[80px]">
-              <SelectValue placeholder={perPage}>{perPage}</SelectValue>
-            </SelectTrigger>
-            <SelectContent side="left" align="start">
-              {possiblesPerPage.map(value => (
-                <SelectItem key={value} value={String(value)}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <Footer
+        isLoading={isLoading}
+        page={page}
+        setPage={setPage}
+        perPage={perPage}
+        setPerPage={setPerPage}
+        meta={meta}
+        sorting={sorting}
+        columnVisibility={columnVisibility}
+      />
     </div>
   );
 };

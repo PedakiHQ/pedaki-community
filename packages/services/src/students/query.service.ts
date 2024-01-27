@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { buildPaginationClause, buildWhereClause, escape, getJsonBType } from '~/shared/sql.ts';
 import { studentPropertiesService } from '~/students/properties.service.ts';
 import { getKnownField } from '~/students/query.model.ts';
@@ -7,11 +8,11 @@ import type { GetManyStudentsInput, UpdateOneStudentInput } from '~/students/stu
 // TODO make this cleaner
 
 class StudentQueryService {
-  #buildWhereClause(filter: GetManyStudentsInput['filter']): string {
-    if (!filter || filter.length === 0) return '';
+  #buildWhereClause(where: GetManyStudentsInput['where']): string {
+    if (!where || where.length === 0) return '';
 
     // Here we suppose that the input is correct
-    const whereClauses = filter.map(({ field, operator, value }) => {
+    const whereClauses = where.map(({ field, operator, value }) => {
       let whereField: string = field;
       const knownField = getKnownField(field);
       if (knownField) {
@@ -57,7 +58,7 @@ class StudentQueryService {
     { selectFields }: { selectFields: Field[] },
   ): string {
     const isCount = selectFields.includes('count');
-    const whereClause = this.#buildWhereClause(request.filter);
+    const whereClause = this.#buildWhereClause(request.where);
     const paginationClause = !isCount ? buildPaginationClause(request.pagination) : '';
     const orderByClause = !isCount ? this.#buildOrderByClause(request.orderBy) : '';
 
@@ -81,10 +82,12 @@ class StudentQueryService {
       return field;
     });
 
+    console.log(request);
+
     const hasClassFields =
-      request.filter?.some(({ field }) => field.startsWith('class.')) ??
-      request.orderBy?.some(([field]) => field.startsWith('class.')) ??
-      request.fields.some(field => field.startsWith('class.')) ??
+      request.where?.some(({ field }) => field.startsWith('class.')) ||
+      request.orderBy?.some(([field]) => field.startsWith('class.')) ||
+      request.fields.some(field => field.startsWith('class.')) ||
       false;
 
     const joinClass = hasClassFields
@@ -93,7 +96,7 @@ class StudentQueryService {
         LEFT JOIN classes class ON class.id = t1."A"`
       : '';
     const hasTeachers =
-      request.filter?.some(({ field }) => field.startsWith('class.teachers.')) ??
+      request.where?.some(({ field }) => field.startsWith('class.teachers.')) ??
       request.orderBy?.some(([field]) => field.startsWith('class.teachers.')) ??
       request.fields.some(field => field.startsWith('class.teachers.')) ??
       false;
@@ -126,7 +129,7 @@ class StudentQueryService {
         INNER JOIN teachers ON teachers.id = t2."B"`
       : '';
     const whereTeachers = hasTeachers
-      ? request.filter
+      ? request.where
           ?.filter(({ field }) => field.startsWith('class.teachers.'))
           .map(({ field, operator, value }) => {
             const whereField = `teachers.${field.split('class.teachers.', 2)[1]}`;

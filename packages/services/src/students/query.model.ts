@@ -10,10 +10,14 @@ const FieldTypes = ['int', 'text', 'date'] as const;
 export type FieldType = (typeof FieldTypes)[number];
 
 export const FieldAllowedOperators: Record<FieldType, QueryOperator[]> = {
-  int: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'in', 'nin'],
+  int: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
   text: ['eq', 'neq', 'like', 'nlike'],
-  date: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'in', 'nin'],
+  date: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
 } as const;
+
+export const isPositiveOperator = (operator: QueryOperator): boolean => {
+  return ['eq', 'gt', 'gte', 'in', 'like'].includes(operator);
+};
 
 const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = {
   count: {
@@ -129,26 +133,26 @@ const QueryOperators = [
   'gte',
   'lt',
   'lte',
-  'in',
-  'nin',
+  // 'in',
+  // 'nin',
   'like',
   'nlike',
 ] as const;
 export const QueryOperatorSchema = z.enum(QueryOperators);
 export type QueryOperator = z.infer<typeof QueryOperatorSchema>;
 
-export const PropertiesSchema = z
+export const FilterSchema = z
   .object({
     field: FieldSchema,
     operator: QueryOperatorSchema,
     value: z.union([
       z.string(),
-      z.string().array(),
+      // z.string().array(),
       z.number(),
-      z.number().array(),
+      // z.number().array(),
       z.boolean(),
       z.date(),
-      z.date().array(),
+      // z.date().array(),
     ]),
   })
   .refine(
@@ -175,4 +179,4 @@ export const PropertiesSchema = z
       message: `Invalid value for ${field} with operator ${operator}: ${JSON.stringify(value)}`,
     }),
   );
-export type Properties = z.infer<typeof PropertiesSchema>;
+export type Filter = z.infer<typeof FilterSchema>;

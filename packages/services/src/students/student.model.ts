@@ -1,11 +1,11 @@
 import { PaginationInputSchema, PaginationOutputSchema } from '~/shared/pagination.model.ts';
 import { StudentSchema } from '~/students/student_base.model.ts';
 import { z } from 'zod';
-import { FieldSchema, PropertiesSchema } from './query.model.ts';
+import { FieldSchema, FilterSchema } from './query.model.ts';
 
 export const GetManyStudentsInputSchema = z.object({
   fields: FieldSchema.array(),
-  filter: PropertiesSchema.array().optional(),
+  where: FilterSchema.array().optional(),
   orderBy: z.array(z.tuple([FieldSchema, z.enum(['asc', 'desc'])])).optional(),
   pagination: PaginationInputSchema.optional().default({
     page: 1,

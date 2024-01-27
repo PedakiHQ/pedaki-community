@@ -1,15 +1,5 @@
 'use client';
 
-import { Button } from '@pedaki/design/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@pedaki/design/ui/dropdown-menu';
-import { IconMoreHorizontal } from '@pedaki/design/ui/icons';
 import { Skeleton } from '@pedaki/design/ui/skeleton';
 import type { Field } from '@pedaki/services/students/query.model';
 import type { GetManyStudentsOutput } from '@pedaki/services/students/student.model';
@@ -24,36 +14,6 @@ export type StudentColumnDef = ColumnDef<StudentData> & {
   id: string;
   accessorKey: Field | null;
   title?: string;
-};
-const actionCell: StudentColumnDef = {
-  id: 'actions',
-  accessorKey: null,
-  size: 30,
-  cell: ({ row }) => {
-    const payment = row.original;
-
-    return (
-      <div className="flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <IconMoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    );
-  },
 };
 
 const levelCell = (accessorKey: Field, name: string): StudentColumnDef => {
@@ -129,8 +89,6 @@ export const generateColumns = (
       res.push(defaultCell(`properties.${key}`, `properties.${key}`, value.name));
     }
   });
-
-  res.push(actionCell);
 
   return res;
 };

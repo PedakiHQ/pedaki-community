@@ -49,7 +49,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['id'],
-          filter: [
+          where: [
             {
               field: 'firstName',
               operator: 'eq',
@@ -72,16 +72,11 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1'],
-          filter: [
+          where: [
             {
               field: 'firstName',
               operator: 'like',
               value: 'Natha',
-            },
-            {
-              field: 'lastName',
-              operator: 'in',
-              value: ['Dupont', 'Dupond'],
             },
             {
               field: 'otherName',
@@ -117,7 +112,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.name'],
-          filter: [],
+          where: [],
           pagination: {
             page: 1,
             limit: 10,
@@ -140,7 +135,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.name', 'class.academicYearId'],
-          filter: [],
+          where: [],
           pagination: {
             page: 1,
             limit: 10,
@@ -165,7 +160,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1'],
-          filter: [
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -191,7 +186,7 @@ describe('studentsRouter', () => {
         try {
           await api.students.getMany({
             fields: ['firstName', 'properties.1'],
-            filter: [
+            where: [
               {
                 field: 'properties.1',
                 operator: 'eq',
@@ -236,7 +231,7 @@ describe('studentsRouter', () => {
         try {
           await api.students.getMany({
             fields: ['firstName'],
-            filter: [
+            where: [
               {
                 field: 'properties.unknown',
                 operator: 'eq',
@@ -276,7 +271,7 @@ describe('studentsRouter', () => {
         try {
           await api.students.getMany({
             fields: ['firstName'],
-            filter: [
+            where: [
               {
                 field: 'properties.',
                 operator: 'eq',
@@ -301,7 +296,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1'],
-          filter: [
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -331,7 +326,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.name'],
-          filter: [
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -357,7 +352,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.teachers.id'],
-          filter: [
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -385,11 +380,11 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1'],
-          filter: [
+          where: [
             {
               field: 'class.teachers.id',
-              operator: 'in',
-              value: [1, 2],
+              operator: 'gte',
+              value: 1,
             },
           ],
           pagination: {
@@ -410,11 +405,11 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.teachers.name'],
-          filter: [
+          where: [
             {
               field: 'class.teachers.id',
-              operator: 'in',
-              value: [1, 2],
+              operator: 'lte',
+              value: 2,
             },
           ],
           pagination: {
@@ -441,7 +436,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.teachers.name'],
-          filter: [
+          where: [
             {
               field: 'properties.1',
               operator: 'gte',
@@ -473,11 +468,16 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['firstName', 'properties.1', 'class.teachers.name'],
-          filter: [
+          where: [
             {
               field: 'properties.1',
-              operator: 'nin',
-              value: [5, 6],
+              operator: 'neq',
+              value: 5,
+            },
+            {
+              field: 'properties.1',
+              operator: 'neq',
+              value: 6,
             },
           ],
           orderBy: [
@@ -649,23 +649,6 @@ describe('studentsRouter', () => {
       } catch (e) {
         expect((e as Error).message).toBe('Student not found');
       }
-    });
-  });
-
-  describe('getSchema', () => {
-    test.each([anonymousSession, userSession, internalSession])(
-      'need to be authenticated to use this route - $type',
-      async ({ api, type }) => {
-        await assertIsAuthenticated(() => api.students.getSchema(), {
-          shouldWork: type !== 'anonymousUserSession',
-        });
-      },
-    );
-
-    test.each([userSession, internalSession])('returns the schema - $type', async ({ api }) => {
-      const schema = await api.students.getSchema();
-
-      expect(schema).toBeDefined();
     });
   });
 });

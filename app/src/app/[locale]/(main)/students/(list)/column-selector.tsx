@@ -26,7 +26,7 @@ export const ColumnSelector = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="stroke-primary-main" size="sm" className="ml-auto hidden h-8 lg:flex">
+        <Button variant="stroke-primary-main" size="sm" className="shrink-0">
           <IconSettings2 className="mr-2 h-4 w-4" />
           {t('label')}
         </Button>

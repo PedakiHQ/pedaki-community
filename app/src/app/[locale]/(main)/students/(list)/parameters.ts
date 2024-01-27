@@ -1,3 +1,5 @@
+import { FilterSchema } from '@pedaki/services/students/query.model.js';
+import type { Filter } from '@pedaki/services/students/query.model.js';
 import {
   createParser,
   createSerializer,
@@ -23,6 +25,24 @@ const sortingParser = createParser({
   },
 });
 
+const filtersParser = createParser({
+  parse: (raw: string) => {
+    const [column, operator, value] = raw.split(':', 3);
+    if (!column || !operator || !value) {
+      return null;
+    }
+    const v = JSON.parse(value) as unknown;
+    const result = FilterSchema.safeParse({ field: column, operator: operator, value: v });
+    if (result.success) {
+      return result.data;
+    }
+    return null;
+  },
+  serialize: (value: Filter) => {
+    return `${value.field}:${value.operator}:${JSON.stringify(value.value)}`;
+  },
+});
+
 export const possiblesPerPage = [10, 20, 30] as const;
 export const searchParams = {
   page: parseAsInteger.withDefault(1),
@@ -33,6 +53,18 @@ export const searchParams = {
     lastName: true,
     'class.name': true,
   }),
+  filters: parseAsArrayOf(filtersParser).withDefault([
+    {
+      field: 'firstName',
+      operator: 'eq',
+      value: 'John',
+    },
+    {
+      field: 'lastName',
+      operator: 'neq',
+      value: 'Doe',
+    },
+  ]),
 } as const;
 export const serialize = createSerializer(searchParams);
 export type PossiblePerPage = (typeof possiblesPerPage)[number];

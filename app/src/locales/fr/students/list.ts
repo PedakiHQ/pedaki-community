@@ -10,6 +10,9 @@ export default {
     create: {
       label: 'Ajouter des élèves',
     },
+    export: {
+      label: 'Exporter',
+    },
     import: {
       label: 'Importer',
     },
@@ -37,6 +40,11 @@ export default {
       columns: {
         label: 'Colonnes',
         subLabel: 'Sélectionnez les colonnes à afficher',
+      },
+    },
+    filters: {
+      selector: {
+        subLabel: 'Sélectionnez les filtres à appliquer',
       },
     },
   },

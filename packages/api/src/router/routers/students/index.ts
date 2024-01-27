@@ -44,7 +44,7 @@ export const studentsRouter = router({
           }
         });
 
-        input.filter?.forEach(({ field, value, operator }, index) => {
+        input.where?.forEach(({ field, value, operator }, index) => {
           if (field.startsWith('properties.')) {
             const key = field.split('properties.', 2)[1];
             if (!key) {
@@ -95,6 +95,9 @@ export const studentsRouter = router({
       const queryCount = studentQueryService.buildSelectPreparedQuery(input, {
         selectFields: ['count'],
       });
+
+      console.log(queryData);
+      console.log(queryCount);
 
       const [data, meta] = await prisma.$transaction([
         prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData),

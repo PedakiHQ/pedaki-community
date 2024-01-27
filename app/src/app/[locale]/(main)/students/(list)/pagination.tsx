@@ -31,7 +31,8 @@ export const PaginationElement = ({
 }) => {
   const cacheTotalPage = useRef<number>();
   const shownTotalPages = useMemo(() => {
-    if (!totalPages || cacheTotalPage.current === totalPages) return cacheTotalPage.current;
+    if (totalPages === undefined || cacheTotalPage.current === totalPages)
+      return cacheTotalPage.current;
     cacheTotalPage.current = totalPages;
     return cacheTotalPage.current;
   }, [totalPages]);
@@ -40,14 +41,14 @@ export const PaginationElement = ({
     if (!shownTotalPages || page > shownTotalPages) return '#';
     return generateUrl({ page: Math.min(Math.max(1, page), shownTotalPages) });
   };
-  const pagination = shownTotalPages
-    ? generatePagination(page, shownTotalPages)
-    : (['ellipsis_l', 'ellipsis_r'] as const);
+  const pagination = shownTotalPages ? generatePagination(page, shownTotalPages) : undefined;
   const setPage = (page: number) => {
     if (!shownTotalPages) return;
     if (page > shownTotalPages) return;
     _setPage(Math.min(Math.max(1, page), shownTotalPages));
   };
+
+  if (!pagination) return null;
 
   return (
     <Pagination>
