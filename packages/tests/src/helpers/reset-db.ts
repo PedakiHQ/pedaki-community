@@ -5,10 +5,12 @@ const prisma = new PrismaClient();
 
 const newProperties = [
   {
+    id: 1,
     name: 'math_level',
     type: 'LEVEL' as const,
   },
   {
+    id: 2,
     name: 'english_level',
     type: 'LEVEL' as const,
   },
@@ -21,7 +23,7 @@ const fakeStudents = () => ({
   birthDate: faker.date.past(),
   properties: newProperties.reduce(
     (acc, property) => {
-      acc[property.name] = faker.number.int({ min: 0, max: 20 });
+      acc[property.id] = faker.number.int({ min: 0, max: 20 });
       return acc;
     },
     {} as Record<string, any>,
@@ -48,7 +50,7 @@ const resetDb = async () => {
     birthDate: new Date('2001-01-01'),
     properties: {
       ...baseStudent.properties,
-      math_level: 15,
+      1: 15,
     },
   };
 

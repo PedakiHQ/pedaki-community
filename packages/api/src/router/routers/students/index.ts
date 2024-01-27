@@ -1,19 +1,49 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
 import { studentPropertiesService } from '@pedaki/services/students/properties.service.js';
-import { FieldAllowedOperators } from '@pedaki/services/students/query.model.js';
+import { FieldAllowedOperators, KnownFieldsKeys } from '@pedaki/services/students/query.model.js';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
-import type { Student } from '@pedaki/services/students/student.model.js';
+import type { GetStudentMapping, Student } from '@pedaki/services/students/student.model.js';
 import {
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
+  GetStudentMappingSchema,
   StudentSchema,
   UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
 import { TRPCError } from '@trpc/server';
+import { studentPropertiesSchema } from '~api/router/routers/students/properties';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
 export const studentsRouter = router({
+  properties: studentPropertiesSchema,
+
+  getSchema: privateProcedure.output(GetStudentMappingSchema).query(() => {
+    const schema: GetStudentMapping = [];
+    KnownFieldsKeys.forEach(key => {
+      if (key == 'count') return;
+      const group = key.startsWith('class.teachers.')
+        ? 'teacher'
+        : key.startsWith('class.')
+          ? 'class'
+          : 'default';
+      schema.push({
+        type: group,
+        field: key,
+      });
+    });
+
+    const properties = studentPropertiesService.getProperties();
+    Object.keys(properties).forEach(property => {
+      schema.push({
+        type: 'property',
+        field: `properties.${property}`,
+      });
+    });
+
+    return schema;
+  }),
+
   getMany: privateProcedure
     .input(GetManyStudentsInputSchema)
     .output(GetManyStudentsOutputSchema)
@@ -152,6 +182,7 @@ export const studentsRouter = router({
           ? Object.entries(joinDataStudentMap).filter(([key]) => key.startsWith('class.'))
           : [];
         return {
+          id: student.id,
           ...Object.fromEntries(otherData),
           properties: Object.fromEntries(
             properties.map(([key, value]) => [key.split('properties.', 2)[1], value]),

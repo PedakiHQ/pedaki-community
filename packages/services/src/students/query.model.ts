@@ -83,7 +83,7 @@ const KnownFields: Record<string, QueryFieldSchema> = {
   },
 } as const;
 
-const KnownFieldsKeys = [
+export const KnownFieldsKeys = [
   'count',
   'id',
   'identifier',

@@ -1,3 +1,4 @@
+import { prisma } from '@pedaki/db';
 import type { PropertyType } from '@prisma/client';
 import type { FieldType } from '~/students/query.model.ts';
 import { z } from 'zod';
@@ -6,6 +7,7 @@ interface PropertySchema {
   type: FieldType;
   schema: z.Schema;
 }
+
 const PROPERTIES_VALIDATION: Readonly<Record<PropertyType, PropertySchema>> = {
   LEVEL: {
     type: 'int',
@@ -14,16 +16,30 @@ const PROPERTIES_VALIDATION: Readonly<Record<PropertyType, PropertySchema>> = {
 } as const;
 
 class StudentPropertiesService {
-  #studentProperties: Record<string, PropertyType> | null = null;
+  #studentProperties: Record<string, PropertyType>;
+
+  constructor() {
+    this.#studentProperties = {};
+  }
+
+  async reload() {
+    const properties = await prisma.property.findMany({
+      select: {
+        id: true,
+        type: true,
+      },
+    });
+    this.#studentProperties = properties.reduce(
+      (acc, property) => {
+        acc[property.id] = property.type;
+        return acc;
+      },
+      {} as Record<string, PropertyType>,
+    );
+    console.log(this.#studentProperties);
+  }
 
   getProperties() {
-    if (this.#studentProperties === null) {
-      // TODO: load from db
-      this.#studentProperties = {
-        math_level: 'LEVEL',
-      };
-    }
-
     return this.#studentProperties;
   }
 
@@ -41,4 +57,5 @@ class StudentPropertiesService {
 }
 
 const studentPropertiesService = new StudentPropertiesService();
+await studentPropertiesService.reload();
 export { studentPropertiesService };
