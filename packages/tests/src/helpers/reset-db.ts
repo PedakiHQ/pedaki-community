@@ -6,12 +6,12 @@ const prisma = new PrismaClient();
 const newProperties = [
   {
     id: 1,
-    name: 'math_level',
+    name: 'Maths Level',
     type: 'LEVEL' as const,
   },
   {
     id: 2,
-    name: 'english_level',
+    name: 'English Level',
     type: 'LEVEL' as const,
   },
 ];

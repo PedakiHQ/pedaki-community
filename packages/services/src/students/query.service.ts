@@ -89,8 +89,8 @@ class StudentQueryService {
 
     const joinClass = hasClassFields
       ? `
-        INNER JOIN "_class_to_student" t1 ON students.id = t1."B"
-        INNER JOIN classes class ON class.id = t1."A"`
+        LEFT JOIN "_class_to_student" t1 ON students.id = t1."B"
+        LEFT JOIN classes class ON class.id = t1."A"`
       : '';
     const hasTeachers =
       request.filter?.some(({ field }) => field.startsWith('class.teachers.')) ??
@@ -99,8 +99,8 @@ class StudentQueryService {
       false;
     const joinTeachers = hasTeachers
       ? `
-        INNER JOIN "_class_to_teacher" t2 ON class.id = t2."A"
-        INNER JOIN teachers ON teachers.id = t2."B"`
+        LEFT JOIN "_class_to_teacher" t2 ON class.id = t2."A"
+        LEFT JOIN teachers ON teachers.id = t2."B"`
       : '';
 
     return `SELECT ${finalFields.join(', ')}
@@ -138,7 +138,7 @@ class StudentQueryService {
                 FROM "_class_to_student" t
                          INNER JOIN "classes" class ON "t"."A" = "class"."id"
                     ${joinTeachers}
-                WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers ? 'AND' : ''} ${whereTeachers}`;
+                WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers ? `AND ${whereTeachers}` : ''}`;
   }
 
   buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {

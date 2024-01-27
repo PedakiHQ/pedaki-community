@@ -16,7 +16,7 @@ const PROPERTIES_VALIDATION: Readonly<Record<PropertyType, PropertySchema>> = {
 } as const;
 
 class StudentPropertiesService {
-  #studentProperties: Record<string, PropertyType>;
+  #studentProperties: Record<string, { type: PropertyType; name: string }>;
 
   constructor() {
     this.#studentProperties = {};
@@ -27,16 +27,19 @@ class StudentPropertiesService {
       select: {
         id: true,
         type: true,
+        name: true,
       },
     });
     this.#studentProperties = properties.reduce(
       (acc, property) => {
-        acc[property.id] = property.type;
+        acc[property.id] = {
+          type: property.type,
+          name: property.name,
+        };
         return acc;
       },
-      {} as Record<string, PropertyType>,
+      {} as Record<string, { type: PropertyType; name: string }>,
     );
-    console.log(this.#studentProperties);
   }
 
   getProperties() {
@@ -45,14 +48,14 @@ class StudentPropertiesService {
 
   getPropertyType(property: string): PropertyType | null {
     const studentProperties = this.getProperties();
-    return studentProperties[property] ?? null;
+    return studentProperties[property]?.type ?? null;
   }
 
   getPropertySchema(property: string): PropertySchema | null {
     const studentProperties = this.getProperties();
     const propertyType = studentProperties[property] ?? null;
     if (propertyType === null) return null;
-    return PROPERTIES_VALIDATION[propertyType];
+    return PROPERTIES_VALIDATION[propertyType.type];
   }
 }
 

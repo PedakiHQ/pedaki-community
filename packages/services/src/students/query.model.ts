@@ -15,7 +15,7 @@ export const FieldAllowedOperators: Record<FieldType, QueryOperator[]> = {
   date: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'in', 'nin'],
 } as const;
 
-const KnownFields: Record<string, QueryFieldSchema> = {
+const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = {
   count: {
     type: z.number(),
     mappping: 'COUNT(*)',
@@ -56,6 +56,11 @@ const KnownFields: Record<string, QueryFieldSchema> = {
     mappping: 'class.academic_year_id',
     fieldType: 'int',
   },
+  'class.id': {
+    type: z.number(),
+    mappping: 'class.id',
+    fieldType: 'int',
+  },
   'class.name': {
     type: z.string(),
     mappping: 'class.name',
@@ -92,6 +97,7 @@ export const KnownFieldsKeys = [
   'otherName',
   'birthDate',
   'class.academicYearId',
+  'class.id',
   'class.name',
   'class.levelId',
   'class.mainTeacherId',
@@ -100,7 +106,7 @@ export const KnownFieldsKeys = [
 ] as const;
 
 export const getKnownField = (key: string): QueryFieldSchema | undefined => {
-  return KnownFields[key];
+  return KnownFields[key as (typeof KnownFieldsKeys)[number]];
 };
 
 export const FieldSchema = z.union([

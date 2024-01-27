@@ -1,3 +1,4 @@
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import AuthProvider from '~/app/[locale]/(main)/AuthProvider.tsx';
 import type { LayoutType } from '~/app/types.ts';
 import DemoBanner from '~/components/DemoBanner/wrapper';
@@ -14,6 +15,7 @@ export default function MainLayout({ children, params }: LayoutType) {
   return (
     <>
       <DemoBanner locale={params.locale} />
+      <ReactQueryDevtools initialIsOpen={false} />
 
       <div className="relative h-full peer-data-[visible=true]:mt-12">
         <AuthProvider>

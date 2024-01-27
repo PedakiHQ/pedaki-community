@@ -8,13 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from '@pedaki/design/ui/table';
+import type { ColumnDef, SortingState, VisibilityState } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import React from 'react';
 
 interface DataTableProps<TData, TValue> {
@@ -22,6 +22,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   sorting: SortingState;
   setSorting?: React.Dispatch<React.SetStateAction<SortingState>>;
+  columnVisibility?: VisibilityState;
+  setColumnVisibility?: React.Dispatch<React.SetStateAction<VisibilityState>>;
 }
 
 export function DataTable<TData, TValue>({
@@ -29,6 +31,8 @@ export function DataTable<TData, TValue>({
   data,
   setSorting,
   sorting,
+  columnVisibility,
+  setColumnVisibility,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -36,8 +40,10 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
+      columnVisibility,
     },
     defaultColumn: {
       minSize: 0,

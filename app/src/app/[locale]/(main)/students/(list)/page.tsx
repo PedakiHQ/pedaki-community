@@ -6,6 +6,7 @@ import PageHeader from '~/components/PageHeader.tsx';
 import type { LocaleCode } from '~/locales/server.ts';
 import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
+import { api } from '~/server/clients/server.ts';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
 
@@ -21,6 +22,12 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
 export default async function StudentsListPage({ params }: PageType) {
   setStaticParamsLocale(params.locale);
   const t = await getScopedI18n('students.list');
+
+  const [propertiesMapping, classesMapping, teachersMapping] = await Promise.all([
+    api.students.properties.getMany.query(),
+    api.classes.getMany.query(),
+    api.teachers.getMany.query(),
+  ]);
 
   return (
     <>
@@ -42,7 +49,11 @@ export default async function StudentsListPage({ params }: PageType) {
       </PageHeader>
 
       <div className="pt-6" id={MAIN_CONTENT}>
-        <Client />
+        <Client
+          propertiesMapping={propertiesMapping}
+          classesMapping={classesMapping}
+          teachersMapping={teachersMapping}
+        />
       </div>
     </>
   );

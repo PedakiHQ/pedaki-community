@@ -141,7 +141,7 @@ model Teacher {
   // But can only be the main teacher of one class
   mainClass Class?  @relation("main_teacher")
 
-  name String? @db.VarChar(255) // Default if the teacher is not linked to a user
+  name String @db.VarChar(255) // Default if the teacher is not linked to a user (can be different from the user name)
 
   // A teacher can be linked to a user
   userId String? @unique @map("user_id") @db.VarChar(25)
