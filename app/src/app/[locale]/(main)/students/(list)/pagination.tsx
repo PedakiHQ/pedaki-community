@@ -81,7 +81,7 @@ export const PaginationElement = ({
           <PaginationNext
             href={pageUrl(page + 1)}
             onClick={() => setPage(page + 1)}
-            disabled={page === pagination.length}
+            disabled={page === shownTotalPages}
           />
         </PaginationItem>
       </PaginationContent>

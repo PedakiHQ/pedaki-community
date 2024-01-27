@@ -108,6 +108,7 @@ class StudentQueryService {
   }
 
   buildSelectJoinQuery(request: GetManyStudentsInput, ids: number[]): string | null {
+    if (ids.length === 0) return null;
     const fields = request.fields.filter(field => field.startsWith('class.'));
     const finalFields = fields
       .map(field => {

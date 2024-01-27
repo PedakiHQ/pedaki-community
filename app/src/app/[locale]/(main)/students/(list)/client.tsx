@@ -141,7 +141,7 @@ const Client = ({
         setColumnVisibility={setColumnVisibility}
       />
       <div className="grid grid-cols-12 items-center justify-between gap-4">
-        <span className="col-span-6 mx-auto text-p-sm text-sub lg:col-span-3">
+        <span className="col-span-6 mx-auto text-p-sm text-sub lg:col-span-3 lg:ml-0">
           {t('footer.showing', {
             from: isLoading ? '0' : (page - 1) * perPage + 1,
             to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
@@ -156,7 +156,7 @@ const Client = ({
             generateUrl={generateUrl}
           />
         </div>
-        <div className="col-span-6 mx-auto flex items-center gap-2 lg:col-span-3">
+        <div className="col-span-6 mx-auto flex items-center gap-2 lg:col-span-3 lg:mr-0">
           <span className="text-p-sm text-sub">{t('footer.perPage')}</span>
           <Select
             onValueChange={async value => {
