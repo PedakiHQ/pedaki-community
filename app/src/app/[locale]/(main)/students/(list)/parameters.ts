@@ -1,5 +1,5 @@
-import { FilterSchema } from '@pedaki/services/students/query.model.js';
-import type { Filter } from '@pedaki/services/students/query.model.js';
+import { FilterSchema } from '@pedaki/services/students/query.model.client.js';
+import type { Filter } from '@pedaki/services/students/query.model.client.js';
 import {
   createParser,
   createSerializer,

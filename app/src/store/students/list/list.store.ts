@@ -3,12 +3,13 @@ import type { Field, FieldType } from '@pedaki/services/students/query.model';
 import type { StudentColumnDef } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
 import type { OutputType } from '~api/router/router.ts';
 import { createContext, useContext } from 'react';
+import type { z } from 'zod';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface StudentsListStore {
   translatedColumns: StudentColumnDef[];
   propertyMapping: OutputType['students']['properties']['getMany'];
-  propertySchemaMapping: Record<Field, FieldType>;
+  propertySchemaMapping: Record<Field, { type: FieldType; schema: z.Schema }>;
   classMapping: OutputType['classes']['getMany'];
   teacherMapping: OutputType['teachers']['getMany'];
   setTranslatedColumns: (columns: StudentColumnDef[]) => void;
@@ -34,14 +35,14 @@ export const initializeStore = (
     'translatedColumns' | 'propertySchemaMapping' | 'setTranslatedColumns'
   >,
 ) => {
-  return createStore<StudentsListStore>((set, get) => ({
+  return createStore<StudentsListStore>(set => ({
     ...preloadedState,
     propertySchemaMapping: Object.entries(preloadedState.propertyMapping).reduce(
       (acc, [key, value]) => {
-        acc[`properties.${key}`] = PROPERTIES_VALIDATION[value.type].type;
+        acc[`properties.${key}`] = PROPERTIES_VALIDATION[value.type];
         return acc;
       },
-      {} as Record<Field, FieldType>,
+      {} as StudentsListStore['propertySchemaMapping'],
     ),
     translatedColumns: [],
     setTranslatedColumns: columns => set({ translatedColumns: columns }),

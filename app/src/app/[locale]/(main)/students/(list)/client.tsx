@@ -1,6 +1,6 @@
 'use client';
 
-import type { Field, FieldType } from '@pedaki/services/students/query.model';
+import type { Field } from '@pedaki/services/students/query.model';
 import type {
   StudentColumnDef,
   StudentData,

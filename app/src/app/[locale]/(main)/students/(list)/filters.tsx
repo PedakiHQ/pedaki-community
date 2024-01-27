@@ -19,17 +19,19 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
+import { Filter } from '@pedaki/services/students/query.model';
 import type { FieldType } from '@pedaki/services/students/query.model';
 import {
   FieldAllowedOperators,
   FilterSchema,
   getKnownField,
   isPositiveOperator,
- Filter } from '@pedaki/services/students/query.model';
+} from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const Filters = ({
   filters,
@@ -207,13 +209,29 @@ const EditFilter = ({
   const { isValid } = form.formState;
 
   const { field, operator } = form.getValues();
+  const isProperty = field && field.startsWith('properties.');
   const fieldTitle = field && columns.find(column => column.id === field)?.title;
   const fieldType =
-    form.getValues().field && (getKnownField(field)?.fieldType ?? propertyTypes[field] ?? 'text');
+    field && (getKnownField(field)?.fieldType ?? propertyTypes[field].type ?? 'text');
+
+  const handleFormSubmit = (filter: Filter) => {
+    filter.value = fieldType === 'int' ? parseInt(filter.value as string) : filter.value;
+
+    if (isProperty) {
+      const result = propertyTypes[field]?.schema.safeParse(filter.value);
+      if (result && !result.success) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        toast.error(JSON.parse(result.error?.message)[0].message as string);
+        return;
+      }
+    }
+
+    onSubmit(filter);
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
         <span className="text-label-md text-main">{title}</span>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-4">
@@ -290,7 +308,12 @@ const EditFilter = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <FilterValue fieldType={fieldType} initialValue={field.value} {...field} />
+                    <FilterValue
+                      fieldType={fieldType}
+                      operator={operator}
+                      initialValue={field.value}
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -315,13 +338,16 @@ const EditFilter = ({
 const FilterValue = ({
   onChange,
   fieldType,
+  operator,
   initialValue,
 }: {
   onChange: (value: any) => void;
-  fieldType: FieldType | undefined;
+  fieldType: FieldType | null;
+  operator: string | undefined;
   initialValue?: any;
 }) => {
   const t = useScopedI18n('students.list.table');
+  const disabled = fieldType === undefined || operator === undefined;
 
   if (fieldType === 'text' || fieldType === undefined) {
     return (
@@ -330,7 +356,7 @@ const FilterValue = ({
         type="text"
         autoCapitalize="none"
         autoCorrect="off"
-        disabled={fieldType === undefined}
+        disabled={disabled}
         onChange={e => onChange(e.target.value)}
         defaultValue={initialValue as string}
       />
@@ -344,7 +370,7 @@ const FilterValue = ({
         type="number"
         autoCapitalize="none"
         autoCorrect="off"
-        disabled={fieldType === undefined}
+        disabled={disabled}
         onChange={e => onChange(e.target.value)}
         defaultValue={initialValue as string}
       />
