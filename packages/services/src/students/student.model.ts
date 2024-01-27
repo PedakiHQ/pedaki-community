@@ -24,9 +24,11 @@ export const GetManyStudentsOutputSchema = z.object({
             .object({
               id: z.number(),
               teachers: z.array(
-                z.object({
-                  id: z.number(),
-                }),
+                z
+                  .object({
+                    id: z.number().optional(),
+                  })
+                  .passthrough(),
               ),
             })
             .partial()

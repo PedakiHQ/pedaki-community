@@ -203,7 +203,7 @@ describe('studentsRouter', () => {
           assertTrpcError(e, 'BAD_REQUEST');
           assertZodError(e, [
             {
-              path: ['fields', 0, 'value'],
+              path: ['properties.1', 'value'],
               message: 'Expected number, received string',
             },
           ]);

@@ -1,7 +1,6 @@
 import { Button } from '@pedaki/design/ui/button';
 import { IconDownload, IconPlus, IconUpload, IconUserGroups } from '@pedaki/design/ui/icons';
 import Client from '~/app/[locale]/(main)/students/(list)/client.tsx';
-import { generateColumns } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import type { LocaleCode } from '~/locales/server.ts';

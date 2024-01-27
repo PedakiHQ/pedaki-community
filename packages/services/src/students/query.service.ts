@@ -82,8 +82,6 @@ class StudentQueryService {
       return field;
     });
 
-    console.log(request);
-
     const hasClassFields =
       request.where?.some(({ field }) => field.startsWith('class.')) ||
       request.orderBy?.some(([field]) => field.startsWith('class.')) ||

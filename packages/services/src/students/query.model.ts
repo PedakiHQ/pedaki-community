@@ -1,3 +1,4 @@
+import { studentPropertiesService } from '~/students/properties.service.ts';
 import { z } from 'zod';
 
 export interface QueryFieldSchema {
@@ -115,14 +116,25 @@ export const getKnownField = (key: string): QueryFieldSchema | undefined => {
 
 export const FieldSchema = z.union([
   z.enum(KnownFieldsKeys),
-  z.custom<`properties.${string}`>(key => {
-    return (
-      typeof key === 'string' &&
-      key.startsWith('properties.') &&
-      !key.includes(' ') &&
-      !key.includes("'")
-    );
-  }),
+  z
+    .custom<`properties.${string}`>(key => {
+      return (
+        typeof key === 'string' &&
+        key.startsWith('properties.') &&
+        !key.includes(' ') &&
+        !key.includes("'")
+      );
+    })
+    .refine(
+      key => {
+        const propertyKey = key.split('properties.', 2)[1]!;
+        const property = studentPropertiesService.getPropertySchema(propertyKey);
+        return property !== null;
+      },
+      key => ({
+        message: `Unknown property ${key}`,
+      }),
+    ),
 ]);
 export type Field = z.infer<typeof FieldSchema>;
 
@@ -155,28 +167,41 @@ export const FilterSchema = z
       // z.date().array(),
     ]),
   })
-  .refine(
-    ({ field, operator, value }) => {
-      const knownField = getKnownField(field);
-      if (!knownField) return true;
+  .refine(({ field, operator, value }) => {
+    const knownField = getKnownField(field);
+    let zodSchema: z.Schema | undefined = undefined;
+    let fieldType: FieldType | undefined = undefined;
+    if (knownField) {
+      zodSchema = knownField.type;
+      fieldType = knownField.fieldType;
+    } else if (field.startsWith('properties.')) {
+      const propertyKey = field.split('properties.', 2)[1]!;
+      const property = studentPropertiesService.getPropertySchema(propertyKey);
+      if (!property) return false;
+      zodSchema = property.schema;
+      fieldType = property.type;
+    }
 
-      const isArray = Array.isArray(value);
-      if (isArray && !['in', 'nin'].includes(operator)) return false;
-      if (!isArray && ['in', 'nin'].includes(operator)) return false;
-      if (!isArray) {
-        const allowedOperators = FieldAllowedOperators[knownField.fieldType];
-        if (!allowedOperators.includes(operator)) return false;
-      }
+    if (!fieldType || !zodSchema) return false;
 
-      const type = knownField.type;
-      if (isArray) {
-        return type.array().safeParse(value).success;
-      } else {
-        return type.safeParse(value).success;
-      }
-    },
-    ({ field, operator, value }) => ({
-      message: `Invalid value for ${field} with operator ${operator}: ${JSON.stringify(value)}`,
-    }),
-  );
+    const isArray = Array.isArray(value);
+    if (isArray && !['in', 'nin'].includes(operator)) return false;
+    if (!isArray && ['in', 'nin'].includes(operator)) return false;
+    if (!isArray) {
+      const allowedOperators = FieldAllowedOperators[fieldType];
+      if (!allowedOperators.includes(operator)) return false;
+    }
+
+    if (isArray) {
+      zodSchema.array().parse(value, {
+        path: [field, 'value'],
+      });
+      return true;
+    } else {
+      zodSchema.parse(value, {
+        path: [field, 'value'],
+      });
+      return true;
+    }
+  });
 export type Filter = z.infer<typeof FilterSchema>;
