@@ -14,6 +14,7 @@ import type {
 } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
 import { generateColumns } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
 import { DataTable } from '~/app/[locale]/(main)/students/(list)/data-table.tsx';
+import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 import { useQueryState } from 'nuqs';
@@ -24,23 +25,24 @@ import type { PossiblePerPage } from './parameters';
 import { possiblesPerPage, searchParams, serialize } from './parameters';
 
 const Client = ({
-  propertiesMapping,
-  classesMapping,
-  teachersMapping,
+  propertyMapping,
+  classMapping,
+  teacherMapping,
 }: {
-  propertiesMapping: OutputType['students']['properties']['getMany'];
-  classesMapping: OutputType['classes']['getMany'];
-  teachersMapping: OutputType['teachers']['getMany'];
+  propertyMapping: OutputType['students']['properties']['getMany'];
+  classMapping: OutputType['classes']['getMany'];
+  teacherMapping: OutputType['teachers']['getMany'];
 }) => {
-  // @ts-expect-error: TODO add translations
+  const t = useScopedI18n('students.list.table');
+
   const translatedColumns = React.useMemo(
     () =>
-      generateColumns(null, {
-        propertiesMapping,
-        classesMapping,
-        teachersMapping,
+      generateColumns(t, {
+        propertyMapping,
+        classMapping,
+        teacherMapping,
       }),
-    [propertiesMapping, classesMapping, teachersMapping],
+    [propertyMapping, classMapping, teacherMapping],
   );
 
   // Loading state
@@ -138,22 +140,24 @@ const Client = ({
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
       />
-      <div className="flex flex-row items-center justify-between gap-4">
-        <span className="shrink-0 text-p-sm text-sub">
-          {/*TODO trads*/}
-          Showing {isLoading ? '0' : perPage} of {meta?.totalCount ?? 0} results
+      <div className="grid grid-cols-12 items-center justify-between gap-4">
+        <span className="col-span-6 mx-auto text-p-sm text-sub lg:col-span-3">
+          {t('footer.showing', {
+            from: isLoading ? '0' : (page - 1) * perPage + 1,
+            to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
+            total: isLoading ? '0' : meta?.totalCount,
+          })}
         </span>
-        <PaginationElement
-          page={page}
-          setPage={setPage}
-          totalPages={meta?.pageCount}
-          generateUrl={generateUrl}
-        />
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="text-p-sm text-sub">
-            {/*TODO trads*/}
-            Lignes par page
-          </span>
+        <div className="order-last col-span-12 lg:order-none lg:col-span-6">
+          <PaginationElement
+            page={page}
+            setPage={setPage}
+            totalPages={meta?.pageCount}
+            generateUrl={generateUrl}
+          />
+        </div>
+        <div className="col-span-6 mx-auto flex items-center gap-2 lg:col-span-3">
+          <span className="text-p-sm text-sub">{t('footer.perPage')}</span>
           <Select
             onValueChange={async value => {
               const newValue = Number(value) as PossiblePerPage;
@@ -164,7 +168,7 @@ const Client = ({
             <SelectTrigger className="w-[80px]">
               <SelectValue placeholder={perPage}>{perPage}</SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent side="left" align="start">
               {possiblesPerPage.map(value => (
                 <SelectItem key={value} value={String(value)}>
                   {value}

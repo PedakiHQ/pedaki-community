@@ -86,33 +86,33 @@ const defaultCell = (id: string, accessorKey: Field | null, name: string): Stude
 };
 
 export const generateColumns = (
-  t: UseScopedI18nType<'tutorial'>,
+  t: UseScopedI18nType<'students.list.table'>,
   {
-    propertiesMapping,
-    classesMapping,
-    teachersMapping,
+    propertyMapping,
+    classMapping,
+    teacherMapping,
   }: {
-    propertiesMapping: OutputType['students']['properties']['getMany'];
-    classesMapping: OutputType['classes']['getMany'];
-    teachersMapping: OutputType['teachers']['getMany'];
+    propertyMapping: OutputType['students']['properties']['getMany'];
+    classMapping: OutputType['classes']['getMany'];
+    teacherMapping: OutputType['teachers']['getMany'];
   },
 ) => {
   const res: StudentColumnDef[] = [
-    defaultCell('firstName', 'firstName', 'firstName'), // TODO: trads
-    defaultCell('lastName', 'lastName', 'lastName'), // TODO: trads
+    defaultCell('firstName', 'firstName', t('columns.firstName.label')),
+    defaultCell('lastName', 'lastName', t('columns.lastName.label')),
     {
-      ...defaultCell('class.name', `class.id`, 'class name'), // TODO: trads
+      ...defaultCell('class.name', `class.id`, t('columns.class.label')),
       cell: ({ row }) => {
         const data = row.original;
-        return <div>{classesMapping[data.class.id!]?.name ?? '-'}</div>;
+        return <div>{classMapping[data.class.id!]?.name ?? '-'}</div>;
       },
     },
     {
-      ...defaultCell(`class.teachers.name`, `class.teachers.id`, 'teachers name'), // TODO: trads
+      ...defaultCell(`class.teachers.name`, `class.teachers.id`, t('columns.teachers.label')),
       cell: ({ row }) => {
         const data = row.original;
         const teachers = data.class.teachers
-          ?.map(({ id }) => teachersMapping[id]?.name)
+          ?.map(({ id }) => teacherMapping[id]?.name)
           .filter(Boolean)
           .join(', ');
         return <div>{teachers ?? '-'}</div>;
@@ -121,7 +121,7 @@ export const generateColumns = (
   ];
 
   // add all properties cell
-  Object.entries(propertiesMapping).forEach(([key, value]) => {
+  Object.entries(propertyMapping).forEach(([key, value]) => {
     if (value.type === 'LEVEL') {
       // TODO: add mapping
       res.push(levelCell(`properties.${key}`, value.name));

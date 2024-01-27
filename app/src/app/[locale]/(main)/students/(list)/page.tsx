@@ -23,7 +23,7 @@ export default async function StudentsListPage({ params }: PageType) {
   setStaticParamsLocale(params.locale);
   const t = await getScopedI18n('students.list');
 
-  const [propertiesMapping, classesMapping, teachersMapping] = await Promise.all([
+  const [propertyMapping, classMapping, teacherMapping] = await Promise.all([
     api.students.properties.getMany.query(),
     api.classes.getMany.query(),
     api.teachers.getMany.query(),
@@ -50,9 +50,9 @@ export default async function StudentsListPage({ params }: PageType) {
 
       <div className="pt-6" id={MAIN_CONTENT}>
         <Client
-          propertiesMapping={propertiesMapping}
-          classesMapping={classesMapping}
-          teachersMapping={teachersMapping}
+          propertyMapping={propertyMapping}
+          classMapping={classMapping}
+          teacherMapping={teacherMapping}
         />
       </div>
     </>

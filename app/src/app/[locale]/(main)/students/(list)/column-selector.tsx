@@ -9,6 +9,7 @@ import {
 } from '@pedaki/design/ui/dropdown-menu';
 import { IconSettings2 } from '@pedaki/design/ui/icons';
 import type { StudentColumnDef } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
+import { useScopedI18n } from '~/locales/client.ts';
 import React from 'react';
 
 export const ColumnSelector = ({
@@ -20,17 +21,18 @@ export const ColumnSelector = ({
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }) => {
+  const t = useScopedI18n('students.list.table.hide.columns');
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="stroke-primary-main" size="sm" className="ml-auto hidden h-8 lg:flex">
           <IconSettings2 className="mr-2 h-4 w-4" />
-          {/*TODO trads*/}
-          Columns
+          {t('label')}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-[180px]">
+        <DropdownMenuLabel>{t('subLabel')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {columns
           .filter(column => column.id && column.title)
