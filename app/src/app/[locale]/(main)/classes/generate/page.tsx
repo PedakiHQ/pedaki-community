@@ -1,7 +1,7 @@
 import { IconBookUser } from '@pedaki/design/ui/icons';
-import Bidule from '~/app/[locale]/(main)/classes/generate/bidule.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
+import DrawerWrapper from '~/components/students/list/drawer-wrapper.tsx';
 import { getScopedI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
@@ -29,8 +29,8 @@ export default async function ClassesGeneratePage({ params }: PageType) {
         icon={IconBookUser}
       />
 
-      <div className="pt-6" id={MAIN_CONTENT}>
-        <Bidule />
+      <div className="h-full pt-6" id={MAIN_CONTENT}>
+        <DrawerWrapper />
       </div>
     </>
   );

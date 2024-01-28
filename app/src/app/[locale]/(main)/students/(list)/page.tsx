@@ -46,7 +46,7 @@ export default async function StudentsListPage({ params }: PageType) {
         </>
       </PageHeader>
 
-      <div className="pt-6" id={MAIN_CONTENT}>
+      <div className="h-full pt-6" id={MAIN_CONTENT}>
         <StudentsListWrapper>
           <Client />
         </StudentsListWrapper>

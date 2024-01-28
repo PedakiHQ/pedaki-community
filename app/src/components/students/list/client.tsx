@@ -108,7 +108,7 @@ const Client = () => {
   const isLoading = isQueryLoading || isTransitionLoading;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full max-h-full flex-col gap-4">
       <div className="flex gap-4">
         <Filters filters={filters} setFilters={setFilters} />
         <ColumnSelector
@@ -117,7 +117,6 @@ const Client = () => {
           setColumnVisibility={setColumnVisibility}
         />
       </div>
-
       <TableElement
         columns={translatedColumns}
         data={students}

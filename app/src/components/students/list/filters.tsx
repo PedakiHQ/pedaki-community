@@ -25,8 +25,8 @@ import {
   FilterSchema,
   getKnownField,
   isPositiveOperator,
-} from '@pedaki/services/students/query.model.client.js';
-import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
+ Filter } from '@pedaki/services/students/query.model.client.js';
+import type { FieldType } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { Fragment } from 'react';
@@ -67,7 +67,7 @@ const Filters = ({
             );
           })}
           {filtersCount === 0 && (
-            <span className="mx-1 mt-0.5 select-none text-label-xs text-sub">{t('noFilters')}</span>
+            <span className="mx-1 select-none text-label-xs text-sub">{t('noFilters')}</span>
           )}
         </ul>
       </ScrollArea>

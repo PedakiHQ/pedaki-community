@@ -29,7 +29,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.7.0",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.3",
+    "@pedaki/common": "0.5.2-beta.4",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@pedaki/services": "workspace:*",

@@ -19,10 +19,10 @@ export default function MainLayout({ children, params }: LayoutType) {
 
       <div className="relative h-full peer-data-[visible=true]:mt-12">
         <AuthProvider>
-          <div className="relative flex flex-1 flex-col sm:flex-row">
+          <div className="relative flex flex-col sm:flex-row">
             <Sidebar locale={params.locale} />
             <main className="mt-[4rem] min-h-screen w-full gap-6 p-2 sm:ml-[17rem] sm:mt-0 sm:pl-0 peer-data-[collapsed=true]:sm:ml-20">
-              <div className="h-full rounded-2xl border bg-white p-6 shadow-lg @container/main">
+              <div className="flex h-full flex-col rounded-2xl border bg-white p-6 shadow-lg @container/main">
                 <I18nProviderClient locale={params.locale}>{children}</I18nProviderClient>
               </div>
             </main>
