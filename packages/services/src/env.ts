@@ -28,6 +28,9 @@ export const env = createEnv({
 
     CLOUDFLARE_ZONE_ID: z.string().optional(),
     CLOUDFLARE_API_TOKEN: z.string().optional(),
+
+    SKIP_ENV_VALIDATION: z.boolean().optional(),
+    SKIP_DB_CALLS: z.boolean().optional(),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

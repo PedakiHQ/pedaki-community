@@ -36,7 +36,12 @@ const DemoBannerComponentContent = () => {
 
   return (
     <div className="peer" data-visible={demoBannerVisible}>
-      <div className="fixed inset-x-0 z-[21] bg-weak">
+      <div
+        className="fixed inset-x-0 z-[21] bg-weak"
+        style={{
+          right: 'var(--removed-body-scroll-bar-size, 0px)',
+        }}
+      >
         <div className="m-1 rounded-sm bg-surface px-4 py-2 text-white">
           <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center justify-center gap-2">

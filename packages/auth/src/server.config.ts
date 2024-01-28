@@ -42,7 +42,7 @@ export const authOptions: NextAuthConfig = {
 
       session.user = {
         ...session.user,
-        emailVerified: token.emailVerified,
+        emailVerified: token.emailVerified as boolean,
       };
 
       return session;

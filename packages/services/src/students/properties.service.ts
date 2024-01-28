@@ -1,44 +1,55 @@
+import { prisma } from '@pedaki/db';
 import type { PropertyType } from '@prisma/client';
-import type { FieldType } from '~/students/query.model.ts';
-import { z } from 'zod';
-
-interface PropertySchema {
-  type: FieldType;
-  schema: z.Schema;
-}
-const PROPERTIES_VALIDATION: Readonly<Record<PropertyType, PropertySchema>> = {
-  LEVEL: {
-    type: 'int',
-    schema: z.number().min(0).max(100), // In front we use a transform to convert to A, B, C, D, E, F or 0-20 depending on the setting
-  },
-} as const;
+import { env } from '~/env.ts';
+import type { PropertySchema } from './properties-validations.ts';
+import { PROPERTIES_VALIDATION } from './properties-validations.ts';
 
 class StudentPropertiesService {
-  #studentProperties: Record<string, PropertyType> | null = null;
+  #studentProperties: Record<string, { type: PropertyType; name: string }>;
+
+  constructor() {
+    this.#studentProperties = {};
+  }
+
+  async reload() {
+    // Skip in ci
+    if (env.SKIP_DB_CALLS) return;
+    const properties = await prisma.property.findMany({
+      select: {
+        id: true,
+        type: true,
+        name: true,
+      },
+    });
+    this.#studentProperties = properties.reduce(
+      (acc, property) => {
+        acc[property.id] = {
+          type: property.type,
+          name: property.name,
+        };
+        return acc;
+      },
+      {} as Record<string, { type: PropertyType; name: string }>,
+    );
+  }
 
   getProperties() {
-    if (this.#studentProperties === null) {
-      // TODO: load from db
-      this.#studentProperties = {
-        math_level: 'LEVEL',
-      };
-    }
-
     return this.#studentProperties;
   }
 
   getPropertyType(property: string): PropertyType | null {
     const studentProperties = this.getProperties();
-    return studentProperties[property] ?? null;
+    return studentProperties[property]?.type ?? null;
   }
 
   getPropertySchema(property: string): PropertySchema | null {
     const studentProperties = this.getProperties();
     const propertyType = studentProperties[property] ?? null;
     if (propertyType === null) return null;
-    return PROPERTIES_VALIDATION[propertyType];
+    return PROPERTIES_VALIDATION[propertyType.type];
   }
 }
 
 const studentPropertiesService = new StudentPropertiesService();
+await studentPropertiesService.reload();
 export { studentPropertiesService };

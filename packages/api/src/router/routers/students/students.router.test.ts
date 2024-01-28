@@ -49,7 +49,7 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
           fields: ['id'],
-          filter: [
+          where: [
             {
               field: 'firstName',
               operator: 'eq',
@@ -71,17 +71,12 @@ describe('studentsRouter', () => {
       'returns the 1st page - with many filter - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level'],
-          filter: [
+          fields: ['firstName', 'properties.1'],
+          where: [
             {
               field: 'firstName',
               operator: 'like',
               value: 'Natha',
-            },
-            {
-              field: 'lastName',
-              operator: 'in',
-              value: ['Dupont', 'Dupond'],
             },
             {
               field: 'otherName',
@@ -94,7 +89,7 @@ describe('studentsRouter', () => {
               value: new Date('2001-01-01 00:00:00'),
             },
             {
-              field: 'properties.math_level',
+              field: 'properties.1',
               operator: 'eq',
               value: 15,
             },
@@ -108,7 +103,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
       },
     );
 
@@ -116,8 +111,8 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join field on one level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.name'],
-          filter: [],
+          fields: ['firstName', 'properties.1', 'class.name'],
+          where: [],
           pagination: {
             page: 1,
             limit: 10,
@@ -128,7 +123,7 @@ describe('studentsRouter', () => {
         expect(data.length).toBe(10);
         expect(data[0]!.class.name).toBeDefined();
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
         expect(data[1]!.class).toBeDefined();
         expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
@@ -139,8 +134,8 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join fields on one level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.name', 'class.academicYearId'],
-          filter: [],
+          fields: ['firstName', 'properties.1', 'class.name', 'class.academicYearId'],
+          where: [],
           pagination: {
             page: 1,
             limit: 10,
@@ -151,7 +146,7 @@ describe('studentsRouter', () => {
         expect(data.length).toBe(10);
         expect(data[0]!.class.name).toBeDefined();
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
         expect(data[0]!.class.academicYearId).toBe(1);
         expect(data[1]!.class).toBeDefined();
@@ -164,8 +159,8 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join filter on one level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level'],
-          filter: [
+          fields: ['firstName', 'properties.1'],
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -181,7 +176,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
       },
     );
 
@@ -190,10 +185,10 @@ describe('studentsRouter', () => {
       async ({ api }) => {
         try {
           await api.students.getMany({
-            fields: ['firstName', 'properties.math_level'],
-            filter: [
+            fields: ['firstName', 'properties.1'],
+            where: [
               {
-                field: 'properties.math_level',
+                field: 'properties.1',
                 operator: 'eq',
                 value: 'a', // expect a integer
               },
@@ -208,7 +203,7 @@ describe('studentsRouter', () => {
           assertTrpcError(e, 'BAD_REQUEST');
           assertZodError(e, [
             {
-              path: ['fields', 0, 'value'],
+              path: ['properties.1', 'value'],
               message: 'Expected number, received string',
             },
           ]);
@@ -236,7 +231,7 @@ describe('studentsRouter', () => {
         try {
           await api.students.getMany({
             fields: ['firstName'],
-            filter: [
+            where: [
               {
                 field: 'properties.unknown',
                 operator: 'eq',
@@ -276,7 +271,7 @@ describe('studentsRouter', () => {
         try {
           await api.students.getMany({
             fields: ['firstName'],
-            filter: [
+            where: [
               {
                 field: 'properties.',
                 operator: 'eq',
@@ -300,8 +295,8 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join filters on one level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level'],
-          filter: [
+          fields: ['firstName', 'properties.1'],
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -322,7 +317,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
       },
     );
 
@@ -330,8 +325,8 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join fields and filters on one level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.name'],
-          filter: [
+          fields: ['firstName', 'properties.1', 'class.name'],
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -347,7 +342,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
       },
     );
@@ -356,8 +351,8 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join fields on two level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.teachers.id'],
-          filter: [
+          fields: ['firstName', 'properties.1', 'class.teachers.id'],
+          where: [
             {
               field: 'class.name',
               operator: 'eq',
@@ -373,7 +368,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
         expect(data[0]!.class.teachers).toBeDefined();
         expect(data[0]!.class.teachers).toHaveLength(3);
         expect(data[0]!.class.teachers).toStrictEqual([{ id: 1 }, { id: 2 }, { id: 3 }]);
@@ -384,12 +379,12 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join filter on two level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level'],
-          filter: [
+          fields: ['firstName', 'properties.1'],
+          where: [
             {
               field: 'class.teachers.id',
-              operator: 'in',
-              value: [1, 2],
+              operator: 'gte',
+              value: 1,
             },
           ],
           pagination: {
@@ -401,7 +396,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
       },
     );
 
@@ -409,12 +404,12 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join filter and fields on two level - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
-          filter: [
+          fields: ['firstName', 'properties.1', 'class.teachers.name'],
+          where: [
             {
               field: 'class.teachers.id',
-              operator: 'in',
-              value: [1, 2],
+              operator: 'lte',
+              value: 2,
             },
           ],
           pagination: {
@@ -426,7 +421,7 @@ describe('studentsRouter', () => {
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(1);
         expect(data[0]!.firstName).toBe('Nathan');
-        expect(data[0]!.properties!.math_level).toBe(15);
+        expect(data[0]!.properties!['1']).toBe(15);
         expect(data[0]!.class.teachers).toBeDefined();
         expect(data[0]!.class.teachers).toHaveLength(2);
         expect(data[0]!.class.teachers).toStrictEqual([
@@ -440,15 +435,15 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join filter and fields on two level and ordered - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
-          filter: [
+          fields: ['firstName', 'properties.1', 'class.teachers.name'],
+          where: [
             {
-              field: 'properties.math_level',
+              field: 'properties.1',
               operator: 'gte',
               value: 5,
             },
           ],
-          orderBy: [['properties.math_level', 'asc']],
+          orderBy: [['properties.1', 'asc']],
           pagination: {
             page: 1,
             limit: 50,
@@ -460,7 +455,7 @@ describe('studentsRouter', () => {
 
         let previousValue = 0;
         data.forEach(student => {
-          const value = student.properties!.math_level! as number;
+          const value = student.properties!['1']! as number;
           expect(value).toBeGreaterThanOrEqual(previousValue);
           expect(value).toBeGreaterThanOrEqual(5);
           previousValue = value;
@@ -472,16 +467,21 @@ describe('studentsRouter', () => {
       'returns the 1st page - with join filter and fields on two level and ordered twice - $type',
       async ({ api }) => {
         const { data, meta } = await api.students.getMany({
-          fields: ['firstName', 'properties.math_level', 'class.teachers.name'],
-          filter: [
+          fields: ['firstName', 'properties.1', 'class.teachers.name'],
+          where: [
             {
-              field: 'properties.math_level',
-              operator: 'nin',
-              value: [5, 6],
+              field: 'properties.1',
+              operator: 'neq',
+              value: 5,
+            },
+            {
+              field: 'properties.1',
+              operator: 'neq',
+              value: 6,
             },
           ],
           orderBy: [
-            ['properties.math_level', 'asc'],
+            ['properties.1', 'asc'],
             ['firstName', 'desc'],
           ],
           pagination: {
@@ -496,7 +496,7 @@ describe('studentsRouter', () => {
         let previousValue = 0;
         let lastFirstName = '';
         data.forEach(student => {
-          const value = student.properties!.math_level as number;
+          const value = student.properties!['1'] as number;
           const firstName = student.firstName!;
           expect(value).toBeGreaterThanOrEqual(previousValue);
           expect(value).not.toBe(5);
@@ -614,7 +614,7 @@ describe('studentsRouter', () => {
 
       // Old values should not have changed
       expect(student2.lastName).toBe(oldStudent.lastName);
-      expect(student2.properties!.math_level).toBe(oldStudent.properties!.math_level);
+      expect(student2.properties!['1']).toBe(oldStudent.properties!['1']);
     });
   });
 

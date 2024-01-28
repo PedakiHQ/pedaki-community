@@ -33,8 +33,7 @@ const SidebarHeader = ({ collapsed }: SidebarHeaderProps) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onlyIcon="true"
-              size="xs"
+              size="icon"
               variant="stroke-primary-main"
               onClick={() => setCollapsed?.(!collapsed)}
               className="p-0"

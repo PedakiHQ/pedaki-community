@@ -99,7 +99,7 @@ CREATE TABLE "teachers" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "name" VARCHAR(255),
+    "name" VARCHAR(255) NOT NULL,
     "user_id" VARCHAR(25),
 
     CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")

@@ -1,5 +1,5 @@
 import type { PaginationInput } from '~/shared/pagination.model.ts';
-import type { Properties } from '~/students/query.model.ts';
+import type { Filter } from '~/students/query.model.ts';
 import SqlString from 'sqlstring';
 
 export const buildPaginationClause = (pagination: PaginationInput): string => {
@@ -24,17 +24,14 @@ export const getJsonBType = (value: unknown): string => {
   return 'jsonb';
 };
 
-export const prepareValue = ({
-  operator,
-  value,
-}: Pick<Properties, 'value' | 'operator'>): string => {
+export const prepareValue = ({ operator, value }: Pick<Filter, 'value' | 'operator'>): string => {
   switch (operator) {
     case 'like':
     case 'nlike':
       return escape(`%${value as string}%`); //TODO remove % and put them directly in the value (to use startsWith and endsWith)
-    case 'in':
-    case 'nin':
-      return `(${escape(value)})`;
+    // case 'in':
+    // case 'nin':
+    //   return `(${escape(value)})`;
     default:
       if (typeof value === 'number') return `'${escape(value)}'`; // TODO: this is to avoid having to typecast
       return escape(value as string);
@@ -43,8 +40,8 @@ export const prepareValue = ({
 
 export const buildWhereClause = (
   whereField: string,
-  operator: Properties['operator'],
-  value: Properties['value'],
+  operator: Filter['operator'],
+  value: Filter['value'],
   raw = false,
 ): string => {
   const cleanValue = raw ? (value as string) : prepareValue({ operator, value });
@@ -64,10 +61,10 @@ export const buildWhereClause = (
       return `${whereField} < ${cleanValue}`;
     case 'lte':
       return `${whereField} <= ${cleanValue}`;
-    case 'in':
-      return `${whereField} IN ${cleanValue}`;
-    case 'nin':
-      return `${whereField} NOT IN ${cleanValue}`;
+    // case 'in':
+    //   return `${whereField} IN ${cleanValue}`;
+    // case 'nin':
+    //   return `${whereField} NOT IN ${cleanValue}`;
     case 'like':
       return `${whereField} ILIKE ${cleanValue}`;
     case 'nlike':
