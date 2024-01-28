@@ -1,21 +1,18 @@
 'use client';
 
 import type { Field } from '@pedaki/services/students/query.model';
-import type {
-  StudentColumnDef,
-  StudentData,
-} from '~/app/[locale]/(main)/students/(list)/columns.tsx';
-import { generateColumns } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
-import { DataTable } from '~/app/[locale]/(main)/students/(list)/data-table.tsx';
-import Filters from '~/app/[locale]/(main)/students/(list)/filters.tsx';
-import Footer from '~/app/[locale]/(main)/students/(list)/footer.tsx';
+import { ColumnSelector } from '~/components/students/list/column-selector.tsx';
+import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
+import { generateColumns } from '~/components/students/list/columns.tsx';
+import { DataTable } from '~/components/students/list/data-table.tsx';
+import Filters from '~/components/students/list/filters.tsx';
+import Footer from '~/components/students/list/footer.tsx';
+import { searchParams } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
-import { ColumnSelector } from './column-selector';
-import { searchParams } from './parameters';
 
 const Client = () => {
   const t = useScopedI18n('students.list.table');

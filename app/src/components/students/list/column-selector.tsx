@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
 import { IconSettings2 } from '@pedaki/design/ui/icons';
-import type { StudentColumnDef } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
+import type { StudentColumnDef } from '~/components/students/list/columns.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import React from 'react';
 

@@ -20,14 +20,13 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
-import { Filter } from '@pedaki/services/students/query.model';
-import type { FieldType } from '@pedaki/services/students/query.model';
 import {
   FieldAllowedOperators,
   FilterSchema,
   getKnownField,
   isPositiveOperator,
 } from '@pedaki/services/students/query.model.client.js';
+import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { Fragment } from 'react';

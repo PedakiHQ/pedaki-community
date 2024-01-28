@@ -1,13 +1,12 @@
 import { Button } from '@pedaki/design/ui/button';
 import { IconDownload, IconPlus, IconUpload, IconUserGroups } from '@pedaki/design/ui/icons';
-import Client from '~/app/[locale]/(main)/students/(list)/client.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
+import Client from '~/components/students/list/client';
+import StudentsListWrapper from '~/components/students/list/wrapper.tsx';
 import type { LocaleCode } from '~/locales/server.ts';
 import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
-import { api } from '~/server/clients/server.ts';
-import StoreProvider from '~/store/students/list/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
 
@@ -23,12 +22,6 @@ export const generateMetadata = async ({ params }: { params: { locale: LocaleCod
 export default async function StudentsListPage({ params }: PageType) {
   setStaticParamsLocale(params.locale);
   const t = await getScopedI18n('students.list');
-
-  const [propertyMapping, classMapping, teacherMapping] = await Promise.all([
-    api.students.properties.getMany.query(),
-    api.classes.getMany.query(),
-    api.teachers.getMany.query(),
-  ]);
 
   return (
     <>
@@ -54,13 +47,9 @@ export default async function StudentsListPage({ params }: PageType) {
       </PageHeader>
 
       <div className="pt-6" id={MAIN_CONTENT}>
-        <StoreProvider
-          propertyMapping={propertyMapping}
-          classMapping={classMapping}
-          teacherMapping={teacherMapping}
-        >
+        <StudentsListWrapper>
           <Client />
-        </StoreProvider>
+        </StudentsListWrapper>
       </div>
     </>
   );

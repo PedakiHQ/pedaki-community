@@ -1,10 +1,10 @@
 'use client';
 
 import { Skeleton } from '@pedaki/design/ui/skeleton';
-import type { Field } from '@pedaki/services/students/query.model';
-import type { GetManyStudentsOutput } from '@pedaki/services/students/student.model';
+import type { Field } from '@pedaki/services/students/query.model.client';
+import type { GetManyStudentsOutput } from '@pedaki/services/students/student.model.js';
 import type { ColumnDef } from '@tanstack/react-table';
-import { DataTableColumnHeader } from '~/app/[locale]/(main)/students/(list)/data-table-column-header.tsx';
+import { DataTableColumnHeader } from '~/components/students/list/data-table-column-header.tsx';
 import type { UseScopedI18nType } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 

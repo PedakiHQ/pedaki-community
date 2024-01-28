@@ -1,5 +1,4 @@
 import { IconUserGroups } from '@pedaki/design/ui/icons';
-import Bidule from '~/app/[locale]/(main)/students/(list)/bidule.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import { getScopedI18n } from '~/locales/server.ts';
@@ -29,9 +28,7 @@ export default async function StudentsListPage({ params }: PageType) {
         icon={IconUserGroups}
       />
 
-      <div className="pt-6" id={MAIN_CONTENT}>
-        <Bidule />
-      </div>
+      <div className="pt-6" id={MAIN_CONTENT}></div>
     </>
   );
 }

@@ -5,9 +5,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@pedaki/design/ui/select';
-import { PaginationElement } from '~/app/[locale]/(main)/students/(list)/pagination.tsx';
-import type { PossiblePerPage } from '~/app/[locale]/(main)/students/(list)/parameters.ts';
-import { possiblesPerPage, serialize } from '~/app/[locale]/(main)/students/(list)/parameters.ts';
+import { PaginationElement } from '~/components/students/list/pagination.tsx';
+import type { PossiblePerPage } from '~/components/students/list/parameters.ts';
+import { possiblesPerPage, serialize } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 import React from 'react';

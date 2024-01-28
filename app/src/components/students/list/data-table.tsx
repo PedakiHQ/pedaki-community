@@ -33,7 +33,7 @@ export function DataTable<TData, TValue>({
   sorting,
   columnVisibility,
   setColumnVisibility,
-}: DataTableProps<TData, TValue>) {
+}: Readonly<DataTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
     columns,

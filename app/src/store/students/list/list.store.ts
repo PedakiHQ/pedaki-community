@@ -1,6 +1,6 @@
 import { PROPERTIES_VALIDATION } from '@pedaki/services/students/properties-validations';
 import type { Field, FieldType } from '@pedaki/services/students/query.model';
-import type { StudentColumnDef } from '~/app/[locale]/(main)/students/(list)/columns.tsx';
+import type { StudentColumnDef } from '~/components/students/list/columns.tsx';
 import type { OutputType } from '~api/router/router.ts';
 import { createContext, useContext } from 'react';
 import type { z } from 'zod';
