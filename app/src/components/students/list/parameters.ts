@@ -53,7 +53,7 @@ export const searchParams = {
     lastName: true,
     'class.name': true,
   }),
-  filters: parseAsArrayOf(filtersParser),
+  filters: parseAsArrayOf(filtersParser).withDefault([]),
 } as const;
 export const serialize = createSerializer(searchParams);
 export type PossiblePerPage = (typeof possiblesPerPage)[number];
