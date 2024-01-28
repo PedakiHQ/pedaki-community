@@ -12,7 +12,7 @@ class StudentPropertiesService {
 
   async reload() {
     // Skip in ci
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL === '{{{DATABASE_URL}}}') return;
+    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith('{{{')) return;
     const properties = await prisma.property.findMany({
       select: {
         id: true,
