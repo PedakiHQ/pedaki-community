@@ -50,7 +50,7 @@ const Footer = ({
     <div className="grid grid-cols-12 items-center justify-between gap-4">
       <span className="col-span-6 justify-start text-p-sm text-sub @3xl/main:col-span-3">
         {t('footer.showing', {
-          from: isLoading ? '0' : Math.min((page - 1) * perPage + 1, meta?.totalCount),
+          from: isLoading ? '0' : Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0),
           to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
           total: isLoading ? '0' : meta?.totalCount,
         })}
