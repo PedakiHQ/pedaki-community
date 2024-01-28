@@ -10,9 +10,12 @@ import { z } from 'zod';
 
 export const FieldSchemaWithRefinement = FieldSchema.refine(
   key => {
-    const propertyKey = key.split('properties.', 2)[1]!;
-    const property = studentPropertiesService.getPropertySchema(propertyKey);
-    return property !== null;
+    if (key.startsWith('properties.')) {
+      const propertyKey = key.split('properties.', 2)[1]!;
+      const property = studentPropertiesService.getPropertySchema(propertyKey);
+      return property !== null;
+    }
+    return true;
   },
   key => ({
     message: `Unknown property ${key}`,
