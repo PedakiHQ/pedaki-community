@@ -11,7 +11,7 @@ import { env } from '~/env.ts';
 // import { VERSION } from '~/version.ts';
 
 export const initTelemetry = (instrumentations: InstrumentationOption[]): NodeSDK | null => {
-  if (!env.TRANSPORTERS.includes('otlp')) return null;
+  if (!env.TRANSPORTERS?.includes('otlp')) return null;
 
   if (!env.OTLP_ENDPOINT) {
     throw new Error('OTLP_ENDPOINT is not defined');

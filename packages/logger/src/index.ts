@@ -17,7 +17,7 @@ const removeColors = winston.format(info => {
 
 const transports: winston.transport[] = [];
 
-if (env.TRANSPORTERS.includes('file')) {
+if (env.TRANSPORTERS?.includes('file')) {
   transports.push(
     new winston.transports.File({
       filename: 'error.log',
@@ -36,7 +36,7 @@ if (env.TRANSPORTERS.includes('file')) {
   );
 }
 
-if (env.TRANSPORTERS.includes('console')) {
+if (env.TRANSPORTERS?.includes('console')) {
   transports.push(
     new winston.transports.Console({
       silent: env.NODE_ENV === 'test',
@@ -47,7 +47,7 @@ if (env.TRANSPORTERS.includes('console')) {
   );
 }
 
-if (env.TRANSPORTERS.includes('other')) {
+if (env.TRANSPORTERS?.includes('other')) {
   // In production we are using a third party service to collect logs
 }
 
