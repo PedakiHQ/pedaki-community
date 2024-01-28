@@ -31,7 +31,7 @@ const filtersParser = createParser({
     if (!column || !operator || !value) {
       return null;
     }
-    const v = JSON.parse(value) as unknown;
+    const v = JSON.parse(value);
     const result = FilterSchema.safeParse({ field: column, operator: operator, value: v });
     if (result.success) {
       return result.data;
@@ -53,18 +53,7 @@ export const searchParams = {
     lastName: true,
     'class.name': true,
   }),
-  filters: parseAsArrayOf(filtersParser).withDefault([
-    {
-      field: 'firstName',
-      operator: 'eq',
-      value: 'John',
-    },
-    {
-      field: 'lastName',
-      operator: 'neq',
-      value: 'Doe',
-    },
-  ]),
+  filters: parseAsArrayOf(filtersParser),
 } as const;
 export const serialize = createSerializer(searchParams);
 export type PossiblePerPage = (typeof possiblesPerPage)[number];
