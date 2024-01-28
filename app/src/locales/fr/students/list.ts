@@ -43,8 +43,38 @@ export default {
       },
     },
     filters: {
+      noFilters: 'Aucun filtre',
       selector: {
         subLabel: 'Sélectionnez les filtres à appliquer',
+      },
+      clear: {
+        label: 'Effacer les filtres',
+      },
+      new: {
+        label: 'Nouveau filtre',
+        title: 'Nouveau filtre',
+      },
+      edit: {
+        title: 'Modifier le filtre',
+      },
+      form: {
+        field: {
+          placeholder: 'Colonne',
+        },
+        operator: {
+          placeholder: 'Opérateur',
+        },
+        value: {
+          placeholder: {
+            text: 'Saisissez une valeur',
+            int: 'Saisissez un nombre',
+          },
+        },
+        action: {
+          add: 'Ajouter',
+          update: 'Modifier',
+          remove: 'Supprimer',
+        },
       },
     },
   },
