@@ -18,6 +18,7 @@ export default {
     },
   },
   table: {
+    noResult: 'Aucun élève trouvé',
     columns: {
       firstName: {
         label: 'Prénom',
@@ -43,6 +44,7 @@ export default {
       },
     },
     filters: {
+      and: 'ET',
       noFilters: 'Aucun filtre',
       selector: {
         subLabel: 'Sélectionnez les filtres à appliquer',
@@ -63,6 +65,30 @@ export default {
         },
         operator: {
           placeholder: 'Opérateur',
+          names: {
+            eq: 'égal à',
+            neq: 'différent de',
+            gt: 'supérieur à',
+            gte: 'supérieur ou égal à',
+            lt: 'inférieur à',
+            lte: 'inférieur ou égal à',
+            // in: 'in',
+            // nin: 'nin',
+            like: 'contient',
+            nlike: 'ne contient pas',
+          },
+          shortNames: {
+            eq: '=',
+            neq: '≠',
+            gt: '>',
+            gte: '≥',
+            lt: '<',
+            lte: '≤',
+            // in: 'in',
+            // nin: 'nin',
+            like: 'contient',
+            nlike: 'ne contient pas',
+          },
         },
         value: {
           placeholder: {

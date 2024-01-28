@@ -51,23 +51,23 @@ const Filters = ({
   return (
     <div className="flex h-9 w-full flex-row items-center gap-2 rounded-md border border-dashed p-1">
       <ScrollArea orientation="horizontal">
-        <ul className="flex w-full items-center">
+        <ul className="flex w-full items-center gap-0.5">
           {filters.map((filter, index) => {
             const key = `${filter.field}${filter.operator}${JSON.stringify(filter.value)}`;
             const isLast = index === filtersCount - 1;
             return (
               <Fragment key={key}>
-                <li>
+                <li className="shrink-0">
                   <Filter filter={filter} setFilters={setFilters} />
                 </li>
                 {!isLast && (
-                  <span className="mx-1 mt-0.5 select-none text-label-xs text-sub">AND</span>
+                  <span className="mt-0.5 select-none text-label-xs text-sub shrink-0">{t('and')}</span>
                 )}
               </Fragment>
             );
           })}
           {filtersCount === 0 && (
-            <span className="mx-1 select-none text-label-xs text-sub">{t('noFilters')}</span>
+            <span className="select-none text-label-xs text-sub">{t('noFilters')}</span>
           )}
         </ul>
       </ScrollArea>
@@ -150,7 +150,7 @@ const Filter = ({
   filter: Filter;
   setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
 }) => {
-  const t = useScopedI18n('students.list.table.filters.edit');
+  const t = useScopedI18n('students.list.table.filters');
   const [isOpened, setIsOpened] = React.useState(false);
 
   const columns = useStudentsListStore(store => store.translatedColumns);
@@ -174,7 +174,7 @@ const Filter = ({
         <Badge className="group-focus:focus-ring-force cursor-pointer hover:bg-weak">
           <span className="whitespace-nowrap">{fieldTitle}</span>&nbsp;
           <span className={cn(isPositive ? 'text-green-dark' : 'text-state-error')}>
-            {filter.operator}
+            {t(`form.operator.shortNames.${filter.operator}`)}
           </span>
           &nbsp;
           <span className="text-sub">{JSON.stringify(filter.value)}</span>
@@ -185,7 +185,7 @@ const Filter = ({
           filter={filter}
           onSubmit={editFilter}
           onRemove={() => removeFilter(filter)}
-          title={t('title')}
+          title={t('edit.title')}
         />
       </PopoverContent>
     </Popover>
@@ -303,7 +303,7 @@ const EditFilter = ({
                         {fieldType &&
                           FieldAllowedOperators[fieldType].map(operator => (
                             <SelectItem key={operator} value={operator}>
-                              {operator}
+                              {t(`operator.names.${operator}`)}
                             </SelectItem>
                           ))}
                       </SelectContent>

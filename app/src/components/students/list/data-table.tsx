@@ -16,6 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useScopedI18n } from '~/locales/client';
 import React from 'react';
 
 interface DataTableProps<TData, TValue> {
@@ -37,6 +38,7 @@ export function DataTable<TData, TValue>({
   setColumnVisibility,
   tableClassName,
 }: Readonly<DataTableProps<TData, TValue>>) {
+  const t = useScopedI18n('students.list.table');
   const table = useReactTable({
     data,
     columns,
@@ -98,7 +100,7 @@ export function DataTable<TData, TValue>({
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
+              {t('noResult')}
             </TableCell>
           </TableRow>
         )}
