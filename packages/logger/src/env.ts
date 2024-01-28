@@ -14,7 +14,7 @@ export const env = createEnv({
     OTLP_HEADERS: z
       .string()
       .transform(value => {
-        if (!value || value.startsWith('{{{')) {
+        if (!value) {
           return {};
         }
         return JSON.parse(value) as Record<string, string>;
@@ -22,4 +22,5 @@ export const env = createEnv({
       .optional(),
   },
   runtimeEnv: process.env,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
