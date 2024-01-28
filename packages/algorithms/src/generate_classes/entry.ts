@@ -1,9 +1,9 @@
 import type Algorithm from './algorithm.ts';
 import type { Attribute } from './attribute.ts';
-import Class from './class.ts';
 import type { ClassWithIndex } from './class.ts';
-import { RuleType } from './rules/rule.ts';
+import Class from './class.ts';
 import type { Rule, StudentValue } from './rules/rule.ts';
+import { RuleType } from './rules/rule.ts';
 import { Student } from './student.ts';
 
 export interface StudentWithClass {
@@ -74,12 +74,16 @@ export default class Entry {
 
   public students(): StudentWithClass[] {
     return this.classes()
-      .map((c, i) =>
-        [...c.students()].map(student => ({
-          student,
-          studentClass: { class: c, index: i } as ClassWithIndex,
-        })),
-      )
+      .map((c, i) => {
+        const array = [];
+        for (const student of c.students()) {
+          array.push({
+            student,
+            studentClass: { class: c, index: i } as ClassWithIndex,
+          });
+        }
+        return array;
+      })
       .flat();
   }
 
@@ -175,7 +179,7 @@ export default class Entry {
    */
   public moveStudents(rule: Rule): number {
     // On initialise chaque règle précédente pour une nouvelle exécution.
-    for (const r of this.algo().input().rules()) {
+    for (const r of this.algo().input().rules().keys()) {
       rule.initialize(this);
       if (rule === r) break;
     }
@@ -284,7 +288,7 @@ export default class Entry {
    * Déterminer si cette configuration est moins bien qu'une autre, jusqu'à une certaine règle (non incluse).
    */
   private isRegressionOf(target: Entry, toRule: Rule): boolean {
-    for (const r of this.algo().input().rules()) {
+    for (const r of this.algo().input().rules().keys()) {
       if (r === toRule) break;
       if (this.value(r) > target.value(r)) return true;
     }
@@ -355,18 +359,13 @@ export default class Entry {
    */
   public getStudentSample(
     students: Student[],
-    toRule?: Rule,
-    // minLength?: number,
+    toRule: Rule,
     ignorePreviousRules?: boolean,
     ...ignoreStudents: Student[]
   ): Student[] {
-    const ruleKey = toRule && this.algo().input().ruleKey(toRule);
     // Il faut gérer les relations si une règle correspond.
-    const handleRelationships = !![...this.algo().input().rules()].filter(
-      (r, i) =>
-        r.ruleType() === RuleType.RELATIONSHIPS &&
-        (!toRule || ruleKey == i || (!ignorePreviousRules && ruleKey! > i)),
-    ).length;
+    const handleRelationships = toRule.hasType(this, RuleType.RELATIONSHIPS, !ignorePreviousRules);
+
     // On supprime tous les doublons d'élèves qui ont les mêmes attributs sans affinité.
     return students
       .reduce(
@@ -374,15 +373,14 @@ export default class Entry {
           // Si la liste d'attributs de cet élève n'est pas encore représentée dans la liste, ou s'il a des affinités, on ajoute l'élève.
           if (
             (handleRelationships && Object.entries(cur.relationships()).length) ||
-            !acc.some(
-              s =>
-                s.attributes().size === cur.attributes().size &&
-                ![...s.attributes()].some(a => !cur.hasAttribute(a)),
-            )
+            !acc.some(s => s.equals(cur))
           )
             acc.push(cur);
           return acc;
         },
+        // On les inclut, puis ils seront filtrés après.
+        // Permet d'ignorer tous les élèves qui sont identiques, sans parcourir 2 listes à chaque fois.
+        // La copie est nécessaire au filtrage qui suit, afin qu'elles restent bien différentes.
         [...ignoreStudents],
       )
       .filter(student => !ignoreStudents.includes(student));

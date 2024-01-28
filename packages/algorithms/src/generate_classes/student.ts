@@ -79,6 +79,17 @@ export class Student {
   }
 
   /**
+   * Savoir si deux élèves sont identiques du point de vue des attributs.
+   */
+  public equals(other: Student): boolean {
+    if (other.attributes().size !== this.attributes().size) return false;
+    for (const attribute of this.attributes()) {
+      if (!other.hasAttribute(attribute)) return false;
+    }
+    return true;
+  }
+
+  /**
    * Savoir si l'élève possède au moins un attribut parmi une liste.
    */
   public hasAttribute(...attributes: Attribute[]): boolean {

@@ -111,6 +111,19 @@ export abstract class Rule {
   }
 
   /**
+   * Savoir si cette règle ou une des précédentes est d'un certain type.
+   */
+  public hasType(entry: Entry, type: RuleType, checkBefore?: boolean): boolean {
+    if (!checkBefore) return this.ruleType() === type;
+    const thisKey = entry.algo().input().ruleKey(this);
+    for (const [rule, key] of entry.algo().input().rules()) {
+      if (rule.ruleType() === type) return true;
+      if (key === thisKey) break;
+    }
+    return false;
+  }
+
+  /**
    * Obtenir la différence d'une valeur par rapport à un objectif.
    * Prend en compte un objectif décimal (autorise les deux entiers).
    */

@@ -35,7 +35,7 @@ export default class Algorithm {
     const result: Partial<Result> = {};
 
     // On fait respecter chaque règle en respectant l'ordre de priorité.
-    for (const rule of this.input().rules()) {
+    for (const rule of this.input().rules().keys()) {
       // On effectue les déplacements jusqu'à ce que cette règle soit respectée, ou que plus aucun déplacement ne soit possible.
       let moves = Number.MAX_VALUE;
       while (entry.value(rule) > 0 && moves > 0) {

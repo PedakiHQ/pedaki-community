@@ -54,7 +54,7 @@ export type LevelRuleType =
   | 'negative_relationships';
 
 const RuleOrder: Record<
-  string,
+  LevelRuleType,
   { rule: new (rawRule: RawRule, input: Input) => Rule; priority: number }
 > = {
   gather_attributes: { rule: GatherAttributesRule, priority: 2 },
@@ -89,7 +89,7 @@ export class Input {
    * Obtenir la liste des règles.
    */
   public rules() {
-    return this._rules.keys();
+    return this._rules;
   }
 
   public ruleKey(rule: Rule) {
@@ -152,11 +152,11 @@ export class Input {
       return r2.priority() - r1.priority();
     });
 
+    this._attributes = [];
     for (const [key, rule] of Object.entries(rules)) {
       this._rules.set(rule, parseInt(key));
+      this.attributes().push(...rule.attributes());
     }
-
-    this._attributes = [...this.rules()].map(r => r.attributes()).flat();
 
     // Définir la liste des affinités de chaque élève.
     for (const student of Object.values(this._students)) {

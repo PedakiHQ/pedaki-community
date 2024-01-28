@@ -99,7 +99,7 @@ export default class Class {
   public findBestStudentFor(
     entry: Entry,
     students: Student[],
-    toRule?: Rule,
+    toRule: Rule,
     ...ignoreStudents: Student[]
   ): Student {
     // On récupère une liste réduite d'élèves, mais qui contient quand même l'ensemble des cas.
@@ -119,14 +119,17 @@ export default class Class {
       });
 
       const values: number[] = [];
-      for (const rule of entry.algo().input().rules()) {
+      for (const rule of entry.algo().input().rules().keys()) {
         const index = entry.algo().input().ruleKey(rule)!;
 
+        // On récupère la valeur de la configuration pour cette règle.
+        const value = entry.value(rule);
+
         // Si la valeur est déjà supérieure à la meilleure, on abandonne cette configuration.
-        if (bestValues && entry.value(rule) > bestValues[index]) break;
+        if (bestValues && value > bestValues[index]) break;
 
         // On définit la valeur de cette règle avec cette configuration.
-        values[index] = entry.value(rule);
+        values[index] = value;
 
         // Si on a atteint la règle limite, on ne va pas plus loin pour cette configuration.
         if (rule === toRule) break;
@@ -149,9 +152,12 @@ export default class Class {
    * Permet de s'assurer que le dénombrement stocké est correct.
    */
   manualCount(option: string, level?: number | string): number {
-    return [...this.students()].filter(
-      s => option in s.levels() && (level === undefined || s.levels()[option] == level),
-    ).length;
+    let count = 0;
+    for (const student of this.students()) {
+      if (option in student.levels() && (level === undefined || student.levels()[option] == level))
+        count++;
+    }
+    return count;
   }
 
   toString(showLevel?: boolean, showIds?: boolean, ...keysMask: string[]) {
