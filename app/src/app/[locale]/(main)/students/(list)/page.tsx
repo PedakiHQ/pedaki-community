@@ -1,5 +1,5 @@
-import { Button } from '@pedaki/design/ui/button';
-import { IconDownload, IconPlus, IconUpload, IconUserGroups } from '@pedaki/design/ui/icons';
+import { IconUserGroups } from '@pedaki/design/ui/icons';
+import HeaderActions from '~/app/[locale]/(main)/students/(list)/header-actions.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import Client from '~/components/students/list/client';
@@ -30,20 +30,7 @@ export default async function StudentsListPage({ params }: PageType) {
         description={t('header.description')}
         icon={IconUserGroups}
       >
-        <>
-          <Button variant="stroke-primary-main" className="text-sub">
-            <IconUpload className="mr-2 h-4 w-4" />
-            {t('headerActions.export.label')}
-          </Button>
-          <Button variant="stroke-primary-main" className="text-sub">
-            <IconDownload className="mr-2 h-4 w-4" />
-            {t('headerActions.import.label')}
-          </Button>
-          <Button variant="filled-primary">
-            <IconPlus className="mr-2 h-4 w-4" />
-            {t('headerActions.create.label')}
-          </Button>
-        </>
+        <HeaderActions />
       </PageHeader>
 
       <div className="h-full pt-6" id={MAIN_CONTENT}>
