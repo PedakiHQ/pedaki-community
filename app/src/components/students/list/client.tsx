@@ -11,7 +11,6 @@ import Footer from '~/components/students/list/footer.tsx';
 import { searchParams } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
-import { useGlobalStore } from '~/store/global/global.store';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
