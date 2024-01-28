@@ -25,7 +25,16 @@ export const env = createEnv({
         if (!value) {
           return {};
         }
-        return JSON.parse(value) as Record<string, string>;
+        // key=value,key=value
+        return value.split(',').reduce(
+          (acc, header) => {
+            const [key, value] = header.split('=', 2);
+            if (!key || !value) throw new Error(`Invalid OTLP_HEADERS: ${value}`);
+            acc[key] = value;
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
       })
       .optional(),
   },
