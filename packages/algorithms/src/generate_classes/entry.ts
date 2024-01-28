@@ -20,13 +20,13 @@ export default class Entry {
   private _classes: Class[];
 
   // La valeur actuelle de cette configuration pour chaque règle. Elle est invalidée à chaque modification.
-  private _values: Record<string, number> = {};
+  private _values = new Map<Rule, number>();
 
   // La valeur de chaque élève pour chaque règle, invalidées à chaque modification.
-  private _studentValues: Record<string, Record<string, StudentValue>> = {};
+  private _studentValues = new Map<Rule, Map<Student, StudentValue>>();
 
   // L'indice de la classe actuelle de chaque élève.
-  private _studentClass: Record<string, number> = {};
+  private _studentClass = new Map<Student, number>();
 
   constructor(algo: Algorithm, classes: Class[]) {
     this._algo = algo;
@@ -34,8 +34,8 @@ export default class Entry {
 
     // On définit une seule fois la position de chaque élève, pour ne pas devoir chercher ensuite.
     for (const [index, c] of Object.entries(classes)) {
-      for (const student of c.getStudents()) {
-        this._studentClass[student.id()] = parseInt(index);
+      for (const student of c.students()) {
+        this._studentClass.set(student, parseInt(index));
       }
     }
   }
@@ -49,7 +49,7 @@ export default class Entry {
   }
 
   public clone() {
-    return new Entry(this.algo(), [...this.classes().map(c => new Class([...c.getStudents()]))]);
+    return new Entry(this.algo(), [...this.classes().map(c => new Class([...c.students()]))]);
   }
 
   public class(index: number | string): Class | null {
@@ -64,19 +64,21 @@ export default class Entry {
   }
 
   public studentClass(student: Student): ClassWithIndex | null {
-    if (!(student.id() in this._studentClass)) return null;
+    if (!this._studentClass.has(student)) return null;
+    const index = this._studentClass.get(student)!;
     return {
-      index: this._studentClass[student.id()],
-      class: this.classes()[this._studentClass[student.id()]],
+      index: index,
+      class: this.classes()[index],
     };
   }
 
-  public getStudents(): StudentWithClass[] {
+  public students(): StudentWithClass[] {
     return this.classes()
       .map((c, i) =>
-        c
-          .getStudents()
-          .map(student => ({ student, studentClass: { class: c, index: i } as ClassWithIndex })),
+        [...c.students()].map(student => ({
+          student,
+          studentClass: { class: c, index: i } as ClassWithIndex,
+        })),
       )
       .flat();
   }
@@ -85,25 +87,42 @@ export default class Entry {
    * Obtenir la valeur de cette configuration, relative à une règle.
    */
   public value(rule: Rule): number {
-    const index = this.algo().input().rules().indexOf(rule);
-    if (!(index in this._values)) this._values[index] = rule.getEntryValue(this);
-    return this._values[index];
+    let value = this._values.get(rule);
+    if (value === undefined) {
+      value = rule.getEntryValue(this);
+      this._values.set(rule, value);
+    }
+    return value;
+  }
+
+  public studentValues() {
+    return this._studentValues;
+  }
+
+  public values() {
+    return this._values;
   }
 
   /**
    * Obtenir la valeur d'un élève dans cette configuration, relativement à une règle.
    */
   public studentValue(student: Student | StudentWithClass, rule: Rule): StudentValue {
+    let map = this._studentValues.get(rule);
+    if (!map) {
+      map = new Map<Student, StudentValue>();
+      this._studentValues.set(rule, map);
+    }
+
     // On récupère la classe actuelle de l'élève.
     if (student instanceof Student)
       student = { student, studentClass: this.studentClass(student)! };
 
-    if (!(student.student.id() in this._studentValues))
-      this._studentValues[student.student.id()] = {};
-    const index = this.algo().input().rules().indexOf(rule);
-    if (!(index in this._studentValues[student.student.id()]))
-      this._studentValues[student.student.id()][index] = rule.getStudentValue(this, student);
-    return this._studentValues[student.student.id()][index];
+    let value = map.get(student.student);
+    if (!value) {
+      value = rule.getStudentValue(this, student);
+      map.set(student.student, value);
+    }
+    return value;
   }
 
   /**
@@ -121,12 +140,12 @@ export default class Entry {
     this.studentClass(student)!.class.removeStudent(student);
     to.class.addStudent(student);
 
-    // On invalide la valeur de la configuration puisqu'elle a changé.
-    this._values = {};
-    this._studentValues = {};
+    // On invalide la valeur de la configuration pour chaque règle.
+    this._values.clear();
+    this._studentValues.clear();
 
     // On modifie l'indice de l'élève concerné.
-    this._studentClass[student.id()] = to.index;
+    this._studentClass.set(student, to.index);
   }
 
   public static default(algo: Algorithm): Entry {
@@ -155,8 +174,15 @@ export default class Entry {
    * Retourne le nombre de déplacements effectués (chaque déplacement améliore le respect de la règle).
    */
   public moveStudents(rule: Rule): number {
+    // On initialise chaque règle précédente pour une nouvelle exécution.
+    for (const r of this.algo().input().rules()) {
+      rule.initialize(this);
+      if (rule === r) break;
+    }
+
     // Obtenir la liste de tous les élèves, triés par valeur décroissante.
-    const allStudents = this.getStudents().sort(
+    // On ne filtre pas les valeurs nulles ici, parce qu'elles peuvent évoluer après chaque déplacement.
+    const allStudents = this.students().sort(
       (a, b) => this.studentValue(b, rule).value - this.studentValue(a, rule).value,
     );
 
@@ -191,13 +217,8 @@ export default class Entry {
       worseClasses.push(student.studentClass.class);
     }
 
-    // Ajouter des pires classes des règles précédentes.
-    for (const r of this.algo().input().rules()) {
-      if (r === rule) break;
-      worseClasses.push(
-        ...this.studentValue(student, r).worseClasses.filter(c => !worseClasses.includes(c)),
-      );
-    }
+    // On n'utilise pas les pires classes des règles précédentes puisque ça pourrait retirer de réelles possiblités.
+    // Les retours en arrière sont de toute façon impossible car testés dans "applyRuleForStudent()".
 
     return this.classes().filter(c => !worseClasses.includes(c));
   }
@@ -220,7 +241,7 @@ export default class Entry {
 
     // Récupération de la liste d'élèves disponibles pour un éventuel échange.
     // C'est-à-dire sans l'élève qui va être rajouté, pour éviter que l'échange annule tout.
-    const studentsForExchange = [...destination.getStudents()];
+    const studentsForExchange = [...destination.students()];
 
     const to = {
       class: destination,
@@ -231,7 +252,7 @@ export default class Entry {
     this.moveStudent(student.student, to);
 
     // On l'échange avec un élève de sa nouvelle classe si elle est pleine.
-    if (destination.getStudents().length > this.algo().input().classSize()) {
+    if (destination.students().size > this.algo().input().classSize()) {
       // Déterminer l'élève de la classe de destination avec qui échanger.
       // On ignore tous les élèves qui sont équivalents en terme d'attributs.
       const exchanged: Student | null = student.studentClass.class.findBestStudentFor(
@@ -253,7 +274,7 @@ export default class Entry {
     }
 
     // Supprimer la classe s'il n'y a plus d'élèves dedans.
-    if (student.studentClass?.class.getStudents().length === 0)
+    if (student.studentClass?.class.students().size === 0)
       this.deleteClass(student.studentClass.index);
 
     return { student, to };
@@ -262,7 +283,7 @@ export default class Entry {
   /**
    * Déterminer si cette configuration est moins bien qu'une autre, jusqu'à une certaine règle (non incluse).
    */
-  private isRegression(target: Entry, toRule: Rule): boolean {
+  private isRegressionOf(target: Entry, toRule: Rule): boolean {
     for (const r of this.algo().input().rules()) {
       if (r === toRule) break;
       if (this.value(r) > target.value(r)) return true;
@@ -275,49 +296,54 @@ export default class Entry {
    * Un éventuel échange est effectué pour respecter la limite de taille de classe.
    * Chaque destination envisageable est testée pour que la meilleure soit choisie.
    */
-  private applyRuleForStudent(student: Student, rule: Rule): boolean {
+  private applyRuleForStudent(student: Student | StudentWithClass, rule: Rule): boolean {
+    if (student instanceof Student)
+      student = { student, studentClass: this.studentClass(student)! };
+
     // Obtenir la liste des destinations envisageables pour l'élève.
     const destinations: (Class | undefined)[] | undefined = this.getStudentBestClasses(
-      { student, studentClass: this.studentClass(student)! },
+      student,
       rule,
     );
     if (!destinations) return false;
     if (!destinations.length) destinations.push(undefined);
 
+    // On clone la configuration de base, afin de pouvoir la comparer ensuite à ce qu'on va générer.
+    const fromEntry = this.clone();
+
     // Création des variables de recherche de la meilleure configuration.
-    let bestEntry = null,
+    let bestResult = null,
       bestValue = Number.MAX_VALUE;
 
     // On réalise le déplacement dans chaque destination séparément et on prend le meilleur résultat.
-    for (let destination of destinations) {
-      // Création d'une nouvelle configuration à partir de celle-ci.
-      const entry = this.clone();
-      if (destination) destination = entry.class(this.classes().indexOf(destination))!;
-
+    for (const [index, destination] of Object.entries(destinations)) {
       // Réalisation du déplacement, avec un potentiel échange.
-      if (
-        !entry.moveAndExchangeStudent(
-          { student, studentClass: entry.studentClass(student)! },
-          rule,
-          destination,
-        )
-      )
-        continue;
+      let result;
+      if (!(result = this.moveAndExchangeStudent(student, rule, destination))) continue;
+
+      // Récupération de la valeur de cette modification, afin de savoir si elle est bénéfique et la meilleure possible.
+      const value = this.value(rule);
 
       // On compare cette nouvelle configuration pour trouver la meilleure.
       // Si cette configuration est moins bien concernant les règles précédentes, on l'ignore.
-      if (!entry.isRegression(this, rule) && entry.value(rule) < bestValue) {
-        bestEntry = entry;
-        bestValue = entry.value(rule);
+      if (value < bestValue && !this.isRegressionOf(fromEntry, rule)) {
+        bestResult = result;
+        bestValue = value;
+
+        // Si c'était la dernière destination à tester, on s'arrête tel-quel.
+        if (index == (destinations.length - 1).toString()) return true;
       }
+
+      // Annulation du déplacement, afin de revenir à la configuration initiale.
+      this.moveStudent(student.student, student.studentClass);
+      if (result.exchanged) this.moveStudent(result.exchanged, result.to);
     }
 
     // On indique en retour si ce changement a été bénéfique ou non.
-    if (bestEntry && bestValue < this.value(rule)) {
-      // On applique les modifications dans cette configuration.
-      this._classes = bestEntry.classes();
-      this._values = bestEntry._values;
-      this._studentValues = bestEntry._studentValues;
+    if (bestResult && bestValue < fromEntry.value(rule)) {
+      // On applique de nouveau les déplacements de la meilleure configuration trouvée.
+      this.moveStudent(student.student, bestResult.to);
+      if (bestResult.exchanged) this.moveStudent(bestResult.exchanged, student.studentClass);
       return true;
     }
 
@@ -330,34 +356,36 @@ export default class Entry {
   public getStudentSample(
     students: Student[],
     toRule?: Rule,
+    // minLength?: number,
+    ignorePreviousRules?: boolean,
     ...ignoreStudents: Student[]
   ): Student[] {
+    const ruleKey = toRule && this.algo().input().ruleKey(toRule);
     // Il faut gérer les relations si une règle correspond.
-    const handleRelationships = !!this.algo()
-      .input()
-      .rules()
-      .filter(
-        (r, i) =>
-          r.ruleType() === RuleType.RELATIONSHIPS &&
-          (!toRule || this.algo().input().rules().indexOf(toRule) >= i),
-      ).length;
+    const handleRelationships = !![...this.algo().input().rules()].filter(
+      (r, i) =>
+        r.ruleType() === RuleType.RELATIONSHIPS &&
+        (!toRule || ruleKey == i || (!ignorePreviousRules && ruleKey! > i)),
+    ).length;
     // On supprime tous les doublons d'élèves qui ont les mêmes attributs sans affinité.
-    return students.reduce(
-      (acc, cur) => {
-        // Si la liste d'attributs de cet élève n'est pas encore représentée dans la liste, ou s'il a des affinités, on ajoute l'élève.
-        if (
-          (handleRelationships && Object.entries(cur.relationships()).length) ||
-          !acc.some(
-            s =>
-              s.attributes().length === cur.attributes().length &&
-              !s.attributes().some(a => !cur.attributes().includes(a)),
+    return students
+      .reduce(
+        (acc, cur) => {
+          // Si la liste d'attributs de cet élève n'est pas encore représentée dans la liste, ou s'il a des affinités, on ajoute l'élève.
+          if (
+            (handleRelationships && Object.entries(cur.relationships()).length) ||
+            !acc.some(
+              s =>
+                s.attributes().size === cur.attributes().size &&
+                ![...s.attributes()].some(a => !cur.hasAttribute(a)),
+            )
           )
-        )
-          acc.push(cur);
-        return acc;
-      },
-      [...ignoreStudents],
-    );
+            acc.push(cur);
+          return acc;
+        },
+        [...ignoreStudents],
+      )
+      .filter(student => !ignoreStudents.includes(student));
   }
 
   /**

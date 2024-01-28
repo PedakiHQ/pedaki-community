@@ -22,7 +22,7 @@ export class MaximizeClassSizeRule extends Rule {
     // On retourne la somme de la place libre dans chaque classe.
     return entry
       .classes()
-      .map(c => entry.algo().input().classSize() - c.getStudents().length)
+      .map(c => entry.algo().input().classSize() - c.students().size)
       .reduce((acc, cur) => acc + cur, 0);
   }
 
@@ -33,10 +33,10 @@ export class MaximizeClassSizeRule extends Rule {
    */
   override getStudentValue(entry: Entry, student: StudentWithClass): StudentValue {
     return {
-      value: entry.algo().input().classSize() - student.studentClass.class.getStudents().length,
+      value: entry.algo().input().classSize() - student.studentClass.class.students().size,
       worseClasses: entry
         .classes()
-        .filter(c => c.getStudents().length < student.studentClass.class.getStudents().length),
+        .filter(c => c.students().size < student.studentClass.class.students().size),
     };
   }
 }

@@ -83,7 +83,7 @@ export class BalanceCountRule extends Rule {
    * C'est-à-dire tous les élèves, ou ceux possédant un éventuel attribut défini.
    */
   private getRelatedStudentsOfClass = (entry: Entry, classKey: number | string): number => {
-    if (!this.attribute()) return entry.class(classKey)!.getStudents().length;
+    if (!this.attribute()) return entry.class(classKey)!.students().size;
     return entry.class(classKey)!.count(this.attribute()!);
   };
 }

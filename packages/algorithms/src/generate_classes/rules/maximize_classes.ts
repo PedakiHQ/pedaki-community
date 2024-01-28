@@ -30,15 +30,13 @@ export class MaximizeClassesRule extends Rule {
   override getStudentValue(entry: Entry, student: StudentWithClass): StudentValue {
     // TODO ça casse le pourcentage de respect, c'est jamais à 0
     return {
-      value: student.studentClass.class.getStudents().length,
+      value: student.studentClass.class.students().size,
       worseClasses:
         entry.classes().length < entry.algo().input().classAmount()
           ? entry.classes()
           : entry
               .classes()
-              .filter(
-                c => c.getStudents().length > student.studentClass.class.getStudents().length,
-              ),
+              .filter(c => c.students().size > student.studentClass.class.students().size),
     };
   }
 }

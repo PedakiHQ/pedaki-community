@@ -2,22 +2,52 @@ import type Class from '../class.ts';
 import type { StudentWithClass } from '../entry.ts';
 import type Entry from '../entry.ts';
 import type { Input, RawRule } from '../input.ts';
-import { Rule, RuleType } from './rule.ts';
+import type { Student } from '../student.ts';
 import type { StudentValue } from './rule.ts';
+import { Rule, RuleType } from './rule.ts';
 
 /**
  * Équilibrer le dénombrement de plusieurs attributs dans un maximum de classes.
  * Elle est faite après les répartitions d'attributs.
+ * S'adapte à la configuration actuelle des attributs non concernés, et ne modifie pas leur dénombrement.
  */
 export class BalanceClassCountRule extends Rule {
   protected _ruleType = RuleType.ATTRIBUTES;
+
+  // Pendant l'exécution de cette règle, les classes qu'on peut équilibrer seront toujours les mêmes,
+  // parce que le dénombrement des attributs non concernés ne change pas.
+  // Le dénombrement ne pourra ensuite pas être changé par les règles suivantes.
+  private canBalance = new Map<Class, boolean>();
+
+  // Échantillons d'élèves dans chaque classe. Permet de ne pas réaliser le même déplacement inutile pour 100 élèves identiques.
+  // Les classes à ne pas équilibrer sont quand même incluses parce qu'on y déplace des élèves.
+  // Redéfini avant chaque application de la règle, puisque des attributs peuvent apparaitre.
+  private samples = new Map<Class, Set<Student>>();
 
   constructor(rawRule: RawRule, input: Input) {
     super(rawRule, input);
   }
 
   /**
+   * Définir une liste d'élèves aléatoire qui représente l'ensemble des cas dans chaque classe.
+   * Permet de ne déplacer que le nombre requis d'élèves dans chaque classe, sans omettre aucune possibilité.
+   */
+  override initialize(entry: Entry) {
+    this.samples.clear();
+    for (const c of entry.classes()) {
+      this.samples.set(c, new Set(entry.getStudentSample([...c.students()], this, true)));
+      // TODO inclure davantage d'élèves par rapport à la différence de dénombrement dans la classe, seulement si c'est moins long que refaire un tour d'exécution
+    }
+    // Il faut réinitialiser les valeurs, parce qu'au tour précédent tous ceux dont la valeur était nulle ne doit pas le rester.
+    // Elle est réinitialisée au tour précédent seulement lorsque quelqu'un est déplacé, donc lorsque la valeur est positive.
+    // Toutes les valeurs calculées après le dernier déplacement ne sont pas réinitialisées et doivent l'être maintenant.
+    entry.studentValues().clear();
+  }
+
+  /**
+   * @inheritDoc
    * Produit de somme des différences de dénombrement des attributs de chaque classe.
+   * Les classes qu'on ne peut pas équilibrer (à cause des attributs non concernés) sont ignorées.
    */
   override getEntryValue(entry: Entry): number {
     // On compte la différence entre le dénombrement de chaque attribut dans chaque classe.
@@ -39,20 +69,11 @@ export class BalanceClassCountRule extends Rule {
 
   /**
    * @inheritDoc
-   * La valeur correspond à la différence totale de dénombrement de chaque attribut de l'élève dans sa classe.
+   * La valeur est positive pour les élèves présents dans l'échantillon d'élèves calculé précédemment.
    */
   override getStudentValue(_entry: Entry, student: StudentWithClass): StudentValue {
-    // Somme des différences de dénombrement des attributs que l'élève possède.
-    // L'objectif pris en compte est l'entier inférieur, afin de ne pas rester bloqué avec trop d'attributs.
-    const goal = Math.floor(this.getClassAvgCount(student.studentClass.class));
-    let value = 0;
-    for (const attribute of student.student.attributes()) {
-      if (!this.attributes().includes(attribute)) continue;
-      value += Math.abs(this.getDifference(student.studentClass.class.count(attribute), goal));
-    }
-
     return {
-      value: value,
+      value: this.samples.get(student.studentClass.class)!.has(student.student) ? 1 : 0,
       // Il n'y a aucune pire classe, on n'est pas capable de les définir.
       worseClasses: [],
     };
@@ -92,9 +113,13 @@ export class BalanceClassCountRule extends Rule {
    * Par exemple : avec 10 anglais et 5 allemands dans la classe, il faut trouver 10 anglais et 5 allemands de toutes classes pour équilibrer les attributs concernés.
    */
   private canBalanceClass(entry: Entry, c: Class): boolean {
+    // On retourne l'éventuelle valeur déjà calculée. Elle est forcément identique pendant toute l'exécution de la règle.
+    let result = this.canBalance.get(c);
+    if (result !== undefined) return result;
+
     // On compte les attributs non concernés dans la classe, afin de respecter ce dénombrement plus tard.
     const unrelatedAttributesInClass: Record<string, number> = {};
-    for (const student of c.getStudents()) {
+    for (const student of c.students()) {
       const unrelatedAttributesKey = student.attributesKey(...this.attributes());
       if (!(unrelatedAttributesKey in unrelatedAttributesInClass))
         unrelatedAttributesInClass[unrelatedAttributesKey] = 1;
@@ -130,8 +155,9 @@ export class BalanceClassCountRule extends Rule {
     // Obtention de l'objectif de dénombrement de chaque attribut dans la classe.
     const goal = this.getClassAvgCount(c);
 
+    // TODO optimiser : obtenir le bon format de liste directement.
     // On regarde si c'est possible en comptant les attributs concernés. Aucun ne doit être inférieur à l'objectif.
-    return !Object.values(
+    result = !Object.values(
       Object.entries(attributesAmount)
         .filter(([key]) => key in unrelatedAttributesInClass)
         .reduce(
@@ -144,6 +170,8 @@ export class BalanceClassCountRule extends Rule {
           {} as Record<string, number>,
         ),
     ).some(amount => this.getDifference(amount, goal) < 0);
+    this.canBalance.set(c, result);
+    return result;
   }
 
   /**

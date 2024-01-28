@@ -34,7 +34,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 describe('get classes from input', function () {
-  fixtures(__dirname, 'algo', async ({ module }: { module: Module }) => {
+  fixtures(__dirname, 'rules', async ({ module }: { module: Module }) => {
     const {
       studentsFile,
       inputFile,
@@ -139,14 +139,14 @@ const isClassValid = (c: Class, model: OutputClass): boolean => {
   for (const [key, value] of Object.entries(model)) {
     // S'il s'agit de la clé indiquant le dénombrement global, c'est uniquement ça que l'on compare.
     if (key === 'total') {
-      if (isValueDifferent(c.getStudents().length, value)) return false;
+      if (isValueDifferent(c.students().size, value)) return false;
       continue;
     }
 
     // S'il s'agit de la clé de comparaison des identifiants, ce sont uniquement eux que l'on compare.
     if (key === 'ids') {
       // Si aucune liste d'identifiants ne correspond, alors la classe n'est pas valide.
-      const studentIds = c.getStudents().map(student => parseInt(student.id()));
+      const studentIds = [...c.students()].map(student => parseInt(student.id()));
       if (
         !(value as unknown as number[][]).find(
           ids => studentIds.length === ids.length && !ids.find(id => !studentIds.includes(id)),

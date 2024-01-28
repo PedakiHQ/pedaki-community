@@ -25,7 +25,7 @@ export class Student {
   private readonly _levels: Record<string, number>;
 
   // Liste des attributs correspondants à l'élève.
-  private _attributes: Attribute[] | null = null;
+  private _attributes: Set<Attribute> | undefined;
 
   // Liste des niveaux de relations (positives et négatives), avec les élèves relatifs à chaque niveau.
   private _relationships: Record<number, Student[]> | null = {};
@@ -66,12 +66,12 @@ export class Student {
   /**
    * Obtenir la liste des attributs de règles qui correspondent à l'élève.
    */
-  public attributes(): Attribute[] {
+  public attributes() {
     // On ne définit qu'une seule fois la liste des attributs.
-    if (!this._attributes) {
-      this._attributes = [];
+    if (this._attributes === undefined) {
+      this._attributes = new Set<Attribute>();
       for (const attribute of this.input.attributes()) {
-        if (attribute.students().includes(this)) this._attributes.push(attribute);
+        if (attribute.students().has(this)) this._attributes.add(attribute);
       }
     }
 
@@ -83,7 +83,7 @@ export class Student {
    */
   public hasAttribute(...attributes: Attribute[]): boolean {
     for (const attribute of attributes) {
-      if (this._attributes?.includes(attribute)) return true;
+      if (this._attributes?.has(attribute)) return true;
     }
     return false;
   }

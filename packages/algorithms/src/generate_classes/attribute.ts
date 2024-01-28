@@ -13,14 +13,14 @@ export class Attribute {
   private readonly input: Input;
 
   // Élèves qui ont cet attribut.
-  private readonly _students: Student[] = [];
+  private readonly _students = new Set<Student>();
   // Indice de l'attribut.
   private _key: number | null = null;
 
   constructor(attribute: RawAttribute, input: Input) {
     this.attribute = attribute;
     this.input = input;
-    this._students = this.correspondingStudents(input.students());
+    this._students = new Set(this.correspondingStudents(input.students()));
   }
 
   public options(): string[] {
@@ -56,13 +56,13 @@ export class Attribute {
    * Obtenir le nombre d'élèves qui ont cet attribut.
    */
   public count(): number {
-    return this._students.length;
+    return this._students.size;
   }
 
   /**
    * Obtenir la liste des élèves qui ont cet attribut.
    */
-  public students(): Student[] {
+  public students() {
     return this._students;
   }
 
@@ -104,5 +104,27 @@ export class Attribute {
   public key(): number {
     if (this._key === null) this._key = this.input.keyOfAttribute(this);
     return this._key;
+  }
+
+  private attributeString<T>(name: string, values: T[]): string {
+    let string = '';
+    if (values.length) {
+      string += name + ':(';
+      for (const value of values) {
+        string += value + ', ';
+      }
+      string = string.slice(0, -2) + '), ';
+    }
+
+    return string;
+  }
+
+  public toString(): string {
+    let string = 'Attribute{';
+    string += this.attributeString('options', this.options());
+    string += this.attributeString('levels', this.levels());
+    string += this.attributeString('genders', this.genders());
+    string += this.attributeString('extras', this.extras());
+    return string.slice(0, -2) + '}';
   }
 }

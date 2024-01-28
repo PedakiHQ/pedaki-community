@@ -9,10 +9,10 @@ export interface ClassWithIndex {
 }
 
 export default class Class {
-  private students: Student[] = [];
+  private _students = new Set<Student>();
 
   // Nombre d'élèves ayant chaque attribut dans la classe.
-  private attributesCount: Record<number, number> = {};
+  private attributesCount = new Map<number, number>();
 
   constructor(students: Student[]) {
     for (const student of students) {
@@ -23,8 +23,8 @@ export default class Class {
   /**
    * Obtenir la liste des élèves présents dans cette classe.
    */
-  public getStudents(): Student[] {
-    return this.students;
+  public students() {
+    return this._students;
   }
 
   /**
@@ -34,7 +34,8 @@ export default class Class {
     return attributes
       .map(
         attribute =>
-          this.attributesCount[typeof attribute === 'number' ? attribute : attribute.key()] ?? 0,
+          this.attributesCount.get(typeof attribute === 'number' ? attribute : attribute.key()) ??
+          0,
       )
       .reduce((acc, cur) => acc + cur);
   }
@@ -43,14 +44,13 @@ export default class Class {
    * Retirer un élève de la classe.
    */
   public removeStudent(student: Student) {
-    this.students.splice(
-      this.students.findIndex(s => s === student),
-      1,
-    );
+    this._students.delete(student);
 
     for (const attribute of student.attributes()) {
-      this.attributesCount[attribute.key()]--;
-      if (this.attributesCount[attribute.key()] <= 0) delete this.attributesCount[attribute.key()];
+      const count = this.attributesCount.get(attribute.key());
+      if (count === undefined) continue;
+      if (count == 1) this.attributesCount.delete(attribute.key());
+      else this.attributesCount.set(attribute.key(), count - 1);
     }
   }
 
@@ -58,33 +58,23 @@ export default class Class {
    * Ajouter un élève à la classe.
    */
   public addStudent(student: Student) {
-    this.students.push(student);
+    this._students.add(student);
 
     for (const attribute of student.attributes()) {
-      this.attributesCount[attribute.key()] =
-        attribute.key() in this.attributesCount ? this.attributesCount[attribute.key()] + 1 : 1;
+      const count = this.attributesCount.get(attribute.key());
+      if (count === undefined) this.attributesCount.set(attribute.key(), 1);
+      else this.attributesCount.set(attribute.key(), count + 1);
     }
-  }
-
-  /**
-   * Déterminer si cette classe contient un certain élève.
-   */
-  public hasStudent(id: string) {
-    for (const student of this.students) {
-      if (student.id() === id) return true;
-    }
-
-    return false;
   }
 
   /**
    * Déterminer si cette classe est égale à une autre, en comparant la liste des élèves.
    */
   public equals(other: Class): boolean {
-    if (other.getStudents().length != this.students.length) return false;
+    if (other._students.size != this._students.size) return false;
 
-    for (const s1 of this.students) {
-      if (!other.getStudents().includes(s1)) return false;
+    for (const s1 of this._students) {
+      if (other._students.has(s1)) return false;
     }
 
     return true;
@@ -113,7 +103,7 @@ export default class Class {
     ...ignoreStudents: Student[]
   ): Student {
     // On récupère une liste réduite d'élèves, mais qui contient quand même l'ensemble des cas.
-    const sample = entry.getStudentSample(students, toRule, ...ignoreStudents);
+    const sample = entry.getStudentSample(students, toRule, false, ...ignoreStudents);
     let bestValues: number[] | undefined = undefined;
     let bestStudent: Student | undefined = undefined;
 
@@ -129,12 +119,14 @@ export default class Class {
       });
 
       const values: number[] = [];
-      for (const [index, rule] of Object.entries(entry.algo().input().rules())) {
+      for (const rule of entry.algo().input().rules()) {
+        const index = entry.algo().input().ruleKey(rule)!;
+
         // Si la valeur est déjà supérieure à la meilleure, on abandonne cette configuration.
-        if (bestValues && entry.value(rule) > bestValues[parseInt(index)]) break;
+        if (bestValues && entry.value(rule) > bestValues[index]) break;
 
         // On définit la valeur de cette règle avec cette configuration.
-        values[parseInt(index)] = entry.value(rule);
+        values[index] = entry.value(rule);
 
         // Si on a atteint la règle limite, on ne va pas plus loin pour cette configuration.
         if (rule === toRule) break;
@@ -157,19 +149,19 @@ export default class Class {
    * Permet de s'assurer que le dénombrement stocké est correct.
    */
   manualCount(option: string, level?: number | string): number {
-    return this.students.filter(
+    return [...this.students()].filter(
       s => option in s.levels() && (level === undefined || s.levels()[option] == level),
     ).length;
   }
 
   toString(showLevel?: boolean, showIds?: boolean, ...keysMask: string[]) {
-    let str = `Class{students: ${this.students.length}, `;
-    if (showIds) return str + `ids: (${this.students.map(s => s.id()).join(',')})}`;
+    let str = `Class{students: ${this._students.size}, `;
+    if (showIds) return str + `ids: (${[...this._students].map(s => s.id()).join(',')})}`;
 
     const attributeCount: Record<string, number> = {};
     const levelCount: Record<string, Record<number, number>> = {};
 
-    for (const student of this.students) {
+    for (const student of this._students) {
       for (const [attribute, level] of Object.entries(student.levels())) {
         attributeCount[attribute] = attributeCount[attribute] ? attributeCount[attribute] + 1 : 1;
         if (!levelCount[attribute]) levelCount[attribute] = {};

@@ -78,10 +78,16 @@ export abstract class Rule {
    */
   public getEntryValue(entry: Entry): number {
     return entry
-      .getStudents()
+      .students()
       .map(student => entry.studentValue(student, this).value)
       .reduce((acc, cur) => acc + cur);
   }
+
+  /**
+   * Préparation avant l'exécution de la règle pour chaque élève.
+   * Peut donc être utilisé plusieurs fois.
+   */
+  public initialize(_entry: Entry) {}
 
   /**
    * Retourne une valeur relative à un élève et cette règle, correspondant à son placement actuel.
@@ -94,8 +100,12 @@ export abstract class Rule {
    * Correspond au nombre d'élèves bien placés par rapport au nombre total.
    */
   public getRespectPercent(entry: Entry): number {
+    // Il faut initialiser la règle avant de pouvoir obtenir les valeurs.
+    this.initialize(entry);
+
+    // Calcul du pourcentage à partir des élèves bien placés et du nombre total d'élèves.
     const percent =
-      entry.getStudents().filter(student => entry.studentValue(student, this).value <= 0).length /
+      entry.students().filter(student => entry.studentValue(student, this).value <= 0).length /
       entry.algo().input().students().length;
     return Math.round(percent * 100) / 100;
   }

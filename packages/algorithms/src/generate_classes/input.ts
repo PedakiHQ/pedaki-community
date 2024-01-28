@@ -73,7 +73,7 @@ export class Input {
   // Liste de tous les attributs, permettant de leur associer un unique identifiant.
   private _attributes: Attribute[] = [];
   // Liste complète des instances de règles, dans l'ordre défini par les priorités de l'utilisateur et les nôtres.
-  private _rules: Rule[] = [];
+  private _rules = new Map<Rule, number>();
   // Niveau minimal des d'options.
   private _minLevel: number = Number.MAX_VALUE;
   // Niveau maximal des options.
@@ -89,7 +89,11 @@ export class Input {
    * Obtenir la liste des règles.
    */
   public rules() {
-    return this._rules;
+    return this._rules.keys();
+  }
+
+  public ruleKey(rule: Rule) {
+    return this._rules.get(rule);
   }
 
   /**
@@ -131,12 +135,16 @@ export class Input {
       this._students[parseInt(student.id())] = student;
     }
 
+    const rules: Rule[] = [];
     for (const rawRule of Object.values(this.input.rules)) {
-      if (!(rawRule.rule in RuleOrder)) console.error(`Unknown rule ${rawRule.rule}`);
-      else this._rules.push(new RuleOrder[rawRule.rule].rule(rawRule, this));
+      if (!(rawRule.rule in RuleOrder)) {
+        console.error(`Unknown rule ${rawRule.rule}`);
+        continue;
+      }
+      rules.push(new RuleOrder[rawRule.rule].rule(rawRule, this));
     }
 
-    this._rules.sort((r1, r2) => {
+    rules.sort((r1, r2) => {
       // On vérifie d'abord si notre priorité peut les départager.
       if (RuleOrder[r1.key()].priority != RuleOrder[r2.key()].priority)
         return RuleOrder[r2.key()].priority - RuleOrder[r1.key()].priority;
@@ -144,9 +152,11 @@ export class Input {
       return r2.priority() - r1.priority();
     });
 
-    this._attributes = this.rules()
-      .map(r => r.attributes())
-      .flat();
+    for (const [key, rule] of Object.entries(rules)) {
+      this._rules.set(rule, parseInt(key));
+    }
+
+    this._attributes = [...this.rules()].map(r => r.attributes()).flat();
 
     // Définir la liste des affinités de chaque élève.
     for (const student of Object.values(this._students)) {
