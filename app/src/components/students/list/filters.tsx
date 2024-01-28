@@ -25,8 +25,8 @@ import {
   FilterSchema,
   getKnownField,
   isPositiveOperator,
- Filter } from '@pedaki/services/students/query.model.client.js';
-import type { FieldType } from '@pedaki/services/students/query.model.client.js';
+} from '@pedaki/services/students/query.model.client.js';
+import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { Fragment } from 'react';
