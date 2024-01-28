@@ -25,8 +25,9 @@ import {
   FilterSchema,
   getKnownField,
   isPositiveOperator,
- Filter } from '@pedaki/services/students/query.model.client.js';
-import type { FieldType } from '@pedaki/services/students/query.model.client.js';
+} from '@pedaki/services/students/query.model.client.js';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { Fragment } from 'react';
@@ -61,7 +62,9 @@ const Filters = ({
                   <Filter filter={filter} setFilters={setFilters} />
                 </li>
                 {!isLast && (
-                  <span className="mt-0.5 select-none text-label-xs text-sub shrink-0">{t('and')}</span>
+                  <span className="mt-0.5 shrink-0 select-none text-label-xs text-sub">
+                    {t('and')}
+                  </span>
                 )}
               </Fragment>
             );
