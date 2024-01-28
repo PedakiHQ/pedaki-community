@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO: fix auth types
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { matchPassword } from '@pedaki/common/utils/hash';
 import { prisma } from '@pedaki/db';
@@ -44,7 +42,7 @@ export const authOptions: NextAuthConfig = {
 
       session.user = {
         ...session.user,
-        emailVerified: token.emailVerified,
+        emailVerified: token.emailVerified as boolean,
       };
 
       return session;

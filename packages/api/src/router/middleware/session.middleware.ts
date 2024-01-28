@@ -23,8 +23,6 @@ const getInternalSession = (ctx: Context): Context['session'] => {
       name: 'internal',
       email: 'developers@pedaki.fr',
       id: '0',
-      // @ts-ignore
-      // TODO: fix auth types
       emailVerified: true,
     },
     expires: new Date().toString(), // TODO ajouter quelque chose ? quelques minutes jsp

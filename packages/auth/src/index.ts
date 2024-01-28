@@ -1,10 +1,7 @@
-// @ts-nocheck
-// TODO: fix auth types
-
-import type { NextAuthConfig } from 'next-auth';
+import type { DefaultSession, NextAuthConfig } from 'next-auth';
 import { env } from './env';
 
-declare module '@auth/core/types' {
+declare module 'next-auth' {
   /**
    * Returned by `auth`, contains information about the active session.
    */
@@ -15,7 +12,6 @@ declare module '@auth/core/types' {
       email: string;
       id: string;
       emailVerified: boolean;
-      // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     } & DefaultSession['user'];
   }
 
@@ -35,7 +31,7 @@ declare module '@auth/core/types' {
   }
 }
 
-declare module '@auth/core/jwt' {
+declare module 'next-auth' {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
     name: string;
