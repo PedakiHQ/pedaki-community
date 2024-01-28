@@ -29,7 +29,7 @@ const PageHeader = ({
       <header className="flex h-14 justify-between pb-3">
         <div className="flex items-center gap-4">
           {image != undefined && (
-            <Avatar className="flex size-12 items-center justify-center object-cover">
+            <Avatar className="hidden size-12 items-center justify-center object-cover sm:flex">
               <AvatarImage src={image} alt={alt} className="size-12" />
               <AvatarFallback>
                 <Skeleton className="size-12 bg-neutral-300">&nbsp;</Skeleton>
@@ -37,7 +37,7 @@ const PageHeader = ({
             </Avatar>
           )}
           {Icon && (
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full border bg-weak p-3.5 text-sub">
+            <div className="hidden size-12 shrink-0 items-center justify-center rounded-full border bg-weak p-3.5 text-sub sm:flex">
               <Icon className="size-5" />
             </div>
           )}
@@ -46,7 +46,6 @@ const PageHeader = ({
             <p className="text-p-sm text-sub">{description}</p>
           </div>
         </div>
-
         {children && <div className="flex items-center gap-4">{children}</div>}
       </header>
       <Separator className={!divider ? 'invisible' : ''} />
