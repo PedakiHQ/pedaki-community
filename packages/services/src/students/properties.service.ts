@@ -13,7 +13,7 @@ class StudentPropertiesService {
 
   async reload() {
     // Skip in ci
-    if (env.SKIP_ENV_VALIDATION) return;
+    if (env.SKIP_DB_CALLS) return;
     const properties = await prisma.property.findMany({
       select: {
         id: true,

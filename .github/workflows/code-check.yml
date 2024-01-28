@@ -13,6 +13,7 @@ jobs:
   lint:
     name: Code check (lint)
     env:
+      SKIP_DB_CALLS: true
       SKIP_ENV_VALIDATION: true
       NEXT_TELEMETRY_DISABLED: 1
 
@@ -61,6 +62,7 @@ jobs:
     name: Code check (test)
     env:
       NEXT_TELEMETRY_DISABLED: 1
+      SKIP_ENV_VALIDATION: true
 
     runs-on: ubuntu-latest
     steps:
@@ -87,7 +89,7 @@ jobs:
         if: always()
         run: pnpm build --filter "./packages/*"
         env:
-          SKIP_ENV_VALIDATION: true
+          SKIP_DB_CALLS: true
 
       - name: Init database
         run: bash ./bin/init-test
