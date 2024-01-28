@@ -299,7 +299,9 @@ const EditFilter = ({
                     >
                       <SelectTrigger>
                         <SelectValue placeholder={t('operator.placeholder')} className="w-full">
-                          {field.value ?? t('operator.placeholder')}
+                          {field.value
+                            ? t(`operator.names.${field.value}`)
+                            : t('operator.placeholder')}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
