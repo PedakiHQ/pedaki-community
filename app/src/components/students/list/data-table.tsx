@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
   return (
     <Table
       wrapperClassName={cn(
-        'relative h-[70vh] border-separate border-spacing-0 overflow-auto rounded-md border',
+        'relative h-full border-separate border-spacing-0 overflow-auto rounded-md border',
         tableClassName,
       )}
     >

@@ -30,7 +30,7 @@ const DrawerWrapper = () => {
             side="right"
             className="md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
           >
-            <div className="p-4">
+            <div className="h-full p-4">
               <button></button>
               <Client />
             </div>

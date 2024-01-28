@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/students/query.model';
 import { ColumnSelector } from '~/components/students/list/column-selector.tsx';
 import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
@@ -10,11 +11,12 @@ import Footer from '~/components/students/list/footer.tsx';
 import { searchParams } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
+import { useGlobalStore } from '~/store/global/global.store';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
 
-const Client = () => {
+const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
   const t = useScopedI18n('students.list.table');
 
   const { setTranslatedColumns, propertyMapping, classMapping, teacherMapping } =
@@ -107,7 +109,7 @@ const Client = () => {
   const isLoading = isQueryLoading || isTransitionLoading;
 
   return (
-    <div className="flex h-full max-h-full flex-col gap-4">
+    <div className={cn('flex h-full flex-col gap-4', className)}>
       <div className="flex gap-4">
         <Filters filters={filters} setFilters={setFilters} />
         <ColumnSelector

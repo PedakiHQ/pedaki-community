@@ -1,9 +1,9 @@
 import { IconUserGroups } from '@pedaki/design/ui/icons';
 import HeaderActions from '~/app/[locale]/(main)/students/(list)/header-actions.tsx';
+import StudentsListPageClient from '~/app/[locale]/(main)/students/(list)/students-list-page-client';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
-import Client from '~/components/students/list/client';
-import StudentsListWrapper from '~/components/students/list/wrapper.tsx';
+import StudentsListWrapper from '~/components/students/list/wrapper';
 import type { LocaleCode } from '~/locales/server.ts';
 import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
@@ -35,7 +35,7 @@ export default async function StudentsListPage({ params }: PageType) {
 
       <div className="h-full pt-6" id={MAIN_CONTENT}>
         <StudentsListWrapper>
-          <Client />
+          <StudentsListPageClient />
         </StudentsListWrapper>
       </div>
     </>
