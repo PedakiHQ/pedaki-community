@@ -79,7 +79,6 @@ const Client = () => {
 
   // Fetch data
   const { data, isLoading: isQueryLoading } = api.students.getMany.useQuery({
-    // @ts-expect-error: TODO fix types
     fields: [
       ...new Set(
         visibleColumns.map(column => translatedColumns.find(col => col.id === column)?.accessorKey),
@@ -152,7 +151,7 @@ const TableElement = ({
   setColumnVisibility,
 }: {
   columns: StudentColumnDef[];
-  data: StudentData[];
+  data: StudentData[] | undefined;
   isLoading: boolean;
   perPage: number;
   sorting: { id: string; desc: boolean }[];

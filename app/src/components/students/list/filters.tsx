@@ -218,7 +218,6 @@ const EditFilter = ({
           propertyTypes[field]?.schema.parse(typedValue(value, fieldType), {
             path: ['value'],
           });
-          return true;
         }
         return true;
       }),

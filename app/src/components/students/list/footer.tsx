@@ -27,7 +27,7 @@ const Footer = ({
   perPage: PossiblePerPage;
   setPerPage: React.Dispatch<React.SetStateAction<PossiblePerPage>>;
   setPage: (page: number) => void;
-  meta: OutputType['students']['getMany']['meta'];
+  meta: OutputType['students']['getMany']['meta'] | undefined;
   sorting: { id: string; desc: boolean }[];
   columnVisibility: Record<string, boolean>;
 }) => {
