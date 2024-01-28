@@ -19,6 +19,11 @@ export default {
   },
   table: {
     noResult: 'Aucun élève trouvé',
+    columnHeader: {
+      asc: 'Ascendant',
+      desc: 'Décroissant',
+      hide: 'Masquer',
+    },
     columns: {
       firstName: {
         label: 'Prénom',

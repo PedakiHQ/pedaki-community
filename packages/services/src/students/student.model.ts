@@ -46,12 +46,4 @@ export const UpdateOneStudentInputSchema = StudentSchema.partial().merge(
 );
 export type UpdateOneStudentInput = z.infer<typeof UpdateOneStudentInputSchema>;
 
-export const GetStudentMappingSchema = z.array(
-  z.object({
-    type: z.enum(['property', 'class', 'teacher', 'default']),
-    field: z.string(),
-  }),
-);
-export type GetStudentMapping = z.infer<typeof GetStudentMappingSchema>;
-
 export * from '~/students/student_base.model.ts';

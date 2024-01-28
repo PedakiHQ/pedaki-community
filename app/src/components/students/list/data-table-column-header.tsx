@@ -9,6 +9,7 @@ import {
 import { IconArrowDown, IconArrowUp, IconCaretSort, IconEyeNone } from '@pedaki/design/ui/icons';
 import { cn } from '@pedaki/design/utils';
 import type { Column } from '@tanstack/react-table';
+import { useScopedI18n } from '~/locales/client';
 import type { HTMLAttributes } from 'react';
 
 interface DataTableColumnHeaderProps<TData, TValue> extends HTMLAttributes<HTMLDivElement> {
@@ -21,6 +22,7 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: Readonly<DataTableColumnHeaderProps<TData, TValue>>) {
+  const t = useScopedI18n('students.list.table.columnHeader');
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -45,21 +47,20 @@ export function DataTableColumnHeader<TData, TValue>({
             onClick={() => column.toggleSorting(false)}
             disabled={column.getIsSorted() === 'asc'}
           >
-            <IconArrowUp className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
-            Asc
+            <IconArrowUp className="text-muted-foreground/70 mr-1 h-3.5 w-3.5" />
+            {t('asc')}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => column.toggleSorting(true)}
             disabled={column.getIsSorted() === 'desc'}
           >
-            <IconArrowDown className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
-            Desc
+            <IconArrowDown className="text-muted-foreground/70 mr-1 h-3.5 w-3.5" />
+            {t('desc')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <IconEyeNone className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
-            {/*TODO: trads*/}
-            Hide
+            <IconEyeNone className="text-muted-foreground/70 mr-1 h-3.5 w-3.5" />
+            {t('hide')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
