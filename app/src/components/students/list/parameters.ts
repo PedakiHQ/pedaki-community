@@ -43,10 +43,10 @@ const filtersParser = createParser({
   },
 });
 
-export const possiblesPerPage = [10, 20, 30] as const;
+export const possiblesPerPage = [10, 25, 50, 100] as const;
 export const searchParams = {
   page: parseAsInteger.withDefault(1),
-  perPage: parseAsNumberLiteral(possiblesPerPage).withDefault(10),
+  perPage: parseAsNumberLiteral(possiblesPerPage).withDefault(25),
   sorting: parseAsArrayOf(sortingParser).withDefault([]),
   columns: parseAsJson<Record<string, boolean>>().withDefault({
     firstName: true,
