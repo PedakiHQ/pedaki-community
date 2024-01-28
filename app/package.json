@@ -41,7 +41,7 @@
     "cookies-next": "^4.1.1",
     "dayjs": "^1.11.10",
     "next": "14.1.0",
-    "next-auth": "5.0.0-beta.4",
+    "next-auth": "5.0.0-beta.5",
     "next-international": "^1.2.3",
     "nuqs": "1.16.0-beta.1",
     "react": "^18.2.0",
