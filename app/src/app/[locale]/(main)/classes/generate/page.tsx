@@ -2,6 +2,7 @@ import { IconBookUser } from '@pedaki/design/ui/icons';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import DrawerWrapper from '~/components/students/list/drawer-wrapper.tsx';
+import StudentsListWrapper from '~/components/students/list/wrapper';
 import { getScopedI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
@@ -30,7 +31,9 @@ export default async function ClassesGeneratePage({ params }: PageType) {
       />
 
       <div className="h-full pt-6" id={MAIN_CONTENT}>
-        <DrawerWrapper />
+        <StudentsListWrapper>
+          <DrawerWrapper />
+        </StudentsListWrapper>
       </div>
     </>
   );
