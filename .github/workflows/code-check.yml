@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,7 +16,6 @@ jobs:
   lint:
     name: Code check (lint)
     env:
-      SKIP_DB_CALLS: true
       SKIP_ENV_VALIDATION: true
       NEXT_TELEMETRY_DISABLED: 1
 
@@ -88,8 +90,6 @@ jobs:
       - name: Build packages
         if: always()
         run: pnpm build --filter "./packages/*"
-        env:
-          SKIP_DB_CALLS: true
 
       - name: Init database
         run: bash ./bin/init-test

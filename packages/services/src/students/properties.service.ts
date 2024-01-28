@@ -1,6 +1,5 @@
 import { prisma } from '@pedaki/db';
 import type { PropertyType } from '@prisma/client';
-import { env } from '~/env.ts';
 import type { PropertySchema } from './properties-validations.ts';
 import { PROPERTIES_VALIDATION } from './properties-validations.ts';
 
@@ -13,7 +12,7 @@ class StudentPropertiesService {
 
   async reload() {
     // Skip in ci
-    if (env.SKIP_DB_CALLS) return;
+    if (!process.env.DATABASE_URL || process.env.DATABASE_URL === '{{{DATABASE_URL}}}') return;
     const properties = await prisma.property.findMany({
       select: {
         id: true,
