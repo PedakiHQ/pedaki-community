@@ -25,8 +25,8 @@ import {
   FilterSchema,
   getKnownField,
   isPositiveOperator,
-} from '@pedaki/services/students/query.model.client.js';
-import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
+ Filter } from '@pedaki/services/students/query.model.client.js';
+import type { FieldType } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { Fragment } from 'react';
@@ -229,7 +229,6 @@ const EditFilter = ({
   const { isValid } = form.formState;
 
   const { field, operator } = form.getValues();
-  const fieldTitle = field && columns.find(column => column.id === field)?.title;
   const fieldType =
     field && (getKnownField(field)?.fieldType ?? propertyTypes[field]?.type ?? 'text');
 
@@ -247,34 +246,38 @@ const EditFilter = ({
             <FormField
               control={form.control}
               name="field"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Select
-                      {...field}
-                      onValueChange={value => {
-                        field.onChange(value);
-                        form.resetField('operator');
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('field.placeholder')} className="w-full">
-                          {fieldTitle ?? t('field.placeholder')}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {columns
-                          .filter(column => column.id && column.title)
-                          .map(column => (
-                            <SelectItem key={column.id} value={column.id}>
-                              {column.title}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const fieldTitle =
+                  field.value && columns.find(column => column.id === field.value)?.title;
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        {...field}
+                        onValueChange={value => {
+                          field.onChange(value);
+                          form.resetField('operator');
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('field.placeholder')} className="w-full">
+                            {fieldTitle ?? t('field.placeholder')}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {columns
+                            .filter(column => column.id && column.title)
+                            .map(column => (
+                              <SelectItem key={column.id} value={column.id}>
+                                {column.title}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <div className="col-span-12 md:col-span-4">
@@ -293,7 +296,7 @@ const EditFilter = ({
                     >
                       <SelectTrigger>
                         <SelectValue placeholder={t('operator.placeholder')} className="w-full">
-                          {operator ?? t('operator.placeholder')}
+                          {field.value ?? t('operator.placeholder')}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
