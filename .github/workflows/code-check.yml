@@ -60,7 +60,6 @@ jobs:
   test:
     name: Code check (test)
     env:
-      SKIP_ENV_VALIDATION: true
       NEXT_TELEMETRY_DISABLED: 1
 
     runs-on: ubuntu-latest
@@ -87,6 +86,8 @@ jobs:
       - name: Build packages
         if: always()
         run: pnpm build --filter "./packages/*"
+        env:
+          SKIP_ENV_VALIDATION: true
 
       - name: Init database
         run: bash ./bin/init-test
