@@ -72,7 +72,7 @@ export const generateColumns = (
       cell: ({ row }) => {
         const data = row.original;
         const teachers = data.class.teachers
-          ?.map(({ id }) => teacherMapping[id]?.name)
+          ?.map(({ id }) => id && teacherMapping[id]?.name)
           .filter(Boolean)
           .join(', ');
         return <div>{teachers ?? '-'}</div>;
