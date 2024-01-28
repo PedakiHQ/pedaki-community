@@ -42,7 +42,8 @@ export const authOptions: NextAuthConfig = {
 
       session.user = {
         ...session.user,
-        emailVerified: token.emailVerified as boolean,
+        // TODO: fix lint type
+        emailVerified: (token as { emailVerified: boolean }).emailVerified,
       };
 
       return session;
