@@ -16,7 +16,10 @@ const prismaClientSingleton = () => {
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,
-        decryptionKeys: env.PRISMA_DECRYPTION_KEY ? [env.PRISMA_DECRYPTION_KEY] : undefined,
+        decryptionKeys:
+          env.PRISMA_DECRYPTION_KEY && !env.PRISMA_DECRYPTION_KEY.startsWith('{{{')
+            ? [env.PRISMA_DECRYPTION_KEY]
+            : undefined,
       }),
     );
 
