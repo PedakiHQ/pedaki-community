@@ -21,7 +21,7 @@ export const api = experimental_createTRPCNextAppDirServer<typeof appRouter>({
           enabled: () => false,
         }),
         experimental_nextCacheLink({
-          revalidate: 1, // todo cache ? cpt il faut actualiser deux fois pour que le cache parte
+          revalidate: false, // todo cache ? cpt il faut actualiser deux fois pour que le cache parte
           router: appRouter,
           // eslint-disable-next-line @typescript-eslint/require-await
           createContext: async () => {
