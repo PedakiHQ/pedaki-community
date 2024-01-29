@@ -1,46 +1,5 @@
-import type { DefaultSession, NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 import { env } from './env';
-
-declare module 'next-auth' {
-  /**
-   * Returned by `auth`, contains information about the active session.
-   */
-  interface Session {
-    user: {
-      image: string;
-      name: string;
-      email: string;
-      id: string;
-      emailVerified: boolean;
-    } & DefaultSession['user'];
-  }
-
-  /**
-   * The shape of the user object returned in the OAuth providers' `profile` callback,
-   * or the second parameter of the `session` callback, when using a database.
-   */
-  interface User {
-    id: string;
-    // @ts-expect-error: in our case it's always a string
-    image: string;
-    // @ts-expect-error: in our case it's always a string
-    email: string;
-    // @ts-expect-error: in our case it's always a string
-    name: string;
-    emailVerified: boolean;
-  }
-}
-
-declare module 'next-auth' {
-  /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
-  interface JWT {
-    name: string;
-    email: string;
-    id: string;
-    emailVerified: boolean;
-    picture: string;
-  }
-}
 
 const useSecureCookies = env.NODE_ENV === 'production';
 const cookiePrefix = useSecureCookies ? '__Secure-' : '';

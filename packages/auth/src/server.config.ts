@@ -2,6 +2,8 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { matchPassword } from '@pedaki/common/utils/hash';
 import { prisma } from '@pedaki/db';
 import type { NextAuthConfig } from 'next-auth';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { env } from './env.ts';
 import { baseAuthOptions } from './index.ts';
@@ -36,14 +38,15 @@ export const authOptions: NextAuthConfig = {
 
       return token;
     },
-    session: ({ session, token }) => {
+    session: ({ session, ...props }) => {
       // Called every time a session is checked
       // console.log("Session Callback", { session, token })
 
+      const token = 'token' in props ? props.token : null;
+
       session.user = {
         ...session.user,
-        // TODO: fix lint type
-        emailVerified: (token as { emailVerified: boolean }).emailVerified,
+        emailVerified: token ? token.emailVerified : false,
       };
 
       return session;
