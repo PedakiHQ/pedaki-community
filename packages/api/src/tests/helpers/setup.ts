@@ -1,4 +1,4 @@
-import { studentPropertiesService } from '@pedaki/services/students/properties.service.js';
+import { studentPropertiesService } from '@pedaki/services/students/properties/properties.service.js';
 import { beforeAll, beforeEach } from 'vitest';
 
 beforeAll(async () => {

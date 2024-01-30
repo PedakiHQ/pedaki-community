@@ -104,12 +104,14 @@ model Student {
   lastName  String  @map("last_name") @db.VarChar(255)
   otherName String? @map("other_name") @db.VarChar(255) // 3rd name etc... just in case
 
-  birthDate DateTime @map("birth_date")
+  birthDate DateTime @map("birth_date") @db.Date
 
   properties Json @db.JsonB
 
   // Many to many relation - A student can be in multiple classes (ex: double cursus)
   classes Class[] @relation("class_to_student")
+
+  importStudent ImportStudent[]
 
   @@map("students")
 }
@@ -259,4 +261,45 @@ enum TokenType {
   CONFIRM_EMAIL
   ACTIVATE_ACCOUNT
   RESET_PASSWORD
+}
+
+// Student Imports
+
+model Import {
+  id        String       @id @default(cuid()) @db.VarChar(25)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at")
+  status    ImportStatus
+  data      Json?        @db.JsonB
+
+  students ImportStudent[]
+
+  @@map("imports")
+}
+
+model ImportStudent {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  studentId Int?     @map("student_id")
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  // Total copy of the student data (used to merge with the existing student when importing)
+  firstName String   @map("first_name") @db.VarChar(255)
+  lastName  String   @map("last_name") @db.VarChar(255)
+  otherName String?  @map("other_name") @db.VarChar(255)
+  birthDate DateTime @map("birth_date")
+
+  properties Json @db.JsonB
+
+  @@unique([importId, studentId])
+  @@map("import_students")
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  DONE
+  ERROR
 }

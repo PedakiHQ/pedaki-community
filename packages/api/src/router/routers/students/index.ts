@@ -8,11 +8,13 @@ import {
   StudentSchema,
   UpdateOneStudentInputSchema,
 } from '@pedaki/services/students/student.model.js';
+import { studentImports } from '~api/router/routers/students/imports';
 import { studentPropertiesSchema } from '~api/router/routers/students/properties';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
 export const studentsRouter = router({
   properties: studentPropertiesSchema,
+  imports: studentImports,
 
   getMany: privateProcedure
     .input(GetManyStudentsInputSchema)

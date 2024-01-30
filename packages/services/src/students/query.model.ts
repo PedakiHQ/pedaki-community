@@ -1,4 +1,4 @@
-import { studentPropertiesService } from '~/students/properties.service.ts';
+import { studentPropertiesService } from '~/students/properties/properties.service.ts';
 import type { FieldType } from '~/students/query.model.client.ts';
 import {
   FieldAllowedOperators,

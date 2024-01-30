@@ -1,4 +1,4 @@
-import { PROPERTIES_VALIDATION } from '@pedaki/services/students/properties-validations';
+import { PROPERTIES_VALIDATION } from '@pedaki/services/students/properties/properties-validations.js';
 import type { Field, FieldType } from '@pedaki/services/students/query.model';
 import type { StudentColumnDef } from '~/components/students/list/columns.tsx';
 import type { OutputType } from '~api/router/router.ts';

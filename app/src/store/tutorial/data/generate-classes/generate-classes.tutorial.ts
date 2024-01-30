@@ -1,8 +1,4 @@
-import {
-  MAIN_CONTENT,
-  SIDEBAR_CLASSES_BUTTON,
-  SIDEBAR_STUDENTS_BUTTON,
-} from '~/store/tutorial/data/constants.ts';
+import { MAIN_CONTENT, SIDEBAR_CLASSES_BUTTON } from '~/store/tutorial/data/constants.ts';
 import { TUTORIAL_ID } from '~/store/tutorial/data/generate-classes/constants.ts';
 import {
   getNextStepIndex,
