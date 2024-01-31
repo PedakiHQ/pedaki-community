@@ -20,20 +20,16 @@ export type ImportUploadResult = z.infer<typeof ImportUploadResultSchema>;
 
 export const ImportUploadStatusSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'DONE', 'ERROR']),
-  data: z.union([
-    z.object({
-      family: ImportFamilySchema,
-    }),
-    z.object({
-      family: ImportFamilySchema,
-      initialCount: z.number(),
-      mappedCount: z.number(),
-      total: z.number(),
-    }),
-    z.object({
-      message: z.string(),
-    }),
-  ]),
+  data: z
+    .object({
+      // TODO: make this a union
+      family: ImportFamilySchema.optional(),
+      initialCount: z.number().optional(),
+      mappedCount: z.number().optional(),
+      total: z.number().optional(),
+      message: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type ImportUploadStatus = z.infer<typeof ImportUploadStatusSchema>;

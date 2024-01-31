@@ -45,7 +45,7 @@ export const studentImports = router({
       return {
         status: currentStatus?.status ?? 'ERROR',
         data: (currentStatus?.data as ImportUploadStatus['data']) ?? {
-          message: 'Import not found',
+          message: 'NOT_FOUND',
         },
       };
     }),
