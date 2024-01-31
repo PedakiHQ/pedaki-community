@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export interface QueryFieldSchema {
   type: z.Schema;
-  mappping: string;
+  mapping: string;
   fieldType: FieldType;
 }
 
@@ -22,72 +22,72 @@ export const isPositiveOperator = (operator: QueryOperator): boolean => {
 const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = {
   count: {
     type: z.number(),
-    mappping: 'COUNT(*)',
+    mapping: 'COUNT(*)',
     fieldType: 'int',
   },
   id: {
     type: z.number(),
-    mappping: 'students.id',
+    mapping: 'students.id',
     fieldType: 'int',
   },
   identifier: {
     type: z.string(),
-    mappping: 'identifier',
+    mapping: 'identifier',
     fieldType: 'text',
   },
   firstName: {
     type: z.string(),
-    mappping: 'first_name',
+    mapping: 'first_name',
     fieldType: 'text',
   },
   lastName: {
     type: z.string(),
-    mappping: 'last_name',
+    mapping: 'last_name',
     fieldType: 'text',
   },
   otherName: {
     type: z.string(),
-    mappping: 'other_name',
+    mapping: 'other_name',
     fieldType: 'text',
   },
   birthDate: {
     type: z.date(),
-    mappping: 'birth_date',
+    mapping: 'birth_date',
     fieldType: 'date',
   },
   'class.academicYearId': {
     type: z.number(),
-    mappping: 'class.academic_year_id',
+    mapping: 'class.academic_year_id',
     fieldType: 'int',
   },
   'class.id': {
     type: z.number(),
-    mappping: 'class.id',
+    mapping: 'class.id',
     fieldType: 'int',
   },
   'class.name': {
     type: z.string(),
-    mappping: 'class.name',
+    mapping: 'class.name',
     fieldType: 'text',
   },
   'class.levelId': {
     type: z.number(),
-    mappping: 'class.level_id',
+    mapping: 'class.level_id',
     fieldType: 'int',
   },
   'class.mainTeacherId': {
     type: z.number(),
-    mappping: 'class.main_teacher_id',
+    mapping: 'class.main_teacher_id',
     fieldType: 'int',
   },
   'class.teachers.id': {
     type: z.number(),
-    mappping: 'teachers.id',
+    mapping: 'teachers.id',
     fieldType: 'int',
   },
   'class.teachers.name': {
     type: z.string(),
-    mappping: 'teachers.name',
+    mapping: 'teachers.name',
     fieldType: 'text',
   },
 } as const;

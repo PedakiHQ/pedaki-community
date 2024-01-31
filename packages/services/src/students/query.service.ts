@@ -16,7 +16,7 @@ class StudentQueryService {
       let whereField: string = field;
       const knownField = getKnownField(field);
       if (knownField) {
-        whereField = `${knownField.mappping}::${knownField.fieldType}`;
+        whereField = `${knownField.mapping}::${knownField.fieldType}`;
       } else if (field.startsWith('properties.')) {
         const key = field.split('properties.', 2)[1]!;
         const knownProperty = studentPropertiesService.getPropertySchema(key);
@@ -39,7 +39,7 @@ class StudentQueryService {
       let orderByField: string = field;
       const knownField = getKnownField(field);
       if (knownField) {
-        orderByField = `${knownField.mappping}::${knownField.fieldType}`;
+        orderByField = `${knownField.mapping}::${knownField.fieldType}`;
       } else if (field.startsWith('properties.')) {
         const key = field.split('properties.', 2)[1]!;
         const knownProperty = studentPropertiesService.getPropertySchema(key);
@@ -69,7 +69,7 @@ class StudentQueryService {
     const finalFields = selectFields.map(field => {
       const knownField = getKnownField(field);
       if (knownField) {
-        return `${knownField.mappping}::${knownField.fieldType} as "${field}"`;
+        return `${knownField.mapping}::${knownField.fieldType} as "${field}"`;
       }
       if (field.startsWith('properties.')) {
         const key = field.split('properties.', 2)[1]!;
@@ -115,7 +115,7 @@ class StudentQueryService {
       .map(field => {
         const knownField = getKnownField(field);
         if (!knownField) return null;
-        return `${knownField.mappping}::${knownField.fieldType} as "${field}"`;
+        return `${knownField.mapping}::${knownField.fieldType} as "${field}"`;
       })
       .filter(Boolean);
 
@@ -165,7 +165,7 @@ class StudentQueryService {
 
         const knownField = getKnownField(key);
         if (knownField) {
-          return `${knownField.mappping} = ${escape(value)}`;
+          return `${knownField.mapping} = ${escape(value)}`;
         }
       })
       .filter(Boolean);
