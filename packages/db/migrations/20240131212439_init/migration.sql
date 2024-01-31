@@ -7,6 +7,9 @@ CREATE TYPE "ClassStatus" AS ENUM ('ACTIVE', 'ARCHIVED');
 -- CreateEnum
 CREATE TYPE "TokenType" AS ENUM ('CONFIRM_EMAIL', 'ACTIVATE_ACCOUNT', 'RESET_PASSWORD');
 
+-- CreateEnum
+CREATE TYPE "ImportStatus" AS ENUM ('PENDING', 'PROCESSING', 'DONE', 'ERROR');
+
 -- CreateTable
 CREATE TABLE "accounts" (
     "id" SERIAL NOT NULL,
@@ -76,7 +79,7 @@ CREATE TABLE "students" (
     "first_name" VARCHAR(255) NOT NULL,
     "last_name" VARCHAR(255) NOT NULL,
     "other_name" VARCHAR(255),
-    "birth_date" TIMESTAMP(3) NOT NULL,
+    "birth_date" DATE NOT NULL,
     "properties" JSONB NOT NULL,
 
     CONSTRAINT "students_pkey" PRIMARY KEY ("id")
@@ -168,6 +171,51 @@ CREATE TABLE "classes" (
 );
 
 -- CreateTable
+CREATE TABLE "imports" (
+    "id" VARCHAR(25) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "status" "ImportStatus" NOT NULL,
+    "data" JSONB,
+
+    CONSTRAINT "imports_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "import_students" (
+    "id" SERIAL NOT NULL,
+    "import_id" VARCHAR(25) NOT NULL,
+    "student_id" INTEGER,
+    "first_name" VARCHAR(255) NOT NULL,
+    "last_name" VARCHAR(255) NOT NULL,
+    "other_name" VARCHAR(255),
+    "birth_date" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "import_students_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "import_classes" (
+    "id" SERIAL NOT NULL,
+    "import_id" VARCHAR(25) NOT NULL,
+    "class_id" INTEGER,
+    "name" VARCHAR(255) NOT NULL,
+    "level_id" INTEGER NOT NULL,
+
+    CONSTRAINT "import_classes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "import_class_levels" (
+    "id" SERIAL NOT NULL,
+    "import_id" VARCHAR(25) NOT NULL,
+    "class_level_id" INTEGER,
+    "name" VARCHAR(255) NOT NULL,
+
+    CONSTRAINT "import_class_levels_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_branch_to_level" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -193,6 +241,12 @@ CREATE TABLE "_branch_to_class" (
 
 -- CreateTable
 CREATE TABLE "_class_to_room" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_ImportClassToImportStudent" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -240,6 +294,15 @@ CREATE INDEX "classes_academic_year_id_level_id_idx" ON "classes"("academic_year
 CREATE UNIQUE INDEX "classes_name_key" ON "classes"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "import_students_import_id_student_id_key" ON "import_students"("import_id", "student_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "import_classes_import_id_class_id_key" ON "import_classes"("import_id", "class_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "import_class_levels_import_id_class_level_id_key" ON "import_class_levels"("import_id", "class_level_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_branch_to_level_AB_unique" ON "_branch_to_level"("A", "B");
 
 -- CreateIndex
@@ -269,6 +332,12 @@ CREATE UNIQUE INDEX "_class_to_room_AB_unique" ON "_class_to_room"("A", "B");
 -- CreateIndex
 CREATE INDEX "_class_to_room_B_index" ON "_class_to_room"("B");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_ImportClassToImportStudent_AB_unique" ON "_ImportClassToImportStudent"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ImportClassToImportStudent_B_index" ON "_ImportClassToImportStudent"("B");
+
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -286,6 +355,27 @@ ALTER TABLE "classes" ADD CONSTRAINT "classes_level_id_fkey" FOREIGN KEY ("level
 
 -- AddForeignKey
 ALTER TABLE "classes" ADD CONSTRAINT "classes_academic_year_id_fkey" FOREIGN KEY ("academic_year_id") REFERENCES "academic_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_students" ADD CONSTRAINT "import_students_import_id_fkey" FOREIGN KEY ("import_id") REFERENCES "imports"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_students" ADD CONSTRAINT "import_students_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "students"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_classes" ADD CONSTRAINT "import_classes_import_id_fkey" FOREIGN KEY ("import_id") REFERENCES "imports"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_classes" ADD CONSTRAINT "import_classes_class_id_fkey" FOREIGN KEY ("class_id") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_classes" ADD CONSTRAINT "import_classes_level_id_fkey" FOREIGN KEY ("level_id") REFERENCES "import_class_levels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_class_levels" ADD CONSTRAINT "import_class_levels_import_id_fkey" FOREIGN KEY ("import_id") REFERENCES "imports"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "import_class_levels" ADD CONSTRAINT "import_class_levels_class_level_id_fkey" FOREIGN KEY ("class_level_id") REFERENCES "class_levels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_branch_to_level" ADD CONSTRAINT "_branch_to_level_A_fkey" FOREIGN KEY ("A") REFERENCES "class_branches"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -316,3 +406,9 @@ ALTER TABLE "_class_to_room" ADD CONSTRAINT "_class_to_room_A_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "_class_to_room" ADD CONSTRAINT "_class_to_room_B_fkey" FOREIGN KEY ("B") REFERENCES "rooms"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ImportClassToImportStudent" ADD CONSTRAINT "_ImportClassToImportStudent_A_fkey" FOREIGN KEY ("A") REFERENCES "import_classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ImportClassToImportStudent" ADD CONSTRAINT "_ImportClassToImportStudent_B_fkey" FOREIGN KEY ("B") REFERENCES "import_students"("id") ON DELETE CASCADE ON UPDATE CASCADE;
