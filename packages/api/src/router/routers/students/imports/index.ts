@@ -1,10 +1,10 @@
 import { prisma } from '@pedaki/db';
+import type { ImportUploadStatus } from '@pedaki/services/students/imports/import.model.js';
 import {
   ImportUploadResultSchema,
   ImportUploadSchema,
   ImportUploadStatusSchema,
 } from '@pedaki/services/students/imports/import.model.js';
-import type { ImportUploadStatus } from '@pedaki/services/students/imports/import.model.js';
 import { studentImportsService } from '@pedaki/services/students/imports/imports.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
@@ -40,10 +40,13 @@ export const studentImports = router({
         },
       });
 
+      console.log(currentStatus);
+
       return {
         status: currentStatus?.status ?? 'ERROR',
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        data: (currentStatus?.data as ImportUploadStatus['data']) ?? {},
+        data: (currentStatus?.data as ImportUploadStatus['data']) ?? {
+          message: 'Import not found',
+        },
       };
     }),
 });
