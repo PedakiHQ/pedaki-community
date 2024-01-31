@@ -165,6 +165,8 @@ model ClassLevel {
   classes          Class[]       @relation("class_to_level")
   possibleBranches ClassBranch[] @relation("branch_to_level")
 
+  importClassLevel ImportClassLevel[]
+
   @@map("class_levels")
 }
 
@@ -247,6 +249,8 @@ model Class {
   // Status of the class
   status ClassStatus @default(ACTIVE)
 
+  importClass ImportClass[]
+
   @@unique([name])
   @@index([academicYearId, levelId])
   @@map("classes")
@@ -272,7 +276,9 @@ model Import {
   status    ImportStatus
   data      Json?        @db.JsonB
 
-  students ImportStudent[]
+  students   ImportStudent[]
+  class      ImportClass[]
+  classLevel ImportClassLevel[]
 
   @@map("imports")
 }
@@ -285,16 +291,50 @@ model ImportStudent {
   studentId Int?     @map("student_id")
   student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  // Total copy of the student data (used to merge with the existing student when importing)
   firstName String   @map("first_name") @db.VarChar(255)
   lastName  String   @map("last_name") @db.VarChar(255)
   otherName String?  @map("other_name") @db.VarChar(255)
   birthDate DateTime @map("birth_date")
 
-  properties Json @db.JsonB
+  impotClasses ImportClass[]
 
   @@unique([importId, studentId])
   @@map("import_students")
+}
+
+model ImportClass {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  classId Int?   @map("class_id")
+  class   Class? @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  name String @db.VarChar(255)
+
+  importLevelId Int              @map("level_id")
+  importLevel   ImportClassLevel @relation(fields: [importLevelId], references: [id], onDelete: Cascade)
+
+  importStudents ImportStudent[]
+
+  @@unique([importId, classId])
+  @@map("import_classes")
+}
+
+model ImportClassLevel {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  classLevelId Int?        @map("class_level_id")
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: Cascade)
+
+  name String @db.VarChar(255)
+
+  importClass ImportClass[]
+
+  @@unique([importId, classLevelId])
+  @@map("import_class_levels")
 }
 
 enum ImportStatus {

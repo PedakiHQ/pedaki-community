@@ -1,6 +1,11 @@
 import { dateWithoutTimezone } from '~/shared/date.ts';
 import type { ImportUpload } from '~/students/imports/import.model.ts';
-import type { FileProcessor, StudentImport } from '~/students/imports/processor/processor.ts';
+import type {
+  ClassImport,
+  ClassLevelImport,
+  FileProcessor,
+  StudentImport,
+} from '~/students/imports/processor/processor.ts';
 import { parse } from 'csv-parse/sync';
 import { z } from 'zod';
 
@@ -13,11 +18,11 @@ const schema = z.object({
     .string()
     .min(1)
     .transform(value => value.toUpperCase()),
-  Cycle: z
-    .string()
-    .min(1)
-    .transform(value => value.toUpperCase()),
-  Regroupement: z.string().max(255),
+  // Cycle: z
+  //     .string()
+  //     .min(1)
+  //     .transform(value => value.toUpperCase()),
+  // Regroupement: z.string().max(255),
   Classe: z.string().min(1).max(255), // Class name
   // 'Date inscription': z.string().regex(dateRegex).transform(value => new Date(value)),
   // "Nom d'usage": z.string().min(1).max(255),
@@ -46,8 +51,11 @@ type SiecleRow = z.infer<typeof schema>;
 export class SiecleProcessor implements FileProcessor {
   name = 'siecle' as const;
 
-  #data: SiecleRow[] = [];
-  #initialCount = 0;
+  #data: SiecleRow[] | null = null;
+
+  #students: StudentImport[] | null = null;
+  #levels: ClassLevelImport[] | null = null;
+  #classes: ClassImport[] | null = null;
 
   #parseCSV(buffer: ArrayBuffer): SiecleRow[] {
     const rawData = parse(Buffer.from(buffer), {
@@ -57,17 +65,9 @@ export class SiecleProcessor implements FileProcessor {
       delimiter: ';',
     }) as Record<string, string>[];
 
-    this.#initialCount = rawData.length;
-
-    return rawData
-      .map(row => {
-        try {
-          return schema.parse(row);
-        } catch (e) {
-          return null;
-        }
-      })
-      .filter(Boolean) as SiecleRow[];
+    return rawData.map(row => {
+      return schema.parse(row);
+    });
   }
 
   canProcess(file: ImportUpload): boolean {
@@ -83,23 +83,50 @@ export class SiecleProcessor implements FileProcessor {
     }
   }
 
-  #prepareStudent(row: SiecleRow): StudentImport {
-    const otherName = row['Deuxième prénom'] + row['Troisième prénom'] || null;
+  prepare() {
+    const levelNames = this.#data!.map(row => row.Niveau);
+    const uniqueLevelNames = [...new Set(levelNames)];
+    this.#levels = uniqueLevelNames.map(levelName => ({ name: levelName }));
 
-    return {
+    const classNames = this.#data!.map(row => row.Niveau + ':' + row.Classe);
+    const uniqueClassNames = [...new Set(classNames)];
+    this.#classes = uniqueClassNames.map(className => {
+      const [level, name] = className.split(':', 2);
+      return {
+        name: name!,
+        _rawLevel: level!,
+      };
+    });
+
+    this.#students = this.#data!.map(row => ({
       firstName: row['Prénom élève'],
       lastName: row['Nom élève'],
       birthDate: row['Date naissance'],
-      otherName,
-      properties: {},
-    };
+      otherName: row['Deuxième prénom'] + row['Troisième prénom'] || null,
+    }));
   }
 
-  prepare(): StudentImport[] {
-    return this.#data.map(row => this.#prepareStudent(row));
+  getClassLevels(): ClassLevelImport[] {
+    if (this.#levels) {
+      return this.#levels;
+    }
+
+    throw new Error('Levels not prepared');
   }
 
-  getInitialCount(): number {
-    return this.#initialCount;
+  getClasses(): ClassImport[] {
+    if (this.#classes) {
+      return this.#classes;
+    }
+
+    throw new Error('Levels not prepared');
+  }
+
+  getStudents(): StudentImport[] {
+    if (this.#students) {
+      return this.#students;
+    }
+
+    throw new Error('Levels not prepared');
   }
 }

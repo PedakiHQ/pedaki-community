@@ -14,7 +14,6 @@ export const studentImports = router({
     .output(ImportUploadResultSchema)
     .mutation(async ({ input }) => {
       const id = await studentImportsService.createImport();
-
       // We don't want to wait for the file to be processed
       void studentImportsService.processFile(id, {
         ...input,
@@ -39,8 +38,6 @@ export const studentImports = router({
           data: true,
         },
       });
-
-      console.log(currentStatus);
 
       return {
         status: currentStatus?.status ?? 'ERROR',

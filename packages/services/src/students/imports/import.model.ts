@@ -18,15 +18,20 @@ export const ImportUploadResultSchema = z.object({
 
 export type ImportUploadResult = z.infer<typeof ImportUploadResultSchema>;
 
+const CountSchema = z.object({
+  mappedCount: z.number(),
+  insertedCount: z.number(),
+});
+
 export const ImportUploadStatusSchema = z.object({
   status: z.enum(['PENDING', 'PROCESSING', 'DONE', 'ERROR']),
   data: z
     .object({
       // TODO: make this a union
       family: ImportFamilySchema.optional(),
-      initialCount: z.number().optional(),
-      mappedCount: z.number().optional(),
-      total: z.number().optional(),
+      students: CountSchema.optional(),
+      classes: CountSchema.optional(),
+      levels: CountSchema.optional(),
       message: z.string().optional(),
     })
     .optional(),

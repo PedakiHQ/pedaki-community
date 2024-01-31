@@ -1,6 +1,11 @@
 import { prisma } from '@pedaki/db';
 import type { ImportUpload, ImportUploadStatus } from '~/students/imports/import.model.ts';
-import type { FileProcessor, StudentImport } from '~/students/imports/processor/processor.ts';
+import type {
+  ClassImport,
+  ClassLevelImport,
+  FileProcessor,
+  StudentImport,
+} from '~/students/imports/processor/processor.ts';
 import { FILE_PROCESSORS } from '~/students/imports/processor/processor.ts';
 
 class StudentImportsService {
@@ -48,41 +53,49 @@ class StudentImportsService {
     return fileProcessor;
   }
 
-  prepare(processor: FileProcessor): StudentImport[] {
-    const students = processor.prepare();
-    if (students.length === 0) {
-      throw new Error('No students found'); // TODO: error code
-    }
-
-    return students;
-  }
-
-  async #mapStudents(students: StudentImport[]): Promise<StudentImport[]> {
-    const existingStudents = await prisma.$transaction(
-      students.map(student =>
-        prisma.student.findFirst({
-          where: {
-            firstName: student.firstName,
-            lastName: student.lastName,
-            birthDate: student.birthDate,
-            otherName: student.otherName ?? undefined,
+  async #insertData(
+    id: string,
+    classes: ClassImport[],
+    levels: ClassLevelImport[],
+    students: StudentImport[],
+  ): Promise<void> {
+    const importClassLevelIds = await prisma.$transaction(
+      levels.map(level =>
+        prisma.importClassLevel.create({
+          data: {
+            importId: id,
+            classLevelId: level.classLevelId ?? undefined,
+            name: level.name,
           },
           select: {
             id: true,
+            name: true,
           },
         }),
       ),
     );
 
-    // set studentId to students
-    students.forEach((student, index) => {
-      student.studentId = existingStudents[index]?.id ?? null;
+    // set importLevelId to classes
+    classes.forEach((class_, index) => {
+      const level = importClassLevelIds.find(l => l.name === class_._rawLevel);
+      if (level) {
+        class_.importLevelId = level.id;
+      }
+    });
+    // throw if importLevelId is not set for a class
+    if (classes.some(class_ => !class_.importLevelId)) {
+      throw new Error('ImportLevelId not set for a class'); // TODO: error code
+    }
+
+    await prisma.importClass.createMany({
+      data: classes.map(class_ => ({
+        importId: id,
+        classId: class_.classId ?? undefined,
+        importLevelId: class_.importLevelId!,
+        name: class_.name,
+      })),
     });
 
-    return students;
-  }
-
-  async #insertStudents(id: string, students: StudentImport[]): Promise<void> {
     await prisma.importStudent.createMany({
       data: students.map(student => ({
         importId: id,
@@ -91,8 +104,73 @@ class StudentImportsService {
         lastName: student.lastName,
         birthDate: student.birthDate,
         otherName: student.otherName ?? undefined,
-        properties: student.properties ?? undefined,
       })),
+    });
+  }
+
+  async #mapData(
+    classes: ClassImport[],
+    levels: ClassLevelImport[],
+    students: StudentImport[],
+  ): Promise<void> {
+    const [existingClasses, existingLevels, existingStudents] = await Promise.all([
+      prisma.$transaction(
+        classes.map(c =>
+          prisma.class.findFirst({
+            where: {
+              name: c.name,
+              level: {
+                name: c._rawLevel,
+              },
+            },
+            select: {
+              id: true,
+            },
+          }),
+        ),
+      ),
+      prisma.$transaction(
+        levels.map(level =>
+          prisma.classLevel.findFirst({
+            where: {
+              name: level.name,
+            },
+            select: {
+              id: true,
+            },
+          }),
+        ),
+      ),
+      prisma.$transaction(
+        students.map(student =>
+          prisma.student.findFirst({
+            where: {
+              firstName: student.firstName,
+              lastName: student.lastName,
+              birthDate: student.birthDate,
+              otherName: student.otherName ?? undefined,
+            },
+            select: {
+              id: true,
+            },
+          }),
+        ),
+      ),
+    ]);
+
+    // set studentId to students
+    students.forEach((student, index) => {
+      student.studentId = existingStudents[index]?.id ?? undefined;
+    });
+
+    // set classId to classes
+    classes.forEach((class_, index) => {
+      class_.classId = existingClasses[index]?.id ?? undefined;
+    });
+
+    // set levelId to levels
+    levels.forEach((level, index) => {
+      level.classLevelId = existingLevels[index]?.id ?? undefined;
     });
   }
 
@@ -103,17 +181,35 @@ class StudentImportsService {
         family: fileProcessor.name,
       });
 
-      const students = this.prepare(fileProcessor);
+      fileProcessor.prepare();
 
-      const mappedStudents = await this.#mapStudents(students);
-
-      await this.#insertStudents(id, mappedStudents);
+      await this.#mapData(
+        fileProcessor.getClasses(),
+        fileProcessor.getClassLevels(),
+        fileProcessor.getStudents(),
+      );
+      await this.#insertData(
+        id,
+        fileProcessor.getClasses(),
+        fileProcessor.getClassLevels(),
+        fileProcessor.getStudents(),
+      );
 
       await this.#updateStatus(id, 'DONE', {
         family: fileProcessor.name,
-        initialCount: fileProcessor.getInitialCount(),
-        mappedCount: mappedStudents.filter(student => student.studentId !== null).length,
-        total: mappedStudents.length,
+        students: {
+          insertedCount: fileProcessor.getStudents().length,
+          mappedCount: fileProcessor.getStudents().filter(s => s.studentId !== undefined).length,
+        },
+        classes: {
+          insertedCount: fileProcessor.getClasses().length,
+          mappedCount: fileProcessor.getClasses().filter(c => c.classId !== undefined).length,
+        },
+        levels: {
+          insertedCount: fileProcessor.getClassLevels().length,
+          mappedCount: fileProcessor.getClassLevels().filter(l => l.classLevelId !== undefined)
+            .length,
+        },
       });
     } catch (e) {
       await this.#updateStatus(id, 'ERROR', {

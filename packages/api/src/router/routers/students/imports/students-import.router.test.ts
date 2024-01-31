@@ -70,11 +70,12 @@ describe('studentImports', () => {
 
       expect(status.status).toBe('DONE');
       expect(status.data).toBeDefined();
-      expect(status.data.family).toBe('siecle');
-      expect(status.data.mappedCount).toBe(1);
-      expect(status.data.total).toBe(367);
-      expect(status.data.initialCount).toBe(367);
+      expect(status.data!.family).toBe('siecle');
+      expect(status.data!.students!.mappedCount).toBe(1);
+      expect(status.data!.students!.insertedCount).toBe(367);
+      expect(status.data!.levels!.mappedCount).toBe(2);
 
+      // Students
       const importStudentsCount = await prisma.importStudent.count({
         where: {
           importId: response.id,
@@ -94,7 +95,46 @@ describe('studentImports', () => {
       expect(importStudentMapped[0]!.firstName).toBe('Nathan');
       expect(importStudentMapped[0]!.lastName).toBe('Dupont');
 
-      // TODO: check classes
+      // Classes
+      const importClassesCount = await prisma.importClass.count({
+        where: {
+          importId: response.id,
+        },
+      });
+      expect(importClassesCount).toBe(22);
+
+      const importClassMapped = await prisma.importClass.findMany({
+        where: {
+          importId: response.id,
+          classId: {
+            not: null,
+          },
+        },
+      });
+      expect(importClassMapped.length).toBe(0);
+
+      // Levels
+      const importLevelsCount = await prisma.importClassLevel.count({
+        where: {
+          importId: response.id,
+        },
+      });
+      expect(importLevelsCount).toBe(5);
+
+      const importLevelMapped = await prisma.importClassLevel.findMany({
+        where: {
+          importId: response.id,
+          classLevelId: {
+            not: null,
+          },
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      });
+      expect(importLevelMapped.length).toBe(2);
+      expect(importLevelMapped[0]!.name).toBe('CE1');
+      expect(importLevelMapped[1]!.name).toBe('CP');
     });
   });
 });
