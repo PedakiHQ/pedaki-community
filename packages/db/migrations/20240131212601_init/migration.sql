@@ -189,7 +189,7 @@ CREATE TABLE "import_students" (
     "first_name" VARCHAR(255) NOT NULL,
     "last_name" VARCHAR(255) NOT NULL,
     "other_name" VARCHAR(255),
-    "birth_date" TIMESTAMP(3) NOT NULL,
+    "birth_date" DATE NOT NULL,
 
     CONSTRAINT "import_students_pkey" PRIMARY KEY ("id")
 );
