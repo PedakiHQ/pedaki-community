@@ -20,8 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Use node 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
       - name: Run script
-        timeout-minutes: 3
+        timeout-minutes: 5
         run: bash ./bin/deploy
         env:
           IS_CI: true
