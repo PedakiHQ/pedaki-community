@@ -38,23 +38,23 @@
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
-    "@pedaki/eslint-config": "0.5.2-beta.4",
-    "@pedaki/prettier-config": "0.5.2-beta.4",
+    "@pedaki/eslint-config": "0.5.2-beta.5",
+    "@pedaki/prettier-config": "0.5.2-beta.5",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.19.10",
+    "@types/node": "^20.11.15",
     "@vitest/coverage-v8": "^1.2.2",
     "@vitest/ui": "^1.2.2",
     "chalk": "^5.3.0",
     "esbuild": "^0.20.0",
     "fs-extra": "^11.2.0",
-    "husky": "^9.0.6",
+    "husky": "^9.0.7",
     "inquirer": "^9.2.13",
-    "lint-staged": "^15.2.0",
+    "lint-staged": "^15.2.1",
     "open": "^10.0.3",
     "rimraf": "latest",
     "throat": "^6.0.2",
-    "turbo": "^1.11.3",
+    "turbo": "^1.12.2",
     "typescript": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.1",
     "vitest": "^1.2.2"
@@ -66,7 +66,7 @@
     ]
   },
   "engines": {
-    "node": ">=18.17.0 <19.0.0",
+    "node": ">=20",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"

@@ -29,7 +29,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.7.0",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.4",
+    "@pedaki/common": "0.5.2-beta.5",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@pedaki/services": "workspace:*",
@@ -45,12 +45,12 @@
   },
   "devDependencies": {
     "@pedaki/tests": "workspace:*",
-    "@types/node": "^18.19.10",
+    "@types/node": "^20.11.15",
     "next": "14.1.0",
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
