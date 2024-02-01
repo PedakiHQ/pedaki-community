@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@pedaki/tests": "workspace:*",
-    "@prisma/client": "^5.9.0",
+    "@prisma/client": "5.8.1",
     "@types/mime-types": "^2.1.4",
     "@types/sqlstring": "^2.3.2"
   },

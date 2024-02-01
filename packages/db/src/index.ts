@@ -12,7 +12,7 @@ const prismaClientSingleton = () => {
   });
 
   if (env.PRISMA_ENCRYPTION_KEY && !env.PRISMA_ENCRYPTION_KEY.startsWith('{{{')) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+    // @ts-expect-error: extends breaks the type
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,
@@ -23,7 +23,7 @@ const prismaClientSingleton = () => {
       }),
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+    // @ts-expect-error: extends breaks the type
     client = client.$extends(
       pagination({
         pages: {

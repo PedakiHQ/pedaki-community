@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.0",
-    "@prisma/client": "^5.9.0",
+    "@prisma/client": "5.8.1",
     "@types/mime-types": "^2.1.4"
   },
   "engines": {

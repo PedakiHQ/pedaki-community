@@ -275,7 +275,7 @@ importers:
     dependencies:
       '@auth/prisma-adapter':
         specifier: ^1.2.0
-        version: 1.2.0(@prisma/client@5.9.0)
+        version: 1.2.0(@prisma/client@5.8.1)
       '@pedaki/common':
         specifier: 0.5.2-beta.5
         version: 0.5.2-beta.5(bcryptjs@2.4.3)(memory-cache@0.2.0)(nanoid@5.0.4)(sonner@1.4.0)
@@ -362,27 +362,27 @@ importers:
         specifier: workspace:*
         version: link:../logger/dist
       '@prisma/client':
-        specifier: ^5.9.0
-        version: 5.9.0(prisma@5.9.0)
+        specifier: 5.8.1
+        version: 5.8.1(prisma@5.8.1)
       '@prisma/instrumentation':
-        specifier: ^5.9.0
-        version: 5.9.0
+        specifier: 5.8.1
+        version: 5.8.1
       cpy:
         specifier: ^11.0.0
         version: 11.0.0
       prisma-extension-pagination:
         specifier: ^0.6.0
-        version: 0.6.0(@prisma/client@5.9.0)
+        version: 0.6.0(@prisma/client@5.8.1)
       prisma-field-encryption:
         specifier: ^1.5.1
-        version: 1.5.1(@prisma/client@5.9.0)
+        version: 1.5.1(@prisma/client@5.8.1)
       tsup:
         specifier: ^8.0.1
         version: 8.0.1(postcss@8.4.32)(typescript@5.3.3)
     devDependencies:
       prisma:
-        specifier: ^5.9.0
-        version: 5.9.0
+        specifier: 5.8.1
+        version: 5.8.1
     publishDirectory: dist
 
   packages/logger:
@@ -471,8 +471,8 @@ importers:
         specifier: workspace:*
         version: link:../tests/dist
       '@prisma/client':
-        specifier: ^5.9.0
-        version: 5.9.0(prisma@5.9.0)
+        specifier: 5.8.1
+        version: 5.8.1(prisma@5.8.1)
       '@types/mime-types':
         specifier: ^2.1.4
         version: 2.1.4
@@ -497,8 +497,8 @@ importers:
         specifier: ^8.4.0
         version: 8.4.0
       '@prisma/client':
-        specifier: ^5.9.0
-        version: 5.9.0(prisma@5.9.0)
+        specifier: 5.8.1
+        version: 5.8.1(prisma@5.8.1)
       '@types/mime-types':
         specifier: ^2.1.4
         version: 2.1.4
@@ -577,13 +577,13 @@ packages:
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: false
 
-  /@auth/prisma-adapter@1.2.0(@prisma/client@5.9.0):
+  /@auth/prisma-adapter@1.2.0(@prisma/client@5.8.1):
     resolution: {integrity: sha512-yn1ZHX/a57x8hhU+rwi+GL1IHx8k92Fhqk5w9R5toAtO9PxAr9xD+sNjD0OgrAMrO7GttKyW/mac6t8G0NYDEg==}
     peerDependencies:
       '@prisma/client': '>=2.26.0 || >=3 || >=4 || >=5'
     dependencies:
       '@auth/core': 0.25.0
-      '@prisma/client': 5.9.0(prisma@5.9.0)
+      '@prisma/client': 5.8.1(prisma@5.8.1)
     transitivePeerDependencies:
       - nodemailer
     dev: false
@@ -2785,14 +2785,14 @@ packages:
       '@opentelemetry/api': 1.7.0
     dev: false
 
-  /@opentelemetry/core@1.20.0(@opentelemetry/api@1.7.0):
-    resolution: {integrity: sha512-lSRvk5AIdD6CtgYJcJXh0wGibQ3S/8bC2qbqKs9wK8e0K1tsWV6YkGFOqVc+jIRlCbZoIBeZzDe5UI+vb94uvg==}
+  /@opentelemetry/core@1.19.0(@opentelemetry/api@1.7.0):
+    resolution: {integrity: sha512-w42AukJh3TP8R0IZZOVJVM/kMWu8g+lm4LzT70WtuKqhwq7KVhcDzZZuZinWZa6TtQCl7Smt2wolEYzpHabOgw==}
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.8.0'
     dependencies:
       '@opentelemetry/api': 1.7.0
-      '@opentelemetry/semantic-conventions': 1.20.0
+      '@opentelemetry/semantic-conventions': 1.19.0
     dev: false
 
   /@opentelemetry/core@1.21.0(@opentelemetry/api@1.7.0):
@@ -3372,15 +3372,15 @@ packages:
       - supports-color
     dev: false
 
-  /@opentelemetry/instrumentation@0.47.0(@opentelemetry/api@1.7.0):
-    resolution: {integrity: sha512-ZFhphFbowWwMahskn6BBJgMm8Z+TUx98IM+KpLIX3pwCK/zzgbCgwsJXRnjF9edDkc5jEhA7cEz/mP0CxfQkLA==}
+  /@opentelemetry/instrumentation@0.46.0(@opentelemetry/api@1.7.0):
+    resolution: {integrity: sha512-a9TijXZZbk0vI5TGLZl+0kxyFfrXHhX6Svtz7Pp2/VBlCSKrazuULEyoJQrOknJyFWNMEmbbJgOciHCCpQcisw==}
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
     dependencies:
       '@opentelemetry/api': 1.7.0
       '@types/shimmer': 1.0.5
-      import-in-the-middle: 1.7.3
+      import-in-the-middle: 1.7.1
       require-in-the-middle: 7.2.0
       semver: 7.5.4
       shimmer: 1.2.1
@@ -3548,15 +3548,15 @@ packages:
       - supports-color
     dev: false
 
-  /@opentelemetry/resources@1.20.0(@opentelemetry/api@1.7.0):
-    resolution: {integrity: sha512-nOpV0vGegSq+9ze2cEDvO3BMA5pGBhmhKZiAlj+xQZjiEjPmJtdHIuBLRvptu2ahcbFJw85gIB9BYHZOvZK1JQ==}
+  /@opentelemetry/resources@1.19.0(@opentelemetry/api@1.7.0):
+    resolution: {integrity: sha512-RgxvKuuMOf7nctOeOvpDjt2BpZvZGr9Y0vf7eGtY5XYZPkh2p7e2qub1S2IArdBMf9kEbz0SfycqCviOu9isqg==}
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.8.0'
     dependencies:
       '@opentelemetry/api': 1.7.0
-      '@opentelemetry/core': 1.20.0(@opentelemetry/api@1.7.0)
-      '@opentelemetry/semantic-conventions': 1.20.0
+      '@opentelemetry/core': 1.19.0(@opentelemetry/api@1.7.0)
+      '@opentelemetry/semantic-conventions': 1.19.0
     dev: false
 
   /@opentelemetry/resources@1.21.0(@opentelemetry/api@1.7.0):
@@ -3619,16 +3619,16 @@ packages:
       - supports-color
     dev: false
 
-  /@opentelemetry/sdk-trace-base@1.20.0(@opentelemetry/api@1.7.0):
-    resolution: {integrity: sha512-BAIZ0hUgnhdb3OBQjn1FKGz/Iwie4l+uOMKklP7FGh7PTqEAbbzDNMJKaZQh6KepF7Fq+CZDRKslD3yrYy2Tzw==}
+  /@opentelemetry/sdk-trace-base@1.19.0(@opentelemetry/api@1.7.0):
+    resolution: {integrity: sha512-+IRvUm+huJn2KqfFW3yW/cjvRwJ8Q7FzYHoUNx5Fr0Lws0LxjMJG1uVB8HDpLwm7mg5XXH2M5MF+0jj5cM8BpQ==}
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.8.0'
     dependencies:
       '@opentelemetry/api': 1.7.0
-      '@opentelemetry/core': 1.20.0(@opentelemetry/api@1.7.0)
-      '@opentelemetry/resources': 1.20.0(@opentelemetry/api@1.7.0)
-      '@opentelemetry/semantic-conventions': 1.20.0
+      '@opentelemetry/core': 1.19.0(@opentelemetry/api@1.7.0)
+      '@opentelemetry/resources': 1.19.0(@opentelemetry/api@1.7.0)
+      '@opentelemetry/semantic-conventions': 1.19.0
     dev: false
 
   /@opentelemetry/sdk-trace-base@1.21.0(@opentelemetry/api@1.7.0):
@@ -3658,8 +3658,8 @@ packages:
       semver: 7.5.4
     dev: false
 
-  /@opentelemetry/semantic-conventions@1.20.0:
-    resolution: {integrity: sha512-3zLJJCgTKYpbqFX8drl8hOCHtdchELC+kGqlVcV4mHW1DiElTtv1Nt9EKBptTd1IfL56QkuYnWJ3DeHd2Gtu/A==}
+  /@opentelemetry/semantic-conventions@1.19.0:
+    resolution: {integrity: sha512-14jRpC8f5c0gPSwoZ7SbEJni1PqI+AhAE8m1bMz6v+RPM4OlP1PT2UHBJj5Qh/ALLPjhVU/aZUK3YyjTUqqQVg==}
     engines: {node: '>=14'}
     dev: false
 
@@ -3845,8 +3845,8 @@ packages:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
     dev: true
 
-  /@prisma/client@5.9.0(prisma@5.9.0):
-    resolution: {integrity: sha512-dHvFZgCT0BpRS+gRhk3S+50DstXMmVowxbrPeUJaK7sjNq5OhzfpT/OGE1kq9z5Q8WmOwIXJXyxP8O2CmP+nSg==}
+  /@prisma/client@5.8.1(prisma@5.8.1):
+    resolution: {integrity: sha512-xQtMPfbIwLlbm0VVIVQY2yqQVOxPwRQhvIp7Z3m2900g1bu/zRHKhYZJQWELqmjl6d8YwBy0K2NvMqh47v1ubw==}
     engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
@@ -3855,29 +3855,33 @@ packages:
       prisma:
         optional: true
     dependencies:
-      prisma: 5.9.0
+      prisma: 5.8.1
+
+  /@prisma/debug@5.8.1:
+    resolution: {integrity: sha512-tjuw7eA0Us3T42jx9AmAgL58rzwzpFGYc3R7Y4Ip75EBYrKMBA1YihuWMcBC92ILmjlQ/u3p8VxcIE0hr+fZfg==}
 
   /@prisma/debug@5.9.0:
     resolution: {integrity: sha512-3Uhj5YSPqaIfzJQ6JQzCNBXeBTy0x803fGIoo2tvP/KIEd+o4o49JxCQtKtP8aeef5iNh5Nn9Z25wDrdLjS80A==}
+    dev: false
 
-  /@prisma/engines-version@5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64:
-    resolution: {integrity: sha512-HFl7275yF0FWbdcNvcSRbbu9JCBSLMcurYwvWc8WGDnpu7APxQo2ONtZrUggU3WxLxUJ2uBX+0GOFIcJeVeOOQ==}
+  /@prisma/engines-version@5.8.1-1.78caf6feeaed953168c64e15a249c3e9a033ebe2:
+    resolution: {integrity: sha512-f5C3JM3l9yhGr3cr4FMqWloFaSCpNpMi58Om22rjD2DOz3owci2mFdFXMgnAGazFPKrCbbEhcxdsRfspEYRoFQ==}
 
-  /@prisma/engines@5.9.0:
-    resolution: {integrity: sha512-BH1fpXbMH09TwfZH5FVMJwRp6afEhKzqwebbCLdaEkJDuhxA//iwbILLqGFtGTgZbdBNUOThIK+UC3++5kWMTg==}
+  /@prisma/engines@5.8.1:
+    resolution: {integrity: sha512-TJgYLRrZr56uhqcXO4GmP5be+zjCIHtLDK20Cnfg+o9d905hsN065QOL+3Z0zQAy6YD31Ol4u2kzSfRmbJv/uA==}
     requiresBuild: true
     dependencies:
-      '@prisma/debug': 5.9.0
-      '@prisma/engines-version': 5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64
-      '@prisma/fetch-engine': 5.9.0
-      '@prisma/get-platform': 5.9.0
+      '@prisma/debug': 5.8.1
+      '@prisma/engines-version': 5.8.1-1.78caf6feeaed953168c64e15a249c3e9a033ebe2
+      '@prisma/fetch-engine': 5.8.1
+      '@prisma/get-platform': 5.8.1
 
-  /@prisma/fetch-engine@5.9.0:
-    resolution: {integrity: sha512-NL8Vm8Vl2d6NOSkkPGN5TTTz4s6cyCleXOzqtOFWzfKFJ4wtN2Shu7llOT+ykf6nDzh1lCN2JHUt1S6FGFZGig==}
+  /@prisma/fetch-engine@5.8.1:
+    resolution: {integrity: sha512-+bgjjoSFa6uYEbAPlklfoVSStOEfcpheOjoBoNsNNSQdSzcwE2nM4Q0prun0+P8/0sCHo18JZ9xqa8gObvgOUw==}
     dependencies:
-      '@prisma/debug': 5.9.0
-      '@prisma/engines-version': 5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64
-      '@prisma/get-platform': 5.9.0
+      '@prisma/debug': 5.8.1
+      '@prisma/engines-version': 5.8.1-1.78caf6feeaed953168c64e15a249c3e9a033ebe2
+      '@prisma/get-platform': 5.8.1
 
   /@prisma/generator-helper@5.9.0:
     resolution: {integrity: sha512-MNeJ6Rso387Tw6ciWLmQY2KOklrqMg1t45DCeiz+a1uFe9PpDxb0dwFZRGET7+1NkbbqFI28TZ4Y3z2fDvs7/A==}
@@ -3885,17 +3889,17 @@ packages:
       '@prisma/debug': 5.9.0
     dev: false
 
-  /@prisma/get-platform@5.9.0:
-    resolution: {integrity: sha512-8CatX+E6eZxcOjJZe5hF8EXxdb5GsQTA/u7pdmUJSxGLacW9K3r5vDdgV8s22PubObQQ6979/rkCMItbCrG4Yg==}
+  /@prisma/get-platform@5.8.1:
+    resolution: {integrity: sha512-wnA+6HTFcY+tkykMokix9GiAkaauPC5W/gg0O5JB0J8tCTNWrqpnQ7AsaGRfkYUbeOIioh6woDjQrGTTRf1Zag==}
     dependencies:
-      '@prisma/debug': 5.9.0
+      '@prisma/debug': 5.8.1
 
-  /@prisma/instrumentation@5.9.0:
-    resolution: {integrity: sha512-VjLZQM/Gv5EgN8l7T+VH5nbSYbl25tkkQJCMyrV+ajY6wRYwsUY3WPEzqdYe/eB3zcfr6+rUN+Cp919scUYt/A==}
+  /@prisma/instrumentation@5.8.1:
+    resolution: {integrity: sha512-vrsJPwofWJUjmiWFoER2nJii5Y7laUp8Mg2ULajyc+Kd9rtXYRDaULMsrH8bt8TEoZiMcE+kLO+wfmT+o8sGxg==}
     dependencies:
       '@opentelemetry/api': 1.7.0
-      '@opentelemetry/instrumentation': 0.47.0(@opentelemetry/api@1.7.0)
-      '@opentelemetry/sdk-trace-base': 1.20.0(@opentelemetry/api@1.7.0)
+      '@opentelemetry/instrumentation': 0.46.0(@opentelemetry/api@1.7.0)
+      '@opentelemetry/sdk-trace-base': 1.19.0(@opentelemetry/api@1.7.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -9266,15 +9270,6 @@ packages:
       module-details-from-path: 1.0.3
     dev: false
 
-  /import-in-the-middle@1.7.3:
-    resolution: {integrity: sha512-R2I11NRi0lI3jD2+qjqyVlVEahsejw7LDnYEbGb47QEFjczE3bZYsmWheCTQA+LFs2DzOQxR7Pms7naHW1V4bQ==}
-    dependencies:
-      acorn: 8.11.3
-      acorn-import-assertions: 1.9.0(acorn@8.11.3)
-      cjs-module-lexer: 1.2.3
-      module-details-from-path: 1.0.3
-    dev: false
-
   /imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
@@ -10753,18 +10748,6 @@ packages:
     deprecated: You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy v1
     dev: false
 
-  /postcss-import@15.1.0(postcss@8.4.32):
-    resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      postcss: ^8.0.0
-    dependencies:
-      postcss: 8.4.32
-      postcss-value-parser: 4.2.0
-      read-cache: 1.0.0
-      resolve: 1.22.8
-    dev: false
-
   /postcss-import@15.1.0(postcss@8.4.33):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
     engines: {node: '>=14.0.0'}
@@ -10775,16 +10758,6 @@ packages:
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
-
-  /postcss-js@4.0.1(postcss@8.4.32):
-    resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
-    engines: {node: ^12 || ^14 || >= 16}
-    peerDependencies:
-      postcss: ^8.4.21
-    dependencies:
-      camelcase-css: 2.0.1
-      postcss: 8.4.32
-    dev: false
 
   /postcss-js@4.0.1(postcss@8.4.33):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
@@ -10827,16 +10800,6 @@ packages:
       lilconfig: 3.0.0
       postcss: 8.4.33
       yaml: 2.3.4
-
-  /postcss-nested@6.0.1(postcss@8.4.32):
-    resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
-    engines: {node: '>=12.0'}
-    peerDependencies:
-      postcss: ^8.2.14
-    dependencies:
-      postcss: 8.4.32
-      postcss-selector-parser: 6.0.15
-    dev: false
 
   /postcss-nested@6.0.1(postcss@8.4.33):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
@@ -11003,22 +10966,22 @@ packages:
       react: 18.2.0
     dev: false
 
-  /prisma-extension-pagination@0.6.0(@prisma/client@5.9.0):
+  /prisma-extension-pagination@0.6.0(@prisma/client@5.8.1):
     resolution: {integrity: sha512-xur3CX4Q9X3NLeCvayTAMuAy88HtnHq31LeYhKUhcXDx6sHNl53aW9oe5j57cgxY9bwvHD3ygQLKD0Aly7xzIA==}
     peerDependencies:
       '@prisma/client': ^4.9.0 || ^5.0.0
     dependencies:
-      '@prisma/client': 5.9.0(prisma@5.9.0)
+      '@prisma/client': 5.8.1(prisma@5.8.1)
     dev: false
 
-  /prisma-field-encryption@1.5.1(@prisma/client@5.9.0):
+  /prisma-field-encryption@1.5.1(@prisma/client@5.8.1):
     resolution: {integrity: sha512-//pdkS0YBRGHOHG3QLR5gHpNs0LVEp3lN3RfI6cKdGUR9eJVwpUwIsa6BynI+8zGes+B0wn3MUl7ADIYV6RNlA==}
     hasBin: true
     peerDependencies:
       '@prisma/client': '>= 4.7'
     dependencies:
       '@47ng/cloak': 1.1.0
-      '@prisma/client': 5.9.0(prisma@5.9.0)
+      '@prisma/client': 5.8.1(prisma@5.8.1)
       '@prisma/generator-helper': 5.9.0
       debug: 4.3.4
       immer: 10.0.3
@@ -11028,13 +10991,13 @@ packages:
       - supports-color
     dev: false
 
-  /prisma@5.9.0:
-    resolution: {integrity: sha512-0UcOofjNuAnd227JMaPqZvP01dsUXw9EXB9iC8fyoZtfv7zkQ0ozxyjY1g+vcjFPOnNLICMnLHx+lM5BJZYqOQ==}
+  /prisma@5.8.1:
+    resolution: {integrity: sha512-N6CpjzECnUHZ5beeYpDzkt2rYpEdAeqXX2dweu6BoQaeYkNZrC/WJHM+5MO/uidFHTak8QhkPKBWck1o/4MD4A==}
     engines: {node: '>=16.13'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 5.9.0
+      '@prisma/engines': 5.8.1
 
   /prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
@@ -12142,11 +12105,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.32
-      postcss-import: 15.1.0(postcss@8.4.32)
-      postcss-js: 4.0.1(postcss@8.4.32)
-      postcss-load-config: 4.0.2(postcss@8.4.32)
-      postcss-nested: 6.0.1(postcss@8.4.32)
+      postcss: 8.4.33
+      postcss-import: 15.1.0(postcss@8.4.33)
+      postcss-js: 4.0.1(postcss@8.4.33)
+      postcss-load-config: 4.0.2(postcss@8.4.33)
+      postcss-nested: 6.0.1(postcss@8.4.33)
       postcss-selector-parser: 6.0.15
       resolve: 1.22.8
       sucrase: 3.35.0
