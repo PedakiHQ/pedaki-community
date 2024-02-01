@@ -27,8 +27,8 @@
   "author": "pedaki",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
-    "@auth/prisma-adapter": "^1.1.0",
-    "@pedaki/common": "0.5.2-beta.4",
+    "@auth/prisma-adapter": "^1.2.0",
+    "@pedaki/common": "0.5.2-beta.5",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
@@ -37,11 +37,11 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^18.19.10",
+    "@types/node": "^20.11.15",
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
