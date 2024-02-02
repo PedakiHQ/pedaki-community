@@ -94,9 +94,9 @@ class StudentQueryService {
         LEFT JOIN classes class ON class.id = t1."A"`
       : '';
     const hasTeachers =
-      request.where?.some(({ field }) => field.startsWith('class.teachers.')) ??
-      request.orderBy?.some(([field]) => field.startsWith('class.teachers.')) ??
-      request.fields.some(field => field.startsWith('class.teachers.')) ??
+      request.where?.some(({ field }) => field.startsWith('class.teachers.')) ||
+      request.orderBy?.some(([field]) => field.startsWith('class.teachers.')) ||
+      request.fields.some(field => field.startsWith('class.teachers.')) ||
       false;
     const joinTeachers = hasTeachers
       ? `

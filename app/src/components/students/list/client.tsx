@@ -79,7 +79,11 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
   const page = Math.max(1, _page);
 
   // Fetch data
-  const { data, isLoading: isQueryLoading } = api.students.getMany.useQuery({
+  const {
+    data,
+    isLoading: isQueryLoading,
+    isError,
+  } = api.students.getMany.useQuery({
     fields: [
       ...new Set(
         visibleColumns.map(column => translatedColumns.find(col => col.id === column)?.accessorKey),
@@ -105,7 +109,7 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
     }
   }, [setPage, meta?.pageCount, page]);
 
-  const isLoading = isQueryLoading || isTransitionLoading;
+  const isLoading = isQueryLoading || isTransitionLoading || isError;
 
   return (
     <div className={cn('flex h-full flex-col gap-4', className)}>
