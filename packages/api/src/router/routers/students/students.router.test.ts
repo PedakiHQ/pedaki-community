@@ -126,7 +126,7 @@ describe('studentsRouter', () => {
         expect(data[0]!.properties!['1']).toBe(15);
         expect(data[0]!.class.name).toBe('6ème B');
         expect(data[1]!.class).toBeDefined();
-        expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
+        expect(data[1]!.class.name).toBeUndefined(); // In our test data only the first user has a class
       },
     );
 
@@ -150,7 +150,7 @@ describe('studentsRouter', () => {
         expect(data[0]!.class.name).toBe('6ème B');
         expect(data[0]!.class.academicYearId).toBe(1);
         expect(data[1]!.class).toBeDefined();
-        expect(data[1]!.class.name).toBeUndefined(); // In out test data only the first user has a class
+        expect(data[1]!.class.name).toBeUndefined(); // In our test data only the first user has a class
         expect(data[1]!.class.academicYearId).toBeUndefined();
       },
     );

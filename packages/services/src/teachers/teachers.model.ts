@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
-export const GetManyTeachersSchema = z.record(
-  z.object({
-    id: z.number(),
-    name: z.string(),
-  }),
-);
-export type GetManyClasses = z.infer<typeof GetManyTeachersSchema>;
+export const TeacherSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+export type Teacher = z.infer<typeof TeacherSchema>;
+
+export const GetManyTeachersSchema = z.record(TeacherSchema);
+export type GetManyTeachers = z.infer<typeof GetManyTeachersSchema>;

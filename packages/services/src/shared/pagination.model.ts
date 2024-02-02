@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const PaginationInputSchema = z.object({
-  page: z.number().default(1), // the first page is 1
-  limit: z.number().default(30),
+  page: z.number().min(0).default(1), // the first page is 1
+  limit: z.number().min(0).default(30),
 });
 
 export type PaginationInput = z.infer<typeof PaginationInputSchema>;

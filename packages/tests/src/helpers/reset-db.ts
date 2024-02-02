@@ -183,7 +183,7 @@ const resetDb = async () => {
           connect: { id: 2 },
         },
         level: {
-          connect: { id: 2 },
+          connect: { id: 1 },
         },
         academicYear: {
           connect: { id: 1 },
@@ -201,7 +201,7 @@ const resetDb = async () => {
           connect: { id: 3 },
         },
         level: {
-          connect: { id: 1 },
+          connect: { id: 2 },
         },
         academicYear: {
           connect: { id: 2 },

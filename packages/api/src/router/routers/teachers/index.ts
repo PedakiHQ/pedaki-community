@@ -1,6 +1,6 @@
 import { prisma } from '@pedaki/db';
 import { GetManyTeachersSchema } from '@pedaki/services/teachers/teachers.model.js';
-import type { GetManyClasses } from '@pedaki/services/teachers/teachers.model.js';
+import type { GetManyTeachers } from '@pedaki/services/teachers/teachers.model.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
 export const teachersRouter = router({
@@ -15,6 +15,6 @@ export const teachersRouter = router({
     return data.reduce((acc, curr) => {
       acc[curr.id] = curr;
       return acc;
-    }, {} as GetManyClasses);
+    }, {} as GetManyTeachers);
   }),
 });

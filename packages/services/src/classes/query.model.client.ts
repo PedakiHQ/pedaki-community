@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export interface QueryFieldSchema {
   type: z.Schema;
-  mapping: string;
   fieldType: FieldType;
 }
 
@@ -20,86 +19,77 @@ export const isPositiveOperator = (operator: QueryOperator): boolean => {
 };
 
 const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = {
-  count: {
-    type: z.number(),
-    mapping: 'COUNT(*)',
-    fieldType: 'int',
-  },
   id: {
     type: z.number(),
-    mapping: 'classes.id',
     fieldType: 'int',
   },
   name: {
     type: z.string(),
-    mapping: 'name',
     fieldType: 'text',
   },
   description: {
     type: z.string(),
-    mapping: 'description',
     fieldType: 'text',
   },
   'academicYear.id': {
     type: z.number(),
-    mapping: 'academic_year_id',
     fieldType: 'int',
   },
   'academicYear.name': {
     type: z.number(),
-    mapping: 'academic_years.name',
     fieldType: 'text',
   },
   'academicYear.startDate': {
     type: z.number(),
-    mapping: 'academic_years.start_date',
     fieldType: 'date',
   },
   'academicYear.endDate': {
     type: z.number(),
-    mapping: 'academic_years.end_date',
     fieldType: 'date',
   },
   'level.id': {
     type: z.number(),
-    mapping: 'level_id',
     fieldType: 'int',
   },
   'level.name': {
     type: z.number(),
-    mapping: 'class_levels.name',
     fieldType: 'text',
   },
   'level.description': {
     type: z.number(),
-    mapping: 'class_levels.description',
     fieldType: 'text',
   },
   'mainTeacher.id': {
     type: z.number(),
-    mapping: 'main_teacher_id',
     fieldType: 'int',
   },
-  // 'mainTeacher.name': {
-  //   type: z.number(),
-  //   // TODO: idk mapping
-  //   mapping: 'main_teacher.name',
-  //   fieldType: 'text',
-  // },
+  'mainTeacher.name': {
+    type: z.number(),
+    fieldType: 'text',
+  },
   'teachers.id': {
     type: z.number(),
-    mapping: 'teachers.id',
     fieldType: 'int',
   },
   'teachers.name': {
     type: z.string(),
-    mapping: 'teachers.name',
+    fieldType: 'text',
+  },
+  'branches.id': {
+    type: z.number(),
+    fieldType: 'int',
+  },
+  'branches.name': {
+    type: z.string(),
+    fieldType: 'text',
+  },
+  'branches.description': {
+    type: z.string(),
     fieldType: 'text',
   },
 } as const;
 
 export const KnownFieldsKeys = [
-  'count',
   'id',
   'name',
   'description',
@@ -111,9 +101,12 @@ export const KnownFieldsKeys = [
   'level.name',
   'level.description',
   'mainTeacher.id',
-  // 'mainTeacher.name',
+  'mainTeacher.name',
   'teachers.id',
   'teachers.name',
+  'branches.id',
+  'branches.name',
+  'branches.description',
 ] as const;
 
 export const getKnownField = (key: string): QueryFieldSchema | undefined => {
