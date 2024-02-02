@@ -104,12 +104,14 @@ model Student {
   lastName  String  @map("last_name") @db.VarChar(255)
   otherName String? @map("other_name") @db.VarChar(255) // 3rd name etc... just in case
 
-  birthDate DateTime @map("birth_date")
+  birthDate DateTime @map("birth_date") @db.Date
 
   properties Json @db.JsonB
 
   // Many to many relation - A student can be in multiple classes (ex: double cursus)
   classes Class[] @relation("class_to_student")
+
+  importStudent ImportStudent[]
 
   @@map("students")
 }
@@ -162,6 +164,8 @@ model ClassLevel {
 
   classes          Class[]       @relation("class_to_level")
   possibleBranches ClassBranch[] @relation("branch_to_level")
+
+  importClassLevel ImportClassLevel[]
 
   @@map("class_levels")
 }
@@ -245,6 +249,8 @@ model Class {
   // Status of the class
   status ClassStatus @default(ACTIVE)
 
+  importClass ImportClass[]
+
   @@unique([name])
   @@index([academicYearId, levelId])
   @@map("classes")
@@ -259,4 +265,81 @@ enum TokenType {
   CONFIRM_EMAIL
   ACTIVATE_ACCOUNT
   RESET_PASSWORD
+}
+
+// Student Imports
+
+model Import {
+  id        String       @id @default(cuid()) @db.VarChar(25)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at")
+  status    ImportStatus
+  data      Json?        @db.JsonB
+
+  students   ImportStudent[]
+  class      ImportClass[]
+  classLevel ImportClassLevel[]
+
+  @@map("imports")
+}
+
+model ImportStudent {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  studentId Int?     @map("student_id")
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  firstName String   @map("first_name") @db.VarChar(255)
+  lastName  String   @map("last_name") @db.VarChar(255)
+  otherName String?  @map("other_name") @db.VarChar(255)
+  birthDate DateTime @map("birth_date") @db.Date
+
+  impotClasses ImportClass[]
+
+  @@unique([importId, studentId])
+  @@map("import_students")
+}
+
+model ImportClass {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  classId Int?   @map("class_id")
+  class   Class? @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  name String @db.VarChar(255)
+
+  importLevelId Int              @map("level_id")
+  importLevel   ImportClassLevel @relation(fields: [importLevelId], references: [id], onDelete: Cascade)
+
+  importStudents ImportStudent[]
+
+  @@unique([importId, classId])
+  @@map("import_classes")
+}
+
+model ImportClassLevel {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  classLevelId Int?        @map("class_level_id")
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: Cascade)
+
+  name String @db.VarChar(255)
+
+  importClass ImportClass[]
+
+  @@unique([importId, classLevelId])
+  @@map("import_class_levels")
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  DONE
+  ERROR
 }

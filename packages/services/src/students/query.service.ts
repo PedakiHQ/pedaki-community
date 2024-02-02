@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { buildPaginationClause, buildWhereClause, escape, getJsonBType } from '~/shared/sql.ts';
-import { studentPropertiesService } from '~/students/properties.service.ts';
+import { studentPropertiesService } from '~/students/properties/properties.service.ts';
 import { getKnownField } from '~/students/query.model.ts';
 import type { Field } from '~/students/query.model.ts';
 import type { GetManyStudentsInput, UpdateOneStudentInput } from '~/students/student.model.ts';

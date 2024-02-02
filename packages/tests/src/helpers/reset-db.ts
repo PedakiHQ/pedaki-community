@@ -64,6 +64,9 @@ const resetDb = async () => {
     prisma.$executeRawUnsafe('TRUNCATE TABLE class_levels RESTART IDENTITY CASCADE'),
     prisma.$executeRawUnsafe('TRUNCATE TABLE academic_years RESTART IDENTITY CASCADE'),
     prisma.$executeRawUnsafe('TRUNCATE TABLE teachers RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE imports RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE import_students RESTART IDENTITY CASCADE'),
+    prisma.$executeRawUnsafe('TRUNCATE TABLE import_classes RESTART IDENTITY CASCADE'),
 
     // create users
     prisma.user.createMany({
@@ -125,6 +128,14 @@ const resetDb = async () => {
         },
         {
           name: '5ème',
+          color: '#0000FF',
+        },
+        {
+          name: 'CE1',
+          color: '#0000FF',
+        },
+        {
+          name: 'CP',
           color: '#0000FF',
         },
       ],
