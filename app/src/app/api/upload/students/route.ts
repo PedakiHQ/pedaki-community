@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
     const response = await caller.students.imports.upload({
       mimeType: file.mimetype,
       buffer: buffer,
+      name: file.fileName,
     });
 
     return Response.json(response);

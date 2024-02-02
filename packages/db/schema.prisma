@@ -270,11 +270,13 @@ enum TokenType {
 // Student Imports
 
 model Import {
-  id        String       @id @default(cuid()) @db.VarChar(25)
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at")
-  status    ImportStatus
-  data      Json?        @db.JsonB
+  id        String   @id @default(cuid()) @db.VarChar(25)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  name   String       @db.VarChar(255)
+  status ImportStatus
+  data   Json?        @db.JsonB
 
   students   ImportStudent[]
   class      ImportClass[]

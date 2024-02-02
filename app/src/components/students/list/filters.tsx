@@ -70,7 +70,7 @@ const Filters = ({
             );
           })}
           {filtersCount === 0 && (
-            <span className="select-none text-label-xs text-sub">{t('noFilters')}</span>
+            <span className="select-none pl-1.5 text-label-xs text-sub">{t('noFilters')}</span>
           )}
         </ul>
       </ScrollArea>

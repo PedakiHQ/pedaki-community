@@ -9,10 +9,11 @@ import type {
 import { FILE_PROCESSORS } from '~/students/imports/processor/processor.ts';
 
 class StudentImportsService {
-  async createImport(): Promise<string> {
+  async createImport(name: string): Promise<string> {
     const data = await prisma.import.create({
       data: {
         status: 'PENDING',
+        name,
       },
       select: {
         id: true,
@@ -48,7 +49,7 @@ class StudentImportsService {
     }
 
     if (!fileProcessor) {
-      throw new Error('No processor found'); // TODO: error code
+      throw new Error('UNKNOWN_FORMAT');
     }
     return fileProcessor;
   }

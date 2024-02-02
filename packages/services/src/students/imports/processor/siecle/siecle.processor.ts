@@ -65,6 +65,10 @@ export class SiecleProcessor implements FileProcessor {
       delimiter: ';',
     }) as Record<string, string>[];
 
+    if (rawData.length === 0) {
+      throw new Error('EMPTY_FILE');
+    }
+
     return rawData.map(row => {
       return schema.parse(row);
     });

@@ -7,13 +7,14 @@ import {
 } from '@pedaki/services/students/imports/import.model.js';
 import { studentImportsService } from '@pedaki/services/students/imports/imports.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
+import { z } from 'zod';
 
 export const studentImports = router({
   upload: privateProcedure
     .input(ImportUploadSchema)
     .output(ImportUploadResultSchema)
     .mutation(async ({ input }) => {
-      const id = await studentImportsService.createImport();
+      const id = await studentImportsService.createImport(input.name);
       // We don't want to wait for the file to be processed
       void studentImportsService.processFile(id, {
         ...input,
@@ -25,10 +26,56 @@ export const studentImports = router({
       };
     }),
 
+  getMany: privateProcedure
+    .output(
+      z.array(
+        ImportUploadStatusSchema.merge(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+          }),
+        ),
+      ),
+    )
+    .query(async () => {
+      const imports = await prisma.import.findMany({
+        select: {
+          id: true,
+          data: true,
+          createdAt: true,
+          name: true,
+          status: true,
+        },
+      });
+
+      return imports.map(importUpload => {
+        return {
+          id: importUpload.id,
+          name: importUpload.name,
+          status: importUpload.status,
+          createdAt: importUpload.createdAt,
+          data: importUpload.data as ImportUploadStatus['data'],
+        };
+      });
+    }),
+
+  deleteOne: privateProcedure
+    .input(z.string())
+    .output(z.boolean())
+    .mutation(async ({ input }) => {
+      await prisma.import.delete({
+        where: {
+          id: input,
+        },
+      });
+
+      return true;
+    }),
+
   status: privateProcedure
     .input(ImportUploadResultSchema.pick({ id: true }))
     .output(ImportUploadStatusSchema)
-    .mutation(async ({ input }) => {
+    .query(async ({ input }) => {
       const currentStatus = await prisma.import.findUnique({
         where: {
           id: input.id,
@@ -36,11 +83,13 @@ export const studentImports = router({
         select: {
           status: true,
           data: true,
+          createdAt: true,
         },
       });
 
       return {
         status: currentStatus?.status ?? 'ERROR',
+        createdAt: currentStatus?.createdAt ?? null,
         data: (currentStatus?.data as ImportUploadStatus['data']) ?? {
           message: 'NOT_FOUND',
         },
