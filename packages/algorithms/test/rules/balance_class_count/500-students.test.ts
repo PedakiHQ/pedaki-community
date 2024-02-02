@@ -29,5 +29,7 @@ test("Regrouper et équilibrer le niveau de l'option allemand dans chaque classe
       {},
     ],
     ['allemand'],
+    undefined,
+    true
   );
 });

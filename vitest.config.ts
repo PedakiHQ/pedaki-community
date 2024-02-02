@@ -12,6 +12,7 @@ export default defineConfig({
             reporter: ['text', 'json-summary', 'json'],
             include: [
                 "packages/api/**/*.ts",
+                "packages/algorithms/**/*.ts",
             ],
             exclude: [
                 'packages/**/env.ts',
