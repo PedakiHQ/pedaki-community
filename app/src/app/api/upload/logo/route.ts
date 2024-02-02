@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     const logo = await sharp(buffer).resize(192, 192).png().toBuffer();
 
     const caller = appRouter.createCaller(ctx);
-    const response = await caller.file.upload([
+    const response = await caller.files.upload([
       {
         // SEE LOGO_URL in app/src/constants.ts
         name: 'logo-192x192',

@@ -54,7 +54,8 @@ rm -rf pedaki-community
 git clone https://github.com/PedakiHQ/pedaki-community.git &> /dev/null || true
 cd pedaki-community
 
-chmod +x ./bin/firewall && ./bin/firewall
+# TODO: ask for firewall
+#chmod +x ./bin/firewall && ./bin/firewall
 chmod +x ./bin/cli-install && ./bin/cli-install
 
 # Used later

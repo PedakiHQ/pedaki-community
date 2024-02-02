@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = []
 }
 
 generator fieldEncryptionMigrations {
@@ -103,12 +104,14 @@ model Student {
   lastName  String  @map("last_name") @db.VarChar(255)
   otherName String? @map("other_name") @db.VarChar(255) // 3rd name etc... just in case
 
-  birthDate DateTime @map("birth_date")
+  birthDate DateTime @map("birth_date") @db.Date
 
   properties Json @db.JsonB
 
   // Many to many relation - A student can be in multiple classes (ex: double cursus)
   classes Class[] @relation("class_to_student")
+
+  importStudent ImportStudent[]
 
   @@map("students")
 }
@@ -140,6 +143,9 @@ model Teacher {
   // But can only be the main teacher of one class
   mainClass Class?  @relation("main_teacher")
 
+  name String @db.VarChar(255) // Default if the teacher is not linked to a user (can be different from the user name)
+
+  // A teacher can be linked to a user
   userId String? @unique @map("user_id") @db.VarChar(25)
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
@@ -152,29 +158,31 @@ model ClassLevel {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
-  color       String @db.Char(7) // Hexadecimal color
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
+  color       String  @db.Char(7) // Hexadecimal color
 
   classes          Class[]       @relation("class_to_level")
   possibleBranches ClassBranch[] @relation("branch_to_level")
 
+  importClassLevel ImportClassLevel[]
+
   @@map("class_levels")
 }
 
-// ex: 1A, 1B, 2A, 2B, ...
+// ex: Science, Math, ...
 model ClassBranch {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
-  color       String @db.Char(7) // Hexadecimal color
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
+  color       String  @db.Char(7) // Hexadecimal color
 
   possibleLevels ClassLevel[] @relation("branch_to_level")
 
-  classes Class[]
+  classes Class[] @relation("branch_to_class")
 
   @@map("class_branches")
 }
@@ -184,8 +192,8 @@ model Room {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
 
   // Relations
   classes Class[] @relation("class_to_room")
@@ -199,8 +207,10 @@ model AcademicYear {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
+  startDate DateTime @map("start_date") @db.Date
+  endDate   DateTime @map("end_date") @db.Date
+
+  name String @unique @db.VarChar(255) // Ex: 2020-2021
 
   // Relations
   classes Class[] @relation("class_to_academic_year")
@@ -213,8 +223,8 @@ model Class {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  name        String @db.VarChar(255)
-  description String @db.VarChar(1000)
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(1000)
 
   // A main teacher is the one who is in charge of the class (and is responsible for only one class)
   mainTeacherId Int?     @unique @map("main_teacher_id")
@@ -224,12 +234,10 @@ model Class {
   teachers Teacher[] @relation("class_to_teacher")
   students Student[] @relation("class_to_student")
 
-  levelId Int        @map("level_id")
+  levelId Int        @map("level_id") // ex: 1st year, 2nd year, 3rd year, ...
   level   ClassLevel @relation("class_to_level", fields: [levelId], references: [id], onDelete: Cascade)
 
-  // Can be null if the class is not linked to a branch
-  branchId Int?
-  branch   ClassBranch? @relation(fields: [branchId], references: [id])
+  branch ClassBranch[] @relation("branch_to_class")
 
   // If the class as assigned rooms, they will be listed here
   rooms Room[] @relation("class_to_room")
@@ -241,8 +249,10 @@ model Class {
   // Status of the class
   status ClassStatus @default(ACTIVE)
 
+  importClass ImportClass[]
+
   @@unique([name])
-  @@index([academicYearId, levelId, branchId])
+  @@index([academicYearId, levelId])
   @@map("classes")
 }
 
@@ -255,4 +265,81 @@ enum TokenType {
   CONFIRM_EMAIL
   ACTIVATE_ACCOUNT
   RESET_PASSWORD
+}
+
+// Student Imports
+
+model Import {
+  id        String       @id @default(cuid()) @db.VarChar(25)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at")
+  status    ImportStatus
+  data      Json?        @db.JsonB
+
+  students   ImportStudent[]
+  class      ImportClass[]
+  classLevel ImportClassLevel[]
+
+  @@map("imports")
+}
+
+model ImportStudent {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  studentId Int?     @map("student_id")
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  firstName String   @map("first_name") @db.VarChar(255)
+  lastName  String   @map("last_name") @db.VarChar(255)
+  otherName String?  @map("other_name") @db.VarChar(255)
+  birthDate DateTime @map("birth_date") @db.Date
+
+  impotClasses ImportClass[]
+
+  @@unique([importId, studentId])
+  @@map("import_students")
+}
+
+model ImportClass {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  classId Int?   @map("class_id")
+  class   Class? @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  name String @db.VarChar(255)
+
+  importLevelId Int              @map("level_id")
+  importLevel   ImportClassLevel @relation(fields: [importLevelId], references: [id], onDelete: Cascade)
+
+  importStudents ImportStudent[]
+
+  @@unique([importId, classId])
+  @@map("import_classes")
+}
+
+model ImportClassLevel {
+  id       Int    @id @default(autoincrement())
+  importId String @map("import_id") @db.VarChar(25)
+  import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  classLevelId Int?        @map("class_level_id")
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: Cascade)
+
+  name String @db.VarChar(255)
+
+  importClass ImportClass[]
+
+  @@unique([importId, classLevelId])
+  @@map("import_class_levels")
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  DONE
+  ERROR
 }

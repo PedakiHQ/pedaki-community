@@ -41,7 +41,7 @@ type SidebarLinkWithoutChildren = SidebarLink & {
 export type SidebarLinkProps = SidebarLinkWithChildren | SidebarLinkWithoutChildren;
 
 const baseItemClass =
-  'flex items-center w-full gap-2 px-3 py-2 rounded-md text-sub hover:bg-white focus-ring group-data-[collapsed=true]/sidebar:sm:justify-center';
+  'flex items-center w-full gap-2 px-3 py-2 rounded-md text-sub bg-weak hover:bg-white focus-ring group-data-[collapsed=true]/sidebar:sm:justify-center z-1 relative';
 const subItemClass = (active: boolean | undefined) =>
   cn(baseItemClass, 'border text-sub', active ? 'z-[1] bg-white shadow-sm' : 'border-transparent');
 
@@ -123,7 +123,7 @@ const SidebarLinkWithChildren = ({ items, segment, ...props }: SidebarLinkWithCh
 
 const SidebarDecoration = () => {
   return (
-    <div className="absolute inset-y-0 left-5">
+    <div className="absolute inset-y-0 left-5 z-0">
       <div className="absolute h-full w-px translate-y-[-70%] scale-150 bg-soft"></div>
     </div>
   );
@@ -198,10 +198,9 @@ const SidebarLinkSubItem = ({
   id,
 }: SidebarLinkSubItem & { active?: boolean }) => {
   const setMobileOpen = useGlobalStore(state => state.setMobileOpen);
-  console.log('id', id);
 
   return (
-    <div className="pl-7" id={id}>
+    <div className="z-1 pl-7" id={id}>
       <Link href={href} className={cn(subItemClass(active))} onClick={() => setMobileOpen?.(false)}>
         <span className={cn('text-label-sm font-medium', active && 'text-main')}>{title}</span>
       </Link>

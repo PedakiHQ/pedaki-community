@@ -1,6 +1,5 @@
 import { authService } from '@pedaki/services/auth/auth.service.js';
 import { InvalidTokenError } from '@pedaki/services/errors/InvalidTokenError.js';
-import { TRPCError } from '@trpc/server';
 import { publicProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 

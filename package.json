@@ -1,6 +1,6 @@
 {
   "name": "pedaki",
-  "version": "0.7.0-beta.0",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "repository": "https://github.com/PedakiHQ/pedaki-community",
@@ -38,25 +38,26 @@
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
-    "@pedaki/eslint-config": "0.5.2-beta.3",
-    "@pedaki/prettier-config": "0.5.2-beta.3",
+    "@pedaki/eslint-config": "0.5.2-beta.5",
+    "@pedaki/prettier-config": "0.5.2-beta.5",
+    "@total-typescript/ts-reset": "^0.5.1",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.19.8",
-    "@vitest/coverage-v8": "^1.2.1",
-    "@vitest/ui": "^1.2.1",
+    "@types/node": "^20.11.15",
+    "@vitest/coverage-v8": "^1.2.2",
+    "@vitest/ui": "^1.2.2",
     "chalk": "^5.3.0",
-    "esbuild": "^0.19.11",
+    "esbuild": "^0.20.0",
     "fs-extra": "^11.2.0",
-    "husky": "^9.0.0",
-    "inquirer": "^9.2.12",
-    "lint-staged": "^15.2.0",
+    "husky": "^9.0.7",
+    "inquirer": "^9.2.13",
+    "lint-staged": "^15.2.1",
     "open": "^10.0.3",
     "rimraf": "latest",
     "throat": "^6.0.2",
-    "turbo": "^1.11.3",
+    "turbo": "^1.12.2",
     "typescript": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.1",
-    "vitest": "^1.2.1"
+    "vitest": "^1.2.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -65,11 +66,11 @@
     ]
   },
   "engines": {
-    "node": ">=18.17.0 <19.0.0",
+    "node": ">=20",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.14.0",
+  "packageManager": "pnpm@8.15.0",
   "prettier": "@pedaki/prettier-config"
 }

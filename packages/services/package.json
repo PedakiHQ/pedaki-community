@@ -1,13 +1,13 @@
 {
   "name": "@pedaki/services",
-  "version": "0.7.0-beta.0",
+  "version": "0.8.0",
   "description": "",
   "private": true,
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsup --clean",
-    "build:watch": "tsup --watch",
+    "build": "cross-env NODE_OPTIONS='--max-old-space-size=16384' tsup --clean",
+    "build:watch": "cross-env NODE_OPTIONS='--max-old-space-size=16384' tsup --watch",
     "lint": "eslint .",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\"",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
@@ -20,30 +20,33 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.496.0",
+    "@aws-sdk/client-s3": "^3.504.0",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.3",
+    "@pedaki/common": "0.5.2-beta.5",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
+    "csv": "^6.3.6",
     "esbuild-plugin-file-path-extensions": "^2.0.0",
     "exponential-backoff": "^3.1.1",
     "mime-types": "^2.1.35",
+    "sqlstring": "^2.3.3",
     "tsconfig-replace-paths": "^0.0.14",
     "tsup": "^8.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@pedaki/tests": "workspace:*",
-    "@prisma/client": "^5.8.1",
-    "@types/mime-types": "^2.1.4"
+    "@prisma/client": "5.8.1",
+    "@types/mime-types": "^2.1.4",
+    "@types/sqlstring": "^2.3.2"
   },
   "engines": {
-    "node": ">=18.0.0 <19.0.0",
+    "node": ">=20",
     "pnpm": ">=8.0.0",
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.14.0",
+  "packageManager": "pnpm@8.15.0",
   "prettier": "@pedaki/prettier-config"
 }

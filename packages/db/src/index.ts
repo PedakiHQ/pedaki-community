@@ -1,5 +1,6 @@
 import { logger } from '@pedaki/logger';
 import PrismaClientPkg from '@prisma/client';
+import { pagination } from 'prisma-extension-pagination';
 import { fieldEncryptionExtension } from 'prisma-field-encryption';
 import { env } from './env.ts';
 
@@ -15,7 +16,20 @@ const prismaClientSingleton = () => {
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,
-        decryptionKeys: env.PRISMA_DECRYPTION_KEY ? [env.PRISMA_DECRYPTION_KEY] : undefined,
+        decryptionKeys:
+          env.PRISMA_DECRYPTION_KEY && !env.PRISMA_DECRYPTION_KEY.startsWith('{{{')
+            ? [env.PRISMA_DECRYPTION_KEY]
+            : undefined,
+      }),
+    );
+
+    // @ts-expect-error: extends breaks the type
+    client = client.$extends(
+      pagination({
+        pages: {
+          limit: 30,
+          includePageCount: true,
+        },
       }),
     );
   }

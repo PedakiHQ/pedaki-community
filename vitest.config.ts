@@ -25,7 +25,8 @@ export default defineConfig({
         passWithNoTests: true,
         logHeapUsage: true,
         setupFiles: [
-            `packages/tests/src/helpers/setup.ts`
+            `packages/tests/src/helpers/setup.ts`,
+            `packages/api/src/tests/helpers/setup.ts`
         ],
         include: [
             '**/*.test.ts',

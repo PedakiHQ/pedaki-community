@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   release:
-    name: Check
+    name: Docker build (no push)
     runs-on: ubuntu-latest
 
     steps:
