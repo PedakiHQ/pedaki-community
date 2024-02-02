@@ -1,36 +1,38 @@
-export const description = 'Maximiser le nombre de classes (500 élèves)';
-export const studentsFile = './data/users-500.json';
-export const inputFile = './data/input-500-maximize-classes.json';
-export const keysMask = [];
-export const output = [
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-  {
-    total: [1, 100],
-  },
-];
+// @ts-nocheck
+import { test } from 'vitest';
+import { runTest } from '../../test.ts';
+
+test('Maximiser le nombre de classes (500 élèves)', async () => {
+  return await runTest('users-500.json', 'input-500-maximize-classes.json', [
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+    {
+      total: [1, 100],
+    },
+  ]);
+});

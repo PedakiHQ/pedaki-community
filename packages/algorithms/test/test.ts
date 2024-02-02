@@ -14,7 +14,7 @@ type OptionOutputClass = Record<string, OptionValueOutputClass>;
 interface IdOutputClass {
   ids?: number[][];
 }
-export type OutputClass = { total?: string } & OptionOutputClass & IdOutputClass;
+export type OutputClass = { total?: number } & OptionOutputClass & IdOutputClass;
 
 async function readJsonFile(path: string) {
   return fs.readFile(__dirname + '/data/' + path, 'utf8').then(raw => JSON.parse(raw));
@@ -23,8 +23,8 @@ async function readJsonFile(path: string) {
 export async function runTest(
   studentsFile: string,
   inputFile: string,
-  keysMask: string[],
   output: OutputClass[],
+  keysMask: string[] = [],
   // Pourcentage minimum de respect de chaque règle, d'après l'indice après tri.
   respectPercents?: number[],
   showLevel?: boolean,
@@ -138,7 +138,7 @@ const isClassValid = (c: Class, model: OutputClass): boolean => {
     }
 
     // On vérifie que la description de l'option correspond.
-    if (optionDiffers(key, value)) return false;
+    if (optionDiffers(key, value!)) return false;
   }
 
   return true;
