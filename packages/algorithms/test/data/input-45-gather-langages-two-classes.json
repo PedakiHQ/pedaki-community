@@ -1,0 +1,35 @@
+{
+  "constraints": {
+    "class_size_limit": 30,
+    "class_amount_limit": 2
+  },
+  "rules": [
+    {
+      "rule": "gather_attributes",
+      "priority": 1,
+      "attributes": [
+        {
+          "options": "allemand"
+        }
+      ]
+    },
+    {
+      "rule": "gather_attributes",
+      "priority": 1,
+      "attributes": [
+        {
+          "options": "espagnol"
+        }
+      ]
+    },
+    {
+      "rule": "gather_attributes",
+      "priority": 1,
+      "attributes": [
+        {
+          "options": "anglais"
+        }
+      ]
+    }
+  ]
+}

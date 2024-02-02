@@ -1,0 +1,71 @@
+[
+  {
+    "id": "1",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"5": 1, "6": 1, "2": -1, "9": -1, "3": -1, "7": -1, "10": -1},
+    "levels": {}
+  },
+  {
+    "id": "2",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"9": 1},
+    "levels": {}
+  },
+  {
+    "id": "3",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"7": 1},
+    "levels": {}
+  },
+  {
+    "id": "4",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"8": 1},
+    "levels": {}
+  },
+  {
+    "id": "5",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"1": 1, "6": 1},
+    "levels": {}
+  },
+  {
+    "id": "6",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"5": 1, "1": 1},
+    "levels": {}
+  },
+  {
+    "id": "7",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"3": 1},
+    "levels": {}
+  },
+  {
+    "id": "8",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"4": 1},
+    "levels": {}
+  },
+  {
+    "id": "9",
+    "gender": "F",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "relationships": {"2": 1},
+    "levels": {}
+  },
+  {
+    "id": "10",
+    "gender": "M",
+    "birthdate": "2002-07-29T03:35:32Z",
+    "levels": {}
+  }
+]

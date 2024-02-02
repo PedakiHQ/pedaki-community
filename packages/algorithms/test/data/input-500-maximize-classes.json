@@ -1,0 +1,12 @@
+{
+  "constraints": {
+    "class_size_limit": 100,
+    "class_amount_limit": 10
+  },
+  "rules": [
+    {
+      "rule": "maximize_classes",
+      "priority": 1
+    }
+  ]
+}

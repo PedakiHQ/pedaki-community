@@ -23,6 +23,7 @@ COPY packages/db/package.json ./packages/db/
 COPY packages/logger/package.json ./packages/logger/
 COPY packages/services/package.json ./packages/services/
 COPY packages/tests/package.json ./packages/tests/
+COPY packages/algorithms/package.json ./packages/algorithms/
 
 RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --filter @pedaki/community --ignore-script
 
@@ -33,6 +34,7 @@ COPY packages/db ./packages/db
 COPY packages/logger ./packages/logger
 COPY packages/services ./packages/services
 COPY packages/tests ./packages/tests
+COPY packages/algorithms ./packages/algorithms
 
 COPY scripts ./scripts
 
