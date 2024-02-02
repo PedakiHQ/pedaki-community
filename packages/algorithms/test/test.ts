@@ -1,16 +1,14 @@
-import * as assert from 'assert';
-import * as path from 'path';
-import * as url from 'url';
+import fs from 'fs/promises';
+import { expect } from 'vitest';
 import Algorithm from '../src/generate_classes/algorithm.ts';
-import type Class from '../src/generate_classes/class.ts';
+import Class from '../src/generate_classes/class.ts';
 import type { RawInput } from '../src/generate_classes/input.ts';
-import type { RawStudent } from '../src/generate_classes/student.ts';
-import { fixtures, readJsonFile } from './fixtures.ts';
+import { RawStudent } from '../src/generate_classes/student.ts';
 
 // Classe modèle ayant pour but d'être comparée à une véritable classe pour déterminer leur égalité.
 interface OptionValueOutputClass {
-  count: number;
-  levels?: number[];
+  count: number | number[];
+  levels?: number[] | Record<string, number | number[]>;
 }
 type OptionOutputClass = Record<string, OptionValueOutputClass>;
 interface IdOutputClass {
@@ -18,40 +16,24 @@ interface IdOutputClass {
 }
 export type OutputClass = { total?: string } & OptionOutputClass & IdOutputClass;
 
-export interface Module {
-  studentsFile: string;
-  inputFile: string;
-  keysMask: string[];
-  skip?: boolean;
-  output: OutputClass[];
-  // Pourcentage minimum de respect de chaque règle, d'après l'indice après tri.
-  respectPercents?: number[];
-  showLevel?: boolean;
-  showIds?: boolean;
-  description?: string;
+async function readJsonFile(path: string) {
+  return fs.readFile(__dirname + '/data/' + path, 'utf8').then(raw => JSON.parse(raw));
 }
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-describe('get classes from input', function () {
-  fixtures(__dirname, 'rules', async ({ module }: { module: Module }) => {
-    const {
-      studentsFile,
-      inputFile,
-      keysMask = [],
-      output,
-      respectPercents,
-      showLevel,
-      showIds,
-    } = module;
-
-    return Promise.all([
-      Promise.resolve((await readJsonFile(studentsFile)) as Promise<RawStudent[]>),
-      Promise.resolve((await readJsonFile(inputFile)) as Promise<RawInput>),
-    ]).then(([students, input]) => {
-      const algo = new Algorithm(students, input);
+export async function runTest(
+  studentsFile: string,
+  inputFile: string,
+  keysMask: string[],
+  output: OutputClass[],
+  // Pourcentage minimum de respect de chaque règle, d'après l'indice après tri.
+  respectPercents?: number[],
+  showLevel?: boolean,
+  showIds?: boolean,
+) {
+  return Promise.all([readJsonFile(studentsFile), readJsonFile(inputFile)]).then(
+    ([students, input]) => {
+      const algo = new Algorithm(students as RawStudent[], input as RawInput);
       const { entry, duration, rules } = algo.solve();
-      console.log(module.description);
       console.log(`duration: ${duration}`);
       for (const [i, { respect_percent }] of Object.entries(rules)) {
         console.log(`respect percent of rule ${i}: ${respect_percent}`);
@@ -61,18 +43,17 @@ describe('get classes from input', function () {
       if (respectPercents) {
         for (const [i, { respect_percent }] of Object.entries(rules)) {
           if (!(i in respectPercents)) break;
-          assert.equal(
+          expect(
             respect_percent < respectPercents[parseInt(i)],
-            false,
             `Respect percent of rule ${i} (${respect_percent}) does not match requirement (${
               respectPercents[parseInt(i)]
             }).`,
-          );
+          ).toBe(false);
         }
       }
 
       if (output) {
-        assert.equal(entry.classes().length, output.length);
+        expect(entry.classes().length).toBe(output.length);
 
         // On vérifie que chaque classe du résultat était bien dénombrée à l'identique dans le test.
         const classesToValidate = entry.classes();
@@ -80,7 +61,7 @@ describe('get classes from input', function () {
         while (classesToValidate.length) {
           for (const outputClass of output) {
             const validClasses = classesToValidate.filter(c => c && isClassValid(c, outputClass));
-            assert.notEqual(validClasses.length, 0, 'Cant find a valid model for a resulted class');
+            expect(validClasses.length, 'Cant find a valid model for a resulted class').not.toBe(0);
             if (validClasses.length > minClassesMatching) continue;
             classesToValidate.splice(classesToValidate.indexOf(validClasses[0]), 1);
             output.splice(output.indexOf(outputClass), 1);
@@ -88,9 +69,9 @@ describe('get classes from input', function () {
           ++minClassesMatching;
         }
       }
-    });
-  });
-});
+    },
+  );
+}
 
 /**
  * Comparer deux objets sans prendre en compte l'ordre des clés.

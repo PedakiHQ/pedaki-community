@@ -12,7 +12,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "vitest --config vitest.config.algo.ts",
     "build": "tsup --clean",
     "build:watch": "tsup --watch",
     "lint": "eslint .",
@@ -21,8 +21,6 @@
   "devDependencies": {
     "@pedaki/eslint-config": "^0.4.2",
     "@pedaki/prettier-config": "^0.4.2",
-    "@types/mocha": "^10.0.6",
-    "mocha": "^10.2.0",
     "ts-node": "^10.9.2"
   },
   "engines": {
