@@ -1,13 +1,18 @@
-export const description =
-  'Regrouper les options allemand, anglais et espagnol dans 2 classes (45 élèves)';
-export const studentsFile = './data/users-45.json';
-export const inputFile = './data/input-45-gather-langages-two-classes.json';
-export const keysMask = ['allemand', 'anglais', 'espagnol'];
-export const output = [
-  {},
-  {
-    anglais: {
-      count: 20,
-    },
-  },
-];
+import { test } from 'vitest';
+import { runTest } from '../../test.ts';
+
+test('Regrouper les options allemand, anglais et espagnol dans 2 classes (45 élèves)', async () => {
+  return await runTest(
+    'users-45.json',
+    'input-45-gather-langages-two-classes.json',
+    [
+      {},
+      {
+        anglais: {
+          count: 20,
+        },
+      },
+    ],
+    ['allemand', 'anglais', 'espagnol'],
+  );
+});

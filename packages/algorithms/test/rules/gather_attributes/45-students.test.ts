@@ -1,22 +1,27 @@
 import { test } from 'vitest';
 import { runTest } from '../../test.ts';
 
-test('Regrouper les options allemand et espagnol ensemble (45 élèves)', async () => {
+test('Regrouper les options allemand, anglais et espagnol (45 élèves)', async () => {
   return await runTest(
     'users-45.json',
-    'input-45-gather-deutsch-spanish-together.json',
+    'input-45-gather-languages.json',
     [
       {
         allemand: {
           count: 10,
         },
+        anglais: {
+          count: 5,
+        },
+      },
+      {
         espagnol: {
           count: 15,
         },
       },
       {
         anglais: {
-          count: 20,
+          count: 15,
         },
       },
     ],

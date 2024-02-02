@@ -10,11 +10,11 @@ interface OptionValueOutputClass {
   count: number | number[];
   levels?: number[] | Record<string, number | number[]>;
 }
-type OptionOutputClass = Record<string, OptionValueOutputClass>;
-interface IdOutputClass {
+export type OutputClass = {
+  total?: number;
   ids?: number[][];
-}
-export type OutputClass = { total?: number } & OptionOutputClass & IdOutputClass;
+  [option: string]: OptionValueOutputClass;
+};
 
 async function readJsonFile(path: string) {
   return fs.readFile(__dirname + '/data/' + path, 'utf8').then(raw => JSON.parse(raw));

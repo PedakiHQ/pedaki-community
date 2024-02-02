@@ -5,7 +5,6 @@ test("Regrouper et équilibrer le niveau de l'option allemand dans chaque classe
   return await runTest(
     'users-500.json',
     'input-500-balance-deutsch-class-level.json',
-    ['allemand'],
     [
       {
         allemand: {
@@ -29,5 +28,6 @@ test("Regrouper et équilibrer le niveau de l'option allemand dans chaque classe
       {},
       {},
     ],
+    ['allemand'],
   );
 });

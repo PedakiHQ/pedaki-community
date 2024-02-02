@@ -5,7 +5,6 @@ test('Regrouper les options allemand, anglais et espagnol, et équilibrer le dé
   return await runTest(
     'users-45.json',
     'input-45-gather-langages-balance-gender-class-level.json',
-    ['allemand', 'anglais', 'espagnol', 'M', 'F'],
     [
       {
         allemand: {
@@ -29,5 +28,6 @@ test('Regrouper les options allemand, anglais et espagnol, et équilibrer le dé
         },
       },
     ],
+    ['allemand', 'anglais', 'espagnol', 'M', 'F'],
   );
 });
