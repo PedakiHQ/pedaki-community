@@ -386,23 +386,6 @@ export default class Entry {
       .filter(student => !ignoreStudents.includes(student));
   }
 
-  /**
-   * Déterminer si une classe est égale à une autre.
-   * Peut ne prendre en compte que les dénombrements.
-   */
-  public equals(entry: Entry, onlyCount?: boolean): boolean {
-    if (entry.classes().length != this.classes().length) return false;
-
-    for (const c1 of this.classes()) {
-      for (const c2 of entry.classes()) {
-        if (!onlyCount && !c1.equals(c2)) return false;
-        if (onlyCount && !c1.equalsCount(c2)) return false;
-      }
-    }
-
-    return true;
-  }
-
   toString(showLevel?: boolean, showIds?: boolean, ...keysMask: string[]) {
     let str = '';
     for (const c of this.classes()) {

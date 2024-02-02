@@ -68,30 +68,6 @@ export default class Class {
   }
 
   /**
-   * Déterminer si cette classe est égale à une autre, en comparant la liste des élèves.
-   */
-  public equals(other: Class): boolean {
-    if (other._students.size != this._students.size) return false;
-
-    for (const s1 of this._students) {
-      if (other._students.has(s1)) return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Déterminer si cette classe est égale à une autre, en ne comparant que les dénombrements.
-   */
-  public equalsCount(other: Class): boolean {
-    for (const [attribute, count] of Object.entries(this.attributesCount)) {
-      if (other.count(parseInt(attribute)) != count) return false;
-    }
-
-    return true;
-  }
-
-  /**
    * Trouver l'élève idéal pour aller dans cette classe.
    * Doit prendre en compte les précédentes règles et leur priorité.
    * On peut donner une liste d'élèves dont les équivalents seront ignorés.
