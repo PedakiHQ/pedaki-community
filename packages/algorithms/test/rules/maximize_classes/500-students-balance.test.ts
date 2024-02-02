@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { test } from 'vitest';
 import { runTest } from '../../test.ts';
 

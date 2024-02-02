@@ -11,9 +11,9 @@ interface OptionValueOutputClass {
   levels?: number[] | Record<string, number | number[]>;
 }
 export type OutputClass = {
-  total?: number;
+  [option: string]: OptionValueOutputClass | number | number[] | number[][] | undefined;
+  total?: number | number[];
   ids?: number[][];
-  [option: string]: OptionValueOutputClass;
 };
 
 async function readJsonFile(path: string) {
@@ -138,7 +138,7 @@ const isClassValid = (c: Class, model: OutputClass): boolean => {
     }
 
     // On vérifie que la description de l'option correspond.
-    if (optionDiffers(key, value!)) return false;
+    if (optionDiffers(key, value as OptionValueOutputClass)) return false;
   }
 
   return true;
