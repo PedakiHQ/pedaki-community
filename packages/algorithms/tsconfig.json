@@ -20,7 +20,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["mocha", "node"]
+    "types": ["node"]
   },
   "include": ["src/**/*", "test/**/*", "tsup.config.ts"],
   "exclude": ["node_modules", "dist"],
