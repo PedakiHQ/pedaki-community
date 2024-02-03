@@ -22,7 +22,7 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: Readonly<DataTableColumnHeaderProps<TData, TValue>>) {
-  const t = useScopedI18n('classes.list.table.columnHeader');
+  const t = useScopedI18n('components.datatable.columnHeader');
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }

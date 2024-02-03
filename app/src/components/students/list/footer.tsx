@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@pedaki/design/ui/select';
-import { PaginationElement } from '~/components/students/list/pagination.tsx';
+import { PaginationElement } from '~/components/datatable/pagination';
 import type { PossiblePerPage } from '~/components/students/list/parameters.ts';
 import { possiblesPerPage, serialize } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
@@ -31,6 +31,7 @@ const Footer = ({
   sorting: { id: string; desc: boolean }[];
   columnVisibility: Record<string, boolean>;
 }) => {
+  const datatableT = useScopedI18n('components.datatable');
   const t = useScopedI18n('students.list.table');
 
   const generateUrl = (data: {
@@ -49,7 +50,7 @@ const Footer = ({
   return (
     <div className="grid grid-cols-12 items-center justify-between gap-4">
       <span className="col-span-6 justify-start text-p-sm text-sub @3xl/main:col-span-3">
-        {t('footer.showing', {
+        {datatableT('footer.showing', {
           from: isLoading ? '0' : Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0),
           to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
           total: isLoading ? '0' : meta?.totalCount,

@@ -20,6 +20,7 @@ import { useScopedI18n } from '~/locales/client';
 import React from 'react';
 
 interface DataTableProps<TData, TValue> {
+  noResultLabel?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   sorting: SortingState;
@@ -30,6 +31,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({
+  noResultLabel,
   columns,
   data,
   setSorting,
@@ -38,7 +40,7 @@ export function DataTable<TData, TValue>({
   setColumnVisibility,
   tableClassName,
 }: Readonly<DataTableProps<TData, TValue>>) {
-  const t = useScopedI18n('classes.list.table');
+  const t = useScopedI18n('components.datatable');
   const table = useReactTable({
     data,
     columns,
@@ -100,7 +102,7 @@ export function DataTable<TData, TValue>({
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              {t('noResult')}
+              {noResultLabel ?? t('noResult')}
             </TableCell>
           </TableRow>
         )}

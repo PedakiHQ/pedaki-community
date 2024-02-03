@@ -4,7 +4,7 @@ import { Skeleton } from '@pedaki/design/ui/skeleton';
 import type { GetManyClassesOutput } from '@pedaki/services/classes/class.model.js';
 import type { Field } from '@pedaki/services/classes/query.model.client';
 import type { ColumnDef } from '@tanstack/react-table';
-import { DataTableColumnHeader } from '~/components/classes/list/data-table-column-header.tsx';
+import { DataTableColumnHeader } from '~/components/datatable/data-table-column-header.tsx';
 import type { UseScopedI18nType } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 

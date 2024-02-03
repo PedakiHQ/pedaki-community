@@ -2,10 +2,10 @@
 
 import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/students/query.model';
+import { DataTable } from '~/components/datatable/data-table';
 import { ColumnSelector } from '~/components/students/list/column-selector.tsx';
 import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
 import { generateColumns } from '~/components/students/list/columns.tsx';
-import { DataTable } from '~/components/students/list/data-table.tsx';
 import Filters from '~/components/students/list/filters.tsx';
 import Footer from '~/components/students/list/footer.tsx';
 import { searchParams } from '~/components/students/list/parameters.ts';
@@ -164,6 +164,8 @@ const TableElement = ({
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }) => {
+  const t = useScopedI18n('students.list.table');
+
   const tableColumns = React.useMemo(
     () =>
       isLoading
@@ -188,6 +190,7 @@ const TableElement = ({
 
   return (
     <DataTable
+      noResultLabel={t('noResult')}
       columns={tableColumns.filter(col => !col.accessorKey || columnVisibility[col.id])}
       data={tableData}
       sorting={sorting}

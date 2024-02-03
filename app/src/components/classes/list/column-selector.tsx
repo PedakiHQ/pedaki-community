@@ -21,7 +21,7 @@ export const ColumnSelector = ({
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }) => {
-  const t = useScopedI18n('classes.list.table.hide.columns');
+  const t = useScopedI18n('components.datatable.hide.columns');
 
   return (
     <DropdownMenu>

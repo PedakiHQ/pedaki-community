@@ -5,10 +5,10 @@ import type { Field } from '@pedaki/services/classes/query.model';
 import { ColumnSelector } from '~/components/classes/list/column-selector.tsx';
 import type { ClassColumnDef, ClassData } from '~/components/classes/list/columns.tsx';
 import { generateColumns } from '~/components/classes/list/columns.tsx';
-import { DataTable } from '~/components/classes/list/data-table.tsx';
 import Filters from '~/components/classes/list/filters.tsx';
 import Footer from '~/components/classes/list/footer.tsx';
 import { searchParams } from '~/components/classes/list/parameters.ts';
+import { DataTable } from '~/components/datatable/data-table';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useClassesListStore } from '~/store/classes/list/list.store.ts';
@@ -158,6 +158,8 @@ const TableElement = ({
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }) => {
+  const t = useScopedI18n('classes.list.table');
+
   const tableColumns = React.useMemo(
     () =>
       isLoading
@@ -182,6 +184,7 @@ const TableElement = ({
 
   return (
     <DataTable
+      noResultLabel={t('noResult')}
       columns={tableColumns.filter(col => !col.accessorKey || columnVisibility[col.id])}
       data={tableData}
       sorting={sorting}

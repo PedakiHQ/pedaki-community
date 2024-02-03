@@ -8,7 +8,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@pedaki/design/ui/pagination';
-import type { PossiblePerPage } from '~/components/classes/list/parameters.ts';
 import React, { useMemo, useRef } from 'react';
 
 export const PaginationElement = ({
@@ -23,7 +22,7 @@ export const PaginationElement = ({
   generateUrl: (
     data: Partial<{
       page: number;
-      perPage: PossiblePerPage;
+      perPage: number;
       sorting: { id: string; desc: boolean }[];
       columns: Record<string, boolean>;
     }>,

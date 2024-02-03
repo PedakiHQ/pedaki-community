@@ -47,7 +47,7 @@ const Filters = ({
   filters: Filter[];
   setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
 }) => {
-  const t = useScopedI18n('classes.list.table.filters');
+  const t = useScopedI18n('components.datatable.filters');
   const filtersCount = filters.length;
   return (
     <div className="flex h-9 w-full flex-row items-center gap-2 rounded-md border border-dashed p-1">
@@ -88,7 +88,7 @@ const NewFilter = ({
 }: {
   setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
 }) => {
-  const t = useScopedI18n('classes.list.table.filters.new');
+  const t = useScopedI18n('components.datatable.filters.new');
   const [isOpened, setIsOpened] = React.useState(false);
 
   const addNewFilter = (filter: Filter) => {
@@ -122,7 +122,7 @@ const ClearFilters = ({
   setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
   disabled: boolean;
 }) => {
-  const t = useScopedI18n('classes.list.table.filters.clear');
+  const t = useScopedI18n('components.datatable.filters.clear');
 
   const clearFilters = () => {
     setFilters([]);
@@ -153,7 +153,7 @@ const Filter = ({
   filter: Filter;
   setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
 }) => {
-  const t = useScopedI18n('classes.list.table.filters');
+  const t = useScopedI18n('components.datatable.filters');
   const [isOpened, setIsOpened] = React.useState(false);
 
   const columns = useClassesListStore(store => store.translatedColumns);
@@ -206,7 +206,7 @@ const EditFilter = ({
   onRemove?: () => void;
   title: string;
 }) => {
-  const t = useScopedI18n('classes.list.table.filters.form');
+  const t = useScopedI18n('components.datatable.filters.form');
 
   const { columns } = useClassesListStore(store => ({
     columns: store.translatedColumns,
@@ -352,7 +352,7 @@ const FilterValue = ({
   operator: string | undefined;
   initialValue?: any;
 }) => {
-  const t = useScopedI18n('classes.list.table.filters.form.value');
+  const t = useScopedI18n('components.datatable.filters.form.value');
   const disabled = fieldType === undefined || operator === undefined;
 
   if (fieldType === 'text' || fieldType === undefined) {
