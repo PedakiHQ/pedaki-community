@@ -28,7 +28,7 @@ import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
 import type { OutputType } from '~api/router/router.ts';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface ImportDataSelectionProps {
   items: OutputType['students']['imports']['classes']['getMany'];
@@ -36,7 +36,17 @@ interface ImportDataSelectionProps {
 }
 
 const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
-  const [selected] = useIdParam();
+  const [selected, setSelected] = useIdParam();
+
+  useEffect(() => {
+    if (selected === null) {
+      const firstNonEmpty = items.find(item => item.status === 'PENDING');
+      if (firstNonEmpty) {
+        void setSelected(firstNonEmpty?.id);
+      }
+    }
+  }, [selected, setSelected, items]);
+
   const [filter] = useFilterParam();
   const t = useScopedI18n('students.import.selector');
   const selectorVisible = useStudentsImportStore(state => state.selectorVisible);
@@ -50,12 +60,10 @@ const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
 
   const filteredItems = items.filter(item => filter.includes(item.status));
   return (
-    <div className="min-w-[370px] shrink-0">
+    <div className="min-w-[320px] shrink-0">
       <Card className="max-h-full gap-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-label-md font-medium tracking-tight text-soft">
-            {t(`title.${type}`)}
-          </h2>
+          <h2 className="text-label-sm font-medium text-soft">{t(`title.${type}`)}</h2>
           <div className="space-x-2">
             <VisibleSelector />
             <StatusSelector />
@@ -102,9 +110,8 @@ const Item = ({
   return (
     <li>
       <Link
-        prefetch={false}
         href={serialize({ id: item.id })}
-        className={cn('w-full rounded-sm p-2 hover:bg-weak', selected && 'bg-weak')}
+        className={cn('w-full rounded-sm p-2 text-label-sm hover:bg-weak', selected && 'bg-weak')}
         aria-current={selected ? 'page' : undefined}
       >
         {item.name}

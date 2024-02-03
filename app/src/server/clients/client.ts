@@ -18,6 +18,7 @@ export const api = createTRPCNext<AppRouter>({
             refetchOnMount: false,
             refetchOnWindowFocus: false,
             refetchOnReconnect: true,
+            useErrorBoundary: false,
             retry: (failureCount: number, error) => {
               if (failureCount > 2) return false;
 

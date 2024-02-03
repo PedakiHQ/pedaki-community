@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
   columnVisibility?: VisibilityState;
   setColumnVisibility?: React.Dispatch<React.SetStateAction<VisibilityState>>;
   tableClassName?: string;
+  onClickRow?: (value: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,6 +38,7 @@ export function DataTable<TData, TValue>({
   columnVisibility,
   setColumnVisibility,
   tableClassName,
+  onClickRow,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const t = useScopedI18n('students.list.table');
   const table = useReactTable({
@@ -85,7 +87,7 @@ export function DataTable<TData, TValue>({
       <TableBody>
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map(row => (
-            <TableRow key={row.id}>
+            <TableRow key={row.id} onClick={onClickRow && (() => onClickRow(row.original))}>
               {row.getVisibleCells().map(cell => (
                 <TableCell
                   key={cell.id}
