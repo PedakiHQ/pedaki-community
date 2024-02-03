@@ -12,6 +12,7 @@ export default {
   selector: {
     title: {
       classes: 'Sélectionner une classe',
+      students: 'Sélectionner un élève',
     },
     noResults: {
       withFilters: 'Aucun résultat ne correspond à votre recherche',

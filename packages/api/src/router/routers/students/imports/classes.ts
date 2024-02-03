@@ -1,19 +1,19 @@
-import { prisma } from '@pedaki/db';
+import {prisma} from '@pedaki/db';
 import {
   MergeGetManyClassesOutput,
   MergeGetManyInput,
   MergeGetOneClassOutput,
   MergeGetOneInput,
 } from '@pedaki/services/students/imports/merge/merge.model';
-import { privateProcedure, router } from '~api/router/trpc.ts';
-import { z } from 'zod';
+import {privateProcedure, router} from '~api/router/trpc.ts';
+import {z} from 'zod';
 
 export const studentImportsClasses = router({
   getMany: privateProcedure
     .input(MergeGetManyInput)
     .output(MergeGetManyClassesOutput)
     .query(async ({ input }) => {
-      const classes = await prisma.importClass.findMany({
+      return await prisma.importClass.findMany({
         where: {
           importId: input.importId,
         },
@@ -23,8 +23,6 @@ export const studentImportsClasses = router({
           status: true,
         },
       });
-
-      return classes;
     }),
 
   getOne: privateProcedure
@@ -57,12 +55,6 @@ export const studentImportsClasses = router({
         },
       });
 
-      const current = data.class
-        ? {
-            class: data.class,
-          }
-        : null;
-
       const importData = {
         name: data.name,
         level: {
@@ -73,7 +65,7 @@ export const studentImportsClasses = router({
       return {
         status: data.status,
         import: importData,
-        current: current,
+        current: data.class,
       };
     }),
 
@@ -99,9 +91,7 @@ export const studentImportsClasses = router({
       });
 
       return {
-        current: {
-          class: data,
-        },
+        current: data
       };
     }),
 });

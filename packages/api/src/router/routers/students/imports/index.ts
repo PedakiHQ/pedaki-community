@@ -9,9 +9,11 @@ import { studentImportsService } from '@pedaki/services/students/imports/imports
 import { studentImportsClasses } from '~api/router/routers/students/imports/classes.ts';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
+import {studentImportsStudents} from "~api/router/routers/students/imports/students.ts";
 
 export const studentImports = router({
   classes: studentImportsClasses,
+  students: studentImportsStudents,
 
   upload: privateProcedure
     .input(ImportUploadSchema)
