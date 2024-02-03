@@ -31,4 +31,28 @@ export default {
       },
     },
   },
+
+  existing: {
+    linkToStudent: 'Lier à un élève',
+    linkedToStudent: 'Lié à un {name}',
+  },
+
+  fields: {
+    firstName: {
+      label: 'Prénom',
+      // TODO
+      placeholder: 'Guillaume',
+    },
+    lastName: {
+      label: 'Nom',
+        placeholder: 'Jobard',
+    },
+    otherName: {
+      label: 'Troisième nom',
+      placeholder: 'ElChapo',
+    },
+    birthDate: {
+      label: 'Date de naissance'
+    },
+  },
 };

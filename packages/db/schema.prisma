@@ -300,7 +300,7 @@ model ImportStudent {
   otherName String?  @map("other_name") @db.VarChar(255)
   birthDate DateTime @map("birth_date") @db.Date
 
-  impotClasses ImportClass[]
+  importClasses ImportClass[]
 
   @@unique([importId, studentId])
   @@map("import_students")

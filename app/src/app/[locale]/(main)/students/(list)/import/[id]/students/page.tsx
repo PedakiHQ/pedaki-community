@@ -1,6 +1,6 @@
-import StudentDiff from '~/app/[locale]/(main)/students/(list)/import/[id]/students/StudentDiff.tsx';
 import type { PageType } from '~/app/types.ts';
 import ImportDataSelection from '~/components/students/import/ImportDataSelection.tsx';
+import StudentDiff from '~/components/students/import/student/StudentDiff.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper.tsx';
 import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';

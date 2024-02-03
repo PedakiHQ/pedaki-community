@@ -49,12 +49,14 @@ export const studentImportsStudents = router({
               firstName: true,
               lastName: true,
               otherName: true,
+              birthDate: true,
             },
           },
         },
       });
 
       const importData = {
+        id: data.id,
         firstName: data.firstName,
         lastName: data.lastName,
         otherName: data.otherName,
@@ -84,6 +86,7 @@ export const studentImportsStudents = router({
           firstName: true,
           lastName: true,
           otherName: true,
+          birthDate: true,
         },
       });
 

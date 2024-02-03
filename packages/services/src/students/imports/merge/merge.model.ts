@@ -51,15 +51,18 @@ export const MergeGetOneClassOutput = z.object({
 export const MergeGetOneStudentOutput = z.object({
   status: MergeStatus,
   import: z.object({
+      id: z.number(),
     firstName: z.string(),
     lastName: z.string(),
     otherName: z.string().nullable(),
   }),
   current: z
     .object({
+      id: z.number(),
       firstName: z.string(),
       lastName: z.string(),
       otherName: z.string().nullable(),
+      birthDate: z.date().nullable(),
     })
     .nullable(),
 });
