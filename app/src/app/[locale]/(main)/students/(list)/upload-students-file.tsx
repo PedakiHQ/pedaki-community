@@ -28,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
+import { cn } from '@pedaki/design/utils';
 import {
   FILE_MAX_SIZE,
   FILE_MAX_SIZE_MB,
@@ -39,6 +40,7 @@ import { customErrorParams } from '~/locales/zod.ts';
 import { api } from '~/server/clients/client.ts';
 import { formatBytes } from '~/utils.ts';
 import type { OutputType } from '~api/router/router.ts';
+import Link from 'next/link';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -101,6 +103,8 @@ const UploadStudentsFile = () => {
     },
   );
 
+  const isDisabled = !data || data.status !== 'DONE';
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -161,9 +165,12 @@ const UploadStudentsFile = () => {
             variant="filled-primary"
             className="flex-1"
             onClick={() => setOpen(false)}
-            disabled={!data || data.status !== 'DONE'}
+            disabled={isDisabled}
+            asChild
           >
-            Continue
+            <Link href={`/students/import/${importId}`} data-disabled={isDisabled}>
+              Continue
+            </Link>
           </Button>
         </div>
       </DialogContent>
@@ -280,8 +287,8 @@ const OldUploadStudentsFile = () => {
                         </div>
                       </div>
                       <div className="flex items-center">
-                        <Button size="sm" variant="ghost-sub">
-                          Ouvrir
+                        <Button size="sm" variant="ghost-sub" asChild>
+                          <Link href={`/students/import/${id}`}>Ouvrir</Link>
                         </Button>
                         <Tooltip>
                           <TooltipTrigger>

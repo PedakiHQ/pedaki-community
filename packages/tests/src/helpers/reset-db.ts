@@ -211,6 +211,24 @@ const resetDb = async () => {
         },
       },
     }),
+    prisma.class.create({
+      data: {
+        name: 'CP Jobard',
+        description: 'Class A',
+        mainTeacher: {
+          connect: { id: 3 },
+        },
+        level: {
+          connect: { id: 4 },
+        },
+        academicYear: {
+          connect: { id: 2 },
+        },
+        teachers: {
+          connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        },
+      },
+    }),
 
     // Create properties
     prisma.property.createMany({

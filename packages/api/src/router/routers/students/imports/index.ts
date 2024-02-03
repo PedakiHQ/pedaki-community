@@ -6,10 +6,13 @@ import {
   ImportUploadStatusSchema,
 } from '@pedaki/services/students/imports/import.model.js';
 import { studentImportsService } from '@pedaki/services/students/imports/imports.service.js';
+import { studentImportsClasses } from '~api/router/routers/students/imports/classes.ts';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
 
 export const studentImports = router({
+  classes: studentImportsClasses,
+
   upload: privateProcedure
     .input(ImportUploadSchema)
     .output(ImportUploadResultSchema)

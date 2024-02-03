@@ -290,6 +290,8 @@ model ImportStudent {
   importId String @map("import_id") @db.VarChar(25)
   import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
 
+  status ImportDataStatus @default(PENDING)
+
   studentId Int?     @map("student_id")
   student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
@@ -308,6 +310,8 @@ model ImportClass {
   id       Int    @id @default(autoincrement())
   importId String @map("import_id") @db.VarChar(25)
   import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  status ImportDataStatus @default(PENDING)
 
   classId Int?   @map("class_id")
   class   Class? @relation(fields: [classId], references: [id], onDelete: Cascade)
@@ -328,6 +332,8 @@ model ImportClassLevel {
   importId String @map("import_id") @db.VarChar(25)
   import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
 
+  status ImportDataStatus @default(PENDING)
+
   classLevelId Int?        @map("class_level_id")
   classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: Cascade)
 
@@ -344,4 +350,10 @@ enum ImportStatus {
   PROCESSING
   DONE
   ERROR
+}
+
+enum ImportDataStatus {
+  PENDING
+  IGNORED
+  DONE
 }
