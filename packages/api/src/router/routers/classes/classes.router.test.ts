@@ -1,4 +1,3 @@
-import { assertTrpcError, assertZodError } from '@pedaki/tests/error';
 import { assertIsAuthenticated } from '@pedaki/tests/middleware.js';
 import {
   getAnonymousSession,
@@ -21,10 +20,8 @@ describe('classesRouter', () => {
         });
       },
     );
-
     test.each([userSession, internalSession])('returns at least one result', async ({ api }) => {
       const data = await api.classes.getAll();
-
       expect(Object.values(data).length).toBeGreaterThan(0);
     });
   });
@@ -68,11 +65,7 @@ describe('classesRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.classes.getMany({
           fields: ['id', 'name'],
-          where: {
-            name: {
-              equals: '6ème A',
-            },
-          },
+          where: [{ field: 'name', operator: 'eq', value: '6ème A' }],
           pagination: {
             page: 1,
             limit: 10,
@@ -90,18 +83,31 @@ describe('classesRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.classes.getMany({
           fields: ['id', 'name'],
-          where: {
-            AND: {
-              description: {
-                equals: 'Class A',
-              },
-              level: {
-                id: {
-                  equals: 2,
-                },
-              },
-            },
+          where: [
+            { field: 'description', operator: 'eq', value: 'Class A' },
+            { field: 'level.id', operator: 'eq', value: 2 },
+          ],
+          pagination: {
+            page: 1,
+            limit: 10,
           },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.name).toBe('5ème A');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with many filter and negation - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.classes.getMany({
+          fields: ['id', 'name'],
+          where: [
+            { field: 'description', operator: 'eq', value: 'Class A' },
+            { field: 'level.id', operator: 'neq', value: 1 },
+          ],
           pagination: {
             page: 1,
             limit: 10,
@@ -119,11 +125,7 @@ describe('classesRouter', () => {
       async ({ api }) => {
         const { data, meta } = await api.classes.getMany({
           fields: ['id', 'name', 'academicYear.id', 'academicYear.name'],
-          where: {
-            id: {
-              equals: 1,
-            },
-          },
+          where: [{ field: 'id', operator: 'eq', value: 1 }],
           pagination: {
             page: 1,
             limit: 10,
@@ -135,6 +137,50 @@ describe('classesRouter', () => {
         expect(data[0]!.name).toBe('6ème A');
         expect(data[0]!.academicYear!.id).toBe(1);
         expect(data[0]!.academicYear!.name).toBe('2021-2022');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with filter and order asc - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.classes.getMany({
+          fields: ['id', 'name'],
+          where: [{ field: 'academicYear.id', operator: 'eq', value: 1 }],
+          orderBy: [['name', 'asc']],
+          pagination: {
+            page: 1,
+            limit: 2,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(2);
+        expect(data[0]!.id).toBe(1);
+        expect(data[0]!.name).toBe('6ème A');
+        expect(data[1]!.id).toBe(2);
+        expect(data[1]!.name).toBe('6ème B');
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with filter and order desc - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.classes.getMany({
+          fields: ['id', 'name'],
+          where: [{ field: 'academicYear.id', operator: 'eq', value: 1 }],
+          orderBy: [['name', 'desc']],
+          pagination: {
+            page: 1,
+            limit: 2,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(2);
+        expect(data[1]!.id).toBe(1);
+        expect(data[1]!.name).toBe('6ème A');
+        expect(data[0]!.id).toBe(2);
+        expect(data[0]!.name).toBe('6ème B');
       },
     );
   });

@@ -86,8 +86,7 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
       sort.id.replace('_', '.') as Field,
       sort.desc ? 'desc' : ('asc' as const),
     ]),
-    // TODO:
-    // where: filters,
+    where: filters,
     pagination: {
       page,
       limit: perPage,

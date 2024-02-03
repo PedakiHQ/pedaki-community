@@ -43,8 +43,7 @@ export type GetAllClasses = z.infer<typeof GetAllClassesSchema>;
 
 export const GetManyClassesInputSchema = z.object({
   fields: FieldSchema.array().min(1),
-  // where: FilterSchema.array().optional(),
-  where: z.any().optional(),
+  where: FilterSchema.array().optional(),
   orderBy: z.array(z.tuple([FieldSchema, z.enum(['asc', 'desc'])])).optional(),
   pagination: PaginationInputSchema.optional().default({
     page: 1,
