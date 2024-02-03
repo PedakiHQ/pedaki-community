@@ -1,12 +1,12 @@
-import {prisma} from '@pedaki/db';
+import { prisma } from '@pedaki/db';
 import {
   MergeGetManyClassesOutput,
   MergeGetManyInput,
   MergeGetOneClassOutput,
   MergeGetOneInput,
 } from '@pedaki/services/students/imports/merge/merge.model';
-import {privateProcedure, router} from '~api/router/trpc.ts';
-import {z} from 'zod';
+import { privateProcedure, router } from '~api/router/trpc.ts';
+import { z } from 'zod';
 
 export const studentImportsClasses = router({
   getMany: privateProcedure
@@ -91,7 +91,7 @@ export const studentImportsClasses = router({
       });
 
       return {
-        current: data
+        current: data,
       };
     }),
 });

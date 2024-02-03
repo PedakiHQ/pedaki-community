@@ -19,8 +19,7 @@ export default async function StudentsImportClassesPage({ params }: PageType<{ i
 
   return (
     <div className="flex h-full flex-col gap-4 @4xl/main:flex-row">
-      <ImportDataSelection items={newClasses.map(c => ({ ...c, label: c.name }))}
-                           type="classes" />
+      <ImportDataSelection items={newClasses.map(c => ({ ...c, label: c.name }))} type="classes" />
       <StudentsListWrapper>
         <ClassDiff importId={params.id} />
       </StudentsListWrapper>

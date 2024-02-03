@@ -30,7 +30,7 @@ import {
 import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
-import React, { Fragment } from 'react';
+import React, { forwardRef, Fragment, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 const typedValue = (value: unknown, type: FieldType): string | number => {
@@ -108,7 +108,11 @@ const NewFilter = ({
         </TooltipTrigger>
         <TooltipContent>{t('label')}</TooltipContent>
       </Tooltip>
-      <PopoverContent align="end" className="w-[300px] md:w-[600px]">
+      <PopoverContent
+        align="end"
+        className="w-[300px] md:w-[600px]"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
         <EditFilter onSubmit={addNewFilter} title={t('title')} />
       </PopoverContent>
     </Popover>
@@ -183,7 +187,11 @@ const Filter = ({
           <span className="text-sub">{JSON.stringify(filter.value)}</span>
         </Badge>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-[300px] md:w-[600px]">
+      <PopoverContent
+        align="start"
+        className="w-[300px] md:w-[600px]"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
         <EditFilter
           filter={filter}
           onSubmit={editFilter}
@@ -353,23 +361,22 @@ const EditFilter = ({
   );
 };
 
-const FilterValue = ({
-  onChange,
-  fieldType,
-  operator,
-  initialValue,
-}: {
-  onChange: (value: any) => void;
-  fieldType: FieldType | null;
-  operator: string | undefined;
-  initialValue?: any;
-}) => {
+const FilterValue = forwardRef<
+  React.ElementRef<typeof Input>,
+  {
+    onChange: (value: any) => void;
+    fieldType: FieldType | null;
+    operator: string | undefined;
+    initialValue?: any;
+  }
+>(({ onChange, fieldType, operator, initialValue }, ref) => {
   const t = useScopedI18n('students.list.table.filters.form.value');
   const disabled = fieldType === undefined || operator === undefined;
 
   if (fieldType === 'text' || fieldType === undefined) {
     return (
       <Input
+        ref={ref}
         placeholder={t('placeholder.text')}
         type="text"
         autoCapitalize="none"
@@ -384,6 +391,7 @@ const FilterValue = ({
   if (fieldType === 'int') {
     return (
       <Input
+        ref={ref}
         placeholder={t('placeholder.int')}
         type="number"
         autoCapitalize="none"
@@ -395,7 +403,7 @@ const FilterValue = ({
     );
   }
 
-  return <div></div>;
-};
+  return null;
+});
 
 export default Filters;

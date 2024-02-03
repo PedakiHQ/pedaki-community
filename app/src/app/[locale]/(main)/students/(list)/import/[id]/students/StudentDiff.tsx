@@ -58,7 +58,9 @@ const Content = ({
           {/*    TODO */}
           Donnée importée
         </h3>
-        <p className="text-label-sm text-soft">{result.import.firstName} {result.import.lastName}</p>
+        <p className="text-label-sm text-soft">
+          {result.import.firstName} {result.import.lastName}
+        </p>
       </div>
       <Separator orientation="vertical" />
       <div className="flex-1">

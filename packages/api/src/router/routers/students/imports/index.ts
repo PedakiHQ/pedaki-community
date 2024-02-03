@@ -7,9 +7,9 @@ import {
 } from '@pedaki/services/students/imports/import.model.js';
 import { studentImportsService } from '@pedaki/services/students/imports/imports.service.js';
 import { studentImportsClasses } from '~api/router/routers/students/imports/classes.ts';
+import { studentImportsStudents } from '~api/router/routers/students/imports/students.ts';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
-import {studentImportsStudents} from "~api/router/routers/students/imports/students.ts";
 
 export const studentImports = router({
   classes: studentImportsClasses,
