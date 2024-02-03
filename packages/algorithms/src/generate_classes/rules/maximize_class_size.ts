@@ -1,8 +1,8 @@
-import type { StudentWithClass } from '../entry.ts';
-import type Entry from '../entry.ts';
-import type { Input, RawRule } from '../input.ts';
-import { Rule, RuleType } from './rule.ts';
-import type { StudentValue } from './rule.ts';
+import type { StudentWithClass } from '../entry';
+import type Entry from '../entry';
+import type { Input, RawRule } from '../input';
+import { Rule, RuleType } from './rule';
+import type { StudentValue } from './rule';
 
 /**
  * Maximiser le nombre d'élèves dans chaque classe, en respectant les contraintes.

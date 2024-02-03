@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import { expect } from 'vitest';
-import Algorithm from '../src/generate_classes/algorithm.ts';
-import Class from '../src/generate_classes/class.ts';
-import type { RawInput } from '../src/generate_classes/input.ts';
-import { RawStudent } from '../src/generate_classes/student.ts';
+import { Algorithm } from '../src/generate_classes/algorithm';
+import Class from '../src/generate_classes/class';
+import type { RawInput } from '../src/generate_classes/input';
+import { RawStudent } from '../src/generate_classes/student';
 
 // Classe modèle ayant pour but d'être comparée à une véritable classe pour déterminer leur égalité.
 interface OptionValueOutputClass {

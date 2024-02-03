@@ -1,10 +1,10 @@
-import type Class from '../class.ts';
-import type { StudentWithClass } from '../entry.ts';
-import type Entry from '../entry.ts';
-import type { Input, RawRule } from '../input.ts';
-import type { Student } from '../student.ts';
-import type { StudentValue } from './rule.ts';
-import { Rule, RuleType } from './rule.ts';
+import type Class from '../class';
+import type { StudentWithClass } from '../entry';
+import type Entry from '../entry';
+import type { Input, RawRule } from '../input';
+import type { Student } from '../student';
+import type { StudentValue } from './rule';
+import { Rule, RuleType } from './rule';
 
 /**
  * Équilibrer le dénombrement de plusieurs attributs dans un maximum de classes.

@@ -1,7 +1,7 @@
-import type { Attribute } from './attribute.ts';
-import type Entry from './entry.ts';
-import type { Rule } from './rules/rule.ts';
-import type { Student } from './student.ts';
+import type { Attribute } from './attribute';
+import type Entry from './entry';
+import type { Rule } from './rules/rule';
+import type { Student } from './student';
 
 export interface ClassWithIndex {
   class: Class;

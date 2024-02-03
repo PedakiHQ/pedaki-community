@@ -1,7 +1,7 @@
-import Entry from './entry.ts';
-import { Input } from './input.ts';
-import type { RawInput } from './input.ts';
-import type { RawStudent } from './student.ts';
+import Entry from './entry';
+import { Input } from './input';
+import type { RawInput } from './input';
+import type { RawStudent } from './student';
 
 export const DEFAULT_PRIORITY = 1;
 
@@ -18,7 +18,7 @@ export interface Result {
  * La modification des solutions est guidée par des valeurs associées à chaque élève,
  * relative à son placement et à la règle courante, ainsi qu'une liste de destinations envisageables.
  */
-export default class Algorithm {
+export class Algorithm {
   private readonly _input: Input;
 
   constructor(students: RawStudent[], rawInput: RawInput) {

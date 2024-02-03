@@ -1,10 +1,10 @@
-import type Algorithm from './algorithm.ts';
-import type { Attribute } from './attribute.ts';
-import type { ClassWithIndex } from './class.ts';
-import Class from './class.ts';
-import type { Rule, StudentValue } from './rules/rule.ts';
-import { RuleType } from './rules/rule.ts';
-import { Student } from './student.ts';
+import type { Algorithm } from './algorithm';
+import type { Attribute } from './attribute';
+import type { ClassWithIndex } from './class';
+import Class from './class';
+import type { Rule, StudentValue } from './rules/rule';
+import { RuleType } from './rules/rule';
+import { Student } from './student';
 
 export interface StudentWithClass {
   student: Student;

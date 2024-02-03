@@ -5,8 +5,8 @@
  * - Un ou plusieurs extras (booléens)
  * - Un ou plusieurs niveaux d'option
  */
-import type { Input, RawAttribute } from './input.ts';
-import type { Gender, Student } from './student.ts';
+import type { Input, RawAttribute } from './input';
+import type { Gender, Student } from './student';
 
 export class Attribute {
   private readonly attribute: RawAttribute;

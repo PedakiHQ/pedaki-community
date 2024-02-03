@@ -1,14 +1,14 @@
-import type { Attribute } from './attribute.ts';
-import { BalanceClassCountRule } from './rules/balance_class_count.ts';
-import { BalanceCountRule } from './rules/balance_count.ts';
-import { GatherAttributesRule } from './rules/gather_attributes.ts';
-import { MaximizeClassSizeRule } from './rules/maximize_class_size.ts';
-import { MaximizeClassesRule } from './rules/maximize_classes.ts';
-import { NegativeRelationshipsRule } from './rules/negative_relationships.ts';
-import { PositiveRelationshipsRule } from './rules/positive_relationships.ts';
-import type { Rule } from './rules/rule.ts';
-import { Student } from './student.ts';
-import type { Gender, RawStudent } from './student.ts';
+import type { Attribute } from './attribute';
+import { BalanceClassCountRule } from './rules/balance_class_count';
+import { BalanceCountRule } from './rules/balance_count';
+import { GatherAttributesRule } from './rules/gather_attributes';
+import { MaximizeClassSizeRule } from './rules/maximize_class_size';
+import { MaximizeClassesRule } from './rules/maximize_classes';
+import { NegativeRelationshipsRule } from './rules/negative_relationships';
+import { PositiveRelationshipsRule } from './rules/positive_relationships';
+import type { Rule } from './rules/rule';
+import { Student } from './student';
+import type { Gender, RawStudent } from './student';
 
 export interface RawInput {
   constraints: {
@@ -19,7 +19,7 @@ export interface RawInput {
 }
 
 export interface RawRule {
-  rule: LevelRuleType;
+  rule: RuleType;
   priority?: number;
   attributes: RawAttribute[];
 }
@@ -31,30 +31,33 @@ export interface RawAttribute {
   extras?: string | string[];
 }
 
-export type LevelRuleType =
+export const algorithmRules = [
   // Regrouper un ou plusieurs attributs dans un minimum de classes.
-  | 'gather_attributes'
+  'gather_attributes',
   // Répartir équitablement le nombre d'élèves dans chaque classe.
   // Si un attribut est associée à la règle, alors seulement cet attribut sera pris en compte.
   // Elle est faite après les répartitions d'attributs.
-  | 'balance_count'
+  'balance_count',
   // Équilibrer le dénombrement de plusieurs attributs dans un maximum de classes.
   // Elle est faite après les répartitions d'attributs.
-  | 'balance_class_count'
+  'balance_class_count',
   // Maximiser le nombre d'élèves dans chaque classe, en respectant les contraintes.
   // Règle inverse de "maximize_classes", ne peut pas être utilisé en même temps.
-  | 'maximize_class_size'
+  'maximize_class_size',
   // Maximiser le nombre de classes, en respectant les contraintes.
   // Règle inverse de "maximize_class_size", ne peut pas être utilisé en même temps.
-  | 'maximize_classes'
+  'maximize_classes',
   // Respecter les relations positives entre élèves qui veulent être dans la même classe.
   // Respecte une certaine hiérarchie, par exemple lien familial ou simple ami.
-  | 'positive_relationships'
+  'positive_relationships',
   // Respecter les relations négatives entre élèves qui ne veulent pas être dans la même classe.
-  | 'negative_relationships';
+  'negative_relationships',
+] as const;
+
+export type RuleType = (typeof algorithmRules)[number];
 
 const RuleOrder: Record<
-  LevelRuleType,
+  RuleType,
   { rule: new (rawRule: RawRule, input: Input) => Rule; priority: number }
 > = {
   gather_attributes: { rule: GatherAttributesRule, priority: 2 },

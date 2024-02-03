@@ -1,5 +1,5 @@
-import type { Attribute } from './attribute.ts';
-import type { Input } from './input.ts';
+import type { Attribute } from './attribute';
+import type { Input } from './input';
 
 export interface RawStudent {
   id: string;
