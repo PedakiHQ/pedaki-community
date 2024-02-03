@@ -49,9 +49,11 @@ export const searchParams = {
   perPage: parseAsNumberLiteral(possiblesPerPage).withDefault(25),
   sorting: parseAsArrayOf(sortingParser).withDefault([]),
   columns: parseAsJson<Record<string, boolean>>().withDefault({
-    firstName: true,
-    lastName: true,
-    'class.name': true,
+    name: true,
+    description: true,
+    'academicYear.name': true,
+    'level.name': true,
+    'mainTeacher.name': true,
   }),
   filters: parseAsArrayOf(filtersParser).withDefault([]),
 } as const;

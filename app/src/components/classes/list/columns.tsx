@@ -16,21 +16,6 @@ export type ClassColumnDef = ColumnDef<ClassData> & {
   title?: string;
 };
 
-const levelCell = (accessorKey: Field, name: string): ClassColumnDef => {
-  // number between 0 and 100
-  return {
-    id: accessorKey,
-    accessorKey,
-    title: name,
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title={name} />;
-    },
-    loadingCell: () => {
-      return <Skeleton className="h-4 w-20" />;
-    },
-  };
-};
-
 const defaultCell = (id: string, accessorKey: Field | null, name: string): ClassColumnDef => {
   return {
     id,
@@ -48,47 +33,27 @@ const defaultCell = (id: string, accessorKey: Field | null, name: string): Class
 export const generateColumns = (
   t: UseScopedI18nType<'classes.list.table'>,
   {
-    propertyMapping,
-    classMapping,
     teacherMapping,
   }: {
-    propertyMapping: OutputType['classes']['properties']['getMany'];
-    classMapping: OutputType['classes']['getMany'];
     teacherMapping: OutputType['teachers']['getMany'];
   },
 ) => {
   const res: ClassColumnDef[] = [
-    defaultCell('firstName', 'firstName', t('columns.firstName.label')),
-    defaultCell('lastName', 'lastName', t('columns.lastName.label')),
+    defaultCell('name', 'name', t('columns.name.label')),
+    defaultCell('description', 'description', t('columns.description.label')),
+    defaultCell('academicYear.name', 'academicYear.name', t('columns.academicYear.label')),
+    defaultCell('level.name', 'level.name', t('columns.level.label')),
     {
-      ...defaultCell('class.name', `class.id`, t('columns.class.label')),
+      ...defaultCell('mainTeacher.name', `mainTeacher.id`, t('columns.mainTeacher.label')),
       cell: ({ row }) => {
         const data = row.original;
-        return <div>{classMapping[data.class.id!]?.name ?? '-'}</div>;
-      },
-    },
-    {
-      ...defaultCell(`class.teachers.name`, `class.teachers.id`, t('columns.teachers.label')),
-      cell: ({ row }) => {
-        const data = row.original;
-        const teachers = data.class.teachers
-          ?.map(({ id }) => id && teacherMapping[id]?.name)
-          .filter(Boolean)
-          .join(', ');
-        return <div>{teachers ?? '-'}</div>;
+        if (data.mainTeacher && teacherMapping[data.mainTeacher.id!]?.name) {
+          return <div>{teacherMapping[data.mainTeacher.id!]?.name}</div>;
+        }
+        return <div>-</div>;
       },
     },
   ];
-
-  // add all properties cell
-  Object.entries(propertyMapping).forEach(([key, value]) => {
-    if (value.type === 'LEVEL') {
-      // TODO: add mapping
-      res.push(levelCell(`properties.${key}`, value.name));
-    } else {
-      res.push(defaultCell(`properties.${key}`, `properties.${key}`, value.name));
-    }
-  });
 
   return res;
 };

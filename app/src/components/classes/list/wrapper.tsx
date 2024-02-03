@@ -10,6 +10,7 @@ interface ClassesListWrapperProps {
 
 const ClassesListWrapper = async ({ children }: ClassesListWrapperProps) => {
   const [teacherMapping] = await Promise.all([api.teachers.getMany.query()]);
+  // TODO mapping for academic year, level and branches
   return <StoreProvider teacherMapping={teacherMapping}>{children}</StoreProvider>;
 };
 

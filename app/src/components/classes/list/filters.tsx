@@ -208,23 +208,12 @@ const EditFilter = ({
 }) => {
   const t = useScopedI18n('classes.list.table.filters.form');
 
-  const { columns, propertyTypes } = useClassesListStore(store => ({
+  const { columns } = useClassesListStore(store => ({
     columns: store.translatedColumns,
-    propertyTypes: store.propertySchemaMapping,
   }));
 
   const form = useForm<Filter>({
-    resolver: zodResolver(
-      FilterSchema.refine(({ field, value }) => {
-        const isProperty = field?.startsWith('properties.');
-        if (isProperty && value) {
-          propertyTypes[field]?.schema.parse(typedValue(value, fieldType), {
-            path: ['value'],
-          });
-        }
-        return true;
-      }),
-    ),
+    resolver: zodResolver(FilterSchema),
     mode: 'onChange',
     defaultValues: filter,
   });
@@ -232,8 +221,7 @@ const EditFilter = ({
   const { isValid } = form.formState;
 
   const { field, operator } = form.getValues();
-  const fieldType =
-    field && (getKnownField(field)?.fieldType ?? propertyTypes[field]?.type ?? 'text');
+  const fieldType = field && (getKnownField(field)?.fieldType ?? 'text');
 
   const handleFormSubmit = (filter: Filter) => {
     filter.value = typedValue(filter.value, fieldType);

@@ -22,21 +22,24 @@ export default {
       name: {
         label: 'Libellé',
       },
-      studentsCount: {
-        label: "Nombre d'élèves",
+      description: {
+        label: 'Description',
       },
-      academicYearId: {
+      // studentsCount: {
+      //   label: "Nombre d'élèves",
+      // },
+      academicYear: {
         label: 'Année académique',
       },
-      levelId: {
+      level: {
         label: 'Niveau',
       },
-      mainTeacherId: {
+      mainTeacher: {
         label: 'Professeur principal',
       },
-      teachers: {
-        label: 'Professeurs',
-      },
+      // teachers: {
+      //   label: 'Professeurs',
+      // },
     },
     footer: {
       showing: 'Affichage de {from} à {to} sur {total}',
