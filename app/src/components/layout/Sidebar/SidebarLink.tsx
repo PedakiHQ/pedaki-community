@@ -81,7 +81,7 @@ const SidebarLinkWithChildren = ({ items, segment, ...props }: SidebarLinkWithCh
               const active =
                 childSegmentIndex !== -1 && childSegmentIndex === currentSegmentIndex + 1;
               return (
-                <DropdownMenuItem key={index} disabled={active} asChild className="w-full">
+                <DropdownMenuItem key={index} asChild className={cn('w-full', active && 'bg-weak')}>
                   <Link href={child.href}>{child.title}</Link>
                 </DropdownMenuItem>
               );

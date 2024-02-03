@@ -67,24 +67,23 @@ export const studentImportsStudents = router({
       };
     }),
 
-  getPossibleClassData: privateProcedure
+  getPossibleStudentData: privateProcedure
     .input(
       z.object({
-        classId: z.number(),
+        studentId: z.number(),
       }),
     )
-    .output(MergeGetOneClassOutput.pick({ current: true }))
+    .output(MergeGetOneStudentOutput.pick({ current: true }))
     .query(async ({ input }) => {
-      const data = await prisma.class.findUniqueOrThrow({
+      const data = await prisma.student.findUniqueOrThrow({
         where: {
-          id: input.classId,
+          id: input.studentId,
         },
         select: {
           id: true,
-          name: true,
-          levelId: true,
-          academicYearId: true,
-          mainTeacherId: true,
+          firstName: true,
+          lastName: true,
+          otherName: true,
         },
       });
 

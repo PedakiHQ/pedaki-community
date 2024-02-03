@@ -59,7 +59,7 @@ const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
 
   const filteredItems = items.filter(item => filter.includes(item.status));
   return (
-    <div className="min-w-[320px] shrink-0">
+    <div className="@4xl/main:w-[320px] shrink-0">
       <Card className="max-h-full gap-2">
         <div className="flex items-center justify-between">
           <h2 className="text-label-sm font-medium text-soft">{t(`title.${type}`)}</h2>
