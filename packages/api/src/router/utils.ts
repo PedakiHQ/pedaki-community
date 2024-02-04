@@ -15,7 +15,8 @@ export const filtersArrayToPrismaWhere = <T extends object>(
       for (const part of fieldParts) {
         // Initialize the next part of the where object and move to it
         // @ts-expect-error: The current object is valid, we can't have a valid type
-        current = current[part] = current[part] || {};
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        current = current[part] = current[part] ?? {};
       }
 
       // If we are in a negatiive operator, we need to create a not object
@@ -24,18 +25,21 @@ export const filtersArrayToPrismaWhere = <T extends object>(
         case 'nlike':
           // Initialize the next part of the where object and move to it
           // @ts-expect-error: The current object is valid, we can't have a valid type
-          current = current.not = current.not || {};
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          current = current.not = current.not ?? {};
           break;
       }
       switch (operator) {
         case 'eq':
         case 'neq':
           // @ts-expect-error: The current object is valid, we can't have a valid type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           current.equals = value;
           break;
         case 'like':
         case 'nlike':
           // @ts-expect-error: The current object is valid, we can't have a valid type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           current.contains = value;
           break;
         // case 'gt':
@@ -44,6 +48,7 @@ export const filtersArrayToPrismaWhere = <T extends object>(
         // case 'lte':
         default:
           // @ts-expect-error: The current object is valid, we can't have a valid type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           current[operator] = value;
       }
     }
@@ -70,7 +75,8 @@ export const orderByArrayToPrismaOrderBy = <T extends object>(
         for (const part of fieldParts.slice(0, -1)) {
           // Initialize the next part of the where object and move to it
           // @ts-expect-error: The current object is valid, we can't have a valid type
-          current = current[part] = current[part] || {};
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          current = current[part] = current[part] ?? {};
         }
         // @ts-expect-error: The current object is valid, we can't have a valid type
         current[fieldParts[fieldParts.length - 1]] = sort;
