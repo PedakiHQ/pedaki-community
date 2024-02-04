@@ -28,7 +28,7 @@
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "@auth/prisma-adapter": "^1.2.0",
-    "@pedaki/common": "0.5.2-beta.5",
+    "@pedaki/common": "0.5.2-beta.6",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
