@@ -253,6 +253,8 @@ const OldUploadStudentsFile = () => {
   const t = useScopedI18n('students.list.upload.oldImport');
   const { data } = api.students.imports.getMany.useQuery();
 
+  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
+
   const utils = api.useContext();
   const deleteOneMutation = api.students.imports.deleteOne.useMutation({
     onMutate: (id: string) => {

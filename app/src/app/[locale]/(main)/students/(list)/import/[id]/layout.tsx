@@ -7,7 +7,9 @@ import { getScopedI18n } from '~/locales/server.ts';
 import { api } from '~/server/clients/internal.ts';
 import StoreProvider from '~/store/students/import/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
+import { notFound } from 'next/navigation';
 import React from 'react';
+
 
 export default async function StudentsImportLayout({
   children,
@@ -16,10 +18,15 @@ export default async function StudentsImportLayout({
   const t = await getScopedI18n('students.import');
   const id = params.id;
 
-  const [classMapping, levelMapping] = await Promise.all([
+  const [classMapping, levelMapping, status] = await Promise.all([
     api.classes.getMany.query(),
     api.classes.levels.getMany.query(),
+      api.students.imports.status.query({ id }),
   ]);
+
+  if(status.status === 'ERROR') {
+      return notFound();
+  }
 
   return (
     <>
