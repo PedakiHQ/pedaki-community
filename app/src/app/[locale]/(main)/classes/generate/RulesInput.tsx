@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { algorithmRules } from '@pedaki/algorithms/input';
-import type { RawRule, RuleType } from '@pedaki/algorithms/input';
+import type { RawAttribute, RawRule, RuleType } from '@pedaki/algorithms/input';
 import { Button } from '@pedaki/design/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@pedaki/design/ui/dialog';
 import { Form, FormControl, FormField, FormItem } from '@pedaki/design/ui/form';
@@ -41,10 +41,24 @@ const Rule = (params: RuleProps) => {
         >
           {params.position}
         </div>
-        {t(params.rule.rule)}
+        <div className={'flex flex-col items-start'}>
+          <span>{t(params.rule.rule)}</span>
+          <span className={'text-p-xs'}>
+            {params.rule.attributes
+              .map(attribute =>
+                (attribute.options as string[])
+                  // .concat(...(attribute.levels as number[]).map(level => `niveau ${level}`))
+                  .concat(...(attribute.genders as string[]))
+                  .concat(...(attribute.extras as string[]))
+                  .join(', '),
+              )
+              .join(', ')
+              .substring(0, 50)}
+          </span>
+        </div>
       </DialogTrigger>
       <Button
-        variant="filled-error"
+        variant="filled-neutral"
         size="icon"
         className="h-6 w-6 shrink-0 "
         onClick={params.onDelete}
@@ -77,12 +91,14 @@ const NewRule = (params: NewRuleProps) => {
 
   return (
     <div className={'flex w-full flex-row gap-6 rounded-lg border p-2'}>
-      <div
-        className={
-          'flex aspect-square h-10 w-10 items-center justify-center rounded-full border bg-primary-base text-white'
-        }
-      >
-        <IconPlus />
+      <div>
+        <div
+          className={
+            'flex aspect-square h-10 w-10 items-center justify-center rounded-full border bg-primary-base text-white'
+          }
+        >
+          <IconPlus />
+        </div>
       </div>
       <Form {...form}>
         <form
@@ -131,13 +147,47 @@ const NewRule = (params: NewRuleProps) => {
   );
 };
 
+interface AttributesProps {
+  rule: RawRule;
+  setAttribute: (index: number, attribute: RawAttribute) => void;
+}
+
+const AttributesInput = (params: AttributesProps) => {
+  return (
+    <div className={'flex flex-row gap-2'}>
+      {params.rule.attributes.map((attribute, i) => (
+        <div key={i} className={'rounded-lg border'}>
+          <p>options: {attribute.options}</p>
+          <p>levels: {attribute.levels}</p>
+          <p>genders: {attribute.genders}</p>
+          <p>extras: {attribute.extras}</p>
+        </div>
+      ))}
+      <button
+        className={'rounded-lg border'}
+        onClick={() =>
+          params.setAttribute(params.rule.attributes.length, {
+            options: ['allemand'],
+            levels: [1, 2],
+            genders: ['M'],
+            extras: [],
+          })
+        }
+      >
+        <IconPlus />
+      </button>
+    </div>
+  );
+};
+
 export const RulesInput = () => {
   const [modalRule, setModalRule] = useState<number | undefined>();
 
-  const { rules, newRule, deleteRule } = useGenerateClassesRulesStore(store => ({
+  const { rules, newRule, deleteRule, setAttribute } = useGenerateClassesRulesStore(store => ({
     rules: store.rules,
     newRule: store.newRule,
     deleteRule: store.deleteRule,
+    setAttribute: store.setAttribute,
   }));
 
   return (
@@ -147,7 +197,7 @@ export const RulesInput = () => {
           <Rule
             key={rule.rule}
             rule={rule}
-            position={position}
+            position={position + 1}
             onModal={() => setModalRule(position)}
             onDelete={() => deleteRule(position)}
           />
@@ -159,7 +209,14 @@ export const RulesInput = () => {
         onOpenAutoFocus={e => e.preventDefault()}
       >
         <div className="w-full p-4">
-          <p>Attributs de la règle n°{modalRule}</p>
+          {modalRule !== undefined && (
+            <AttributesInput
+              rule={rules[modalRule]!}
+              setAttribute={(attributePosition, attribute) =>
+                setAttribute(modalRule, attributePosition, attribute)
+              }
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

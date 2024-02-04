@@ -16,7 +16,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const input = z.object({ class_size_limit: z.number(), class_amount_limit: z.number() });
+const input = z.object({
+  class_size_limit: z.number().gt(0),
+  class_amount_limit: z.number().gt(0),
+});
 type FormValues = z.infer<typeof input>;
 
 const ConstraintsForm = () => {
@@ -48,7 +51,7 @@ const ConstraintsForm = () => {
                   disabled={isSubmitting}
                   {...field}
                   onChange={e => {
-                    field.onChange(e);
+                    field.onChange(e.target.valueAsNumber);
                   }}
                 />
               </FormControl>
@@ -71,7 +74,7 @@ const ConstraintsForm = () => {
                   disabled={isSubmitting}
                   {...field}
                   onChange={e => {
-                    field.onChange(e);
+                    field.onChange(e.target.valueAsNumber);
                   }}
                 />
               </FormControl>

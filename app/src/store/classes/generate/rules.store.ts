@@ -1,9 +1,10 @@
-import type { RawRule, RuleType } from '@pedaki/algorithms/input';
+import type { RawAttribute, RawRule, RuleType } from '@pedaki/algorithms/input';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface GenerateClassesRulesStore {
   newRule: (type: RuleType) => void;
+  setAttribute: (ruleIndex: number, attributeIndex: number, attribute: RawAttribute) => void;
   deleteRule: (position: number) => void;
   rules: RawRule[];
 }
@@ -31,7 +32,6 @@ export const initializeStore = () => {
       set(state => ({
         rules: state.rules.concat({
           rule: ruleType,
-          priority: state.rules.length,
           attributes: [],
         } as RawRule),
       })),
@@ -41,5 +41,19 @@ export const initializeStore = () => {
           .slice(0, position)
           .concat(...state.rules.slice(position + 1, state.rules.length)),
       })),
+    setAttribute: (ruleIndex, attributeIndex, attribute) =>
+      set(state => {
+        const rule = state.rules[ruleIndex];
+        if (!rule) return state;
+        if (attributeIndex == rule.attributes.length) rule.attributes.push(attribute);
+        else rule.attributes[attributeIndex] = attribute;
+        // TODO
+        return {
+          rules: state.rules
+            .slice(0, ruleIndex)
+            .concat(Object.assign({}, rule))
+            .concat(...state.rules.slice(ruleIndex + 1, state.rules.length)),
+        };
+      }),
   }));
 };
