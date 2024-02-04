@@ -11,7 +11,7 @@ interface StudentsListWrapperProps {
 const StudentsListWrapper = async ({ children }: StudentsListWrapperProps) => {
   const [propertyMapping, classMapping, teacherMapping] = await Promise.all([
     api.students.properties.getMany.query(),
-    api.classes.getAll.query(),
+    api.classes.getMany.query(),
     api.teachers.getMany.query(),
   ]);
   return (
