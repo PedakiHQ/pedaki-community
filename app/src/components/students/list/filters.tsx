@@ -110,7 +110,7 @@ const NewFilter = ({
       </Tooltip>
       <PopoverContent
         align="end"
-        className="z-[90] w-[300px] md:w-[600px]"
+        className="w-[300px] md:w-[600px]"
         onOpenAutoFocus={e => e.preventDefault()}
       >
         <EditFilter onSubmit={addNewFilter} title={t('title')} />
@@ -250,7 +250,7 @@ const EditFilter = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="z-[9999] flex flex-col gap-4">
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
         <span className="text-label-md text-main">{title}</span>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12 md:col-span-4">
