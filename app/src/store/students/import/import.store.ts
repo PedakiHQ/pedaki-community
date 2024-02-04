@@ -32,13 +32,12 @@ export const useStudentsImportStore = <T>(selector: (state: StudentsImportStore)
 export const initializeStore = (
   preloadedState: Omit<
     StudentsImportStore,
-    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId' | 'items' | 'setItems'
+    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId'  | 'setItems'
   >,
 ) => {
   return createStore<StudentsImportStore>(set => ({
     ...preloadedState,
     selectorVisible: true,
-    items: [],
     setItems: items => set({ items }),
     setSelectorVisible: visible => set({ selectorVisible: visible }),
   }));

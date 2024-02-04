@@ -2,41 +2,27 @@
 
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@pedaki/design/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@pedaki/design/ui/dropdown-menu';
 import { IconPanelLeftClose, IconPanelLeftOpen, IconSettings2 } from '@pedaki/design/ui/icons';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@pedaki/design/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
-import {
-  possibleFilters,
-  serialize,
-  useIdParam,
-  useVisibleParams,
-} from '~/components/students/import/parameters.ts';
+import { possibleFilters, serialize, useIdParam, useVisibleParams } from '~/components/students/import/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
-import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
-import type { StudentsImportStore } from '~/store/students/import/import.store.ts';
+import {
+  useStudentsImportStore,
+  type StudentsImportStore,
+} from '~/store/students/import/import.store.ts';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
+
 interface ImportDataSelectionProps {
-  items: (StudentsImportStore['items'][0] & { label: string })[];
   type: 'students' | 'classes';
 }
 
-const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
+const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
   const [selected, setSelected] = useIdParam();
+  const items = useStudentsImportStore(state => state.items);
 
   useEffect(() => {
     if (selected === null) {
@@ -93,10 +79,6 @@ const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
 };
 
 const Wrapper = (props: ImportDataSelectionProps) => {
-  const setItems = useStudentsImportStore(state => state.setItems);
-  useEffect(() => {
-    setItems(props.items as StudentsImportStore['items']);
-  }, [props.items, setItems]);
   return (
     <TooltipProvider>
       <ImportDataSelection {...props} />
@@ -104,11 +86,21 @@ const Wrapper = (props: ImportDataSelectionProps) => {
   );
 };
 
+const itemLabel = (item: StudentsImportStore['items'][0]) => {
+  if('firstName' in item && 'lastName' in item) {
+    return `${item.firstName as string} ${item.lastName as string}`;
+  }
+    if('name' in item) {
+        return item.name as string;
+    }
+    return  '-';
+}
+
 const Item = ({
   item,
   selected,
 }: {
-  item: ImportDataSelectionProps['items'][0];
+  item: StudentsImportStore['items'][0];
   selected: boolean;
 }) => {
   const [visible] = useVisibleParams();
@@ -120,7 +112,7 @@ const Item = ({
         className={cn('w-full rounded-sm p-2 text-label-sm hover:bg-weak', selected && 'bg-weak')}
         aria-current={selected ? 'page' : undefined}
       >
-        {item.label}
+        {itemLabel(item)}
         {/*  TODO badge visibility when the filter is > 0*/}
       </Link>
     </li>

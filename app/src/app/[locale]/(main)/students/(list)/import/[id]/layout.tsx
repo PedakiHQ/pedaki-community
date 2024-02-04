@@ -18,11 +18,7 @@ export default async function StudentsImportLayout({
   const t = await getScopedI18n('students.import');
   const id = params.id;
 
-  const [classMapping, levelMapping, status] = await Promise.all([
-    api.classes.getMany.query(),
-    api.classes.levels.getMany.query(),
-      api.students.imports.status.query({ id }),
-  ]);
+  const status = await api.students.imports.status.query({ id });
 
   if(status.status === 'ERROR') {
       return notFound();
@@ -39,9 +35,7 @@ export default async function StudentsImportLayout({
       </PageHeader>
       <ImportNavigation importId={id} />
       <div className="h-full max-h-full pt-6" id={MAIN_CONTENT}>
-        <StoreProvider classMapping={classMapping} levelMapping={levelMapping} importId={id}>
           {children}
-        </StoreProvider>
       </div>
     </>
   );

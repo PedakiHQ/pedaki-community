@@ -7,7 +7,9 @@ import { useIdParam } from '~/components/students/import/parameters.ts';
 import Existing from '~/components/students/import/student/existing.tsx';
 import Imported from '~/components/students/import/student/imported.tsx';
 import { api } from '~/server/clients/client.ts';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
+import { toast } from 'sonner';
+
 
 interface StudentDiffProps {
   importId: string;
@@ -36,6 +38,14 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
     importId,
     id,
   });
+
+    useEffect(() => {
+        if(isError) {
+            toast.error('Error fetching data', {
+                id: 'error-fetching-data',
+            });
+        }
+    }, [isError]);
 
   if (isLoading || isError) {
     return <SuspenseCard />;

@@ -14,7 +14,7 @@ const StoreProvider = ({
 }: PropsWithChildren &
   Omit<
     StudentsImportStore,
-    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId' | 'items' | 'setItems'
+    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId' | 'setItems'
   >) => {
   // TODO: faire un meilleur type
   const storeRef = useRef<StudentsImportStoreType>();

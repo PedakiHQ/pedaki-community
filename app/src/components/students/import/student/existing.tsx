@@ -58,12 +58,12 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
       const nextId = items
         .filter(item => item?.status === 'PENDING')
         .find(item => item.id != importedData.id);
+
       const newItems = items.map(item => {
         if (item.id === variables.id) {
           return {
             ...item,
             status: variables.status,
-            data: variables.data,
           };
         }
         return item;

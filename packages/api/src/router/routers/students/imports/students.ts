@@ -14,7 +14,11 @@ export const studentImportsStudents = router({
     .input(MergeGetManyInput)
     .output(MergeGetManyStudentsOutput)
     .query(async ({ input }) => {
+      console.log('studentImportsStudents.getMany', input);
       return await prisma.importStudent.findMany({
+        orderBy: {
+          id: 'asc',
+        },
         where: {
           importId: input.importId,
         },
