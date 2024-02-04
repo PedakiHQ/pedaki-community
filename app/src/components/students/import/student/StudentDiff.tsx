@@ -19,7 +19,11 @@ const StudentDiff = ({ importId }: StudentDiffProps) => {
 
   return (
     <Suspense fallback={<SuspenseCard />}>
-      {selected === null ? <NoContent /> : <ContentWrapper importId={importId} id={selected} />}
+      {selected === null || typeof window === 'undefined' ? (
+        <NoContent />
+      ) : (
+        <ContentWrapper importId={importId} id={selected} />
+      )}
     </Suspense>
   );
 };
@@ -53,7 +57,7 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
   return (
     <Card className="relative flex h-min w-full flex-row">
       <div className="flex-1">
-        <Imported baseData={result.import} />
+        <Imported baseData={result.import} status={result.status} />
       </div>
       <Separator orientation="vertical" />
       <div className="flex-1">
@@ -62,6 +66,7 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
           importedData={result.import}
           importId={importId}
           key={id}
+          status={result.status}
         />
       </div>
     </Card>

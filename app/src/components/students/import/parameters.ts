@@ -2,7 +2,7 @@ import { useQueryState } from 'nuqs';
 import { createSerializer, parseAsArrayOf, parseAsInteger, parseAsStringEnum } from 'nuqs/parsers';
 import type { TransitionStartFunction } from 'react';
 
-export const possibleFilters = ['DONE', 'IGNORED', 'PENDING'] as const;
+export const possibleFilters = ['DONE', 'IGNORED', 'REMOVED', 'PENDING'] as const;
 export const searchParams = {
   id: parseAsInteger,
   // @ts-expect-error: nuqs type issue when using const enum

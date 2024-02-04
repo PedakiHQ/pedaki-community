@@ -19,7 +19,8 @@ import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 type PossibleStudentData =
-  OutputType['students']['imports']['students']['getPossibleStudentData']['current'];
+  | OutputType['students']['imports']['students']['getPossibleStudentData']
+  | null;
 
 interface FormProps<T extends PossibleStudentData = PossibleStudentData> {
   schema?: z.Schema<T>;
@@ -54,6 +55,7 @@ const BaseForm = ({
   useEffect(() => {
     if (data) {
       form.reset(data);
+      void form.trigger();
     }
   }, [data, form]);
 

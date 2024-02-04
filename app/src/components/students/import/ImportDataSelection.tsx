@@ -10,7 +10,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
-import { IconPanelLeftClose, IconPanelLeftOpen, IconSettings2 } from '@pedaki/design/ui/icons';
+import {
+  IconChevronRight,
+  IconEyeNone,
+  IconPanelLeftClose,
+  IconPanelLeftOpen,
+  IconSettings2,
+  IconX,
+} from '@pedaki/design/ui/icons';
+import IconCheck from '@pedaki/design/ui/icons/IconCheck';
 import {
   Tooltip,
   TooltipContent,
@@ -25,10 +33,8 @@ import {
   useVisibleParams,
 } from '~/components/students/import/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
-import {
-  useStudentsImportStore,
-  type StudentsImportStore,
-} from '~/store/students/import/import.store.ts';
+import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
+import type { StudentsImportStore } from '~/store/students/import/import.store.ts';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
@@ -119,14 +125,30 @@ const Item = ({ item, selected }: { item: StudentsImportStore['items'][0]; selec
     <li>
       <Link
         href={serialize({ id: item.id, visible })}
-        className={cn('w-full rounded-sm p-2 text-label-sm hover:bg-weak', selected && 'bg-weak')}
+        className={cn(
+          'flex w-full items-center justify-between rounded-sm p-2 text-label-sm hover:bg-weak',
+          selected && 'bg-weak',
+        )}
         aria-current={selected ? 'page' : undefined}
       >
         {itemLabel(item)}
-        {/*  TODO badge visibility when the filter is > 0*/}
+        <ItemIcon item={item} />
       </Link>
     </li>
   );
+};
+
+const ItemIcon = ({ item }: { item: StudentsImportStore['items'][0] }) => {
+  if (item.status === 'DONE') {
+    return <IconCheck className="h-4 w-4 text-green-dark" />;
+  }
+  if (item.status === 'IGNORED') {
+    return <IconEyeNone className="h-4 w-4 text-soft opacity-50" />;
+  }
+  if (item.status === 'REMOVED') {
+    return <IconX className="h-4 w-4 text-red-base" />;
+  }
+  return null;
 };
 
 const VisibleSelector = () => {

@@ -5,7 +5,6 @@ import { ImportNavigation } from '~/components/students/import/ImportNavigation.
 import ValidateButton from '~/components/students/import/validate-button.tsx';
 import { getScopedI18n } from '~/locales/server.ts';
 import { api } from '~/server/clients/internal.ts';
-import StoreProvider from '~/store/students/import/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import { notFound } from 'next/navigation';
 import React from 'react';
@@ -30,7 +29,7 @@ export default async function StudentsImportLayout({
         description={t('header.description')}
         icon={IconDownload}
       >
-        <ValidateButton />
+        <ValidateButton importId={id} />
       </PageHeader>
       <ImportNavigation importId={id} />
       <div className="h-full max-h-full pt-6" id={MAIN_CONTENT}>

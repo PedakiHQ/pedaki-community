@@ -4,7 +4,7 @@ import StudentDiff from '~/components/students/import/student/StudentDiff.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper.tsx';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { api } from '~/server/clients/internal.ts';
-import StoreProvider from '~/store/students/import/StoreProvider';
+import StoreProvider from '~/store/students/import/StoreProvider.tsx';
 import React from 'react';
 
 export default async function StudentsImportStudentsPage({ params }: PageType<{ id: string }>) {
@@ -14,14 +14,7 @@ export default async function StudentsImportStudentsPage({ params }: PageType<{ 
   const [classMapping, levelMapping, items] = await Promise.all([
     api.classes.getMany.query(),
     api.classes.levels.getMany.query(),
-    api.students.imports.students.getMany.query(
-      { importId: params.id },
-      {
-        context: {
-          revalidate: false,
-        },
-      },
-    ),
+    api.students.imports.students.getMany.query({ importId: params.id }),
   ]);
 
   return (

@@ -9,6 +9,27 @@ const imports = {
       students: 'Elèves',
     },
   },
+
+  confirmation: {
+    button: 'Valider',
+    title: 'Confirmation',
+    description: 'Voulez-vous vraiment valider cette action ? Cette action est irréversible.',
+    actions: {
+      confirm: 'Valider',
+      cancel: 'Annuler',
+    },
+    students: {
+      title: 'Elèves',
+      added: 'Elèves ajoutés',
+      updated: 'Elèves mis à jour',
+    },
+    classes: {
+      title: 'Classes',
+      added: 'Classes ajoutées',
+      updated: 'Classes mises à jour',
+    },
+  },
+
   selector: {
     title: {
       classes: 'Sélectionner une classe',
@@ -27,6 +48,7 @@ const imports = {
       choices: {
         DONE: 'Terminé',
         IGNORED: 'Ignoré',
+        REMOVED: 'Supprimé',
         PENDING: 'En attente',
       },
     },
@@ -35,6 +57,12 @@ const imports = {
   existing: {
     linkToStudent: 'Lier à un élève',
     linkedToStudent: 'Lié à un {name}',
+  },
+
+  imported: {
+    status: {
+      DONE: '(Modifiée)',
+    },
   },
 
   fields: {

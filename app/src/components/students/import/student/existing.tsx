@@ -17,17 +17,20 @@ import { useStudentsImportStore } from '~/store/students/import/import.store.ts'
 import type { OutputType } from '~api/router/router.ts';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-type PossibleStudentData =
-  OutputType['students']['imports']['students']['getPossibleStudentData']['current'];
+type PossibleStudentData = OutputType['students']['imports']['students']['getOne']['current'];
+
+// TODO: there is an issue here, when updating a student, the form is not updated on the first refresh
 
 interface ExistingProps {
-  baseData: PossibleStudentData;
-  importedData: NonNullable<PossibleStudentData>;
+  baseData: OutputType['students']['imports']['students']['getOne']['current'];
+  importedData: OutputType['students']['imports']['students']['getOne']['import'];
   importId: string;
+  status: string;
 }
 
-const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
+const Existing = ({ baseData, importedData, importId, status }: ExistingProps) => {
   const [visible] = useVisibleParams();
   const items = useStudentsImportStore(state => state.items);
   const setItems = useStudentsImportStore(state => state.setItems);
@@ -39,22 +42,28 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
       studentId: linkStudentId!,
     },
     {
-      enabled: linkStudentId !== null,
+      enabled: linkStudentId !== null && baseData?.id !== linkStudentId,
+      initialData: baseData!,
     },
   );
 
   const [formBaseData, setFormBaseData] = useState<PossibleStudentData | null>(
-    baseData ?? importedData,
+    status === 'DONE' ? importedData : baseData ?? importedData,
   );
 
   useEffect(() => {
-    if (linkedStudent?.current) setFormBaseData(linkedStudent?.current);
-  }, [linkedStudent]);
+    if (linkedStudent) {
+      if (status !== 'DONE' && linkedStudent.id !== baseData?.id) {
+        setFormBaseData(linkedStudent);
+      }
+    }
+  }, [linkedStudent, status, baseData]);
 
   const router = useRouter();
+  const utils = api.useContext();
 
   const updateStudentImportMutation = api.students.imports.students.updateOne.useMutation({
-    onSuccess: (_, variables: MergeUpdateOneStudentInput) => {
+    onSuccess: async (_, variables: MergeUpdateOneStudentInput) => {
       const nextId = items
         .filter(item => item?.status === 'PENDING')
         .find(item => item.id != importedData.id);
@@ -68,14 +77,39 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         }
         return item;
       });
+
       setItems(newItems);
+      await utils.students.imports.previewResult.invalidate({ importId });
+      if (linkStudentId) {
+        await utils.students.imports.students.getPossibleStudentData.invalidate({
+          studentId: linkStudentId,
+        });
+      }
+      if (variables.status === 'DONE') {
+        utils.students.imports.students.getOne.setData({
+          status: 'DONE',
+          import: importedData,
+          current: variables.data.current,
+        });
+      }
       router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
+    },
+    onError: e => {
+      // TODO: translate
+      toast.error('Une erreur est survenue');
     },
   });
 
   const loading = updateStudentImportMutation.isLoading;
 
   const deleteImport = () => {
+    updateStudentImportMutation.mutate({
+      importId: importId,
+      id: importedData.id,
+      status: 'REMOVED',
+    });
+  };
+  const skipImport = () => {
     updateStudentImportMutation.mutate({
       importId: importId,
       id: importedData.id,
@@ -88,7 +122,7 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
       importId: importId,
       id: importedData.id,
       status: 'DONE',
-      data: { current: data },
+      data: { current: data, studentId: linkStudentId },
     });
   };
 
@@ -98,7 +132,7 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         <h3 className="text-label-sm text-soft">Résultat final</h3>
         <SelectAnotherBaseStudent
           setLinkStudentId={setLinkStudentId}
-          linkedStudent={linkedStudent?.current ?? null}
+          linkedStudent={linkedStudent ?? null}
         />
       </div>
       <BaseForm
@@ -109,10 +143,9 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         schema={StudentSchema}
         onSubmitted={updateImport}
       >
-        {form => {
+        {() => {
           return (
             <>
-              <pre>{JSON.stringify(form.watch(), null, 2)}</pre>
               <div className="flex items-center justify-end">
                 <div className={cn('pr-2', !loading && 'hidden')}>
                   <IconSpinner className="h-5 w-5 animate-spin text-primary-base" />
@@ -121,14 +154,24 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
                   type="button"
                   disabled={loading}
                   onClick={deleteImport}
-                  className="rounded-r-none  text-state-error hover:border-state-error"
+                  className="rounded-r-none"
                   size="sm"
                   variant="stroke-primary-main"
                 >
                   Supprimer
                 </Button>
+                <Button
+                  type="button"
+                  disabled={loading}
+                  onClick={skipImport}
+                  className="rounded-none"
+                  size="sm"
+                  variant="stroke-primary-main"
+                >
+                  Ignorer
+                </Button>
                 <Button className="rounded-l-none" size="sm" variant="stroke-primary-main">
-                  {linkedStudent?.current?.id !== undefined ? 'Mettre à jour' : 'Ajouter'}
+                  {linkedStudent?.id !== undefined ? 'Mettre à jour' : 'Ajouter'}
                 </Button>
               </div>
             </>

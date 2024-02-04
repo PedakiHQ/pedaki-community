@@ -6,6 +6,7 @@ import {
   ImportUploadStatusSchema,
 } from '@pedaki/services/students/imports/import.model.js';
 import { studentImportsService } from '@pedaki/services/students/imports/imports.service.js';
+import { MergeGetManyInput } from '@pedaki/services/students/imports/merge/merge.model';
 import { studentImportsClasses } from '~api/router/routers/students/imports/classes.ts';
 import { studentImportsStudents } from '~api/router/routers/students/imports/students.ts';
 import { privateProcedure, router } from '~api/router/trpc.ts';
@@ -98,6 +99,80 @@ export const studentImports = router({
         data: (currentStatus?.data as ImportUploadStatus['data']) ?? {
           message: 'NOT_FOUND',
         },
+      };
+    }),
+
+  previewResult: privateProcedure
+    .input(MergeGetManyInput)
+    .output(
+      z.object({
+        students: z.object({
+          added: z.number().default(0),
+          updated: z.number().default(0),
+        }),
+        classes: z.object({
+          added: z.number().default(0),
+          updated: z.number().default(0),
+        }),
+      }),
+    )
+    .query(async ({ input }) => {
+      const students = await prisma.importStudent.groupBy({
+        by: ['status', 'studentId'],
+        _count: {
+          id: true,
+        },
+        where: {
+          importId: input.importId,
+          status: {
+            not: 'IGNORED',
+          },
+        },
+      });
+      const studentsFlat = students.reduce(
+        (acc, c) => {
+          if (c.status === 'DONE' && c.studentId) {
+            acc.updated = (acc.updated ?? 0) + c._count.id;
+          } else {
+            acc.added = (acc.added ?? 0) + c._count.id;
+          }
+          return acc;
+        },
+        {} as { added?: number; updated?: number },
+      );
+
+      const classes = await prisma.importClass.groupBy({
+        by: ['status', 'classId'],
+        _count: {
+          id: true,
+        },
+        where: {
+          importId: input.importId,
+          status: {
+            not: 'IGNORED',
+          },
+        },
+      });
+      const classesFlat = classes.reduce(
+        (acc, c) => {
+          if (c.status === 'DONE' && c.classId) {
+            acc.updated = (acc.updated ?? 0) + c._count.id;
+          } else {
+            acc.added = (acc.added ?? 0) + c._count.id;
+          }
+          return acc;
+        },
+        {} as { added?: number; updated?: number },
+      );
+
+      console.log({
+        students: studentsFlat,
+        classes: classesFlat,
+      });
+
+      return {
+        students: studentsFlat,
+        classes: classesFlat,
       };
     }),
 });

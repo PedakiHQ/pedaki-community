@@ -5,6 +5,7 @@ import {
   MergeGetOneInput,
   MergeGetOneStudentOutput,
   MergeUpdateOneStudentInputSchema,
+  StudentOutputSchema,
 } from '@pedaki/services/students/imports/merge/merge.model';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
@@ -14,7 +15,6 @@ export const studentImportsStudents = router({
     .input(MergeGetManyInput)
     .output(MergeGetManyStudentsOutput)
     .query(async ({ input }) => {
-      console.log('studentImportsStudents.getMany', input);
       return await prisma.importStudent.findMany({
         orderBy: {
           id: 'asc',
@@ -49,6 +49,7 @@ export const studentImportsStudents = router({
           otherName: true,
           gender: true,
           birthDate: true,
+          studentId: true,
           student: {
             select: {
               id: true,
@@ -82,22 +83,44 @@ export const studentImportsStudents = router({
     .input(MergeUpdateOneStudentInputSchema)
     .mutation(async ({ input }) => {
       const status = input.status;
-      const data = input.data?.current;
-      if (status === 'DONE' && !data) {
-        throw new Error('Data is required when status is DONE');
-      }
-      if (status === 'IGNORED') {
+
+      if (status === 'IGNORED' || status === 'REMOVED') {
         await prisma.importStudent.update({
           where: {
             id: input.id,
             importId: input.importId,
           },
           data: {
-            status: 'IGNORED',
+            status: status,
           },
         });
       }
-      console.log(input);
+
+      if (status === 'DONE') {
+        const data = input.data?.current;
+        const studentId = input.data?.studentId;
+        if (!data) {
+          throw new Error('Data is required when status is DONE');
+        }
+
+        console.log('input', input);
+
+        await prisma.importStudent.update({
+          where: {
+            id: input.id,
+            importId: input.importId,
+          },
+          data: {
+            status: 'DONE',
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            otherName: data?.otherName,
+            birthDate: data?.birthDate,
+            gender: data.gender,
+            studentId: studentId,
+          },
+        });
+      }
     }),
 
   getPossibleStudentData: privateProcedure
@@ -106,7 +129,7 @@ export const studentImportsStudents = router({
         studentId: z.number(),
       }),
     )
-    .output(MergeGetOneStudentOutput.pick({ current: true }))
+    .output(StudentOutputSchema)
     .query(async ({ input }) => {
       const data = await prisma.student.findUniqueOrThrow({
         where: {
@@ -122,8 +145,6 @@ export const studentImportsStudents = router({
         },
       });
 
-      return {
-        current: data,
-      };
+      return data;
     }),
 });

@@ -53,30 +53,31 @@ export const MergeGetOneClassOutput = z.object({
     .nullable(),
 });
 
+export const StudentOutputSchema = StudentSchema.pick({
+  id: true,
+  firstName: true,
+  lastName: true,
+  otherName: true,
+  gender: true,
+  birthDate: true,
+});
+
 export const MergeGetOneStudentOutput = z.object({
   status: MergeStatus,
-  import: StudentSchema.pick({
-    id: true,
-    firstName: true,
-    lastName: true,
-    otherName: true,
-    gender: true,
-    birthDate: true,
-  }),
-  current: StudentSchema.pick({
-    id: true,
-    firstName: true,
-    lastName: true,
-    otherName: true,
-    gender: true,
-    birthDate: true,
-  }).nullable(),
+  import: StudentOutputSchema,
+  current: StudentOutputSchema.nullable(),
 });
 
 export const MergeUpdateOneStudentInputSchema = z
   .object({
     status: MergeStatus,
-    data: MergeGetOneStudentOutput.pick({ current: true }).optional(),
+    data: MergeGetOneStudentOutput.pick({ current: true })
+      .merge(
+        z.object({
+          studentId: z.number().nullable(),
+        }),
+      )
+      .optional(),
   })
   .merge(MergeGetOneInput);
 export type MergeUpdateOneStudentInput = z.infer<typeof MergeUpdateOneStudentInputSchema>;
