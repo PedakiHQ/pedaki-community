@@ -1,13 +1,13 @@
 'use client';
 
-import type { GetManyClassesOutput } from '@pedaki/services/classes/class.model.js';
+import type { GetPaginatedManyClassesOutput } from '@pedaki/services/classes/class.model.js';
 import type { Field } from '@pedaki/services/classes/query.model.client';
 import { defaultCell } from '~/components/datatable/columns';
 import type { ColumnDef } from '~/components/datatable/columns';
 import type { UseScopedI18nType } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 
-export type ClassData = GetManyClassesOutput['data'][number];
+export type ClassData = GetPaginatedManyClassesOutput['data'][number];
 export type ClassColumnDef = ColumnDef<ClassData, Field>;
 
 export const generateColumns = (
@@ -35,14 +35,20 @@ export const generateColumns = (
       ),
       cell: ({ row }) => {
         const data = row.original;
-        return <div>{academicYearMapping[data.academicYear.id!]?.name ?? '-'}</div>;
+        if (data.academicYear && academicYearMapping[data.academicYear.id!]?.name) {
+          return <div>{academicYearMapping[data.academicYear.id!]?.name}</div>;
+        }
+        return <div>-</div>;
       },
     },
     {
       ...defaultCell<ClassColumnDef>('level.name', 'level.id', t('columns.level.label')),
       cell: ({ row }) => {
         const data = row.original;
-        return <div>{classLevelMapping[data.level.id!]?.name ?? '-'}</div>;
+        if (data.level && classLevelMapping[data.level.id!]?.name) {
+          return <div>{classLevelMapping[data.level.id!]?.name}</div>;
+        }
+        return <div>-</div>;
       },
     },
     {
