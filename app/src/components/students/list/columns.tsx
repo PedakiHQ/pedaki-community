@@ -60,6 +60,7 @@ export const generateColumns = (
   const res: StudentColumnDef[] = [
     defaultCell('firstName', 'firstName', t('columns.firstName.label')),
     defaultCell('lastName', 'lastName', t('columns.lastName.label')),
+    defaultCell('gender', 'gender', t('columns.gender.label')),
     {
       ...defaultCell('class.name', `class.id`, t('columns.class.label')),
       cell: ({ row }) => {

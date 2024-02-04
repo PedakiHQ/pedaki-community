@@ -3,4 +3,5 @@ export const fields = {
   lastName: 'text',
   otherName: 'text',
   birthDate: 'date',
+  gender: 'text',
 } as const;

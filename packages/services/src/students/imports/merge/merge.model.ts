@@ -1,4 +1,5 @@
 import { ImportDataStatus } from '@prisma/client';
+import { StudentSchema } from '~/students/student_base.model.ts';
 import { z } from 'zod';
 
 export const MergeGetManyInput = z.object({
@@ -7,12 +8,16 @@ export const MergeGetManyInput = z.object({
 
 export const MergeStatus = z.nativeEnum(ImportDataStatus);
 
+export const MergeGetManyDataSchema = z.object({
+  id: z.number(),
+  status: MergeStatus,
+});
 export const MergeGetManyClassesOutput = z.array(
-  z.object({
-    id: z.number(),
-    status: MergeStatus,
-    name: z.string(),
-  }),
+  MergeGetManyDataSchema.merge(
+    z.object({
+      name: z.string(),
+    }),
+  ),
 );
 
 export const MergeGetManyStudentsOutput = z.array(
@@ -50,19 +55,28 @@ export const MergeGetOneClassOutput = z.object({
 
 export const MergeGetOneStudentOutput = z.object({
   status: MergeStatus,
-  import: z.object({
-      id: z.number(),
-    firstName: z.string(),
-    lastName: z.string(),
-    otherName: z.string().nullable(),
+  import: StudentSchema.pick({
+    id: true,
+    firstName: true,
+    lastName: true,
+    otherName: true,
+    gender: true,
+    birthDate: true,
   }),
-  current: z
-    .object({
-      id: z.number(),
-      firstName: z.string(),
-      lastName: z.string(),
-      otherName: z.string().nullable(),
-      birthDate: z.date().nullable(),
-    })
-    .nullable(),
+  current: StudentSchema.pick({
+    id: true,
+    firstName: true,
+    lastName: true,
+    otherName: true,
+    gender: true,
+    birthDate: true,
+  }).nullable(),
 });
+
+export const MergeUpdateOneStudentInputSchema = z
+  .object({
+    status: MergeStatus,
+    data: MergeGetOneStudentOutput.pick({ current: true }).optional(),
+  })
+  .merge(MergeGetOneInput);
+export type MergeUpdateOneStudentInput = z.infer<typeof MergeUpdateOneStudentInputSchema>;

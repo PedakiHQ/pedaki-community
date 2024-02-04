@@ -1,4 +1,4 @@
-export default {
+const imports = {
   header: {
     title: 'Elèves',
     description: 'Importer des élèves',
@@ -45,14 +45,20 @@ export default {
     },
     lastName: {
       label: 'Nom',
-        placeholder: 'Jobard',
+      placeholder: 'Jobard',
+    },
+    gender: {
+      label: 'Genre',
+      placeholder: 'Masculin',
     },
     otherName: {
       label: 'Troisième nom',
       placeholder: 'ElChapo',
     },
     birthDate: {
-      label: 'Date de naissance'
+      label: 'Date de naissance',
     },
   },
 };
+
+export default imports;

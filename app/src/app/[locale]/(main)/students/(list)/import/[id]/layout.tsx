@@ -1,4 +1,3 @@
-import { Button } from '@pedaki/design/ui/button';
 import { IconDownload } from '@pedaki/design/ui/icons';
 import type { LayoutType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
@@ -8,7 +7,6 @@ import { getScopedI18n } from '~/locales/server.ts';
 import { api } from '~/server/clients/internal.ts';
 import StoreProvider from '~/store/students/import/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
-import Link from 'next/link';
 import React from 'react';
 
 export default async function StudentsImportLayout({
@@ -30,9 +28,6 @@ export default async function StudentsImportLayout({
         description={t('header.description')}
         icon={IconDownload}
       >
-        <Button asChild>
-          <Link href="/students">retour</Link>
-        </Button>
         <ValidateButton />
       </PageHeader>
       <ImportNavigation importId={id} />

@@ -8,6 +8,11 @@ export interface StudentsImportStore {
   importId: string;
   selectorVisible: boolean;
   setSelectorVisible: (visible: boolean) => void;
+  items: ({
+      id: number;
+      status: string;
+    } & Record<string, unknown>)[];
+  setItems: (items: StudentsImportStore['items']) => void;
 }
 
 export type StudentsImportStoreType = ReturnType<typeof initializeStore>;
@@ -25,11 +30,16 @@ export const useStudentsImportStore = <T>(selector: (state: StudentsImportStore)
 };
 
 export const initializeStore = (
-  preloadedState: Omit<StudentsImportStore, 'setSelectorVisible' | 'selectorVisible'>,
+  preloadedState: Omit<
+    StudentsImportStore,
+    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId' | 'items' | 'setItems'
+  >,
 ) => {
   return createStore<StudentsImportStore>(set => ({
     ...preloadedState,
     selectorVisible: true,
+    items: [],
+    setItems: items => set({ items }),
     setSelectorVisible: visible => set({ selectorVisible: visible }),
   }));
 };

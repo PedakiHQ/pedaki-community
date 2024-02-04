@@ -75,7 +75,7 @@ const Content = ({
 const SelectAnotherBaseClass = () => {
   const [open, setOpen] = React.useState(false);
 
-  const onClickRow = (row: StudentData) => {
+  const onClickRow = (_: React.MouseEvent<HTMLTableRowElement>, row: StudentData) => {
     console.log(row);
     setOpen(false);
   };

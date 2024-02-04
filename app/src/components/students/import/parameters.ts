@@ -6,7 +6,7 @@ export const possibleFilters = ['DONE', 'IGNORED', 'PENDING'] as const;
 export const searchParams = {
   id: parseAsInteger,
   // @ts-expect-error: nuqs type issue when using const enum
-  filter: parseAsArrayOf(parseAsStringEnum(possibleFilters)).withDefault(['PENDING']),
+  visible: parseAsArrayOf(parseAsStringEnum(possibleFilters)).withDefault(['PENDING']),
 } as const;
 export const serialize = createSerializer(searchParams);
 
@@ -20,10 +20,10 @@ export const useIdParam = (startTransition?: TransitionStartFunction) => {
   );
 };
 
-export const useFilterParam = () => {
+export const useVisibleParams = () => {
   return useQueryState(
-    'filter',
-    searchParams.filter.withOptions({
+    'visible',
+    searchParams.visible.withOptions({
       history: 'replace',
     }),
   );

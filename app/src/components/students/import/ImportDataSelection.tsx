@@ -21,16 +21,17 @@ import { cn } from '@pedaki/design/utils';
 import {
   possibleFilters,
   serialize,
-  useFilterParam,
   useIdParam,
+  useVisibleParams,
 } from '~/components/students/import/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
+import type { StudentsImportStore } from '~/store/students/import/import.store.ts';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
 interface ImportDataSelectionProps {
-  items: { status: string; id: number; label: string }[];
+  items: (StudentsImportStore['items'][0] & { label: string })[];
   type: 'students' | 'classes';
 }
 
@@ -46,7 +47,7 @@ const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
     }
   }, [selected, setSelected, items]);
 
-  const [filter] = useFilterParam();
+  const [filter] = useVisibleParams();
   const t = useScopedI18n('students.import.selector');
   const selectorVisible = useStudentsImportStore(state => state.selectorVisible);
 
@@ -71,7 +72,7 @@ const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
         <div
           role="navigation"
           aria-label="pagination"
-          className="max-h-64 overflow-auto pr-4 @4xl/main:max-h-[30rem]"
+          className="max-h-64 overflow-auto pr-4 @4xl/main:max-h-[40vh]"
         >
           <ul className="space-y-1">
             {filteredItems.map(item => {
@@ -92,6 +93,10 @@ const ImportDataSelection = ({ items, type }: ImportDataSelectionProps) => {
 };
 
 const Wrapper = (props: ImportDataSelectionProps) => {
+  const setItems = useStudentsImportStore(state => state.setItems);
+  useEffect(() => {
+    setItems(props.items as StudentsImportStore['items']);
+  }, [props.items, setItems]);
   return (
     <TooltipProvider>
       <ImportDataSelection {...props} />
@@ -106,14 +111,17 @@ const Item = ({
   item: ImportDataSelectionProps['items'][0];
   selected: boolean;
 }) => {
+  const [visible] = useVisibleParams();
+
   return (
     <li>
       <Link
-        href={serialize({ id: item.id })}
+        href={serialize({ id: item.id, visible })}
         className={cn('w-full rounded-sm p-2 text-label-sm hover:bg-weak', selected && 'bg-weak')}
         aria-current={selected ? 'page' : undefined}
       >
         {item.label}
+        {/*  TODO badge visibility when the filter is > 0*/}
       </Link>
     </li>
   );
@@ -145,7 +153,7 @@ const VisibleSelector = () => {
 };
 
 const StatusSelector = () => {
-  const [filter, setFilter] = useFilterParam();
+  const [filter, setFilter] = useVisibleParams();
   const t = useScopedI18n('students.import.selector.filter');
 
   return (

@@ -2,14 +2,12 @@ import type { PageType } from '~/app/types.ts';
 import ImportDataSelection from '~/components/students/import/ImportDataSelection.tsx';
 import StudentDiff from '~/components/students/import/student/StudentDiff.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper.tsx';
-import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { api } from '~/server/clients/internal.ts';
 import React from 'react';
 
-export default async function StudentsImportStudentsPage({ params }: PageType) {
+export default async function StudentsImportStudentsPage({ params }: PageType<{ id: string }>) {
   setStaticParamsLocale(params.locale);
-  const t = await getScopedI18n('students.import');
   const newStudents = await api.students.imports.students.getMany.query(
     { importId: params.id },
     {

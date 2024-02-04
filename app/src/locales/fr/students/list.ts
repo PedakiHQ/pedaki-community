@@ -48,6 +48,9 @@ export default {
       lastName: {
         label: 'Nom',
       },
+      gender: {
+        label: 'Genre',
+      },
       class: {
         label: 'Classe',
       },

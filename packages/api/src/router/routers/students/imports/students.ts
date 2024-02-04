@@ -2,9 +2,9 @@ import { prisma } from '@pedaki/db';
 import {
   MergeGetManyInput,
   MergeGetManyStudentsOutput,
-  MergeGetOneClassOutput,
   MergeGetOneInput,
   MergeGetOneStudentOutput,
+  MergeUpdateOneStudentInputSchema,
 } from '@pedaki/services/students/imports/merge/merge.model';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { z } from 'zod';
@@ -43,6 +43,8 @@ export const studentImportsStudents = router({
           firstName: true,
           lastName: true,
           otherName: true,
+          gender: true,
+          birthDate: true,
           student: {
             select: {
               id: true,
@@ -50,6 +52,7 @@ export const studentImportsStudents = router({
               lastName: true,
               otherName: true,
               birthDate: true,
+              gender: true,
             },
           },
         },
@@ -60,6 +63,8 @@ export const studentImportsStudents = router({
         firstName: data.firstName,
         lastName: data.lastName,
         otherName: data.otherName,
+        gender: data.gender,
+        birthDate: data.birthDate,
       };
 
       return {
@@ -67,6 +72,28 @@ export const studentImportsStudents = router({
         import: importData,
         current: data.student,
       };
+    }),
+
+  updateOne: privateProcedure
+    .input(MergeUpdateOneStudentInputSchema)
+    .mutation(async ({ input }) => {
+      const status = input.status;
+      const data = input.data?.current;
+      if (status === 'DONE' && !data) {
+        throw new Error('Data is required when status is DONE');
+      }
+      if (status === 'IGNORED') {
+        await prisma.importStudent.update({
+          where: {
+            id: input.id,
+            importId: input.importId,
+          },
+          data: {
+            status: 'IGNORED',
+          },
+        });
+      }
+      console.log(input);
     }),
 
   getPossibleStudentData: privateProcedure
@@ -87,6 +114,7 @@ export const studentImportsStudents = router({
           lastName: true,
           otherName: true,
           birthDate: true,
+          gender: true,
         },
       });
 

@@ -27,7 +27,8 @@ interface DataTableProps<TData, TValue> {
   columnVisibility?: VisibilityState;
   setColumnVisibility?: React.Dispatch<React.SetStateAction<VisibilityState>>;
   tableClassName?: string;
-  onClickRow?: (value: TData) => void;
+  onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>, value: TData) => void;
+  selectedRows?: Record<string, boolean>;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,6 +40,7 @@ export function DataTable<TData, TValue>({
   setColumnVisibility,
   tableClassName,
   onClickRow,
+  selectedRows = {},
 }: Readonly<DataTableProps<TData, TValue>>) {
   const t = useScopedI18n('students.list.table');
   const table = useReactTable({
@@ -51,6 +53,7 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnVisibility,
+      rowSelection: selectedRows,
     },
     defaultColumn: {
       minSize: 0,
@@ -87,7 +90,11 @@ export function DataTable<TData, TValue>({
       <TableBody>
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map(row => (
-            <TableRow key={row.id} onClick={onClickRow && (() => onClickRow(row.original))}>
+            <TableRow
+              key={row.id}
+              onClick={onClickRow && (e => onClickRow(e, row.original))}
+              data-state={row.getIsSelected() ? 'selected' : undefined}
+            >
               {row.getVisibleCells().map(cell => (
                 <TableCell
                   key={cell.id}

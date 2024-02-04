@@ -107,6 +107,7 @@ export class SiecleProcessor implements FileProcessor {
       lastName: row['Nom élève'],
       birthDate: row['Date naissance'],
       otherName: row['Deuxième prénom'] + row['Troisième prénom'] || null,
+      gender: row.Sexe === 'MASCULIN' ? 'M' : 'F',
     }));
   }
 

@@ -28,7 +28,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
-import { cn } from '@pedaki/design/utils';
 import {
   FILE_MAX_SIZE,
   FILE_MAX_SIZE_MB,

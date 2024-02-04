@@ -105,6 +105,7 @@ class StudentImportsService {
         lastName: student.lastName,
         birthDate: student.birthDate,
         otherName: student.otherName ?? undefined,
+        gender: student.gender ?? undefined,
       })),
     });
   }

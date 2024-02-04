@@ -30,7 +30,7 @@ import {
 import type { FieldType, Filter } from '@pedaki/services/students/query.model.client.js';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
-import React, { forwardRef, Fragment, useEffect } from 'react';
+import React, { forwardRef, Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 
 const typedValue = (value: unknown, type: FieldType): string | number => {
@@ -110,7 +110,7 @@ const NewFilter = ({
       </Tooltip>
       <PopoverContent
         align="end"
-        className="w-[300px] md:w-[600px]"
+        className="z-[90] w-[300px] md:w-[600px]"
         onOpenAutoFocus={e => e.preventDefault()}
       >
         <EditFilter onSubmit={addNewFilter} title={t('title')} />
@@ -250,7 +250,7 @@ const EditFilter = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="z-[9999] flex flex-col gap-4">
         <span className="text-label-md text-main">{title}</span>
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12 md:col-span-4">
@@ -405,5 +405,6 @@ const FilterValue = forwardRef<
 
   return null;
 });
+FilterValue.displayName = 'FilterValue';
 
 export default Filters;

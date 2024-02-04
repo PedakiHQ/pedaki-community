@@ -3,8 +3,7 @@ import BaseForm from '~/components/students/import/student/form.tsx';
 import type { OutputType } from '~api/router/router.ts';
 import React from 'react';
 
-type PossibleStudentData =
-  OutputType['students']['imports']['students']['getOne']['import'];
+type PossibleStudentData = OutputType['students']['imports']['students']['getOne']['import'];
 
 interface ImportedProps {
   baseData: PossibleStudentData;
@@ -18,9 +17,13 @@ const Imported = ({ baseData }: ImportedProps) => {
         <p>&nbsp;</p>
       </div>
 
-      <BaseForm data={baseData} disabled fields={fields}
-      key={`${baseData?.id}`}
-                tKey="students.import.fields" />
+      <BaseForm
+        data={baseData}
+        disabled
+        fields={fields}
+        key={`${baseData?.id}`}
+        tKey="students.import.fields"
+      />
     </>
   );
 };

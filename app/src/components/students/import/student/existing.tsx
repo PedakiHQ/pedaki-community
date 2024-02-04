@@ -1,37 +1,38 @@
+'use client';
+
 import { Button } from '@pedaki/design/ui/button';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
-import { IconX } from '@pedaki/design/ui/icons';
-import { Input } from '@pedaki/design/ui/input';
+import { IconSpinner, IconX } from '@pedaki/design/ui/icons';
 import { Sheet, SheetContent, SheetTrigger } from '@pedaki/design/ui/sheet';
 import { cn } from '@pedaki/design/utils';
+import type { MergeUpdateOneStudentInput } from '@pedaki/services/students/imports/merge/merge.model.js';
+import { StudentSchema } from '@pedaki/services/students/student_base.model';
+import { serialize, useVisibleParams } from '~/components/students/import/parameters.ts';
 import { fields } from '~/components/students/import/student/constants.ts';
 import BaseForm from '~/components/students/import/student/form.tsx';
 import Client from '~/components/students/list/client.tsx';
 import type { StudentData } from '~/components/students/list/columns.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
+import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
 import type { OutputType } from '~api/router/router.ts';
-import React, {useEffect, useState} from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 type PossibleStudentData =
   OutputType['students']['imports']['students']['getPossibleStudentData']['current'];
 
 interface ExistingProps {
-  baseData: PossibleStudentData | null;
-  importedData: PossibleStudentData | null;
+  baseData: PossibleStudentData;
+  importedData: NonNullable<PossibleStudentData>;
+  importId: string;
 }
 
-const merge = (prev: PossibleStudentData, next: PossibleStudentData | null):(PossibleStudentData | null) => {
-    if(!prev) return next;
-    return {
-        ...next,
-        ...prev,
-        id: next?.id ?? prev.id,
-    }
-}
+const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
+  const [visible] = useVisibleParams();
+  const items = useStudentsImportStore(state => state.items);
+  const setItems = useStudentsImportStore(state => state.setItems);
 
-const Existing = ({ baseData, importedData }: ExistingProps) => {
-  const [linkStudentId, setLinkStudentId] = React.useState<number | null>(null);
+  const [linkStudentId, setLinkStudentId] = React.useState<number | null>(baseData?.id ?? null);
 
   const { data: linkedStudent } = api.students.imports.students.getPossibleStudentData.useQuery(
     {
@@ -42,15 +43,54 @@ const Existing = ({ baseData, importedData }: ExistingProps) => {
     },
   );
 
-  const [finalData, setFinalData] = useState<PossibleStudentData | null>(baseData);
+  const [formBaseData, setFormBaseData] = useState<PossibleStudentData | null>(
+    baseData ?? importedData,
+  );
 
-    useEffect(() => {
-        setFinalData(linkedStudent?.current ?? baseData);
-    }, [linkedStudent]);
+  useEffect(() => {
+    if (linkedStudent?.current) setFormBaseData(linkedStudent?.current);
+  }, [linkedStudent]);
 
-    useEffect(() => {
-        setFinalData(baseData);
-    }, [baseData]);
+  const router = useRouter();
+
+  const updateStudentImportMutation = api.students.imports.students.updateOne.useMutation({
+    onSuccess: (_, variables: MergeUpdateOneStudentInput) => {
+      const nextId = items
+        .filter(item => item?.status === 'PENDING')
+        .find(item => item.id != importedData.id);
+      const newItems = items.map(item => {
+        if (item.id === variables.id) {
+          return {
+            ...item,
+            status: variables.status,
+            data: variables.data,
+          };
+        }
+        return item;
+      });
+      setItems(newItems);
+      router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
+    },
+  });
+
+  const loading = updateStudentImportMutation.isLoading;
+
+  const deleteImport = () => {
+    updateStudentImportMutation.mutate({
+      importId: importId,
+      id: importedData.id,
+      status: 'IGNORED',
+    });
+  };
+
+  const updateImport = (data: PossibleStudentData) => {
+    updateStudentImportMutation.mutate({
+      importId: importId,
+      id: importedData.id,
+      status: 'DONE',
+      data: { current: data },
+    });
+  };
 
   return (
     <>
@@ -62,18 +102,35 @@ const Existing = ({ baseData, importedData }: ExistingProps) => {
         />
       </div>
       <BaseForm
-        data={finalData}
+        data={formBaseData}
         importedData={importedData}
         fields={fields}
-        key={`${baseData?.id}-${linkStudentId}-${finalData?.id}`}
         tKey="students.import.fields"
+        schema={StudentSchema}
+        onSubmitted={updateImport}
       >
         {form => {
           return (
             <>
-              <pre>
-                {JSON.stringify(form.watch(), null, 2)}
-              </pre>
+              <pre>{JSON.stringify(form.watch(), null, 2)}</pre>
+              <div className="flex items-center justify-end">
+                <div className={cn('pr-2', !loading && 'hidden')}>
+                  <IconSpinner className="h-5 w-5 animate-spin text-primary-base" />
+                </div>
+                <Button
+                  type="button"
+                  disabled={loading}
+                  onClick={deleteImport}
+                  className="rounded-r-none  text-state-error hover:border-state-error"
+                  size="sm"
+                  variant="stroke-primary-main"
+                >
+                  Supprimer
+                </Button>
+                <Button className="rounded-l-none" size="sm" variant="stroke-primary-main">
+                  {linkedStudent?.current?.id !== undefined ? 'Mettre à jour' : 'Ajouter'}
+                </Button>
+              </div>
             </>
           );
         }}
@@ -92,7 +149,7 @@ const SelectAnotherBaseStudent = ({
   const [open, setOpen] = React.useState(false);
   const t = useScopedI18n('students.import.existing');
 
-  const onClickRow = (row: StudentData) => {
+  const onClickRow = (event: React.MouseEvent<HTMLTableRowElement>, row: StudentData) => {
     setLinkStudentId(row.id);
     setOpen(false);
   };
@@ -105,9 +162,13 @@ const SelectAnotherBaseStudent = ({
         <SheetTrigger className="text-label-sm text-sub hover:underline">
           {!isLinked
             ? t('linkToStudent')
-            : t('linkedToStudent', {
-                name: linkedStudent.firstName + ' ' + linkedStudent.lastName,
-              })}
+            : t(
+                'linkedToStudent',
+                // @ts-expect-error: issue with the translation params type
+                {
+                  name: linkedStudent.firstName + ' ' + linkedStudent.lastName,
+                },
+              )}
         </SheetTrigger>
         <SheetContent
           side="right"
@@ -115,7 +176,10 @@ const SelectAnotherBaseStudent = ({
           onOpenAutoFocus={e => e.preventDefault()}
         >
           <div className="h-full p-4">
-            <Client onClickRow={onClickRow} />
+            <Client
+              onClickRow={onClickRow}
+              selectedRows={isLinked ? { [linkedStudent.id - 1]: true } : {}}
+            />
           </div>
         </SheetContent>
       </Sheet>

@@ -17,7 +17,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\"",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
     "typecheck": "tsc --noEmit --declaration"

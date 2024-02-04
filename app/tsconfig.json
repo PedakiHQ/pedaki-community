@@ -51,6 +51,11 @@
   "include": [
     "src",
     ".next/types/**/*.ts",
+    "next-env.d.ts",
+    ".eslintrc.cjs",
+    "next.config.js",
+    "tailwind.config.ts",
+    "postcss.config.js",
     "reset.d.ts"
   ],
   "exclude": [

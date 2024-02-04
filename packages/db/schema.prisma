@@ -104,6 +104,8 @@ model Student {
   lastName  String  @map("last_name") @db.VarChar(255)
   otherName String? @map("other_name") @db.VarChar(255) // 3rd name etc... just in case
 
+  gender String? @db.Char(1) // M or F
+
   birthDate DateTime @map("birth_date") @db.Date
 
   properties Json @db.JsonB
@@ -299,6 +301,7 @@ model ImportStudent {
   lastName  String   @map("last_name") @db.VarChar(255)
   otherName String?  @map("other_name") @db.VarChar(255)
   birthDate DateTime @map("birth_date") @db.Date
+  gender    String?  @db.Char(1)
 
   importClasses ImportClass[]
 

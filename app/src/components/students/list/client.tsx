@@ -17,10 +17,11 @@ import React, { useEffect, useMemo } from 'react';
 
 interface ClientProps {
   className?: string;
-  onClickRow?: (value: StudentData) => void;
+  onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>, value: StudentData) => void;
+  selectedRows?: Record<StudentData['id'], boolean>;
 }
 
-const Client = ({ className, onClickRow }: ClientProps) => {
+const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
   const t = useScopedI18n('students.list.table');
 
   const { setTranslatedColumns, propertyMapping, classMapping, teacherMapping } =
@@ -136,6 +137,7 @@ const Client = ({ className, onClickRow }: ClientProps) => {
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
         onClickRow={onClickRow}
+        selectedRows={selectedRows}
       />
       <Footer
         isLoading={isLoading}
@@ -161,6 +163,7 @@ const TableElement = ({
   columnVisibility,
   setColumnVisibility,
   onClickRow,
+  selectedRows,
 }: {
   columns: StudentColumnDef[];
   data: StudentData[] | undefined;
@@ -171,6 +174,7 @@ const TableElement = ({
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   onClickRow?: ClientProps['onClickRow'];
+  selectedRows?: ClientProps['selectedRows'];
 }) => {
   const tableColumns = React.useMemo(
     () =>
@@ -203,6 +207,7 @@ const TableElement = ({
       columnVisibility={columnVisibility}
       setColumnVisibility={setColumnVisibility}
       onClickRow={onClickRow}
+      selectedRows={selectedRows}
     />
   );
 };

@@ -21,6 +21,7 @@ const fakeStudents = () => ({
   lastName: faker.person.lastName(),
   otherName: Math.random() > 0.5 ? faker.person.middleName() : null,
   birthDate: faker.date.past(),
+  gender: Math.random() > 0.5 ? 'M' : 'F',
   properties: newProperties.reduce(
     (acc, property) => {
       acc[property.id] = faker.number.int({ min: 0, max: 20 });

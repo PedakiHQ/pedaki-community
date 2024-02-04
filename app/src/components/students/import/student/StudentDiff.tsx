@@ -42,13 +42,18 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
   }
 
   return (
-    <Card className="flex h-full w-full flex-row">
+    <Card className="relative flex h-min w-full flex-row">
       <div className="flex-1">
         <Imported baseData={result.import} />
       </div>
       <Separator orientation="vertical" />
       <div className="flex-1">
-        <Existing baseData={result.current} importedData={result.import} key={id}/>
+        <Existing
+          baseData={result.current}
+          importedData={result.import}
+          importId={importId}
+          key={id}
+        />
       </div>
     </Card>
   );

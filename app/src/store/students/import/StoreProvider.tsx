@@ -11,7 +11,11 @@ import React, { useRef } from 'react';
 const StoreProvider = ({
   children,
   ...props
-}: PropsWithChildren & Omit<StudentsImportStore, 'setSelectorVisible' | 'selectorVisible'>) => {
+}: PropsWithChildren &
+  Omit<
+    StudentsImportStore,
+    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId' | 'items' | 'setItems'
+  >) => {
   // TODO: faire un meilleur type
   const storeRef = useRef<StudentsImportStoreType>();
 
