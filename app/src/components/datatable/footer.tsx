@@ -5,15 +5,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@pedaki/design/ui/select';
-import { serialize } from '~/components/classes/list/parameters.ts';
+import type { PaginationOutput } from '@pedaki/services/shared/pagination.model';
 import { PaginationElement } from '~/components/datatable/pagination';
 import { possiblesPerPage } from '~/components/datatable/parameters';
 import type { PossiblePerPage } from '~/components/datatable/parameters';
 import { useScopedI18n } from '~/locales/client.ts';
-import type { OutputType } from '~api/router/router.ts';
 import React from 'react';
 
+interface GenerateUrlArgs {
+  page: number;
+  perPage: PossiblePerPage;
+  sorting: { id: string; desc: boolean }[];
+  columns: Record<string, boolean>;
+}
+
 const Footer = ({
+  perPageLabel,
   isLoading,
   page,
   setPage,
@@ -22,25 +29,22 @@ const Footer = ({
   meta,
   sorting,
   columnVisibility,
+  serialize,
 }: {
+  perPageLabel?: string;
   isLoading: boolean;
   page: number;
   perPage: PossiblePerPage;
   setPerPage: React.Dispatch<React.SetStateAction<PossiblePerPage>>;
   setPage: (page: number) => void;
-  meta: OutputType['classes']['getPaginatedMany']['meta'] | undefined;
+  meta: PaginationOutput | undefined;
   sorting: { id: string; desc: boolean }[];
   columnVisibility: Record<string, boolean>;
+  serialize: (data: GenerateUrlArgs) => string;
 }) => {
-  const datatableT = useScopedI18n('components.datatable');
-  const t = useScopedI18n('classes.list.table');
+  const t = useScopedI18n('components.datatable');
 
-  const generateUrl = (data: {
-    page?: number;
-    perPage?: PossiblePerPage;
-    sorting?: { id: string; desc: boolean }[];
-    columns?: Record<string, boolean>;
-  }) => {
+  const generateUrl = (data: Partial<GenerateUrlArgs>): string => {
     return serialize({
       page: data.page ?? page,
       perPage: data.perPage ?? perPage,
@@ -51,7 +55,7 @@ const Footer = ({
   return (
     <div className="grid grid-cols-12 items-center justify-between gap-4">
       <span className="col-span-6 justify-start text-p-sm text-sub @3xl/main:col-span-3">
-        {datatableT('footer.showing', {
+        {t('footer.showing', {
           from: isLoading ? '0' : Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0),
           to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
           total: isLoading ? '0' : meta?.totalCount,
@@ -66,7 +70,7 @@ const Footer = ({
         />
       </div>
       <div className="col-span-6 flex items-center justify-end gap-2 @3xl/main:col-span-3 lg:mr-0">
-        <span className="text-p-sm text-sub">{t('footer.perPage')}</span>
+        <span className="text-p-sm text-sub">{perPageLabel ?? t('footer.perPage')}</span>
         <Select
           onValueChange={value => {
             const newValue = Number(value) as PossiblePerPage;

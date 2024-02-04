@@ -7,6 +7,7 @@ export default {
   },
   footer: {
     showing: 'Affichage de {from} à {to} sur {total}',
+    perPage: 'Lignes par page',
   },
   hide: {
     columns: {

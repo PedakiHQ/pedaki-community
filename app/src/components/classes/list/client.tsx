@@ -5,10 +5,10 @@ import type { Field } from '@pedaki/services/classes/query.model';
 import type { ClassColumnDef, ClassData } from '~/components/classes/list/columns.tsx';
 import { generateColumns } from '~/components/classes/list/columns.tsx';
 import Filters from '~/components/classes/list/filters.tsx';
-import Footer from '~/components/classes/list/footer.tsx';
-import { searchParams } from '~/components/classes/list/parameters.ts';
+import { searchParams, serialize } from '~/components/classes/list/parameters.ts';
 import { ColumnSelector } from '~/components/datatable/column-selector';
 import { DataTable } from '~/components/datatable/data-table';
+import Footer from '~/components/datatable/footer';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useClassesListStore } from '~/store/classes/list/list.store.ts';
@@ -151,6 +151,8 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
         meta={meta}
         sorting={sorting}
         columnVisibility={columnVisibility}
+        perPageLabel={t('footer.perPage')}
+        serialize={serialize}
       />
     </div>
   );
