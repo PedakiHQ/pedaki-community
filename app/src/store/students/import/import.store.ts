@@ -9,9 +9,9 @@ export interface StudentsImportStore {
   selectorVisible: boolean;
   setSelectorVisible: (visible: boolean) => void;
   items: ({
-      id: number;
-      status: string;
-    } & Record<string, unknown>)[];
+    id: number;
+    status: string;
+  } & Record<string, unknown>)[];
   setItems: (items: StudentsImportStore['items']) => void;
 }
 
@@ -32,7 +32,7 @@ export const useStudentsImportStore = <T>(selector: (state: StudentsImportStore)
 export const initializeStore = (
   preloadedState: Omit<
     StudentsImportStore,
-    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId'  | 'setItems'
+    'setSelectorVisible' | 'selectorVisible' | 'nextId' | 'setNextId' | 'setItems'
   >,
 ) => {
   return createStore<StudentsImportStore>(set => ({

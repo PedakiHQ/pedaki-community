@@ -10,7 +10,6 @@ import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import { notFound } from 'next/navigation';
 import React from 'react';
 
-
 export default async function StudentsImportLayout({
   children,
   params,
@@ -20,8 +19,8 @@ export default async function StudentsImportLayout({
 
   const status = await api.students.imports.status.query({ id });
 
-  if(status.status === 'ERROR') {
-      return notFound();
+  if (status.status === 'ERROR') {
+    return notFound();
   }
 
   return (
@@ -35,7 +34,7 @@ export default async function StudentsImportLayout({
       </PageHeader>
       <ImportNavigation importId={id} />
       <div className="h-full max-h-full pt-6" id={MAIN_CONTENT}>
-          {children}
+        {children}
       </div>
     </>
   );

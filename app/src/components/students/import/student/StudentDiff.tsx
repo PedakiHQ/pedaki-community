@@ -10,7 +10,6 @@ import { api } from '~/server/clients/client.ts';
 import React, { Suspense, useEffect } from 'react';
 import { toast } from 'sonner';
 
-
 interface StudentDiffProps {
   importId: string;
 }
@@ -39,13 +38,13 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
     id,
   });
 
-    useEffect(() => {
-        if(isError) {
-            toast.error('Error fetching data', {
-                id: 'error-fetching-data',
-            });
-        }
-    }, [isError]);
+  useEffect(() => {
+    if (isError) {
+      toast.error('Error fetching data', {
+        id: 'error-fetching-data',
+      });
+    }
+  }, [isError]);
 
   if (isLoading || isError) {
     return <SuspenseCard />;

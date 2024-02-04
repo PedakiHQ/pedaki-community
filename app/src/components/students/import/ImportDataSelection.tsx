@@ -2,11 +2,28 @@
 
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@pedaki/design/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@pedaki/design/ui/dropdown-menu';
 import { IconPanelLeftClose, IconPanelLeftOpen, IconSettings2 } from '@pedaki/design/ui/icons';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@pedaki/design/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
-import { possibleFilters, serialize, useIdParam, useVisibleParams } from '~/components/students/import/parameters.ts';
+import {
+  possibleFilters,
+  serialize,
+  useIdParam,
+  useVisibleParams,
+} from '~/components/students/import/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import {
   useStudentsImportStore,
@@ -14,7 +31,6 @@ import {
 } from '~/store/students/import/import.store.ts';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-
 
 interface ImportDataSelectionProps {
   type: 'students' | 'classes';
@@ -87,22 +103,16 @@ const Wrapper = (props: ImportDataSelectionProps) => {
 };
 
 const itemLabel = (item: StudentsImportStore['items'][0]) => {
-  if('firstName' in item && 'lastName' in item) {
+  if ('firstName' in item && 'lastName' in item) {
     return `${item.firstName as string} ${item.lastName as string}`;
   }
-    if('name' in item) {
-        return item.name as string;
-    }
-    return  '-';
-}
+  if ('name' in item) {
+    return item.name as string;
+  }
+  return '-';
+};
 
-const Item = ({
-  item,
-  selected,
-}: {
-  item: StudentsImportStore['items'][0];
-  selected: boolean;
-}) => {
+const Item = ({ item, selected }: { item: StudentsImportStore['items'][0]; selected: boolean }) => {
   const [visible] = useVisibleParams();
 
   return (
