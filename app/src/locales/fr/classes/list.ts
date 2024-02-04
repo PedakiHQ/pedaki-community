@@ -20,9 +20,6 @@ export default {
       description: {
         label: 'Description',
       },
-      // studentsCount: {
-      //   label: "Nombre d'élèves",
-      // },
       academicYear: {
         label: 'Année académique',
       },
@@ -32,9 +29,12 @@ export default {
       mainTeacher: {
         label: 'Professeur principal',
       },
-      // teachers: {
-      //   label: 'Professeurs',
-      // },
+      branches: {
+        label: 'Branche(s)',
+      },
+      teachers: {
+        label: 'Professeurs',
+      },
     },
     footer: {
       perPage: 'Elèves par page',

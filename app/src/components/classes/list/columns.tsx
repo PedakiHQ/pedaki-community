@@ -14,19 +14,37 @@ export const generateColumns = (
   t: UseScopedI18nType<'classes.list.table'>,
   {
     teacherMapping,
+    academicYearMapping,
+    classBranchMapping,
+    classLevelMapping,
   }: {
     teacherMapping: OutputType['teachers']['getMany'];
+    academicYearMapping: OutputType['academicYear']['getMany'];
+    classBranchMapping: OutputType['classes']['branches']['getMany'];
+    classLevelMapping: OutputType['classes']['levels']['getMany'];
   },
 ) => {
   const res: ClassColumnDef[] = [
     defaultCell<ClassColumnDef>('name', 'name', t('columns.name.label')),
     defaultCell<ClassColumnDef>('description', 'description', t('columns.description.label')),
-    defaultCell<ClassColumnDef>(
-      'academicYear.name',
-      'academicYear.name',
-      t('columns.academicYear.label'),
-    ),
-    defaultCell<ClassColumnDef>('level.name', 'level.name', t('columns.level.label')),
+    {
+      ...defaultCell<ClassColumnDef>(
+        'academicYear.name',
+        'academicYear.id',
+        t('columns.academicYear.label'),
+      ),
+      cell: ({ row }) => {
+        const data = row.original;
+        return <div>{academicYearMapping[data.academicYear.id!]?.name ?? '-'}</div>;
+      },
+    },
+    {
+      ...defaultCell<ClassColumnDef>('level.name', 'level.id', t('columns.level.label')),
+      cell: ({ row }) => {
+        const data = row.original;
+        return <div>{classLevelMapping[data.level.id!]?.name ?? '-'}</div>;
+      },
+    },
     {
       ...defaultCell<ClassColumnDef>(
         'mainTeacher.name',
@@ -39,6 +57,28 @@ export const generateColumns = (
           return <div>{teacherMapping[data.mainTeacher.id!]?.name}</div>;
         }
         return <div>-</div>;
+      },
+    },
+    {
+      ...defaultCell<ClassColumnDef>(`branches.name`, `branches.id`, t('columns.branches.label')),
+      cell: ({ row }) => {
+        const data = row.original;
+        const branches = data.branches
+          ?.map(({ id }) => id && classBranchMapping[id]?.name)
+          .filter(Boolean)
+          .join(', ');
+        return <div>{branches ?? '-'}</div>;
+      },
+    },
+    {
+      ...defaultCell<ClassColumnDef>(`teachers.name`, `teachers.id`, t('columns.teachers.label')),
+      cell: ({ row }) => {
+        const data = row.original;
+        const teachers = data.teachers
+          ?.map(({ id }) => id && teacherMapping[id]?.name)
+          .filter(Boolean)
+          .join(', ');
+        return <div>{teachers ?? '-'}</div>;
       },
     },
   ];

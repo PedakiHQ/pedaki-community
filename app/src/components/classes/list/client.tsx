@@ -18,18 +18,37 @@ import React, { useEffect, useMemo } from 'react';
 const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
   const t = useScopedI18n('classes.list.table');
 
-  const { setTranslatedColumns, teacherMapping } = useClassesListStore(store => ({
+  const {
+    setTranslatedColumns,
+    teacherMapping,
+    academicYearMapping,
+    classBranchMapping,
+    classLevelMapping,
+  } = useClassesListStore(store => ({
     teacherMapping: store.teacherMapping,
+    academicYearMapping: store.academicYearMapping,
+    classBranchMapping: store.classBranchMapping,
+    classLevelMapping: store.classLevelMapping,
     setTranslatedColumns: store.setTranslatedColumns,
   }));
 
   const translatedColumns = useMemo(() => {
     const result = generateColumns(t, {
       teacherMapping,
+      academicYearMapping,
+      classBranchMapping,
+      classLevelMapping,
     });
     setTranslatedColumns(result);
     return result;
-  }, [t, teacherMapping, setTranslatedColumns]);
+  }, [
+    t,
+    teacherMapping,
+    academicYearMapping,
+    classBranchMapping,
+    classLevelMapping,
+    setTranslatedColumns,
+  ]);
 
   // Loading state
   const [isTransitionLoading, startTransition] = React.useTransition();
@@ -51,7 +70,6 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
       startTransition,
     }),
   );
-  console.log(filters);
 
   const [perPage, setPerPage] = useQueryState(
     'perPage',

@@ -173,6 +173,9 @@ const resetDb = async () => {
         teachers: {
           connect: [{ id: 1 }, { id: 2 }],
         },
+        branches: {
+          connect: [{ id: 1 }],
+        },
       },
     }),
     prisma.class.create({
@@ -191,6 +194,9 @@ const resetDb = async () => {
         teachers: {
           connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
         },
+        branches: {
+          connect: [{ id: 2 }],
+        },
       },
     }),
     prisma.class.create({
@@ -208,6 +214,9 @@ const resetDb = async () => {
         },
         teachers: {
           connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        },
+        branches: {
+          connect: [{ id: 1 }, { id: 2 }],
         },
       },
     }),

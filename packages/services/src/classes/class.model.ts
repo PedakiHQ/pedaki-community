@@ -48,7 +48,6 @@ export const GetPaginatedManyClassesOutputSchema = z.object({
           }).partial(),
           level: ClassLevelSchema.pick({ id: true, name: true, description: true }).partial(),
           teachers: z.array(TeacherSchema.pick({ id: true, name: true }).partial()),
-          // studentsCount: z.number(),
         }),
       )
       .partial(),

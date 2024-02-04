@@ -1,13 +1,14 @@
-import type { Field, FieldType } from '@pedaki/services/classes/query.model';
 import type { ClassColumnDef } from '~/components/classes/list/columns.tsx';
 import type { OutputType } from '~api/router/router.ts';
 import { createContext, useContext } from 'react';
-import type { z } from 'zod';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface ClassesListStore {
   translatedColumns: ClassColumnDef[];
   teacherMapping: OutputType['teachers']['getMany'];
+  academicYearMapping: OutputType['academicYear']['getMany'];
+  classBranchMapping: OutputType['classes']['branches']['getMany'];
+  classLevelMapping: OutputType['classes']['levels']['getMany'];
   setTranslatedColumns: (columns: ClassColumnDef[]) => void;
 }
 

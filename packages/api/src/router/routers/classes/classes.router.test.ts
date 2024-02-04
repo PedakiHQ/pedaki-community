@@ -53,8 +53,6 @@ describe('classesRouter', () => {
           },
         });
 
-        console.log(JSON.stringify(data));
-
         expect(meta.currentPage).toBe(1);
         expect(data.length).toBe(3);
       },
