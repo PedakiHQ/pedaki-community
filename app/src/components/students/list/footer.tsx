@@ -6,8 +6,9 @@ import {
   SelectValue,
 } from '@pedaki/design/ui/select';
 import { PaginationElement } from '~/components/datatable/pagination';
-import type { PossiblePerPage } from '~/components/students/list/parameters.ts';
-import { possiblesPerPage, serialize } from '~/components/students/list/parameters.ts';
+import { possiblesPerPage } from '~/components/datatable/parameters';
+import type { PossiblePerPage } from '~/components/datatable/parameters';
+import { serialize } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 import React from 'react';

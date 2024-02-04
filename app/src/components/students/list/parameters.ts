@@ -1,5 +1,6 @@
 import { FilterSchema } from '@pedaki/services/students/query.model.client';
 import type { Filter } from '@pedaki/services/students/query.model.client';
+import { possiblesPerPage, sortingParser } from '~/components/datatable/parameters';
 import {
   createParser,
   createSerializer,
@@ -8,22 +9,6 @@ import {
   parseAsJson,
   parseAsNumberLiteral,
 } from 'nuqs/parsers';
-
-const sortingParser = createParser({
-  parse: (value: string) => {
-    const [column, direction] = value.split(':', 2);
-    if (direction !== 'asc' && direction !== 'desc') {
-      return null;
-    }
-    return {
-      id: column!,
-      desc: direction === 'desc',
-    };
-  },
-  serialize: (value: { id: string; desc: boolean }) => {
-    return `${value.id}:${value.desc ? 'desc' : 'asc'}`;
-  },
-});
 
 const filtersParser = createParser({
   parse: (raw: string) => {
@@ -43,7 +28,6 @@ const filtersParser = createParser({
   },
 });
 
-export const possiblesPerPage = [10, 25, 50, 100] as const;
 export const searchParams = {
   page: parseAsInteger.withDefault(1),
   perPage: parseAsNumberLiteral(possiblesPerPage).withDefault(25),
@@ -56,4 +40,3 @@ export const searchParams = {
   filters: parseAsArrayOf(filtersParser).withDefault([]),
 } as const;
 export const serialize = createSerializer(searchParams);
-export type PossiblePerPage = (typeof possiblesPerPage)[number];

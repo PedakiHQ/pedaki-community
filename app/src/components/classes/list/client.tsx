@@ -2,12 +2,12 @@
 
 import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/classes/query.model';
-import { ColumnSelector } from '~/components/classes/list/column-selector.tsx';
 import type { ClassColumnDef, ClassData } from '~/components/classes/list/columns.tsx';
 import { generateColumns } from '~/components/classes/list/columns.tsx';
 import Filters from '~/components/classes/list/filters.tsx';
 import Footer from '~/components/classes/list/footer.tsx';
 import { searchParams } from '~/components/classes/list/parameters.ts';
+import { ColumnSelector } from '~/components/datatable/column-selector';
 import { DataTable } from '~/components/datatable/data-table';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
@@ -76,7 +76,7 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
   const page = Math.max(1, _page);
 
   // Fetch data
-  const { data, isLoading: isQueryLoading } = api.classes.getMany.useQuery({
+  const { data, isLoading: isQueryLoading } = api.classes.getPaginatedMany.useQuery({
     fields: [
       ...new Set(
         visibleColumns.map(column => translatedColumns.find(col => col.id === column)?.accessorKey),

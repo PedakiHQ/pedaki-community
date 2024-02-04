@@ -5,9 +5,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@pedaki/design/ui/select';
-import type { PossiblePerPage } from '~/components/classes/list/parameters.ts';
-import { possiblesPerPage, serialize } from '~/components/classes/list/parameters.ts';
+import { serialize } from '~/components/classes/list/parameters.ts';
 import { PaginationElement } from '~/components/datatable/pagination';
+import { possiblesPerPage } from '~/components/datatable/parameters';
+import type { PossiblePerPage } from '~/components/datatable/parameters';
 import { useScopedI18n } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
 import React from 'react';
@@ -27,7 +28,7 @@ const Footer = ({
   perPage: PossiblePerPage;
   setPerPage: React.Dispatch<React.SetStateAction<PossiblePerPage>>;
   setPage: (page: number) => void;
-  meta: OutputType['classes']['getMany']['meta'] | undefined;
+  meta: OutputType['classes']['getPaginatedMany']['meta'] | undefined;
   sorting: { id: string; desc: boolean }[];
   columnVisibility: Record<string, boolean>;
 }) => {

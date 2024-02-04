@@ -4,86 +4,13 @@ import {
   GetManyClassesInputSchema,
   GetManyClassesOutputSchema,
 } from '@pedaki/services/classes/class.model.js';
-import type { GetAllClasses, GetManyClassesInput } from '@pedaki/services/classes/class.model.js';
+import type { GetAllClasses } from '@pedaki/services/classes/class.model.js';
+import type { Prisma } from '@prisma/client';
 import { privateProcedure, router } from '~api/router/trpc.ts';
-
-// TODO: move to a separate file
-const filtersArrayToPrismaWhere = <T extends object>(
-  filters: GetManyClassesInput['where'] | undefined,
-): T => {
-  const where = {} as T;
-  if (filters) {
-    for (const { field, operator, value } of filters) {
-      const fieldParts = field.split('.');
-      let current = where;
-      // Move to the last part of the field
-      for (const part of fieldParts) {
-        // Initialize the next part of the where object and move to it
-        // @ts-expect-error: need to fix the T type
-        current = current[part] = current[part] || {};
-      }
-
-      // If we are in a negatiive operator, we need to create a not object
-      switch (operator) {
-        case 'neq':
-        case 'nlike':
-          // Initialize the next part of the where object and move to it
-          // @ts-expect-error: need to fix the T type
-          current = current.not = current.not || {};
-          break;
-      }
-      switch (operator) {
-        case 'eq':
-        case 'neq':
-          // @ts-expect-error: need to fix the T type
-          current.equals = value;
-          break;
-        case 'like':
-        case 'nlike':
-          // @ts-expect-error: need to fix the T type
-          current.contains = value;
-          break;
-        // case 'gt':
-        // case 'gte':
-        // case 'lt':
-        // case 'lte':
-        default:
-          // @ts-expect-error: need to fix the T type
-          current[operator] = value;
-      }
-    }
-  }
-
-  return where;
-};
-
-// TODO: move to a separate file
-const orderByArrayToPrismaOrderBy = <T extends object>(
-  orderBy: GetManyClassesInput['orderBy'] | undefined,
-): T => {
-  const orderByResult = {} as T;
-  if (orderBy) {
-    for (const [field, sort] of orderBy) {
-      const fieldParts = field.split('.');
-      if (fieldParts.length > 0) {
-        let current = orderByResult;
-        // Move to the last part of the field
-        for (const part of fieldParts.slice(0, -1)) {
-          // Initialize the next part of the where object and move to it
-          // @ts-expect-error: need to fix the T type
-          current = current[part] = current[part] || {};
-        }
-        // @ts-expect-error: need to fix the T type
-        current[fieldParts[fieldParts.length - 1]] = sort;
-      }
-    }
-  }
-
-  return orderByResult;
-};
+import { filtersArrayToPrismaWhere, orderByArrayToPrismaOrderBy } from '~api/router/utils';
 
 export const classesRouter = router({
-  getAll: privateProcedure.output(GetAllClassesSchema).query(async () => {
+  getMany: privateProcedure.output(GetAllClassesSchema).query(async () => {
     const data = await prisma.class.findMany({
       select: {
         id: true,
@@ -97,11 +24,10 @@ export const classesRouter = router({
     }, {} as GetAllClasses);
   }),
 
-  getMany: privateProcedure
+  getPaginatedMany: privateProcedure
     .input(GetManyClassesInputSchema)
     .output(GetManyClassesOutputSchema)
     .query(async ({ input }) => {
-      // TODO orderBy
       const fields = input.fields.reduce(
         (acc, curr) => {
           acc[curr] = true;
@@ -166,13 +92,8 @@ export const classesRouter = router({
                     },
                   },
           },
-          // TODO: fix type, I can't access Prisma.ClassWhereInput
-          // where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where),
-          where: filtersArrayToPrismaWhere<any>(input.where),
-          // TODO: not working with args like academicYear.id
-          // TODO: fix type, I can't access Prisma.ClassOrderByWithRelationInput
-          // orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(input.orderBy),
-          orderBy: orderByArrayToPrismaOrderBy<any>(input.orderBy),
+          where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where),
+          orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(input.orderBy),
         })
         .withPages({
           limit: input.pagination.limit,

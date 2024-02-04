@@ -11,28 +11,28 @@ describe('classesRouter', () => {
   const userSession = getUserSession();
   const internalSession = getInternalSession();
 
-  describe('getAll', () => {
+  describe('getMany', () => {
     test.each([anonymousSession, userSession, internalSession])(
       'need to be authenticated to use this route - $type',
       async ({ api, type }) => {
-        await assertIsAuthenticated(() => api.classes.getAll(), {
+        await assertIsAuthenticated(() => api.classes.getMany(), {
           shouldWork: type !== 'anonymousUserSession',
         });
       },
     );
     test.each([userSession, internalSession])('returns at least one result', async ({ api }) => {
-      const data = await api.classes.getAll();
+      const data = await api.classes.getMany();
       expect(Object.values(data).length).toBeGreaterThan(0);
     });
   });
 
-  describe('getMany', () => {
+  describe('getPaginatedMany', () => {
     test.each([anonymousSession, userSession, internalSession])(
       'need to be authenticated to use this route - $type',
       async ({ api, type }) => {
         await assertIsAuthenticated(
           () =>
-            api.classes.getMany({
+            api.classes.getPaginatedMany({
               fields: ['id'],
             }),
           {
@@ -45,7 +45,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - without filter - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id'],
           pagination: {
             page: 1,
@@ -63,7 +63,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - with filter - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id', 'name'],
           where: [{ field: 'name', operator: 'eq', value: '6ème A' }],
           pagination: {
@@ -81,7 +81,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - with many filter - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id', 'name'],
           where: [
             { field: 'description', operator: 'eq', value: 'Class A' },
@@ -102,7 +102,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - with many filter and negation - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id', 'name'],
           where: [
             { field: 'description', operator: 'eq', value: 'Class A' },
@@ -123,7 +123,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - with join field on one level - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id', 'name', 'academicYear.id', 'academicYear.name'],
           where: [{ field: 'id', operator: 'eq', value: 1 }],
           pagination: {
@@ -143,7 +143,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - with filter and order asc - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id', 'name'],
           where: [{ field: 'academicYear.id', operator: 'eq', value: 1 }],
           orderBy: [['name', 'asc']],
@@ -165,7 +165,7 @@ describe('classesRouter', () => {
     test.each([userSession, internalSession])(
       'returns the 1st page - with filter and order desc - $type',
       async ({ api }) => {
-        const { data, meta } = await api.classes.getMany({
+        const { data, meta } = await api.classes.getPaginatedMany({
           fields: ['id', 'name'],
           where: [{ field: 'academicYear.id', operator: 'eq', value: 1 }],
           orderBy: [['name', 'desc']],

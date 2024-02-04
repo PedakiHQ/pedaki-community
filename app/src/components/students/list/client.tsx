@@ -2,8 +2,8 @@
 
 import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/students/query.model';
+import { ColumnSelector } from '~/components/datatable/column-selector';
 import { DataTable } from '~/components/datatable/data-table';
-import { ColumnSelector } from '~/components/students/list/column-selector.tsx';
 import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
 import { generateColumns } from '~/components/students/list/columns.tsx';
 import Filters from '~/components/students/list/filters.tsx';
