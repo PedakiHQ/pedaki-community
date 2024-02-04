@@ -45,7 +45,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const FormSchema = z.object({
-  logo: z
+  file: z
     .custom<File>()
     .refine(file => file instanceof File, { params: customErrorParams('file.mustBeCsv') })
     .refine(file => FILE_TYPES.includes(file.type), {
@@ -70,8 +70,8 @@ const UploadStudentsFile = () => {
   });
 
   const onSubmit = (values: FormValues) => {
-    if (!values.logo) return;
-    return wrapWithLoading(() => wait(uploadFile(values.logo!), 500), {
+    if (!values.file) return;
+    return wrapWithLoading(() => wait(uploadFile(values.file!), 500), {
       errorProps: _error => {
         return {
           title: t('upload.submit.error.title'),
@@ -126,7 +126,7 @@ const UploadStudentsFile = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
               <FormField
                 control={form.control}
-                name="logo"
+                name="file"
                 render={({ field: { onChange } }) => (
                   <Dropzone
                     accept={FILE_TYPES.join(',')}
@@ -184,7 +184,7 @@ const FileCard = ({
   form: ReturnType<typeof useForm<FormValues>>;
   response: OutputType['students']['imports']['status'] | undefined;
 }) => {
-  const file = form.watch('logo');
+  const file = form.watch('file');
   if (!file) return null;
 
   const format = response?.data?.family;
@@ -202,7 +202,7 @@ const FileCard = ({
           <FileCardStatusLabel response={response} />
         </div>
       </div>
-      <Button size="icon" variant="ghost-sub" onClick={() => form.setValue('logo', undefined)}>
+      <Button size="icon" variant="ghost-sub" onClick={() => form.setValue('file', undefined)}>
         <IconX className="h-4 w-4" />
       </Button>
     </Card>
@@ -290,7 +290,7 @@ const OldUploadStudentsFile = () => {
                           <Link href={`/students/import/${id}`}>Ouvrir</Link>
                         </Button>
                         <Tooltip>
-                          <TooltipTrigger>
+                          <TooltipTrigger asChild>
                             <Button
                               size="icon"
                               variant="ghost-error"
