@@ -10,7 +10,7 @@ export const t = initTRPC.context<Context>().create({
     if (error.code === 'INTERNAL_SERVER_ERROR' && env.NODE_ENV === 'production') {
       return { ...shape, message: 'Internal server error' };
     }
-    // logger.error(error);
+    logger.error(error);
     return shape;
   },
 });
