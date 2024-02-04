@@ -1,31 +1,10 @@
+import { AcademicYearSchema } from '~/academic-year/academic-year.model.ts';
+import { ClassBranchSchema } from '~/classes/branch.model.ts';
+import { ClassLevelSchema } from '~/classes/level.model.ts';
 import { PaginationInputSchema, PaginationOutputSchema } from '~/shared/pagination.model.ts';
 import { TeacherSchema } from '~/teachers/teachers.model.ts';
 import { z } from 'zod';
 import { FieldSchema, FilterSchema } from './query.model.ts';
-
-export const AcademicYearSchema = z.object({
-  id: z.number().min(0),
-  name: z.string().min(0).max(255),
-  startDate: z.date(),
-  endDate: z.date(),
-});
-export type AcademicYear = z.infer<typeof AcademicYearSchema>;
-
-export const ClassLevelSchema = z.object({
-  id: z.number().min(0),
-  name: z.string().min(0).max(255),
-  description: z.string().min(0).max(255).nullable(),
-  color: z.string().length(7),
-});
-export type ClassLevel = z.infer<typeof ClassLevelSchema>;
-
-export const ClassBranchSchema = z.object({
-  id: z.number().min(0),
-  name: z.string().min(0).max(255),
-  description: z.string().min(0).max(1000).nullable(),
-  color: z.string().length(7),
-});
-export type ClassBranch = z.infer<typeof ClassBranchSchema>;
 
 export const ClassesSchema = z.object({
   id: z.number().min(0),
@@ -38,10 +17,10 @@ export const ClassesSchema = z.object({
 });
 export type Class = z.infer<typeof ClassesSchema>;
 
-export const GetAllClassesSchema = z.record(ClassesSchema.pick({ id: true, name: true }));
-export type GetAllClasses = z.infer<typeof GetAllClassesSchema>;
+export const GetManyClassesSchema = z.record(ClassesSchema.pick({ id: true, name: true }));
+export type GetManyClasses = z.infer<typeof GetManyClassesSchema>;
 
-export const GetManyClassesInputSchema = z.object({
+export const GetPaginatedManyClassesInputSchema = z.object({
   fields: FieldSchema.array().min(1),
   where: FilterSchema.array().optional(),
   orderBy: z.array(z.tuple([FieldSchema, z.enum(['asc', 'desc'])])).optional(),
@@ -50,9 +29,9 @@ export const GetManyClassesInputSchema = z.object({
     limit: 10,
   }),
 });
-export type GetManyClassesInput = z.infer<typeof GetManyClassesInputSchema>;
+export type GetPaginatedManyClassesInput = z.infer<typeof GetPaginatedManyClassesInputSchema>;
 
-export const GetManyClassesOutputSchema = z.object({
+export const GetPaginatedManyClassesOutputSchema = z.object({
   data: z.array(
     ClassesSchema.pick({ id: true, name: true, description: true, mainTeacher: true })
       .merge(
@@ -76,4 +55,4 @@ export const GetManyClassesOutputSchema = z.object({
   ),
   meta: PaginationOutputSchema,
 });
-export type GetManyClassesOutput = z.infer<typeof GetManyClassesOutputSchema>;
+export type GetPaginatedManyClassesOutput = z.infer<typeof GetPaginatedManyClassesOutputSchema>;

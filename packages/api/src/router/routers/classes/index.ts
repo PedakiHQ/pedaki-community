@@ -1,16 +1,21 @@
 import { prisma } from '@pedaki/db';
 import {
-  GetAllClassesSchema,
-  GetManyClassesInputSchema,
-  GetManyClassesOutputSchema,
+  GetManyClassesSchema,
+  GetPaginatedManyClassesInputSchema,
+  GetPaginatedManyClassesOutputSchema,
 } from '@pedaki/services/classes/class.model.js';
-import type { GetAllClasses } from '@pedaki/services/classes/class.model.js';
+import type { GetManyClasses } from '@pedaki/services/classes/class.model.js';
 import type { Prisma } from '@prisma/client';
+import { classBranchesRouter } from '~api/router/routers/classes/branches';
+import { classLevelsRouter } from '~api/router/routers/classes/levels';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { filtersArrayToPrismaWhere, orderByArrayToPrismaOrderBy } from '~api/router/utils';
 
 export const classesRouter = router({
-  getMany: privateProcedure.output(GetAllClassesSchema).query(async () => {
+  branches: classBranchesRouter,
+  levels: classLevelsRouter,
+
+  getMany: privateProcedure.output(GetManyClassesSchema).query(async () => {
     const data = await prisma.class.findMany({
       select: {
         id: true,
@@ -21,12 +26,12 @@ export const classesRouter = router({
     return data.reduce((acc, curr) => {
       acc[curr.id] = curr;
       return acc;
-    }, {} as GetAllClasses);
+    }, {} as GetManyClasses);
   }),
 
   getPaginatedMany: privateProcedure
-    .input(GetManyClassesInputSchema)
-    .output(GetManyClassesOutputSchema)
+    .input(GetPaginatedManyClassesInputSchema)
+    .output(GetPaginatedManyClassesOutputSchema)
     .query(async ({ input }) => {
       const fields = input.fields.reduce(
         (acc, curr) => {
