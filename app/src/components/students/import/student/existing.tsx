@@ -86,11 +86,17 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
         });
       }
       if (variables.status === 'DONE') {
-        utils.students.imports.students.getOne.setData({
-          status: 'DONE',
-          import: importedData,
-          current: variables.data.current,
-        });
+        utils.students.imports.students.getOne.setData(
+          {
+            importId,
+            id: importedData.id,
+          },
+          {
+            status: 'DONE',
+            import: importedData,
+            current: variables.data!.current,
+          },
+        );
       }
       router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
     },
