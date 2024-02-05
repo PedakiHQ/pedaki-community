@@ -337,8 +337,8 @@ importers:
         specifier: workspace:*
         version: link:../logger/dist
       '@pedaki/mailer':
-        specifier: 0.5.2-beta.5
-        version: 0.5.2-beta.5(@react-email/button@0.0.13)(@react-email/head@0.0.7)(@react-email/html@0.0.7)(@react-email/link@0.0.7)(@react-email/render@0.0.12)(@react-email/tailwind@0.0.14)(react-email@2.0.0)(resend@3.1.0)
+        specifier: 0.5.2-beta.7
+        version: 0.5.2-beta.7(@react-email/button@0.0.13)(@react-email/head@0.0.7)(@react-email/html@0.0.7)(@react-email/link@0.0.7)(@react-email/render@0.0.12)(@react-email/tailwind@0.0.14)(react-email@2.0.0)(resend@3.1.0)
       '@pedaki/services':
         specifier: workspace:*
         version: link:../services/dist
@@ -3671,8 +3671,8 @@ packages:
       eslint-plugin-node: 11.1.0(eslint@8.56.0)
     dev: true
 
-  /@pedaki/mailer@0.5.2-beta.5(@react-email/button@0.0.13)(@react-email/head@0.0.7)(@react-email/html@0.0.7)(@react-email/link@0.0.7)(@react-email/render@0.0.12)(@react-email/tailwind@0.0.14)(react-email@2.0.0)(resend@3.1.0):
-    resolution: {integrity: sha512-DV0SkEPn3G5enaZOy8G+sFOke7CBtzT0E4/pXFd7UqkPSAWc8nvQDMRAOvRMTt7UqicuLwgGtpo5yfVWnX7vaQ==}
+  /@pedaki/mailer@0.5.2-beta.7(@react-email/button@0.0.13)(@react-email/head@0.0.7)(@react-email/html@0.0.7)(@react-email/link@0.0.7)(@react-email/render@0.0.12)(@react-email/tailwind@0.0.14)(react-email@2.0.0)(resend@3.1.0):
+    resolution: {integrity: sha512-T8d39fSSuCGbvl66V8yoUa4ZjeyIvP4fD+g3WA4i6PUdrU1QUNaJV5cmah+zLha6stOP9L5UNPsTnnCuFOl0Xw==}
     engines: {node: '>=20', npm: use-pnpm, pnpm: '>=8.0.0', yarn: use-pnpm}
     peerDependencies:
       '@react-email/button': 0.0.13
