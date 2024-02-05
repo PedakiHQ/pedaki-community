@@ -31,8 +31,8 @@ importers:
         specifier: 0.5.2-beta.5
         version: 0.5.2-beta.5(@tanstack/eslint-plugin-query@5.17.20)(@typescript-eslint/eslint-plugin@6.19.0)(@typescript-eslint/parser@6.19.0)(eslint-config-next@14.1.0)(eslint-config-prettier@9.1.0)(eslint-plugin-node@11.1.0)(eslint@8.56.0)
       '@pedaki/prettier-config':
-        specifier: 0.5.2-beta.5
-        version: 0.5.2-beta.5(prettier@3.2.4)
+        specifier: 0.5.2-beta.7
+        version: 0.5.2-beta.7(prettier@3.2.4)
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
@@ -3720,8 +3720,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pedaki/prettier-config@0.5.2-beta.5(prettier@3.2.4):
-    resolution: {integrity: sha512-63IKJLonlthel3nReen/+RIIK9+/SS5z3nek84UZ88PM/GEyYkbg1x9oZjEkXsnEISqnuiBeTM7ywAeN1IePIQ==}
+  /@pedaki/prettier-config@0.5.2-beta.7(prettier@3.2.4):
+    resolution: {integrity: sha512-jwz1+KMJXJs8xylo66WAaOoRoR3hlOExBpyoSO+eM9UEvdWIU87qK2zd7bNwDnVVhjRHpMEL9RAyy1/DFKCOnQ==}
     peerDependencies:
       prettier: ^3.0.2
     dependencies:
