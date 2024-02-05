@@ -34,7 +34,7 @@
     "@t3-oss/env-nextjs": "^0.8.0",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^5.18.0",
-    "@tanstack/react-table": "^8.11.7",
+    "@tanstack/react-table": "^8.11.8",
     "@tanstack/react-virtual": "^3.0.4",
     "@trpc/client": "^10.45.0",
     "@trpc/next": "^10.45.0",
@@ -47,7 +47,6 @@
     "next-international": "^1.2.3",
     "nuqs": "1.16.1",
     "react": "^18.2.0",
-    "react-day-picker": "^8.10.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.0",
     "react-joyride": "^2.7.2",
@@ -58,8 +57,8 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.15",
-    "@types/react": "^18.2.51",
+    "@types/node": "^20.11.16",
+    "@types/react": "^18.2.53",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
