@@ -20,7 +20,7 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "@pedaki/common": "0.5.2-beta.5",
+    "@pedaki/common": "0.5.2-beta.7",
     "@pedaki/db": "workspace:*",
     "zod": "^3.22.4"
   },

@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@47ng/cloak": "^1.1.0",
-    "@pedaki/common": "0.5.2-beta.5",
+    "@pedaki/common": "0.5.2-beta.7",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@pedaki/mailer": "0.5.2-beta.5",

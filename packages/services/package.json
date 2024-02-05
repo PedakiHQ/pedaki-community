@@ -22,7 +22,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.504.0",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.5",
+    "@pedaki/common": "0.5.2-beta.7",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
