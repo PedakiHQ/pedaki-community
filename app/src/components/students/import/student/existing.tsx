@@ -74,6 +74,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
             ...item,
             ...variables.data?.current,
             status: variables.status,
+            id: item.id,
           };
         }
         return item;
