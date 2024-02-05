@@ -46,12 +46,7 @@ const ValidateButton = ({ importId }: { importId: string }) => {
 };
 
 const Content = ({ importId }: { importId: string }) => {
-  const [data, { isLoading, isError }] = api.students.imports.previewResult.useSuspenseQuery(
-    { importId },
-    {
-      refetchOnMount: true,
-    },
-  );
+  const [data] = api.students.imports.previewResult.useSuspenseQuery({ importId });
 
   return (
     <div className="flex flex-col gap-2">

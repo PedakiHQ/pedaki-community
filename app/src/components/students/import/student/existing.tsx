@@ -79,7 +79,6 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
       });
 
       setItems(newItems);
-      await utils.students.imports.previewResult.invalidate({ importId });
       if (linkStudentId) {
         await utils.students.imports.students.getPossibleStudentData.invalidate({
           studentId: linkStudentId,
@@ -98,6 +97,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
           },
         );
       }
+      await utils.students.imports.previewResult.invalidate({ importId });
       router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
     },
     onError: e => {

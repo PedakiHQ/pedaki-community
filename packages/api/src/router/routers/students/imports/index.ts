@@ -65,18 +65,13 @@ export const studentImports = router({
       });
     }),
 
-  deleteOne: privateProcedure
-    .input(z.string())
-    .output(z.boolean())
-    .mutation(async ({ input }) => {
-      await prisma.import.delete({
-        where: {
-          id: input,
-        },
-      });
-
-      return true;
-    }),
+  deleteOne: privateProcedure.input(z.string()).mutation(async ({ input }) => {
+    await prisma.import.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
 
   status: privateProcedure
     .input(ImportUploadResultSchema.pick({ id: true }))

@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
 import {
-  IconChevronRight,
   IconEyeNone,
   IconPanelLeftClose,
   IconPanelLeftOpen,
@@ -26,6 +25,7 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   possibleFilters,
   serialize,
@@ -43,30 +43,22 @@ interface ImportDataSelectionProps {
 }
 
 const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
-  const [selected, setSelected] = useIdParam();
+  const [selected] = useIdParam();
   const items = useStudentsImportStore(state => state.items);
-
-  useEffect(() => {
-    if (selected === null) {
-      const firstNonEmpty = items.find(item => item.status === 'PENDING');
-      if (firstNonEmpty) {
-        void setSelected(firstNonEmpty?.id);
-      }
-    }
-  }, [selected, setSelected, items]);
 
   const [filter] = useVisibleParams();
   const t = useScopedI18n('students.import.selector');
-  const selectorVisible = useStudentsImportStore(state => state.selectorVisible);
-
-  if (!selectorVisible)
-    return (
-      <Card className="h-max w-max">
-        <VisibleSelector />
-      </Card>
-    );
 
   const filteredItems = items.filter(item => filter.includes(item.status));
+
+  const parentRef = React.useRef<HTMLDivElement>(null);
+
+  const rowVirtualizer = useVirtualizer({
+    count: filteredItems.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35,
+  });
+
   return (
     <div className="shrink-0 @4xl/main:w-[320px]">
       <Card className="max-h-full gap-2">
@@ -81,11 +73,34 @@ const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
           role="navigation"
           aria-label="pagination"
           className="max-h-64 overflow-auto pr-4 @4xl/main:max-h-[40vh]"
+          ref={parentRef}
         >
-          <ul className="space-y-1">
-            {filteredItems.map(item => {
+          <ul
+            className="space-y-1"
+            style={{
+              height: `${rowVirtualizer.getTotalSize()}px`,
+              width: '100%',
+              position: 'relative',
+            }}
+          >
+            {rowVirtualizer.getVirtualItems().map(virtualItem => {
+              const item = filteredItems[virtualItem.index]!;
               const isSelected = selected === item.id;
-              return <Item key={item.id} item={item} selected={isSelected} />;
+              return (
+                <div
+                  key={virtualItem.key}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: `${virtualItem.size}px`,
+                    transform: `translateY(${virtualItem.start}px)`,
+                  }}
+                >
+                  <Item key={virtualItem.index} item={item} selected={isSelected} />
+                </div>
+              );
             })}
           </ul>
           <p className="text-label-sm text-sub">
@@ -100,12 +115,44 @@ const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
   );
 };
 
+const InitNext = () => {
+  const [selected, setSelected] = useIdParam();
+  const items = useStudentsImportStore(state => state.items);
+
+  useEffect(() => {
+    if (selected === null) {
+      const firstNonEmpty = items.find(item => item.status === 'PENDING');
+      if (firstNonEmpty) {
+        void setSelected(firstNonEmpty?.id);
+      }
+    }
+  }, [selected, setSelected, items]);
+
+  return null;
+};
+
 const Wrapper = (props: ImportDataSelectionProps) => {
   return (
-    <TooltipProvider>
-      <ImportDataSelection {...props} />
-    </TooltipProvider>
+    <>
+      <InitNext />
+      <TooltipProvider>
+        <VisibleCheck {...props} />
+      </TooltipProvider>
+    </>
   );
+};
+
+const VisibleCheck = (props: ImportDataSelectionProps) => {
+  const selectorVisible = useStudentsImportStore(state => state.selectorVisible);
+
+  if (!selectorVisible)
+    return (
+      <Card className="h-max w-max">
+        <VisibleSelector />
+      </Card>
+    );
+
+  return <ImportDataSelection {...props} />;
 };
 
 const itemLabel = (item: StudentsImportStore['items'][0]) => {

@@ -103,8 +103,6 @@ export const studentImportsStudents = router({
           throw new Error('Data is required when status is DONE');
         }
 
-        console.log('input', input);
-
         await prisma.importStudent.update({
           where: {
             id: input.id,
