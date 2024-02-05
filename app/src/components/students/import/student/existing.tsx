@@ -72,6 +72,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
         if (item.id === variables.id) {
           return {
             ...item,
+            ...variables.data?.current,
             status: variables.status,
           };
         }
@@ -141,6 +142,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
         importedData={importedData}
         fields={fields}
         tKey="students.import.fields"
+        key={Math.random()}
         schema={StudentSchema}
         onSubmitted={updateImport}
       >
