@@ -102,7 +102,9 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
     },
     onError: e => {
       // TODO: translate
-      toast.error('Une erreur est survenue');
+      toast.error('Une erreur est survenue', {
+        id: 'import-error',
+      });
     },
   });
 
@@ -113,13 +115,6 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
       importId: importId,
       id: importedData.id,
       status: 'REMOVED',
-    });
-  };
-  const skipImport = () => {
-    updateStudentImportMutation.mutate({
-      importId: importId,
-      id: importedData.id,
-      status: 'IGNORED',
     });
   };
 
@@ -165,16 +160,6 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
                   variant="stroke-primary-main"
                 >
                   Supprimer
-                </Button>
-                <Button
-                  type="button"
-                  disabled={loading}
-                  onClick={skipImport}
-                  className="rounded-none"
-                  size="sm"
-                  variant="stroke-primary-main"
-                >
-                  Ignorer
                 </Button>
                 <Button className="rounded-l-none" size="sm" variant="stroke-primary-main">
                   {linkedStudent?.id !== undefined ? 'Mettre à jour' : 'Ajouter'}

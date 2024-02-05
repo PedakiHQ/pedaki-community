@@ -189,9 +189,6 @@ const ItemIcon = ({ item }: { item: StudentsImportStore['items'][0] }) => {
   if (item.status === 'DONE') {
     return <IconCheck className="h-4 w-4 text-green-dark" />;
   }
-  if (item.status === 'IGNORED') {
-    return <IconEyeNone className="h-4 w-4 text-soft opacity-50" />;
-  }
   if (item.status === 'REMOVED') {
     return <IconX className="h-4 w-4 text-red-base" />;
   }

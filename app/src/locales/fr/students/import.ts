@@ -47,7 +47,6 @@ const imports = {
       label: 'Filtre',
       choices: {
         DONE: 'Terminé',
-        IGNORED: 'Ignoré',
         REMOVED: 'Supprimé',
         PENDING: 'En attente',
       },

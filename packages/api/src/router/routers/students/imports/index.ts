@@ -120,7 +120,7 @@ export const studentImports = router({
         where: {
           importId: input.importId,
           status: {
-            not: 'IGNORED',
+            not: 'REMOVED',
           },
         },
       });
@@ -144,7 +144,7 @@ export const studentImports = router({
         where: {
           importId: input.importId,
           status: {
-            not: 'IGNORED',
+            not: 'REMOVED',
           },
         },
       });

@@ -357,7 +357,6 @@ enum ImportStatus {
 
 enum ImportDataStatus {
   PENDING
-  IGNORED
   REMOVED
   DONE
 }

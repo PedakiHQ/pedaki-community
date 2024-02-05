@@ -84,7 +84,7 @@ export const studentImportsStudents = router({
     .mutation(async ({ input }) => {
       const status = input.status;
 
-      if (status === 'IGNORED' || status === 'REMOVED') {
+      if (status === 'REMOVED') {
         await prisma.importStudent.update({
           where: {
             id: input.id,
