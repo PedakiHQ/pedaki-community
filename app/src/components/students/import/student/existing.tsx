@@ -16,12 +16,12 @@ import { api } from '~/server/clients/client.ts';
 import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
 import type { OutputType } from '~api/router/router.ts';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { toast } from 'sonner';
 
-type PossibleStudentData = OutputType['students']['imports']['students']['getOne']['current'];
-
 // TODO: there is an issue here, when updating a student, the form is not updated on the first refresh
+
+type PossibleStudentData = OutputType['students']['imports']['students']['getPossibleStudentData'];
 
 interface ExistingProps {
   baseData: OutputType['students']['imports']['students']['getOne']['current'];
@@ -30,37 +30,28 @@ interface ExistingProps {
   status: string;
 }
 
-const Existing = ({ baseData, importedData, importId, status }: ExistingProps) => {
+const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
   const [visible] = useVisibleParams();
   const items = useStudentsImportStore(state => state.items);
   const setItems = useStudentsImportStore(state => state.setItems);
 
-  const [linkStudentId, setLinkStudentId] = React.useState<number | null>(baseData?.id ?? null);
-
-  const { data: linkedStudent } = api.students.imports.students.getPossibleStudentData.useQuery(
-    {
-      studentId: linkStudentId!,
-    },
-    {
-      enabled: linkStudentId !== null && baseData?.id !== linkStudentId,
-      initialData: baseData!,
-    },
+  const hasChangedPossibleStudent = React.useRef(false);
+  const [possibleStudent, _setPossibleStudent] = React.useState<PossibleStudentData | null>(
+    baseData,
   );
 
-  const [formBaseData, setFormBaseData] = useState<PossibleStudentData | null>(
-    status === 'DONE' ? importedData : baseData ?? importedData,
-  );
+  console.log({
+    baseData,
+    importedData,
+    possibleStudent,
+  });
 
-  useEffect(() => {
-    if (linkedStudent) {
-      if (status !== 'DONE' && linkedStudent.id !== baseData?.id) {
-        setFormBaseData(linkedStudent);
-      }
-    }
-  }, [linkedStudent, status, baseData]);
+  const setPossibleStudent = (data: PossibleStudentData | null) => {
+    hasChangedPossibleStudent.current = true;
+    _setPossibleStudent(data);
+  };
 
   const router = useRouter();
-  const utils = api.useContext();
 
   const updateStudentImportMutation = api.students.imports.students.updateOne.useMutation({
     onSuccess: async (_, variables: MergeUpdateOneStudentInput) => {
@@ -72,7 +63,8 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
         if (item.id === variables.id) {
           return {
             ...item,
-            ...variables.data?.current,
+            firstName: variables.data?.current?.firstName ?? item.firstName,
+            lastName: variables.data?.current?.lastName ?? item.lastName,
             status: variables.status,
             id: item.id,
           };
@@ -81,25 +73,12 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
       });
 
       setItems(newItems);
-      if (linkStudentId) {
-        await utils.students.imports.students.getPossibleStudentData.invalidate({
-          studentId: linkStudentId,
+      if (variables.status === 'DONE') {
+        await utils.students.imports.students.getOne.invalidate({
+          importId,
+          id: importedData.id,
         });
       }
-      if (variables.status === 'DONE') {
-        utils.students.imports.students.getOne.setData(
-          {
-            importId,
-            id: importedData.id,
-          },
-          {
-            status: 'DONE',
-            import: importedData,
-            current: variables.data!.current,
-          },
-        );
-      }
-      await utils.students.imports.previewResult.invalidate({ importId });
       router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
     },
     onError: e => {
@@ -111,6 +90,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
   });
 
   const loading = updateStudentImportMutation.isLoading;
+  const utils = api.useUtils();
 
   const deleteImport = () => {
     updateStudentImportMutation.mutate({
@@ -125,7 +105,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
       importId: importId,
       id: importedData.id,
       status: 'DONE',
-      data: { current: data, studentId: linkStudentId },
+      data: { current: data, studentId: possibleStudent?.id ?? null },
     });
   };
 
@@ -134,12 +114,12 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
       <div>
         <h3 className="text-label-sm text-soft">Résultat final</h3>
         <SelectAnotherBaseStudent
-          setLinkStudentId={setLinkStudentId}
-          linkedStudent={linkedStudent ?? null}
+          setPossibleStudent={setPossibleStudent}
+          possibleStudent={possibleStudent}
         />
       </div>
       <BaseForm
-        data={formBaseData}
+        data={hasChangedPossibleStudent.current ? possibleStudent ?? importedData : importedData}
         importedData={importedData}
         fields={fields}
         tKey="students.import.fields"
@@ -165,7 +145,7 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
                   Supprimer
                 </Button>
                 <Button className="rounded-l-none" size="sm" variant="stroke-primary-main">
-                  {linkedStudent?.id !== undefined ? 'Mettre à jour' : 'Ajouter'}
+                  {possibleStudent !== null ? 'Mettre à jour' : 'Ajouter'}
                 </Button>
               </div>
             </>
@@ -177,21 +157,26 @@ const Existing = ({ baseData, importedData, importId, status }: ExistingProps) =
 };
 
 const SelectAnotherBaseStudent = ({
-  setLinkStudentId,
-  linkedStudent,
+  setPossibleStudent,
+  possibleStudent,
 }: {
-  setLinkStudentId: (id: number | null) => void;
-  linkedStudent: PossibleStudentData | null;
+  setPossibleStudent: (data: PossibleStudentData | null) => void;
+  possibleStudent: PossibleStudentData | null;
 }) => {
   const [open, setOpen] = React.useState(false);
   const t = useScopedI18n('students.import.existing');
+  const utils = api.useUtils();
 
-  const onClickRow = (event: React.MouseEvent<HTMLTableRowElement>, row: StudentData) => {
-    setLinkStudentId(row.id);
-    setOpen(false);
+  const onClickRow = async (event: React.MouseEvent<HTMLTableRowElement>, row: StudentData) => {
+    await utils.students.imports.students.getPossibleStudentData
+      .fetch({ studentId: row.id })
+      .then(data => {
+        setPossibleStudent(data);
+        setOpen(false);
+      });
   };
 
-  const isLinked = linkedStudent !== null;
+  const isLinked = possibleStudent !== null;
 
   return (
     <div className="flex">
@@ -203,7 +188,7 @@ const SelectAnotherBaseStudent = ({
                 'linkedToStudent',
                 // @ts-expect-error: issue with the translation params type
                 {
-                  name: linkedStudent.firstName + ' ' + linkedStudent.lastName,
+                  name: possibleStudent.firstName + ' ' + possibleStudent.lastName,
                 },
               )}
         </SheetTrigger>
@@ -215,7 +200,7 @@ const SelectAnotherBaseStudent = ({
           <div className="h-full p-4">
             <Client
               onClickRow={onClickRow}
-              selectedRows={isLinked ? { [linkedStudent.id - 1]: true } : {}}
+              selectedRows={isLinked ? { [possibleStudent.id - 1]: true } : {}}
             />
           </div>
         </SheetContent>
@@ -224,7 +209,7 @@ const SelectAnotherBaseStudent = ({
         size="icon"
         variant="ghost-sub"
         className={cn('ml-2 h-6 w-6', !isLinked && 'invisible')}
-        onClick={() => setLinkStudentId(null)}
+        onClick={() => setPossibleStudent(null)}
       >
         <IconX className="h-4 w-4" />
       </Button>
