@@ -40,12 +40,6 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
     baseData,
   );
 
-  console.log({
-    baseData,
-    importedData,
-    possibleStudent,
-  });
-
   const setPossibleStudent = (data: PossibleStudentData | null) => {
     hasChangedPossibleStudent.current = true;
     _setPossibleStudent(data);
@@ -123,7 +117,6 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         importedData={importedData}
         fields={fields}
         tKey="students.import.fields"
-        key={Math.random()}
         schema={StudentSchema}
         onSubmitted={updateImport}
       >

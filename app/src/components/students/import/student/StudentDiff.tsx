@@ -19,10 +19,12 @@ const StudentDiff = ({ importId }: StudentDiffProps) => {
 
   return (
     <Suspense fallback={<SuspenseCard />}>
-      {selected === null ? typeof window === 'undefined' ? (
-          <SuspenseCard/>
-          ) : (
-        <NoContent />
+      {selected === null ? (
+        typeof window === 'undefined' ? (
+          <SuspenseCard />
+        ) : (
+          <NoContent />
+        )
       ) : (
         <ContentWrapper importId={importId} id={selected} />
       )}
