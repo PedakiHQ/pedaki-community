@@ -25,14 +25,17 @@ const ValidateButton = ({ importId }: { importId: string }) => {
   const [isTransitionLoading, startTransition] = React.useTransition();
 
   const router = useRouter();
+  const utils = api.useUtils();
 
   const confirmMutation = api.students.imports.confirm.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       setOpen(false);
 
       toast.success('Import succeeded', {
         id: 'import-succeeded',
       });
+      await utils.students.invalidate();
+      await utils.classes.invalidate();
       router.push('/students');
     },
     onError: () => {
@@ -111,12 +114,14 @@ const StatsContent = ({
     <div>
       <h3 className="mb-2 tracking-tight text-sub">{t('title')}</h3>
       <div className="flex flex-col">
-        {Object.entries(data).map(([key, value]) => (
-          <div key={key} className="flex justify-between">
-            <span>{t(key as any)}</span>
-            <span>{value}</span>
-          </div>
-        ))}
+        {Object.entries(data)
+          .toSorted()
+          .map(([key, value]) => (
+            <div key={key} className="flex justify-between">
+              <span>{t(key as any)}</span>
+              <span>{value}</span>
+            </div>
+          ))}
       </div>
     </div>
   );
