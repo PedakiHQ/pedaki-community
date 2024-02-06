@@ -10,8 +10,8 @@ import {
 } from '@pedaki/design/ui/dialog';
 import { IconSpinner } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
-import React from 'react';
 import { cn } from '@pedaki/design/utils/cn';
+import React from 'react';
 
 interface ConfirmDangerModalProps {
   trigger: React.ReactNode;

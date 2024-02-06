@@ -7,6 +7,15 @@ export const dataRouter = router({
   reset: privateProcedure
     .input(z.enum(['student', 'import']).array())
     .mutation(async ({ input }) => {
-      await prisma.$transaction(input.map(table => prisma[table].deleteMany()));
+      for (const type of input) {
+        switch (type) {
+          case 'student':
+            await prisma.student.deleteMany({});
+            break;
+          case 'import':
+            await prisma.import.deleteMany({});
+            break;
+        }
+      }
     }),
 });
