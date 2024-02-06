@@ -19,8 +19,6 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
 
-// TODO: there is an issue here, when updating a student, the form is not updated on the first refresh
-
 type PossibleStudentData = OutputType['students']['imports']['students']['getPossibleStudentData'];
 
 interface ExistingProps {

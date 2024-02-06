@@ -16,6 +16,12 @@ export const studentImports = router({
   classes: studentImportsClasses,
   students: studentImportsStudents,
 
+  confirm: privateProcedure
+    .input(ImportUploadResultSchema.pick({ id: true }))
+    .mutation(async ({ input }) => {
+      await studentImportsService.confirmImport(input.id);
+    }),
+
   upload: privateProcedure
     .input(ImportUploadSchema)
     .output(ImportUploadResultSchema)
@@ -126,7 +132,7 @@ export const studentImports = router({
       });
       const studentsFlat = students.reduce(
         (acc, c) => {
-          if (c.status === 'DONE' && c.studentId) {
+          if (c.studentId) {
             acc.updated = (acc.updated ?? 0) + c._count.id;
           } else {
             acc.added = (acc.added ?? 0) + c._count.id;
@@ -150,7 +156,7 @@ export const studentImports = router({
       });
       const classesFlat = classes.reduce(
         (acc, c) => {
-          if (c.status === 'DONE' && c.classId) {
+          if (c.classId) {
             acc.updated = (acc.updated ?? 0) + c._count.id;
           } else {
             acc.added = (acc.added ?? 0) + c._count.id;
@@ -159,11 +165,6 @@ export const studentImports = router({
         },
         {} as { added?: number; updated?: number },
       );
-
-      console.log({
-        students: studentsFlat,
-        classes: classesFlat,
-      });
 
       return {
         students: studentsFlat,

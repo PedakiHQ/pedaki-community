@@ -162,6 +162,7 @@ model ClassLevel {
 
   name        String  @db.VarChar(255)
   description String? @db.VarChar(1000)
+  // TODO: remove # (6 chars)
   color       String  @db.Char(7) // Hexadecimal color
 
   classes          Class[]       @relation("class_to_level")
@@ -180,6 +181,7 @@ model ClassBranch {
 
   name        String  @db.VarChar(255)
   description String? @db.VarChar(1000)
+  // TODO: remove # (6 chars)
   color       String  @db.Char(7) // Hexadecimal color
 
   possibleLevels ClassLevel[] @relation("branch_to_level")
@@ -253,8 +255,7 @@ model Class {
 
   importClass ImportClass[]
 
-  @@unique([name])
-  @@index([academicYearId, levelId])
+  @@unique([name, academicYearId, levelId])
   @@map("classes")
 }
 
@@ -326,6 +327,7 @@ model ImportClass {
 
   importStudents ImportStudent[]
 
+  @@unique([importLevelId, name])
   @@unique([importId, classId])
   @@map("import_classes")
 }

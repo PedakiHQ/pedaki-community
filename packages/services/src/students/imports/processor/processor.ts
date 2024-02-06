@@ -22,14 +22,19 @@ export type StudentImport = Omit<
   ImportStudent,
   'importId' | 'id' | 'studentId' | 'properties' | 'status'
 > &
-  Partial<Pick<ImportStudent, 'studentId'>>;
+  Partial<Pick<ImportStudent, 'studentId'>> & {
+    __importClassId?: number;
+    __classHash: string;
+  };
 
 export type ClassImport = Omit<
   ImportClass,
   'importId' | 'id' | 'classId' | 'importLevelId' | 'status'
 > &
   Partial<Pick<ImportClass, 'classId' | 'importLevelId'>> & {
-    _rawLevel: string;
+    __rawLevel: string;
+    __classHash: string;
+    __importClassId?: number;
   };
 export type ClassLevelImport = Omit<
   ImportClassLevel,
