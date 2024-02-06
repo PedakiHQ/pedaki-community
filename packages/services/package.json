@@ -27,6 +27,7 @@
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
     "csv": "^6.3.6",
+    "dayjs": "^1.11.10",
     "esbuild-plugin-file-path-extensions": "^2.0.0",
     "exponential-backoff": "^3.1.1",
     "mime-types": "^2.1.35",

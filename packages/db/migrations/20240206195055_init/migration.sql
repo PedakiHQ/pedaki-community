@@ -297,13 +297,13 @@ CREATE UNIQUE INDEX "academic_years_name_key" ON "academic_years"("name");
 CREATE UNIQUE INDEX "classes_main_teacher_id_key" ON "classes"("main_teacher_id");
 
 -- CreateIndex
-CREATE INDEX "classes_academic_year_id_level_id_idx" ON "classes"("academic_year_id", "level_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "classes_name_key" ON "classes"("name");
+CREATE UNIQUE INDEX "classes_name_academic_year_id_level_id_key" ON "classes"("name", "academic_year_id", "level_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "import_students_import_id_student_id_key" ON "import_students"("import_id", "student_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "import_classes_level_id_name_key" ON "import_classes"("level_id", "name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "import_classes_import_id_class_id_key" ON "import_classes"("import_id", "class_id");
