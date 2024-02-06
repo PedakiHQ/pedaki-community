@@ -104,6 +104,8 @@ model Student {
   lastName  String  @map("last_name") @db.VarChar(255)
   otherName String? @map("other_name") @db.VarChar(255) // 3rd name etc... just in case
 
+  gender String? @db.Char(1) // M or F
+
   birthDate DateTime @map("birth_date") @db.Date
 
   properties Json @db.JsonB
@@ -270,11 +272,13 @@ enum TokenType {
 // Student Imports
 
 model Import {
-  id        String       @id @default(cuid()) @db.VarChar(25)
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at")
-  status    ImportStatus
-  data      Json?        @db.JsonB
+  id        String   @id @default(cuid()) @db.VarChar(25)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  name   String       @db.VarChar(255)
+  status ImportStatus
+  data   Json?        @db.JsonB
 
   students   ImportStudent[]
   class      ImportClass[]
@@ -288,6 +292,8 @@ model ImportStudent {
   importId String @map("import_id") @db.VarChar(25)
   import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
 
+  status ImportDataStatus @default(PENDING)
+
   studentId Int?     @map("student_id")
   student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
@@ -295,8 +301,9 @@ model ImportStudent {
   lastName  String   @map("last_name") @db.VarChar(255)
   otherName String?  @map("other_name") @db.VarChar(255)
   birthDate DateTime @map("birth_date") @db.Date
+  gender    String?  @db.Char(1)
 
-  impotClasses ImportClass[]
+  importClasses ImportClass[]
 
   @@unique([importId, studentId])
   @@map("import_students")
@@ -306,6 +313,8 @@ model ImportClass {
   id       Int    @id @default(autoincrement())
   importId String @map("import_id") @db.VarChar(25)
   import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  status ImportDataStatus @default(PENDING)
 
   classId Int?   @map("class_id")
   class   Class? @relation(fields: [classId], references: [id], onDelete: Cascade)
@@ -326,6 +335,8 @@ model ImportClassLevel {
   importId String @map("import_id") @db.VarChar(25)
   import   Import @relation(fields: [importId], references: [id], onDelete: Cascade)
 
+  status ImportDataStatus @default(PENDING)
+
   classLevelId Int?        @map("class_level_id")
   classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: Cascade)
 
@@ -342,4 +353,10 @@ enum ImportStatus {
   PROCESSING
   DONE
   ERROR
+}
+
+enum ImportDataStatus {
+  PENDING
+  REMOVED
+  DONE
 }

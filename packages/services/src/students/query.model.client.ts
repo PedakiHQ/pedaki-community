@@ -46,8 +46,13 @@ const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = 
     fieldType: 'text',
   },
   otherName: {
-    type: z.string(),
+    type: z.string().nullable(),
     mappping: 'other_name',
+    fieldType: 'text',
+  },
+  gender: {
+    type: z.enum(['M', 'F']).nullable(),
+    mappping: 'gender',
     fieldType: 'text',
   },
   birthDate: {
@@ -100,6 +105,7 @@ export const KnownFieldsKeys = [
   'lastName',
   'otherName',
   'birthDate',
+  'gender',
   'class.academicYearId',
   'class.id',
   'class.name',

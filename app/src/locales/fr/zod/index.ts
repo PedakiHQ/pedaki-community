@@ -166,6 +166,7 @@ export default {
       unmatched: 'Les mots de passe ne correspondent pas',
     },
     file: {
+      mustBeCsv: 'Le fichier doit être au format CSV.',
       mustBeImage: "L'image doit être au format PNG ou JPG.",
       size: 'Le fichier doit être inférieur à {size}.',
     },

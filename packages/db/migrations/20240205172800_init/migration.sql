@@ -10,6 +10,9 @@ CREATE TYPE "TokenType" AS ENUM ('CONFIRM_EMAIL', 'ACTIVATE_ACCOUNT', 'RESET_PAS
 -- CreateEnum
 CREATE TYPE "ImportStatus" AS ENUM ('PENDING', 'PROCESSING', 'DONE', 'ERROR');
 
+-- CreateEnum
+CREATE TYPE "ImportDataStatus" AS ENUM ('PENDING', 'REMOVED', 'DONE');
+
 -- CreateTable
 CREATE TABLE "accounts" (
     "id" SERIAL NOT NULL,
@@ -79,6 +82,7 @@ CREATE TABLE "students" (
     "first_name" VARCHAR(255) NOT NULL,
     "last_name" VARCHAR(255) NOT NULL,
     "other_name" VARCHAR(255),
+    "gender" CHAR(1),
     "birth_date" DATE NOT NULL,
     "properties" JSONB NOT NULL,
 
@@ -175,6 +179,7 @@ CREATE TABLE "imports" (
     "id" VARCHAR(25) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" VARCHAR(255) NOT NULL,
     "status" "ImportStatus" NOT NULL,
     "data" JSONB,
 
@@ -185,11 +190,13 @@ CREATE TABLE "imports" (
 CREATE TABLE "import_students" (
     "id" SERIAL NOT NULL,
     "import_id" VARCHAR(25) NOT NULL,
+    "status" "ImportDataStatus" NOT NULL DEFAULT 'PENDING',
     "student_id" INTEGER,
     "first_name" VARCHAR(255) NOT NULL,
     "last_name" VARCHAR(255) NOT NULL,
     "other_name" VARCHAR(255),
     "birth_date" DATE NOT NULL,
+    "gender" CHAR(1),
 
     CONSTRAINT "import_students_pkey" PRIMARY KEY ("id")
 );
@@ -198,6 +205,7 @@ CREATE TABLE "import_students" (
 CREATE TABLE "import_classes" (
     "id" SERIAL NOT NULL,
     "import_id" VARCHAR(25) NOT NULL,
+    "status" "ImportDataStatus" NOT NULL DEFAULT 'PENDING',
     "class_id" INTEGER,
     "name" VARCHAR(255) NOT NULL,
     "level_id" INTEGER NOT NULL,
@@ -209,6 +217,7 @@ CREATE TABLE "import_classes" (
 CREATE TABLE "import_class_levels" (
     "id" SERIAL NOT NULL,
     "import_id" VARCHAR(25) NOT NULL,
+    "status" "ImportDataStatus" NOT NULL DEFAULT 'PENDING',
     "class_level_id" INTEGER,
     "name" VARCHAR(255) NOT NULL,
 

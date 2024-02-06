@@ -1,5 +1,5 @@
 import { IconSettings } from '@pedaki/design/ui/icons';
-import SettingsNavigation from '~/app/[locale]/(main)/settings/SettingsNavigation.tsx';
+import { SettingsNavigation } from '~/app/[locale]/(main)/settings/SettingsNavigation.tsx';
 import type { LayoutType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import { getScopedI18n } from '~/locales/server.ts';

@@ -14,10 +14,11 @@ export const api = createTRPCNext<AppRouter>({
         defaultOptions: {
           queries: {
             suspense: false,
-            staleTime: 10_000,
+            staleTime: 0,
             refetchOnMount: false,
             refetchOnWindowFocus: false,
             refetchOnReconnect: true,
+            useErrorBoundary: false,
             retry: (failureCount: number, error) => {
               if (failureCount > 2) return false;
 

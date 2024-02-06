@@ -1,9 +1,9 @@
 import { FILE_FIELD } from './constants.ts';
 
-export const importFile = async (file: File) => {
+export const uploadFile = async (file: File): Promise<{ id: string }> => {
   const formData = new FormData();
   formData.append(FILE_FIELD, file);
-  const res = await fetch('/api/upload/imports', {
+  const res = await fetch('/api/upload/students', {
     method: 'POST',
     body: formData,
     credentials: 'include',
@@ -11,5 +11,5 @@ export const importFile = async (file: File) => {
   if (!res.ok) {
     throw new Error('Failed to upload file');
   }
-  await res.json();
+  return (await res.json()) as { id: string };
 };

@@ -24,6 +24,7 @@ describe('studentImports', () => {
             api.students.imports.upload({
               buffer: Buffer.from(''),
               mimeType: 'text/csv',
+              name: 'test',
             }),
           {
             shouldWork: type !== 'anonymousUserSession',
@@ -56,6 +57,7 @@ describe('studentImports', () => {
       const response = await api.students.imports.upload({
         buffer: Buffer.from(siecleFile),
         mimeType: 'text/csv',
+        name: 'test',
       });
       expect(response).toBeDefined();
       expect(response.id).toBeDefined();
@@ -111,7 +113,8 @@ describe('studentImports', () => {
           },
         },
       });
-      expect(importClassMapped.length).toBe(0);
+      expect(importClassMapped.length).toBe(1);
+      expect(importClassMapped[0]!.name).toBe('CP Jobard');
 
       // Levels
       const importLevelsCount = await prisma.importClassLevel.count({

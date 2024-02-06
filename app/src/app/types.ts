@@ -1,12 +1,12 @@
 import type React from 'react';
 
-export type PageType = Readonly<{
-  params: {
+export type PageType<Params extends Record<string, string> = {}> = Readonly<{
+  params: Params & {
     locale: string;
   };
 }>;
 
-export type LayoutType = Readonly<{
+export type LayoutType<Params extends Record<string, string> = {}> = Readonly<{
   children: React.ReactNode;
 }> &
-  PageType;
+  PageType<Params>;

@@ -6,6 +6,6 @@ module.exports = {
   rules: {
     "node/no-unpublished-import": "off",
     "node/no-extraneous-import": "off",
-    "node/file-extension-in-import": "off",
+    "node/file-extension-in-import": "off"
   }
 };

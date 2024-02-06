@@ -65,6 +65,10 @@ export class SiecleProcessor implements FileProcessor {
       delimiter: ';',
     }) as Record<string, string>[];
 
+    if (rawData.length === 0) {
+      throw new Error('EMPTY_FILE');
+    }
+
     return rawData.map(row => {
       return schema.parse(row);
     });
@@ -103,6 +107,7 @@ export class SiecleProcessor implements FileProcessor {
       lastName: row['Nom élève'],
       birthDate: row['Date naissance'],
       otherName: row['Deuxième prénom'] + row['Troisième prénom'] || null,
+      gender: row.Sexe === 'MASCULIN' ? 'M' : 'F',
     }));
   }
 
