@@ -114,7 +114,6 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         data={hasChangedPossibleStudent.current ? possibleStudent ?? importedData : importedData}
         importedData={importedData}
         fields={fields}
-        tKey="students.import.fields"
         schema={StudentSchema}
         onSubmitted={updateImport}
       >
