@@ -10,6 +10,8 @@ import type {
 import { parse } from 'csv-parse/sync';
 import { z } from 'zod';
 
+// TODO: renommer siecle en onde
+
 const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
 
 const schema = z.object({
