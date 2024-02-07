@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@pedaki/design/ui/button';
-import { Form,  FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
+import { Form, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
 import { IconArrowRight, IconX } from '@pedaki/design/ui/icons';
 import {
   Tooltip,

@@ -34,7 +34,7 @@ export default async function StudentSchemaPage({ params }: PageType) {
         icon={IconUserGroups}
       />
       <div className="flex h-full flex-col gap-6 pt-6" id={MAIN_CONTENT}>
-        <PersonalInfoForm disabled />
+        <PersonalInfoForm />
         <Separator />
         <PropertiesSection initialProperties={initialProperties} />
       </div>

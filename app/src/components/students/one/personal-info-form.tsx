@@ -8,10 +8,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { fields } from '../import/student/constants';
 
-interface PersonalInfoProps {
-  disabled: boolean;
-}
-
 interface FormValues {
   avatar: string;
   firstName: string;
@@ -23,7 +19,7 @@ interface FormValues {
 
 type Form = ReturnType<typeof useForm<FormValues>>;
 
-const PersonalInfoForm = ({}: PersonalInfoProps) => {
+const PersonalInfoForm = () => {
   const form = useForm<FormValues>({
     defaultValues: {
       avatar: '',
