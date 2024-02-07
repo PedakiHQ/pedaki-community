@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@pedaki/design/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
+import { Form,  FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
 import { IconArrowRight, IconX } from '@pedaki/design/ui/icons';
 import {
   Tooltip,
@@ -89,7 +89,6 @@ const BaseForm = ({
                 const isEmpty = f.value === '' || f.value === null;
                 return (
                   <FormItem>
-                    {/* @ts-ignore*/}
                     <FormLabel>{tField(`${f.name}.label`)}</FormLabel>
                     <div className="relative flex w-full">
                       <div className="flex w-full items-center gap-1">
@@ -99,7 +98,7 @@ const BaseForm = ({
                           form={form}
                           type={type}
                           disabled={false}
-                          // @ts-ignore
+                          // @ts-expect-error: type is incorrect
                           t={tField}
                           placeholder={!isImported}
                         />

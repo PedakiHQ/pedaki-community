@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
 import {
-  IconEyeNone,
   IconPanelLeftClose,
   IconPanelLeftOpen,
   IconSettings2,

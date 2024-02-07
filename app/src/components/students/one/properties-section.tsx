@@ -51,7 +51,7 @@ const PropertiesFields = ({
   const onSubmit = async (data: { id: number }) => {
     return wrapWithLoading(
       async () => {
-        const newProperty = await deletePropertyMutation.mutateAsync(data);
+        await deletePropertyMutation.mutateAsync(data);
         utils.students.properties.getMany.setData(undefined, old => {
           if (old) {
             delete old[data.id];

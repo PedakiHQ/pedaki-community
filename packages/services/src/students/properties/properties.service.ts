@@ -8,7 +8,6 @@ class StudentPropertiesService {
 
   constructor() {
     this.#studentProperties = {};
-    this.reload();
   }
 
   async reload() {
@@ -73,4 +72,5 @@ class StudentPropertiesService {
 }
 
 const studentPropertiesService = new StudentPropertiesService();
+await studentPropertiesService.reload();
 export { studentPropertiesService };

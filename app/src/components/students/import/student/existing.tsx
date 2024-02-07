@@ -73,7 +73,7 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
       }
       router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
     },
-    onError: e => {
+    onError: () => {
       // TODO: translate
       toast.error('Une erreur est survenue', {
         id: 'import-error',

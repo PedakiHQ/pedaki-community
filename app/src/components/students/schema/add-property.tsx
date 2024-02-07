@@ -1,8 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { wrapWithLoading } from '@pedaki/common/utils/wrap-with-loading';
 import { Button } from '@pedaki/design/ui/button';
-import { Checkbox } from '@pedaki/design/ui/checkbox';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
+import { Form, FormControl, FormField, FormItem } from '@pedaki/design/ui/form';
 import { Input } from '@pedaki/design/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@pedaki/design/ui/popover';
 import {
