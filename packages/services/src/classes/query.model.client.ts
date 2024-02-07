@@ -1,22 +1,11 @@
+import { createFilterSchema } from '~/utils/query';
+import type { FieldType } from '~/utils/query';
 import { z } from 'zod';
 
 export interface QueryFieldSchema {
   type: z.Schema;
   fieldType: FieldType;
 }
-
-const FieldTypes = ['int', 'text', 'date'] as const;
-export type FieldType = (typeof FieldTypes)[number];
-
-export const FieldAllowedOperators: Record<FieldType, QueryOperator[]> = {
-  int: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
-  text: ['eq', 'neq', 'like', 'nlike'],
-  date: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
-} as const;
-
-export const isPositiveOperator = (operator: QueryOperator): boolean => {
-  return ['eq', 'gt', 'gte', 'in', 'like'].includes(operator);
-};
 
 const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = {
   id: {
@@ -114,35 +103,7 @@ export const getKnownField = (key: string): QueryFieldSchema | undefined => {
 };
 
 export const FieldSchema = z.enum(KnownFieldsKeys);
-
 export type Field = z.infer<typeof FieldSchema>;
 
-const QueryOperators = [
-  'eq',
-  'neq',
-  'gt',
-  'gte',
-  'lt',
-  'lte',
-  // 'in',
-  // 'nin',
-  'like',
-  'nlike',
-] as const;
-export const QueryOperatorSchema = z.enum(QueryOperators);
-export type QueryOperator = z.infer<typeof QueryOperatorSchema>;
-
-export const FilterSchema = z.object({
-  field: FieldSchema,
-  operator: QueryOperatorSchema,
-  value: z.union([
-    z.string(),
-    // z.string().array(),
-    z.number(),
-    // z.number().array(),
-    z.boolean(),
-    z.date(),
-    // z.date().array(),
-  ]),
-});
+export const FilterSchema = createFilterSchema(FieldSchema);
 export type Filter = z.infer<typeof FilterSchema>;

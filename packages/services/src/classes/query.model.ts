@@ -1,9 +1,6 @@
-import type { FieldType } from '~/classes/query.model.client.ts';
-import {
-  FieldAllowedOperators,
-  FilterSchema,
-  getKnownField,
-} from '~/classes/query.model.client.ts';
+import { FilterSchema, getKnownField } from '~/classes/query.model.client.ts';
+import { FieldAllowedOperators } from '~/utils/query.ts';
+import type { FieldType } from '~/utils/query.ts';
 import type { z } from 'zod';
 
 export const FilterSchemaWithRefinement = FilterSchema.refine(({ field, operator, value }) => {

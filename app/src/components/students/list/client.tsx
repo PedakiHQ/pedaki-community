@@ -7,7 +7,7 @@ import { DataTable } from '~/components/datatable/data-table';
 import Footer from '~/components/datatable/footer';
 import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
 import { generateColumns } from '~/components/students/list/columns.tsx';
-import Filters from '~/components/students/list/filters.tsx';
+import Filters from '~/components/students/list/filters';
 import { searchParams, serialize } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';

@@ -1,5 +1,5 @@
 import type { PropertyType } from '@prisma/client';
-import type { FieldType } from '~/students/query.model.client.ts';
+import type { FieldType } from '~/utils/query';
 import { z } from 'zod';
 
 export interface PropertySchema {

@@ -20,14 +20,9 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
-import {
-  FieldAllowedOperators,
-  FilterSchema,
-  getKnownField,
-  isPositiveOperator,
-} from '@pedaki/services/classes/query.model.client.js';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { FieldType, Filter } from '@pedaki/services/classes/query.model.client.js';
+import { FilterSchema, getKnownField } from '@pedaki/services/classes/query.model.client.js';
+import { FieldAllowedOperators, isPositiveOperator } from '@pedaki/services/utils/query';
+import type { DefaultFilter, FieldType } from '@pedaki/services/utils/query';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useClassesListStore } from '~/store/classes/list/list.store.ts';
 import React, { Fragment } from 'react';
@@ -40,12 +35,12 @@ const typedValue = (value: unknown, type: FieldType): string | number => {
   return value as string;
 };
 
-const Filters = ({
+const Filters = <T extends DefaultFilter>({
   filters,
   setFilters,
 }: {
-  filters: Filter[];
-  setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
+  filters: T[];
+  setFilters: React.Dispatch<React.SetStateAction<T[]>>;
 }) => {
   const t = useScopedI18n('components.datatable.filters');
   const filtersCount = filters.length;
@@ -83,15 +78,15 @@ const Filters = ({
   );
 };
 
-const NewFilter = ({
+const NewFilter = <T extends DefaultFilter>({
   setFilters,
 }: {
-  setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
+  setFilters: React.Dispatch<React.SetStateAction<T[]>>;
 }) => {
   const t = useScopedI18n('components.datatable.filters.new');
   const [isOpened, setIsOpened] = React.useState(false);
 
-  const addNewFilter = (filter: Filter) => {
+  const addNewFilter = (filter: T) => {
     setFilters(prev => [...prev, filter]);
     setIsOpened(false);
   };
@@ -115,11 +110,11 @@ const NewFilter = ({
   );
 };
 
-const ClearFilters = ({
+const ClearFilters = <T extends DefaultFilter>({
   setFilters,
   disabled,
 }: {
-  setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
+  setFilters: React.Dispatch<React.SetStateAction<T[]>>;
   disabled: boolean;
 }) => {
   const t = useScopedI18n('components.datatable.filters.clear');
@@ -146,24 +141,24 @@ const ClearFilters = ({
   );
 };
 
-const Filter = ({
+const Filter = <T extends DefaultFilter>({
   filter,
   setFilters,
 }: {
-  filter: Filter;
-  setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
+  filter: T;
+  setFilters: React.Dispatch<React.SetStateAction<T[]>>;
 }) => {
   const t = useScopedI18n('components.datatable.filters');
   const [isOpened, setIsOpened] = React.useState(false);
 
   const columns = useClassesListStore(store => store.translatedColumns);
 
-  const removeFilter = (filter: Filter) => {
+  const removeFilter = (filter: T) => {
     setFilters(prev => prev.filter(f => f !== filter));
     setIsOpened(false);
   };
 
-  const editFilter = (newFilter: Filter) => {
+  const editFilter = (newFilter: T) => {
     setFilters(prev => prev.map(f => (f === filter ? newFilter : f)));
     setIsOpened(false);
   };
@@ -195,14 +190,14 @@ const Filter = ({
   );
 };
 
-const EditFilter = ({
+const EditFilter = <T extends DefaultFilter>({
   filter,
   onSubmit,
   onRemove,
   title,
 }: {
-  filter?: Partial<Filter>;
-  onSubmit: (filter: Filter) => void;
+  filter?: Partial<DefaultFilter>;
+  onSubmit: (filter: T) => void;
   onRemove?: () => void;
   title: string;
 }) => {
@@ -212,7 +207,7 @@ const EditFilter = ({
     columns: store.translatedColumns,
   }));
 
-  const form = useForm<Filter>({
+  const form = useForm<DefaultFilter>({
     resolver: zodResolver(FilterSchema),
     mode: 'onChange',
     defaultValues: filter,
@@ -221,11 +216,11 @@ const EditFilter = ({
   const { isValid } = form.formState;
 
   const { field, operator } = form.getValues();
-  const fieldType = field && (getKnownField(field)?.fieldType ?? 'text');
+  const fieldType = (field ? getKnownField(field)?.fieldType : undefined) ?? 'text';
 
-  const handleFormSubmit = (filter: Filter) => {
+  const handleFormSubmit = (filter: DefaultFilter) => {
     filter.value = typedValue(filter.value, fieldType);
-    onSubmit(filter);
+    onSubmit(filter as T);
   };
 
   return (
