@@ -10,6 +10,11 @@ class StudentPropertiesService {
     this.#studentProperties = {};
   }
 
+  async load() {
+    if (this.#studentProperties) return;
+    await this.reload();
+  }
+
   async reload() {
     // Skip in ci
     if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith('{{{')) return;
@@ -50,5 +55,5 @@ class StudentPropertiesService {
 }
 
 const studentPropertiesService = new StudentPropertiesService();
-await studentPropertiesService.reload();
+await studentPropertiesService.load();
 export { studentPropertiesService };

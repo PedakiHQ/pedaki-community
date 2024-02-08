@@ -64,5 +64,9 @@ export default {
         },
       },
     },
+    danger: {
+      title: 'Danger',
+      description: 'Paramètres dangereux du workspace.',
+    },
   },
 } as const;

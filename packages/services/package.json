@@ -22,11 +22,12 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.504.0",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.5",
+    "@pedaki/common": "0.5.2-beta.7",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
     "csv": "^6.3.6",
+    "dayjs": "^1.11.10",
     "esbuild-plugin-file-path-extensions": "^2.0.0",
     "exponential-backoff": "^3.1.1",
     "mime-types": "^2.1.35",
@@ -37,7 +38,7 @@
   },
   "devDependencies": {
     "@pedaki/tests": "workspace:*",
-    "@prisma/client": "5.8.1",
+    "@prisma/client": "5.9.1",
     "@types/mime-types": "^2.1.4",
     "@types/sqlstring": "^2.3.2"
   },
@@ -47,6 +48,6 @@
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "pnpm@8.15.1",
   "prettier": "@pedaki/prettier-config"
 }

@@ -17,7 +17,9 @@ export const ClassesSchema = z.object({
 });
 export type Class = z.infer<typeof ClassesSchema>;
 
-export const GetManyClassesSchema = z.record(ClassesSchema.pick({ id: true, name: true }));
+export const GetManyClassesSchema = z.record(
+  ClassesSchema.pick({ id: true, name: true }).merge(z.object({ levelId: z.number() })),
+);
 export type GetManyClasses = z.infer<typeof GetManyClassesSchema>;
 
 export const GetPaginatedManyClassesInputSchema = z.object({

@@ -539,6 +539,7 @@ describe('studentsRouter', () => {
               firstName: 'John',
               lastName: 'Doe',
               birthDate: new Date('2001-01-01'),
+              gender: 'M',
             }),
           {
             shouldWork: type !== 'anonymousUserSession',
@@ -552,6 +553,7 @@ describe('studentsRouter', () => {
         firstName: 'John',
         lastName: 'Doe',
         birthDate: new Date('2001-01-01'),
+        gender: 'M',
         properties: {
           shrek: 'is love',
         },
@@ -633,6 +635,7 @@ describe('studentsRouter', () => {
         firstName: 'John',
         lastName: 'Doe',
         birthDate: new Date('2001-01-01'),
+        gender: 'M',
         properties: {
           shrek: 'is love',
         },

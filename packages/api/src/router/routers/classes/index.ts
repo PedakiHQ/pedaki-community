@@ -20,6 +20,7 @@ export const classesRouter = router({
       select: {
         id: true,
         name: true,
+        levelId: true,
       },
     });
 

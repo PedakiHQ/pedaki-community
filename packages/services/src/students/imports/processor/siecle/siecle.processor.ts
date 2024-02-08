@@ -1,5 +1,6 @@
 import { dateWithoutTimezone } from '~/shared/date.ts';
 import type { ImportUpload } from '~/students/imports/import.model.ts';
+import { classHash } from '~/students/imports/imports.service.ts';
 import type {
   ClassImport,
   ClassLevelImport,
@@ -65,6 +66,10 @@ export class SiecleProcessor implements FileProcessor {
       delimiter: ';',
     }) as Record<string, string>[];
 
+    if (rawData.length === 0) {
+      throw new Error('EMPTY_FILE');
+    }
+
     return rawData.map(row => {
       return schema.parse(row);
     });
@@ -88,13 +93,14 @@ export class SiecleProcessor implements FileProcessor {
     const uniqueLevelNames = [...new Set(levelNames)];
     this.#levels = uniqueLevelNames.map(levelName => ({ name: levelName }));
 
-    const classNames = this.#data!.map(row => row.Niveau + ':' + row.Classe);
+    const classNames = this.#data!.map(row => classHash(row.Classe, row.Niveau));
     const uniqueClassNames = [...new Set(classNames)];
     this.#classes = uniqueClassNames.map(className => {
-      const [level, name] = className.split(':', 2);
+      const [level, ...name] = className.split('-');
       return {
-        name: name!,
-        _rawLevel: level!,
+        name: name.join('-'),
+        __rawLevel: level!,
+        __classHash: className,
       };
     });
 
@@ -103,6 +109,8 @@ export class SiecleProcessor implements FileProcessor {
       lastName: row['Nom élève'],
       birthDate: row['Date naissance'],
       otherName: row['Deuxième prénom'] + row['Troisième prénom'] || null,
+      gender: row.Sexe === 'MASCULIN' ? 'M' : 'F',
+      __classHash: classHash(row.Classe, row.Niveau),
     }));
   }
 

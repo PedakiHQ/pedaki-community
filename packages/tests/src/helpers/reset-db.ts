@@ -21,6 +21,7 @@ const fakeStudents = () => ({
   lastName: faker.person.lastName(),
   otherName: Math.random() > 0.5 ? faker.person.middleName() : null,
   birthDate: faker.date.past(),
+  gender: Math.random() > 0.5 ? 'M' : 'F',
   properties: newProperties.reduce(
     (acc, property) => {
       acc[property.id] = faker.number.int({ min: 0, max: 20 });
@@ -217,6 +218,24 @@ const resetDb = async () => {
         },
         branches: {
           connect: [{ id: 1 }, { id: 2 }],
+        },
+      },
+    }),
+    prisma.class.create({
+      data: {
+        name: 'CP Jobard',
+        description: 'Class A',
+        mainTeacher: {
+          connect: { id: 3 },
+        },
+        level: {
+          connect: { id: 4 },
+        },
+        academicYear: {
+          connect: { id: 2 },
+        },
+        teachers: {
+          connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
         },
       },
     }),

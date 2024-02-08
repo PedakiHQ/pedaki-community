@@ -29,7 +29,7 @@ import {
   FilterWrapperStudents,
 } from '~/components/students/list/filters';
 import { useScopedI18n } from '~/locales/client.ts';
-import React, { Fragment } from 'react';
+import React, { forwardRef, Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -88,7 +88,7 @@ const Filters = <T extends DefaultFilter>({
             );
           })}
           {filtersCount === 0 && (
-            <span className="select-none text-label-xs text-sub">{t('noFilters')}</span>
+            <span className="select-none pl-1.5 text-label-xs text-sub">{t('noFilters')}</span>
           )}
         </ul>
       </ScrollArea>
@@ -128,7 +128,11 @@ const NewFilter = <T extends DefaultFilter>({
         </TooltipTrigger>
         <TooltipContent>{t('label')}</TooltipContent>
       </Tooltip>
-      <PopoverContent align="end" className="w-[300px] md:w-[600px]">
+      <PopoverContent
+        align="end"
+        className="w-[300px] md:w-[600px]"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
         <EditFilter onSubmit={addNewFilter} title={t('title')} type={type} />
       </PopoverContent>
     </Popover>
@@ -202,7 +206,11 @@ export const FilterContent = <T extends DefaultFilter>({
           <span className="text-sub">{JSON.stringify(filter.value)}</span>
         </Badge>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-[300px] md:w-[600px]">
+      <PopoverContent
+        align="start"
+        className="w-[300px] md:w-[600px]"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
         <EditFilter
           filter={filter}
           onSubmit={editFilter}
@@ -358,23 +366,22 @@ export const EditFilterContent = <T extends DefaultFilter, U extends z.Schema>({
   );
 };
 
-const FilterValue = ({
-  onChange,
-  fieldType,
-  operator,
-  initialValue,
-}: {
-  onChange: (value: any) => void;
-  fieldType: FieldType | null;
-  operator: string | undefined;
-  initialValue?: any;
-}) => {
+const FilterValue = forwardRef<
+  React.ElementRef<typeof Input>,
+  {
+    onChange: (value: any) => void;
+    fieldType: FieldType | null;
+    operator: string | undefined;
+    initialValue?: any;
+  }
+>(({ onChange, fieldType, operator, initialValue }, ref) => {
   const t = useScopedI18n('components.datatable.filters.form.value');
   const disabled = fieldType === undefined || operator === undefined;
 
   if (fieldType === 'text' || fieldType === undefined) {
     return (
       <Input
+        ref={ref}
         placeholder={t('placeholder.text')}
         type="text"
         autoCapitalize="none"
@@ -389,6 +396,7 @@ const FilterValue = ({
   if (fieldType === 'int') {
     return (
       <Input
+        ref={ref}
         placeholder={t('placeholder.int')}
         type="number"
         autoCapitalize="none"
@@ -400,8 +408,9 @@ const FilterValue = ({
     );
   }
 
-  return <div></div>;
-};
+  return null;
+});
+FilterValue.displayName = 'FilterValue';
 
 export const EditFilter = <T extends DefaultFilter>(props: EditFilterProps<T>) => {
   if (props.type === 'classes') {

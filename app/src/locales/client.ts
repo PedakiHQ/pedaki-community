@@ -15,6 +15,6 @@ export const { useI18n, useScopedI18n, I18nProviderClient, useCurrentLocale, use
   );
 
 export type UseI18nType = ReturnType<typeof useI18n>;
-export type UseScopedI18nType<T extends Parameters<typeof useScopedI18n>[0]> = ReturnType<
-  typeof useScopedI18n<T>
->;
+export type TranslationGroup = Parameters<typeof useScopedI18n>[0];
+export type UseScopedI18nType<T extends TranslationGroup> = ReturnType<typeof useScopedI18n<T>>;
+export type ParamScope<T extends TranslationGroup> = Parameters<UseScopedI18nType<T>>[0];

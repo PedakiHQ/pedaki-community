@@ -1,6 +1,7 @@
 import { Separator } from '@pedaki/design/ui/separator';
 import AppearanceForm from '~/app/[locale]/(main)/settings/(general)/appearance-form.tsx';
 import GeneralForm from '~/app/[locale]/(main)/settings/(general)/general-form.tsx';
+import ResetWorkspaceButton from '~/app/[locale]/(main)/settings/(general)/reset.tsx';
 import SettingRow from '~/app/[locale]/(main)/settings/SettingRow.tsx';
 import type { PageType } from '~/app/types';
 import { getScopedI18n } from '~/locales/server.ts';
@@ -34,6 +35,10 @@ export default async function GeneralSettingsPage({ params }: PageType) {
         id={APPEARANCE_FORM}
       >
         <AppearanceForm />
+      </SettingRow>
+      <Separator />
+      <SettingRow title={t('rows.danger.title')} description={t('rows.danger.description')}>
+        <ResetWorkspaceButton />
       </SettingRow>
     </div>
   );

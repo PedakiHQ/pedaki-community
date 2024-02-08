@@ -25,7 +25,6 @@
     "clean": "turbo run clean && rimraf node_modules",
     "check": "cross-env SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check",
     "_check": "cross-env SKIP_ENV_VALIDATION=true && turbo typecheck lint format:check test",
-    "prepare": "husky install",
     "prepare-release": "node --no-warnings=ExperimentalWarning scripts/prepare-release.mjs",
     "preprepare-release": "pnpm check"
   },
@@ -38,19 +37,17 @@
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
-    "@pedaki/eslint-config": "0.5.2-beta.5",
-    "@pedaki/prettier-config": "0.5.2-beta.5",
+    "@pedaki/eslint-config": "0.5.2-beta.7",
+    "@pedaki/prettier-config": "0.5.2-beta.7",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.11.15",
+    "@types/node": "^20.11.16",
     "@vitest/coverage-v8": "^1.2.2",
     "@vitest/ui": "^1.2.2",
     "chalk": "^5.3.0",
     "esbuild": "^0.20.0",
     "fs-extra": "^11.2.0",
-    "husky": "^9.0.7",
-    "inquirer": "^9.2.13",
-    "lint-staged": "^15.2.1",
+    "inquirer": "^9.2.14",
     "open": "^10.0.3",
     "rimraf": "latest",
     "throat": "^6.0.2",
@@ -71,6 +68,6 @@
     "yarn": "use-pnpm",
     "npm": "use-pnpm"
   },
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "pnpm@8.15.1",
   "prettier": "@pedaki/prettier-config"
 }

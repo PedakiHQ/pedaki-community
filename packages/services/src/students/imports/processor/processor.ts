@@ -18,12 +18,26 @@ export interface FileProcessor {
 
 export const FILE_PROCESSORS = [SiecleProcessor];
 
-export type StudentImport = Omit<ImportStudent, 'importId' | 'id' | 'studentId' | 'properties'> &
-  Partial<Pick<ImportStudent, 'studentId'>>;
-
-export type ClassImport = Omit<ImportClass, 'importId' | 'id' | 'classId' | 'importLevelId'> &
-  Partial<Pick<ImportClass, 'classId' | 'importLevelId'>> & {
-    _rawLevel: string;
+export type StudentImport = Omit<
+  ImportStudent,
+  'importId' | 'id' | 'studentId' | 'properties' | 'status'
+> &
+  Partial<Pick<ImportStudent, 'studentId'>> & {
+    __importClassId?: number;
+    __classHash: string;
   };
-export type ClassLevelImport = Omit<ImportClassLevel, 'importId' | 'id' | 'classLevelId'> &
+
+export type ClassImport = Omit<
+  ImportClass,
+  'importId' | 'id' | 'classId' | 'importLevelId' | 'status'
+> &
+  Partial<Pick<ImportClass, 'classId' | 'importLevelId'>> & {
+    __rawLevel: string;
+    __classHash: string;
+    __importClassId?: number;
+  };
+export type ClassLevelImport = Omit<
+  ImportClassLevel,
+  'importId' | 'id' | 'classLevelId' | 'status'
+> &
   Partial<Pick<ImportClassLevel, 'classLevelId'>>;

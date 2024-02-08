@@ -15,7 +15,13 @@ import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
 
-const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
+interface ClientProps {
+  className?: string;
+  onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>, value: StudentData) => void;
+  selectedRows?: Record<StudentData['id'], boolean>;
+}
+
+const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
   const t = useScopedI18n('students.list.table');
 
   const { setTranslatedColumns, propertyMapping, classMapping, teacherMapping } =
@@ -130,6 +136,8 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
         setSorting={setSorting}
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
+        onClickRow={onClickRow}
+        selectedRows={selectedRows}
       />
       <Footer
         isLoading={isLoading}
@@ -156,6 +164,8 @@ const TableElement = ({
   setSorting,
   columnVisibility,
   setColumnVisibility,
+  onClickRow,
+  selectedRows,
 }: {
   columns: StudentColumnDef[];
   data: StudentData[] | undefined;
@@ -165,6 +175,8 @@ const TableElement = ({
   setSorting: React.Dispatch<React.SetStateAction<{ id: string; desc: boolean }[]>>;
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  onClickRow?: ClientProps['onClickRow'];
+  selectedRows?: ClientProps['selectedRows'];
 }) => {
   const t = useScopedI18n('students.list.table');
 
@@ -199,6 +211,8 @@ const TableElement = ({
       setSorting={setSorting}
       columnVisibility={columnVisibility}
       setColumnVisibility={setColumnVisibility}
+      onClickRow={onClickRow}
+      selectedRows={selectedRows}
     />
   );
 };

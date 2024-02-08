@@ -7,12 +7,16 @@ import type {
   StudentImport,
 } from '~/students/imports/processor/processor.ts';
 import { FILE_PROCESSORS } from '~/students/imports/processor/processor.ts';
+import dayjs from 'dayjs';
+
+export const classHash = (name: string, level: string): string => `${level}-${name}`;
 
 class StudentImportsService {
-  async createImport(): Promise<string> {
+  async createImport(name: string): Promise<string> {
     const data = await prisma.import.create({
       data: {
         status: 'PENDING',
+        name,
       },
       select: {
         id: true,
@@ -48,7 +52,7 @@ class StudentImportsService {
     }
 
     if (!fileProcessor) {
-      throw new Error('No processor found'); // TODO: error code
+      throw new Error('UNKNOWN_FORMAT');
     }
     return fileProcessor;
   }
@@ -76,8 +80,8 @@ class StudentImportsService {
     );
 
     // set importLevelId to classes
-    classes.forEach((class_, index) => {
-      const level = importClassLevelIds.find(l => l.name === class_._rawLevel);
+    classes.forEach(class_ => {
+      const level = importClassLevelIds.find(l => l.name === class_.__rawLevel);
       if (level) {
         class_.importLevelId = level.id;
       }
@@ -87,25 +91,62 @@ class StudentImportsService {
       throw new Error('ImportLevelId not set for a class'); // TODO: error code
     }
 
-    await prisma.importClass.createMany({
-      data: classes.map(class_ => ({
-        importId: id,
-        classId: class_.classId ?? undefined,
-        importLevelId: class_.importLevelId!,
-        name: class_.name,
-      })),
+    const importClassIds = await prisma.$transaction(
+      classes.map(class_ =>
+        prisma.importClass.create({
+          data: {
+            importId: id,
+            classId: class_.classId ?? undefined,
+            importLevelId: class_.importLevelId!,
+            name: class_.name,
+          },
+          select: {
+            id: true,
+            name: true,
+            importLevel: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        }),
+      ),
+    );
+
+    classes.forEach(class_ => {
+      const currentClassHash = classHash(class_.name, class_.__rawLevel);
+      class_.__importClassId = importClassIds.find(
+        ic => currentClassHash === classHash(ic.name, ic.importLevel.name),
+      )?.id;
     });
 
-    await prisma.importStudent.createMany({
-      data: students.map(student => ({
-        importId: id,
-        studentId: student.studentId ?? undefined,
-        firstName: student.firstName,
-        lastName: student.lastName,
-        birthDate: student.birthDate,
-        otherName: student.otherName ?? undefined,
-      })),
+    // set classId to students
+    students.forEach(student => {
+      const class_ = classes.find(c => c.__classHash === student.__classHash);
+      if (class_?.__importClassId !== undefined) {
+        student.__importClassId = class_.__importClassId;
+      }
     });
+
+    // set classId to importStudents
+    await prisma.$transaction(
+      students.map(student =>
+        prisma.importStudent.create({
+          data: {
+            importId: id,
+            studentId: student.studentId ?? undefined,
+            firstName: student.firstName,
+            lastName: student.lastName,
+            birthDate: student.birthDate,
+            otherName: student.otherName ?? undefined,
+            gender: student.gender ?? undefined,
+            importClasses: {
+              connect: student.__importClassId ? [{ id: student.__importClassId }] : undefined,
+            },
+          },
+        }),
+      ),
+    );
   }
 
   async #mapData(
@@ -120,7 +161,7 @@ class StudentImportsService {
             where: {
               name: c.name,
               level: {
-                name: c._rawLevel,
+                name: c.__rawLevel,
               },
             },
             select: {
@@ -216,6 +257,194 @@ class StudentImportsService {
         message: (e as Error).message, // TODO check error code
       });
     }
+  }
+
+  async confirmImport(id: string): Promise<void> {
+    // TODO split method
+
+    const importLevels = await prisma.importClassLevel.findMany({
+      where: {
+        importId: id,
+      },
+    });
+
+    // upsert new levels
+    await prisma.$transaction(
+      importLevels.map(importLevel => {
+        if (importLevel.classLevelId) {
+          return prisma.classLevel.update({
+            where: {
+              id: importLevel.classLevelId,
+            },
+            data: {
+              name: importLevel.name,
+              importClassLevel: {
+                connect: {
+                  id: importLevel.id,
+                },
+              },
+            },
+            select: {
+              id: true,
+            },
+          });
+        }
+        return prisma.classLevel.create({
+          data: {
+            name: importLevel.name,
+            // TODO: random color
+            color: '#0000FF',
+            importClassLevel: {
+              connect: {
+                id: importLevel.id,
+              },
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+      }),
+    );
+
+    const importClasses = await prisma.importClass.findMany({
+      where: {
+        importId: id,
+      },
+      include: {
+        importLevel: {
+          select: {
+            classLevelId: true,
+          },
+        },
+      },
+    });
+
+    // TODO add parameter for this (and check timezones)
+    const startDate = dayjs().add(1, 'year').startOf('year').toDate();
+    const endDate = dayjs().add(1, 'year').endOf('year').toDate();
+    const academicYear = {
+      startDate,
+      endDate,
+      name: `${startDate.getFullYear()}/${endDate.getFullYear()}`,
+    };
+    try {
+      await prisma.academicYear.create({
+        data: academicYear,
+        select: {
+          id: true,
+        },
+      });
+    } catch (e) {
+      // academic year already exists
+    }
+
+    // upsert new classes
+    await prisma.$transaction(
+      importClasses.map(importClass => {
+        if (importClass.classId) {
+          return prisma.class.update({
+            where: {
+              id: importClass.classId,
+            },
+            data: {
+              level: {
+                connect: {
+                  id: importClass.importLevel.classLevelId!,
+                },
+              },
+              name: importClass.name,
+            },
+            select: {
+              id: true,
+            },
+          });
+        } else {
+          return prisma.class.create({
+            data: {
+              level: {
+                connect: {
+                  id: importClass.importLevel.classLevelId!,
+                },
+              },
+              academicYear: {
+                connect: {
+                  name: academicYear.name,
+                },
+              },
+              importClass: {
+                connect: {
+                  id: importClass.id,
+                },
+              },
+              name: importClass.name,
+            },
+            select: {
+              id: true,
+            },
+          });
+        }
+      }),
+    );
+
+    // create students
+    const importStudents = await prisma.importStudent.findMany({
+      where: {
+        importId: id,
+      },
+      include: {
+        importClasses: {
+          select: {
+            classId: true,
+          },
+        },
+      },
+    });
+
+    await prisma.$transaction(
+      importStudents.map(importStudent => {
+        if (importStudent.studentId) {
+          return prisma.student.update({
+            where: {
+              id: importStudent.studentId,
+            },
+            data: {
+              firstName: importStudent.firstName,
+              lastName: importStudent.lastName,
+              birthDate: importStudent.birthDate,
+              otherName: importStudent.otherName ?? undefined,
+              gender: importStudent.gender,
+              classes: {
+                set: importStudent.importClasses.map(ic => ({ id: ic.classId! })) ?? undefined,
+              },
+            },
+          });
+        }
+        return prisma.student.create({
+          data: {
+            firstName: importStudent.firstName,
+            lastName: importStudent.lastName,
+            birthDate: importStudent.birthDate,
+            otherName: importStudent.otherName ?? undefined,
+            gender: importStudent.gender,
+            properties: {},
+            classes: {
+              connect: importStudent.importClasses.map(ic => ({ id: ic.classId! })) ?? undefined,
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+      }),
+    );
+
+    // delete import
+    await prisma.import.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
 
