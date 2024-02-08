@@ -4,10 +4,10 @@ import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/students/query.model';
 import { ColumnSelector } from '~/components/datatable/column-selector';
 import { DataTable } from '~/components/datatable/data-table';
+import Filters from '~/components/datatable/filters';
 import Footer from '~/components/datatable/footer';
 import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
 import { generateColumns } from '~/components/students/list/columns.tsx';
-import Filters from '~/components/students/list/filters';
 import { searchParams, serialize } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
@@ -114,7 +114,7 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={cn('flex h-full flex-col gap-4', className)}>
       <div className="flex gap-4">
-        <Filters filters={filters} setFilters={setFilters} />
+        <Filters filters={filters} setFilters={setFilters} type="students" />
         <ColumnSelector
           columns={translatedColumns}
           columnVisibility={columnVisibility}
