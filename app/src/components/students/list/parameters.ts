@@ -1,32 +1,17 @@
 import { FilterSchema } from '@pedaki/services/students/query.model.client';
 import type { Filter } from '@pedaki/services/students/query.model.client';
-import { possiblesPerPage, sortingParser } from '~/components/datatable/parameters';
 import {
-  createParser,
+  createFiltersParser,
+  possiblesPerPage,
+  sortingParser,
+} from '~/components/datatable/parameters';
+import {
   createSerializer,
   parseAsArrayOf,
   parseAsInteger,
   parseAsJson,
   parseAsNumberLiteral,
 } from 'nuqs/parsers';
-
-const filtersParser = createParser({
-  parse: (raw: string) => {
-    const [column, operator, value] = raw.split(':', 3);
-    if (!column || !operator || !value) {
-      return null;
-    }
-    const v = JSON.parse(value);
-    const result = FilterSchema.safeParse({ field: column, operator: operator, value: v });
-    if (result.success) {
-      return result.data;
-    }
-    return null;
-  },
-  serialize: (value: Filter) => {
-    return `${value.field}:${value.operator}:${JSON.stringify(value.value)}`;
-  },
-});
 
 export const searchParams = {
   page: parseAsInteger.withDefault(1),
@@ -37,6 +22,6 @@ export const searchParams = {
     lastName: true,
     'class.name': true,
   }),
-  filters: parseAsArrayOf(filtersParser).withDefault([]),
+  filters: parseAsArrayOf(createFiltersParser<Filter>(FilterSchema)).withDefault([]),
 } as const;
 export const serialize = createSerializer(searchParams);
