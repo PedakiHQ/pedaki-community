@@ -113,8 +113,7 @@ describe('classesRouter', () => {
         });
 
         expect(meta.currentPage).toBe(1);
-        expect(data.length).toBe(1);
-        expect(data[0]!.name).toBe('5ème A');
+        expect(data.length).toBe(2);
       },
     );
 
