@@ -1,6 +1,5 @@
 import { IconUserGroups } from '@pedaki/design/ui/icons';
 import ClassesListPageClient from '~/app/[locale]/(main)/classes/(list)/classes-list-page-client';
-import HeaderActions from '~/app/[locale]/(main)/classes/(list)/header-actions.tsx';
 import type { PageType } from '~/app/types.ts';
 import ClassesListWrapper from '~/components/classes/list/wrapper';
 import PageHeader from '~/components/PageHeader.tsx';
@@ -29,9 +28,7 @@ export default async function ClassesListPage({ params }: PageType) {
         title={t('header.title')}
         description={t('header.description')}
         icon={IconUserGroups}
-      >
-        <HeaderActions />
-      </PageHeader>
+      ></PageHeader>
 
       <div className="h-full pt-6" id={MAIN_CONTENT}>
         <ClassesListWrapper>

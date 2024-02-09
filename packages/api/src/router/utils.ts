@@ -19,7 +19,18 @@ export const filtersArrayToPrismaWhere = <T extends object>(
         current = current[part] = current[part] ?? {};
       }
 
-      // If we are in a negatiive operator, we need to create a not object
+      // Add mode insensitive if needed (it cannot be put inside of the not oject)
+      switch (operator) {
+        case 'eq':
+        case 'neq':
+        case 'like':
+        case 'nlike':
+          // @ts-expect-error: The current object is valid, we can't have a valid type
+          current.mode = 'insensitive';
+          break;
+      }
+
+      // If we are in a negative operator, we need to create a not object
       switch (operator) {
         case 'neq':
         case 'nlike':
@@ -29,6 +40,7 @@ export const filtersArrayToPrismaWhere = <T extends object>(
           current = current.not = current.not ?? {};
           break;
       }
+
       switch (operator) {
         case 'eq':
         case 'neq':

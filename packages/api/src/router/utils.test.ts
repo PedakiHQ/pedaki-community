@@ -6,29 +6,29 @@ describe('utils', () => {
     test('single operator - eq', () => {
       const filters = [{ field: 'id', operator: 'eq', value: 1 }];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { equals: 1 } });
+      expect(result).toEqual({ id: { equals: 1, mode: 'insensitive' } });
     });
     test('single operator - like', () => {
       const filters = [{ field: 'id', operator: 'like', value: 1 }];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { contains: 1 } });
+      expect(result).toEqual({ id: { contains: 1, mode: 'insensitive' } });
     });
 
     test('single negative operator - neq', () => {
       const filters = [{ field: 'id', operator: 'neq', value: 1 }];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { not: { equals: 1 } } });
+      expect(result).toEqual({ id: { not: { equals: 1 }, mode: 'insensitive' } });
     });
     test('single negative operator - nlike', () => {
       const filters = [{ field: 'id', operator: 'nlike', value: 1 }];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { not: { contains: 1 } } });
+      expect(result).toEqual({ id: { not: { contains: 1 }, mode: 'insensitive' } });
     });
 
     test('single nested field', () => {
       const filters = [{ field: 'level.id', operator: 'neq', value: 1 }];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ level: { id: { not: { equals: 1 } } } });
+      expect(result).toEqual({ level: { id: { not: { equals: 1 }, mode: 'insensitive' } } });
     });
 
     test('no filters', () => {
@@ -42,7 +42,10 @@ describe('utils', () => {
         { field: 'level.id', operator: 'neq', value: 1 },
       ];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { equals: 1 }, level: { id: { not: { equals: 1 } } } });
+      expect(result).toEqual({
+        id: { equals: 1, mode: 'insensitive' },
+        level: { id: { not: { equals: 1 }, mode: 'insensitive' } },
+      });
     });
 
     test('multiple of the same field', () => {
@@ -51,7 +54,9 @@ describe('utils', () => {
         { field: 'id', operator: 'neq', value: 2 },
       ];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { equals: 1, not: { equals: 2 } } });
+      expect(result).toEqual({
+        id: { equals: 1, mode: 'insensitive', not: { equals: 2 } },
+      });
     });
 
     test('multiple of the same field and operator', () => {
@@ -60,7 +65,7 @@ describe('utils', () => {
         { field: 'id', operator: 'eq', value: 2 },
       ];
       const result = filtersArrayToPrismaWhere(filters);
-      expect(result).toEqual({ id: { equals: 2 } });
+      expect(result).toEqual({ id: { equals: 2, mode: 'insensitive' } });
     });
   });
 

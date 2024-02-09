@@ -26,7 +26,6 @@ export const generateColumns = (
 ) => {
   const res: ClassColumnDef[] = [
     defaultCell<ClassColumnDef>('name', 'name', t('columns.name.label')),
-    defaultCell<ClassColumnDef>('description', 'description', t('columns.description.label')),
     {
       ...defaultCell<ClassColumnDef>(
         'academicYear.name',
@@ -76,6 +75,7 @@ export const generateColumns = (
         return <div>{branches ?? '-'}</div>;
       },
     },
+    defaultCell<ClassColumnDef>('description', 'description', t('columns.description.label')),
     {
       ...defaultCell<ClassColumnDef>(`teachers.name`, `teachers.id`, t('columns.teachers.label')),
       cell: ({ row }) => {
