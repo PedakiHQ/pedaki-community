@@ -2,6 +2,13 @@
 
 import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/students/query.model';
+import {
+  useColumnsVisibilityParams,
+  useFilterParams,
+  usePageParams,
+  usePerPageParams,
+  useSortingParams,
+} from '~/components/datatable/client';
 import { ColumnSelector } from '~/components/datatable/column-selector';
 import { DataTable } from '~/components/datatable/data-table';
 import Filters from '~/components/datatable/filters';
@@ -44,37 +51,13 @@ const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
 
   // Loading state
   const [isTransitionLoading, startTransition] = React.useTransition();
-  const [_page, setPage] = useQueryState(
-    'page',
-    searchParams.page.withOptions({ history: 'push', startTransition }),
-  );
-  const [sorting, setSorting] = useQueryState(
-    'sorting',
-    searchParams.sorting.withOptions({
-      history: 'replace',
-      startTransition,
-    }),
-  );
-  const [filters, setFilters] = useQueryState(
-    'filter',
-    searchParams.filters.withOptions({
-      history: 'push',
-      startTransition,
-    }),
-  );
-  const [perPage, setPerPage] = useQueryState(
-    'perPage',
-    searchParams.perPage.withOptions({
-      history: 'replace',
-      startTransition,
-    }),
-  );
-  const [columnVisibility, setColumnVisibility] = useQueryState(
-    'columns',
-    searchParams.columns.withOptions({
-      history: 'replace',
-      startTransition,
-    }),
+  const [_page, setPage] = usePageParams(searchParams, startTransition);
+  const [sorting, setSorting] = useSortingParams(searchParams, startTransition);
+  const [filters, setFilters] = useFilterParams(searchParams, startTransition);
+  const [perPage, setPerPage] = usePerPageParams(searchParams, startTransition);
+  const [columnVisibility, setColumnVisibility] = useColumnsVisibilityParams(
+    searchParams,
+    startTransition,
   );
   const visibleColumns = React.useMemo(() => {
     return Object.entries(columnVisibility)

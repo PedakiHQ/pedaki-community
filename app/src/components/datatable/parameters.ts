@@ -30,6 +30,10 @@ export const createFiltersParser = <T extends DefaultFilter, U extends z.Schema 
       return `${value.field}:${value.operator}:${JSON.stringify(value.value)}`;
     },
   });
+export type CreateFiltersParser<
+  T extends DefaultFilter,
+  U extends z.Schema = z.Schema,
+> = ReturnType<typeof createFiltersParser<T, U>>;
 
 export const sortingParser = createParser({
   parse: (value: string) => {
@@ -48,11 +52,11 @@ export const sortingParser = createParser({
 });
 
 export const createSearchParams = <
-  U extends DefaultFilter = DefaultFilter,
-  T extends ReturnType<typeof createFiltersParser<U>> = ReturnType<typeof createFiltersParser<U>>,
+  T extends DefaultFilter = DefaultFilter,
+  U extends CreateFiltersParser<T> = CreateFiltersParser<T>,
 >(
   columns: Record<string, boolean>,
-  filterParser: T,
+  filterParser: U,
 ) => ({
   page: parseAsInteger.withDefault(1),
   perPage: parseAsNumberLiteral(possiblesPerPage).withDefault(25),
@@ -60,6 +64,10 @@ export const createSearchParams = <
   columns: parseAsJson<Record<string, boolean>>().withDefault(columns),
   filters: parseAsArrayOf(filterParser).withDefault([]),
 });
+export type CreateSearchParams<
+  T extends DefaultFilter = DefaultFilter,
+  U extends CreateFiltersParser<T> = CreateFiltersParser<T>,
+> = ReturnType<typeof createSearchParams<T, U>>;
 
 export const possiblesPerPage = [10, 25, 50, 100] as const;
 export type PossiblePerPage = (typeof possiblesPerPage)[number];
