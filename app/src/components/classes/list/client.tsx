@@ -19,7 +19,6 @@ import Footer from '~/components/datatable/footer';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useClassesListStore } from '~/store/classes/list/list.store.ts';
-import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
 
 const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {

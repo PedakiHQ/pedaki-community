@@ -19,7 +19,6 @@ import { searchParams, serialize } from '~/components/students/list/parameters.t
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
-import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
 
 interface ClientProps {
