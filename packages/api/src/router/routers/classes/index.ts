@@ -42,6 +42,8 @@ export const classesRouter = router({
         {} as Record<(typeof input.fields)[number], boolean>,
       );
 
+      const relations = ['branches', 'teachers'];
+
       const [data, meta] = await prisma.class
         .paginate({
           select: {
@@ -87,10 +89,11 @@ export const classesRouter = router({
                       name: fields['branches.name'],
                       description: fields['branches.description'],
                     },
-                    orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
-                      input.orderBy,
-                      { stepDown: 'branches' },
-                    ),
+                    orderBy:
+                      orderByArrayToPrismaOrderBy<Prisma.ClassBranchOrderByWithRelationInput>(
+                        input.orderBy,
+                        { stepDown: 'branches' },
+                      ),
                   },
             teachers:
               input.fields.filter(field => field.startsWith('teachers.')).length <= 0
@@ -100,16 +103,18 @@ export const classesRouter = router({
                       id: fields['teachers.id'],
                       name: fields['teachers.name'],
                     },
-                    orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
+                    orderBy: orderByArrayToPrismaOrderBy<Prisma.TeacherOrderByWithRelationInput>(
                       input.orderBy,
                       { stepDown: 'teachers' },
                     ),
                   },
           },
-          where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where),
+          where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where, {
+            relations,
+          }),
           orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
             input.orderBy,
-            { ignoreStartsWith: ['branches', 'teachers'] },
+            { ignoreStartsWith: relations },
           ),
         })
         .withPages({

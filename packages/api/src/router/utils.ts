@@ -1,15 +1,30 @@
+interface FiltersArrayToPrismaWhereOptions {
+  /**
+   * Relations that needs to be written in a different way
+   */
+  relations?: string[];
+}
+
 /**
  * Transform our filter array to a prisma where object
  * @param filters Filters to use
+ * @param options Options to use
  * @returns The specified type to use in the prisma request
  */
-export const filtersArrayToPrismaWhere = <T extends object>(
+export const filtersArrayToPrismaWhere = <T extends Record<string, any>>(
   filters: { field: string; operator: string; value: any }[] | undefined,
+  { relations }: FiltersArrayToPrismaWhereOptions = {},
 ): T => {
   const where = {} as T;
   if (filters) {
     for (const { field, operator, value } of filters) {
       const fieldParts = field.split('.');
+
+      if (!!relations && relations.includes(fieldParts[0]!) && fieldParts.length > 1) {
+        // Insert 'some' in the fieldParts at the second position
+        fieldParts.splice(1, 0, 'some');
+      }
+
       let current = where;
       // Move to the last part of the field
       for (const part of fieldParts) {
@@ -27,7 +42,6 @@ export const filtersArrayToPrismaWhere = <T extends object>(
           case 'neq':
           case 'like':
           case 'nlike':
-            // TODO only if string
             // @ts-expect-error: The current object is valid, we can't have a valid type
             current.mode = 'insensitive';
             break;

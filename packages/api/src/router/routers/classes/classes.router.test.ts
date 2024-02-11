@@ -203,6 +203,7 @@ describe('classesRouter', () => {
         expect(data[0]!.teachers![2]!.id).toBe(3);
       },
     );
+
     test.each([userSession, internalSession])(
       'return class - with filter and list of relations order desc - $type',
       async ({ api }) => {
@@ -223,6 +224,28 @@ describe('classesRouter', () => {
         expect(data[0]!.teachers![0]!.id).toBe(3);
         expect(data[0]!.teachers![1]!.id).toBe(2);
         expect(data[0]!.teachers![2]!.id).toBe(1);
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns the 1st page - with relation filter - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.classes.getPaginatedMany({
+          fields: ['id', 'name', 'branches.name'],
+          where: [{ field: 'branches.name', operator: 'eq', value: 'info' }],
+          orderBy: [['id', 'asc']],
+          pagination: {
+            page: 1,
+            limit: 2,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(2);
+        expect(data[0]!.id).toBe(1);
+        expect(data[0]!.name).toBe('6ème A');
+        expect(data[1]!.id).toBe(3);
+        expect(data[1]!.name).toBe('5ème A');
       },
     );
   });

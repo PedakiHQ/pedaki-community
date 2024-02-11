@@ -78,6 +78,22 @@ describe('utils', () => {
       const result = filtersArrayToPrismaWhere(filters);
       expect(result).toEqual({ id: { equals: 2 } });
     });
+
+    test('test option relations', () => {
+      const filters = [
+        { field: 'id', operator: 'eq', value: 1 },
+        { field: 'teachers.id', operator: 'eq', value: 2 },
+      ];
+      const result = filtersArrayToPrismaWhere(filters, { relations: ['teachers'] });
+      expect(result).toEqual({
+        id: { equals: 1 },
+        teachers: {
+          some: {
+            id: { equals: 2 },
+          },
+        },
+      });
+    });
   });
 
   describe('orderByArrayToPrismaOrderBy', () => {
@@ -112,7 +128,7 @@ describe('utils', () => {
       expect(result).toEqual({});
     });
 
-    test('test ignoreStartsWith', () => {
+    test('test option ignoreStartsWith', () => {
       const result = orderByArrayToPrismaOrderBy(
         [
           ['id', 'asc'],
@@ -123,7 +139,7 @@ describe('utils', () => {
       expect(result).toEqual({ id: 'asc' });
     });
 
-    test('test stepDown', () => {
+    test('test option stepDown', () => {
       const result = orderByArrayToPrismaOrderBy(
         [
           ['id', 'asc'],
