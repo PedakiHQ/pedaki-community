@@ -180,5 +180,50 @@ describe('classesRouter', () => {
         expect(data[0]!.name).toBe('6ème B');
       },
     );
+
+    test.each([userSession, internalSession])(
+      'return class - with filter and list of relations order asc - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.classes.getPaginatedMany({
+          fields: ['id', 'name', 'teachers.id'],
+          where: [{ field: 'name', operator: 'eq', value: 'CP Jobard' }],
+          orderBy: [['teachers.id', 'asc']],
+          pagination: {
+            page: 1,
+            limit: 2,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.id).toBe(4);
+        expect(data[0]!.name).toBe('CP Jobard');
+        expect(data[0]!.teachers![0]!.id).toBe(1);
+        expect(data[0]!.teachers![1]!.id).toBe(2);
+        expect(data[0]!.teachers![2]!.id).toBe(3);
+      },
+    );
+    test.each([userSession, internalSession])(
+      'return class - with filter and list of relations order desc - $type',
+      async ({ api }) => {
+        const { data, meta } = await api.classes.getPaginatedMany({
+          fields: ['id', 'name', 'teachers.id'],
+          where: [{ field: 'name', operator: 'eq', value: 'CP Jobard' }],
+          orderBy: [['teachers.id', 'desc']],
+          pagination: {
+            page: 1,
+            limit: 2,
+          },
+        });
+
+        expect(meta.currentPage).toBe(1);
+        expect(data.length).toBe(1);
+        expect(data[0]!.id).toBe(4);
+        expect(data[0]!.name).toBe('CP Jobard');
+        expect(data[0]!.teachers![0]!.id).toBe(3);
+        expect(data[0]!.teachers![1]!.id).toBe(2);
+        expect(data[0]!.teachers![2]!.id).toBe(1);
+      },
+    );
   });
 });

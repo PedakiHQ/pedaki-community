@@ -69,15 +69,6 @@ export const classesRouter = router({
                       description: fields['level.description'],
                     },
                   },
-            teachers:
-              input.fields.filter(field => field.startsWith('teachers.')).length <= 0
-                ? undefined
-                : {
-                    select: {
-                      id: fields['teachers.id'],
-                      name: fields['teachers.name'],
-                    },
-                  },
             mainTeacher:
               input.fields.filter(field => field.startsWith('mainTeacher.')).length <= 0
                 ? undefined
@@ -96,10 +87,30 @@ export const classesRouter = router({
                       name: fields['branches.name'],
                       description: fields['branches.description'],
                     },
+                    orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
+                      input.orderBy,
+                      { stepDown: 'branches' },
+                    ),
+                  },
+            teachers:
+              input.fields.filter(field => field.startsWith('teachers.')).length <= 0
+                ? undefined
+                : {
+                    select: {
+                      id: fields['teachers.id'],
+                      name: fields['teachers.name'],
+                    },
+                    orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
+                      input.orderBy,
+                      { stepDown: 'teachers' },
+                    ),
                   },
           },
           where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where),
-          orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(input.orderBy),
+          orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
+            input.orderBy,
+            { ignoreStartsWith: ['branches', 'teachers'] },
+          ),
         })
         .withPages({
           limit: input.pagination.limit,

@@ -73,19 +73,39 @@ export const filtersArrayToPrismaWhere = <T extends object>(
   return where;
 };
 
+interface OrderByArrayToPrismaOrderByOptions {
+  /**
+   * All of the field whose first part is one of these will be ignored
+   */
+  ignoreStartsWith?: string[];
+  /**
+   * If specified, only the orderBy of this field will be used and returned
+   */
+  stepDown?: string;
+}
+
 /**
  * Transform our orderBy array to a prisma orderBy object
  * @param orderBy Order by array to use
+ * @param options Options to use
  * @returns The specified type to use in the prisma request
  */
-export const orderByArrayToPrismaOrderBy = <T extends object>(
+export const orderByArrayToPrismaOrderBy = <T extends Record<string, any>>(
   orderBy: [string, 'asc' | 'desc'][] | undefined,
+  { ignoreStartsWith, stepDown }: OrderByArrayToPrismaOrderByOptions = {},
 ): T => {
   const orderByResult = {} as T;
   if (orderBy) {
     for (const [field, sort] of orderBy) {
       const fieldParts = field.split('.');
       if (fieldParts.length > 0) {
+        if (
+          (!!stepDown && fieldParts[0] !== stepDown) ||
+          (!!ignoreStartsWith && ignoreStartsWith.includes(fieldParts[0]!))
+        ) {
+          continue;
+        }
+
         let current = orderByResult;
         // Move to the last part of the field
         for (const part of fieldParts.slice(0, -1)) {
@@ -98,6 +118,10 @@ export const orderByArrayToPrismaOrderBy = <T extends object>(
         current[fieldParts[fieldParts.length - 1]] = sort;
       }
     }
+  }
+
+  if (stepDown && orderByResult[stepDown]) {
+    return orderByResult[stepDown] as T;
   }
 
   return orderByResult;

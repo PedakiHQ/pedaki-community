@@ -111,5 +111,27 @@ describe('utils', () => {
       const result = orderByArrayToPrismaOrderBy([]);
       expect(result).toEqual({});
     });
+
+    test('test ignoreStartsWith', () => {
+      const result = orderByArrayToPrismaOrderBy(
+        [
+          ['id', 'asc'],
+          ['teachers.id', 'desc'],
+        ],
+        { ignoreStartsWith: ['teachers'] },
+      );
+      expect(result).toEqual({ id: 'asc' });
+    });
+
+    test('test stepDown', () => {
+      const result = orderByArrayToPrismaOrderBy(
+        [
+          ['id', 'asc'],
+          ['teachers.id', 'desc'],
+        ],
+        { stepDown: 'teachers' },
+      );
+      expect(result).toEqual({ id: 'desc' });
+    });
   });
 });
