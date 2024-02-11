@@ -8,7 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@pedaki/design/ui/pagination';
-import type { PossiblePerPage } from '~/components/students/list/parameters.ts';
+import type { PossiblePerPage } from '~/components/datatable/parameters';
 import React, { useMemo, useRef } from 'react';
 
 export const PaginationElement = ({

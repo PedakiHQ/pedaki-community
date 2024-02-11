@@ -241,7 +241,7 @@ model Class {
   levelId Int        @map("level_id") // ex: 1st year, 2nd year, 3rd year, ...
   level   ClassLevel @relation("class_to_level", fields: [levelId], references: [id], onDelete: Cascade)
 
-  branch ClassBranch[] @relation("branch_to_class")
+  branches ClassBranch[] @relation("branch_to_class")
 
   // If the class as assigned rooms, they will be listed here
   rooms Room[] @relation("class_to_room")

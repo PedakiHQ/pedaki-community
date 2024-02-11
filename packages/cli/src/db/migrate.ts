@@ -62,6 +62,7 @@ class DbMigrateCommand implements Command {
       spinner.info('Database tables deployed');
 
       if (process.env.PRISMA_DECRYPTION_KEY) {
+        // @ts-expect-error: Issue since we extend the prisma client with modules
         await migrate(prisma);
         spinner.succeed('Encryption keys migrated');
       } else {

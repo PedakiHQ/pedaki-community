@@ -1,5 +1,6 @@
 import { PaginationInputSchema, PaginationOutputSchema } from '~/shared/pagination.model.ts';
 import { StudentSchema } from '~/students/student_base.model.ts';
+import { TeacherSchema } from '~/teachers/teachers.model.ts';
 import { z } from 'zod';
 import { FieldSchemaWithRefinement, FilterSchemaWithRefinement } from './query.model.ts';
 
@@ -23,13 +24,7 @@ export const GetManyStudentsOutputSchema = z.object({
           class: z
             .object({
               id: z.number(),
-              teachers: z.array(
-                z
-                  .object({
-                    id: z.number().optional(),
-                  })
-                  .passthrough(),
-              ),
+              teachers: z.array(TeacherSchema.pick({ id: true }).partial().passthrough()),
             })
             .partial()
             .passthrough(),

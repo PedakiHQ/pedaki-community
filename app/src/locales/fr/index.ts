@@ -1,5 +1,6 @@
 import auth from '~/locales/fr/auth';
 import classes from '~/locales/fr/classes';
+import components from '~/locales/fr/components';
 import main from '~/locales/fr/main';
 import settings from '~/locales/fr/settings';
 import students from '~/locales/fr/students';
@@ -9,6 +10,7 @@ import zod from '~/locales/fr/zod';
 
 export default {
   auth: auth,
+  components: components,
   tutorial: tutorial,
   classes: classes,
   main: main,

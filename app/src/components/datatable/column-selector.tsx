@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@pedaki/design/ui/dropdown-menu';
 import { IconSettings2 } from '@pedaki/design/ui/icons';
-import type { StudentColumnDef } from '~/components/students/list/columns.tsx';
+import type { ColumnDef } from '~/components/datatable/columns';
 import { useScopedI18n } from '~/locales/client.ts';
 import React from 'react';
 
@@ -17,11 +17,11 @@ export const ColumnSelector = ({
   columnVisibility,
   setColumnVisibility,
 }: {
-  columns: StudentColumnDef[];
+  columns: ColumnDef<any>[];
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }) => {
-  const t = useScopedI18n('students.list.table.hide.columns');
+  const t = useScopedI18n('components.datatable.hide.columns');
 
   return (
     <DropdownMenu>

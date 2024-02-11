@@ -9,10 +9,16 @@ const PrismaClient = PrismaClientPkg.PrismaClient;
 const prismaClientSingleton = () => {
   let client = new PrismaClient({
     log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn', 'info'] : ['error'],
-  });
+  }).$extends(
+    pagination({
+      pages: {
+        limit: 30,
+        includePageCount: true,
+      },
+    }),
+  );
 
   if (env.PRISMA_ENCRYPTION_KEY && !env.PRISMA_ENCRYPTION_KEY.startsWith('{{{')) {
-    // @ts-expect-error: extends breaks the type
     client = client.$extends(
       fieldEncryptionExtension({
         encryptionKey: env.PRISMA_ENCRYPTION_KEY,
@@ -22,17 +28,8 @@ const prismaClientSingleton = () => {
             : undefined,
       }),
     );
-
-    // @ts-expect-error: extends breaks the type
-    client = client.$extends(
-      pagination({
-        pages: {
-          limit: 30,
-          includePageCount: true,
-        },
-      }),
-    );
   }
+
   logger.debug('Created Prisma client', {
     withEncryption: !!env.PRISMA_ENCRYPTION_KEY,
     withDecryption: !!env.PRISMA_DECRYPTION_KEY,

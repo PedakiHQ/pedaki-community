@@ -1,11 +1,7 @@
 import { studentPropertiesService } from '~/students/properties/properties.service.ts';
-import type { FieldType } from '~/students/query.model.client.ts';
-import {
-  FieldAllowedOperators,
-  FieldSchema,
-  FilterSchema,
-  getKnownField,
-} from '~/students/query.model.client.ts';
+import { FieldSchema, FilterSchema, getKnownField } from '~/students/query.model.client.ts';
+import { FieldAllowedOperators } from '~/utils/query.ts';
+import type { FieldType } from '~/utils/query.ts';
 import { z } from 'zod';
 
 export const FieldSchemaWithRefinement = FieldSchema.refine(

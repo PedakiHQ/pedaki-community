@@ -2,17 +2,23 @@
 
 import { cn } from '@pedaki/design/utils';
 import type { Field } from '@pedaki/services/students/query.model';
-import { ColumnSelector } from '~/components/students/list/column-selector.tsx';
+import {
+  useColumnsVisibilityParams,
+  useFilterParams,
+  usePageParams,
+  usePerPageParams,
+  useSortingParams,
+} from '~/components/datatable/client';
+import { ColumnSelector } from '~/components/datatable/column-selector';
+import { DataTable } from '~/components/datatable/data-table';
+import Filters from '~/components/datatable/filters';
+import Footer from '~/components/datatable/footer';
 import type { StudentColumnDef, StudentData } from '~/components/students/list/columns.tsx';
 import { generateColumns } from '~/components/students/list/columns.tsx';
-import { DataTable } from '~/components/students/list/data-table.tsx';
-import Filters from '~/components/students/list/filters.tsx';
-import Footer from '~/components/students/list/footer.tsx';
-import { searchParams } from '~/components/students/list/parameters.ts';
+import { searchParams, serialize } from '~/components/students/list/parameters.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
-import { useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
 
 interface ClientProps {
@@ -44,37 +50,13 @@ const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
 
   // Loading state
   const [isTransitionLoading, startTransition] = React.useTransition();
-  const [_page, setPage] = useQueryState(
-    'page',
-    searchParams.page.withOptions({ history: 'push', startTransition }),
-  );
-  const [sorting, setSorting] = useQueryState(
-    'sorting',
-    searchParams.sorting.withOptions({
-      history: 'replace',
-      startTransition,
-    }),
-  );
-  const [filters, setFilters] = useQueryState(
-    'filter',
-    searchParams.filters.withOptions({
-      history: 'push',
-      startTransition,
-    }),
-  );
-  const [perPage, setPerPage] = useQueryState(
-    'perPage',
-    searchParams.perPage.withOptions({
-      history: 'replace',
-      startTransition,
-    }),
-  );
-  const [columnVisibility, setColumnVisibility] = useQueryState(
-    'columns',
-    searchParams.columns.withOptions({
-      history: 'replace',
-      startTransition,
-    }),
+  const [_page, setPage] = usePageParams(searchParams, startTransition);
+  const [sorting, setSorting] = useSortingParams(searchParams, startTransition);
+  const [filters, setFilters] = useFilterParams(searchParams, startTransition);
+  const [perPage, setPerPage] = usePerPageParams(searchParams, startTransition);
+  const [columnVisibility, setColumnVisibility] = useColumnsVisibilityParams(
+    searchParams,
+    startTransition,
   );
   const visibleColumns = React.useMemo(() => {
     return Object.entries(columnVisibility)
@@ -120,7 +102,7 @@ const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
   return (
     <div className={cn('flex h-full flex-col gap-4', className)}>
       <div className="flex gap-4">
-        <Filters filters={filters} setFilters={setFilters} />
+        <Filters filters={filters} setFilters={setFilters} type="students" />
         <ColumnSelector
           columns={translatedColumns}
           columnVisibility={columnVisibility}
@@ -148,6 +130,8 @@ const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
         meta={meta}
         sorting={sorting}
         columnVisibility={columnVisibility}
+        perPageLabel={t('footer.perPage')}
+        serialize={serialize}
       />
     </div>
   );
@@ -176,6 +160,8 @@ const TableElement = ({
   onClickRow?: ClientProps['onClickRow'];
   selectedRows?: ClientProps['selectedRows'];
 }) => {
+  const t = useScopedI18n('students.list.table');
+
   const tableColumns = React.useMemo(
     () =>
       isLoading
@@ -200,6 +186,7 @@ const TableElement = ({
 
   return (
     <DataTable
+      noResultLabel={t('noResult')}
       columns={tableColumns.filter(col => !col.accessorKey || columnVisibility[col.id])}
       data={tableData}
       sorting={sorting}
