@@ -37,12 +37,12 @@ const PersonalInfoForm = () => {
       <h2 className="text-label-sm font-medium text-main">Base info</h2>
       <Form {...form}>
         <form className="grid grid-cols-12 gap-6">
-          <div className="@2xl/main:order-0 order-1 col-span-12 @2xl/main:col-span-8">
+          <div className="@4xl/main:order-0 order-1 col-span-12 @4xl/main:col-span-9">
             <div className="flex flex-col gap-4">
               <BaseData form={form} />
             </div>
           </div>
-          <div className="order-0 col-span-12 flex flex-col justify-start space-y-1 @2xl/main:order-1 @2xl/main:col-span-4">
+          <div className="order-0 col-span-12 flex flex-col justify-start space-y-1 @4xl/main:order-1 @4xl/main:col-span-3">
             <label className="flex items-center space-x-1 text-label-sm font-medium text-main">
               Image
             </label>
@@ -57,7 +57,7 @@ const PersonalInfoForm = () => {
 const UserImage = ({ form }: { form: Form }) => {
   return (
     <div className="rounded-none">
-      <Avatar className="aspect-square h-full min-h-[150px] w-full rounded-md border bg-weak">
+      <Avatar className="aspect-square h-full min-h-[150px] max-h-[400px] w-auto rounded-md border bg-weak">
         <AvatarImage src={form.watch('avatar')} alt="avatar" className="rounded-none" />
         <AvatarFallback className="select-none rounded-none text-label-sm text-sub">
           No image
