@@ -1,18 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@pedaki/design/ui/button';
-import DayPicker from '@pedaki/design/ui/daypicker';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
+import { Form, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
 import { IconArrowRight, IconX } from '@pedaki/design/ui/icons';
-import { Input } from '@pedaki/design/ui/input';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
-import type { TranslationGroup } from '~/locales/client.ts';
+import type { BaseFields } from '~/components/students/import/student/constants.ts';
+import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
-import dayjs from '~/locales/dayjs.ts';
 import type { OutputType } from '~api/router/router.ts';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -30,8 +28,7 @@ interface FormProps<T extends PossibleStudentData = PossibleStudentData> {
 
   importedData?: PossibleStudentData | null;
   onSubmitted?: (data: NonNullable<T>) => void;
-  fields: Partial<Record<keyof NonNullable<T>, 'text' | 'date'>>;
-  tKey: TranslationGroup;
+  fields: Record<string, BaseFields>;
 }
 
 const BaseForm = ({
@@ -41,7 +38,6 @@ const BaseForm = ({
   importedData,
   onSubmitted,
   fields,
-  tKey,
   schema,
 }: FormProps) => {
   const form = useForm({
@@ -50,7 +46,7 @@ const BaseForm = ({
     defaultValues: data ?? {},
   });
 
-  const t = useScopedI18n(tKey);
+  const tField = useScopedI18n('students.schema.fields');
 
   useEffect(() => {
     if (data) {
@@ -66,9 +62,9 @@ const BaseForm = ({
     };
   };
 
-  const cleanAction = (field: keyof NonNullable<PossibleStudentData>, type: 'text' | 'date') => {
+  const cleanAction = (field: keyof NonNullable<PossibleStudentData>, type: BaseFields) => {
     return () => {
-      form.setValue(field, type === 'text' ? '' : null);
+      form.setValue(field, type.type === 'text' ? '' : null);
       void form.trigger(field);
     };
   };
@@ -93,39 +89,19 @@ const BaseForm = ({
                 const isEmpty = f.value === '' || f.value === null;
                 return (
                   <FormItem>
-                    <FormLabel>{t(`${field}.label` as any)}</FormLabel>
+                    <FormLabel>{tField(`${f.name}.label`)}</FormLabel>
                     <div className="relative flex w-full">
                       <div className="flex w-full items-center gap-1">
                         {!isEquivalent && <MergeButton onClick={mergeAction(f.name)} />}
-                        <FormControl>
-                          {type === 'date' ? (
-                            <DayPicker
-                              {...f}
-                              disabled={disabled}
-                              // @ts-expect-error:  todo not correctly typed
-                              date={f.value ?? undefined}
-                              setDate={date => form.setValue(f.name, date)}
-                              format={date => dayjs(date).format('L')}
-                              className="flex-1"
-                              calendarProps={{
-                                ISOWeek: true,
-                                fromYear: 1900,
-                                toYear: dayjs().year(),
-                                captionLayout: 'dropdown-buttons',
-                                defaultMonth: f.value ? dayjs(f.value).toDate() : undefined,
-                              }}
-                            />
-                          ) : (
-                            <Input
-                              placeholder={!isImported ? t(`${field}.placeholder` as any) : ''}
-                              disabled={disabled}
-                              {...f}
-                              // @ts-expect-error:  todo not correctly typed
-                              value={f.value ?? ''}
-                              wrapperClassName="flex-1"
-                            />
-                          )}
-                        </FormControl>
+                        <GenericField
+                          field={f}
+                          form={form}
+                          type={type}
+                          disabled={false}
+                          // @ts-expect-error: type is incorrect
+                          t={tField}
+                          placeholder={!isImported}
+                        />
                         {!disabled && (
                           <CleanButton onClick={cleanAction(f.name, type)} disabled={isEmpty} />
                         )}

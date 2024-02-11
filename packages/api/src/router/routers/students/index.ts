@@ -100,8 +100,12 @@ export const studentsRouter = router({
         };
       });
 
+      const withoutDuplicates = finalData.filter(
+        (value, index, self) => index === self.findIndex(obj => obj.id === value.id),
+      );
+
       return {
-        data: finalData,
+        data: withoutDuplicates,
         meta: pagination,
       };
     }),

@@ -24,13 +24,7 @@ const Imported = ({ baseData, status }: ImportedProps) => {
         <p>&nbsp;</p>
       </div>
 
-      <BaseForm
-        data={baseData}
-        disabled
-        fields={fields}
-        key={`${baseData?.id}`}
-        tKey="students.import.fields"
-      />
+      <BaseForm data={baseData} disabled fields={fields} key={`${baseData?.id}`} />
     </>
   );
 };

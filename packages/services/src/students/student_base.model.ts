@@ -13,6 +13,6 @@ export const StudentSchema = z.object({
 
   birthDate: z.coerce.date().min(new Date(1900, 0, 1)),
 
-  properties: z.record(z.union([z.string(), z.number()])).optional(),
+  properties: z.record(z.union([z.string(), z.number(), z.null()])).optional(),
 });
 export type Student = z.infer<typeof StudentSchema>;

@@ -1,4 +1,7 @@
 const imports = {
+  metadata: {
+    title: 'Importer des élèves',
+  },
   header: {
     title: 'Elèves',
     description: 'Importer des élèves',
@@ -61,29 +64,6 @@ const imports = {
   imported: {
     status: {
       DONE: '(Modifiée)',
-    },
-  },
-
-  fields: {
-    firstName: {
-      label: 'Prénom',
-      // TODO
-      placeholder: 'Guillaume',
-    },
-    lastName: {
-      label: 'Nom',
-      placeholder: 'Jobard',
-    },
-    gender: {
-      label: 'Genre',
-      placeholder: 'Masculin',
-    },
-    otherName: {
-      label: 'Troisième nom',
-      placeholder: 'ElChapo',
-    },
-    birthDate: {
-      label: 'Date de naissance',
     },
   },
 };

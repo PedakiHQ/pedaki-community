@@ -84,8 +84,8 @@ class StudentQueryService {
 
     const hasClassFields =
       request.where?.some(({ field }) => field.startsWith('class.')) ||
-      request.orderBy?.some(([field]) => field.startsWith('class.')) ||
-      request.fields.some(field => field.startsWith('class.')) ||
+      (!isCount && request.orderBy?.some(([field]) => field.startsWith('class.'))) ||
+      (!isCount && request.fields.some(field => field.startsWith('class.'))) ||
       false;
 
     const joinClass = hasClassFields
@@ -95,8 +95,8 @@ class StudentQueryService {
       : '';
     const hasTeachers =
       request.where?.some(({ field }) => field.startsWith('class.teachers.')) ||
-      request.orderBy?.some(([field]) => field.startsWith('class.teachers.')) ||
-      request.fields.some(field => field.startsWith('class.teachers.')) ||
+      (!isCount && request.orderBy?.some(([field]) => field.startsWith('class.teachers.'))) ||
+      (!isCount && request.fields.some(field => field.startsWith('class.teachers.'))) ||
       false;
     const joinTeachers = hasTeachers
       ? `

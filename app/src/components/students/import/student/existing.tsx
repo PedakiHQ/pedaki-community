@@ -73,7 +73,7 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
       }
       router.push(serialize({ id: nextId?.id ?? importedData.id, visible }));
     },
-    onError: e => {
+    onError: () => {
       // TODO: translate
       toast.error('Une erreur est survenue', {
         id: 'import-error',
@@ -114,7 +114,6 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         data={hasChangedPossibleStudent.current ? possibleStudent ?? importedData : importedData}
         importedData={importedData}
         fields={fields}
-        tKey="students.import.fields"
         schema={StudentSchema}
         onSubmitted={updateImport}
       >

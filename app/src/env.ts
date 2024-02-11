@@ -10,7 +10,7 @@ export const env = createEnv({
 
   client: {
     NEXT_PUBLIC_TESTVALUE: z.string().default('testvalue'),
-    NEXT_PUBLIC_IS_DEMO: z.coerce.boolean().default(false),
+    NEXT_PUBLIC_IS_DEMO: z.string().transform((value) => value === 'true'),
     NEXT_PUBLIC_PEDAKI_HOSTNAME: z.string().default('localhost'), // without protocol
     NEXT_PUBLIC_PEDAKI_VERSION: z.string().default('0.0.0'),
     NEXT_PUBLIC_PEDAKI_NAME: z.string().default('pedaki'),
