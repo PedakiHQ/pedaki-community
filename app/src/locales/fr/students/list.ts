@@ -54,7 +54,7 @@ export default {
       },
     },
     footer: {
-      perPage: 'Classes par page',
+      perPage: 'Elèves par page',
     },
   },
 } as const;

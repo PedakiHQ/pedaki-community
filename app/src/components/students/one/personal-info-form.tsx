@@ -57,7 +57,7 @@ const PersonalInfoForm = () => {
 const UserImage = ({ form }: { form: Form }) => {
   return (
     <div className="rounded-none">
-      <Avatar className="aspect-square h-full min-h-[150px] max-h-[400px] w-auto rounded-md border bg-weak">
+      <Avatar className="aspect-square h-full max-h-[400px] min-h-[150px] w-auto rounded-md border bg-weak">
         <AvatarImage src={form.watch('avatar')} alt="avatar" className="rounded-none" />
         <AvatarFallback className="select-none rounded-none text-label-sm text-sub">
           No image
