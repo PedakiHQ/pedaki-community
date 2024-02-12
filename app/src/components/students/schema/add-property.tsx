@@ -16,6 +16,7 @@ import type { CreateProperty } from '@pedaki/services/students/properties/proper
 import { propertiesFields } from '~/components/students/import/student/constants.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
+import { PROPERTIES_ADD_BUTTON } from '~/store/tutorial/data/schema-student/constants.ts';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -57,7 +58,7 @@ const AddNewPropertyTrigger = () => {
   return (
     <Popover open={isOpened} onOpenChange={setIsOpened}>
       <PopoverTrigger asChild>
-        <Button variant="stroke-primary-main" size="sm">
+        <Button variant="stroke-primary-main" size="sm" id={PROPERTIES_ADD_BUTTON}>
           {t('trigger')}
         </Button>
       </PopoverTrigger>

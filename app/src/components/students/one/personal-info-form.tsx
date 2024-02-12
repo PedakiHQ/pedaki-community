@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@pedaki/design/ui/avatar';
 import { Form, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client';
+import { BASE_INFO } from '~/store/tutorial/data/schema-student/constants.ts';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { fields } from '../import/student/constants';
@@ -32,7 +33,7 @@ const PersonalInfoForm = () => {
   });
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4" id={BASE_INFO}>
       {/*TODO trads*/}
       <h2 className="text-label-sm font-medium text-main">Base info</h2>
       <Form {...form}>

@@ -1,5 +1,10 @@
 import { MAIN_CONTENT, SIDEBAR_STUDENTS_BUTTON } from '~/store/tutorial/data/constants.ts';
-import { TUTORIAL_ID } from '~/store/tutorial/data/schema-student/constants.ts';
+import {
+  BASE_INFO,
+  PROPERTIES,
+  PROPERTIES_ADD_BUTTON,
+  TUTORIAL_ID,
+} from '~/store/tutorial/data/schema-student/constants.ts';
 import {
   getNextStepIndex,
   isCompleted,
@@ -56,9 +61,21 @@ export const schemaStudentTutorial: Tutorial = {
         disableBeacon: true,
       },
       {
-        target: `#${MAIN_CONTENT}`,
+        target: `#${BASE_INFO}`,
         content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
-        placement: 'center',
+        placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: `#${PROPERTIES}`,
+        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        placement: 'top',
+        disableBeacon: true,
+      },
+      {
+        target: `#${PROPERTIES_ADD_BUTTON}`,
+        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        placement: 'top',
         disableBeacon: true,
       },
     ];

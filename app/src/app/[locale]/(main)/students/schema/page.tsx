@@ -1,5 +1,6 @@
 import { IconUserGroups } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
+import TutorialTrigger from '~/app/[locale]/(main)/students/schema/tutorial-trigger.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import PersonalInfoForm from '~/components/students/one/personal-info-form.tsx';
@@ -33,6 +34,7 @@ export default async function StudentSchemaPage({ params }: PageType) {
         description={t('header.description')}
         icon={IconUserGroups}
       />
+      <TutorialTrigger />
       <div className="flex h-full flex-col gap-6 pt-6" id={MAIN_CONTENT}>
         <PersonalInfoForm />
         <Separator />

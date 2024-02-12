@@ -5,9 +5,9 @@ import { uploadStudentsTutorial } from '~/store/tutorial/data/upload-students/up
 import { usersTutorial } from '~/store/tutorial/data/users/users.tutorial.ts';
 
 export const tutorials = [
-  appearanceTutorial,
-  usersTutorial,
   schemaStudentTutorial,
   uploadStudentsTutorial,
   generateClassesTutorial,
+  appearanceTutorial,
+  usersTutorial,
 ];
