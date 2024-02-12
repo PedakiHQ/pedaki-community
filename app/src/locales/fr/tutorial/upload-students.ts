@@ -1,5 +1,5 @@
 export default {
-  title: 'Liste des élèves',
+  title: 'Importer des élèves',
   description: 'Renseignez la liste des élèves de votre workspace.',
   steps: {
     sidebarSubmenu: {

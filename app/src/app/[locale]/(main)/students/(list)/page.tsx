@@ -4,10 +4,12 @@ import StudentsListPageClient from '~/app/[locale]/(main)/students/(list)/studen
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper';
+import TutorialTrigger from '~/components/tutorial-trigger.tsx';
 import type { LocaleCode } from '~/locales/server.ts';
 import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
+import { TUTORIAL_ID } from '~/store/tutorial/data/upload-students/constants.ts';
 import React from 'react';
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
@@ -32,7 +34,7 @@ export default async function StudentsListPage({ params }: PageType) {
       >
         <HeaderActions />
       </PageHeader>
-
+      <TutorialTrigger id={TUTORIAL_ID} step={1} />
       <div className="h-full pt-6" id={MAIN_CONTENT}>
         <StudentsListWrapper>
           <StudentsListPageClient />

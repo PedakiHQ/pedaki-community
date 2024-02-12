@@ -37,6 +37,12 @@ import { uploadFile } from '~/app/api/upload/students/fetch.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { customErrorParams } from '~/locales/zod.ts';
 import { api } from '~/server/clients/client.ts';
+import {
+  TUTORIAL_ID,
+  UPLOAD_BUTTON,
+  UPLOAD_MODAL,
+} from '~/store/tutorial/data/upload-students/constants.ts';
+import { useTutorialStore } from '~/store/tutorial/tutorial.store.ts';
 import { formatBytes } from '~/utils.ts';
 import type { OutputType } from '~api/router/router.ts';
 import Link from 'next/link';
@@ -60,7 +66,7 @@ type FormValues = z.infer<typeof FormSchema>;
 
 const UploadStudentsFile = () => {
   const t = useScopedI18n('students.list');
-  const [open, setOpen] = React.useState(false);
+  const [open, _setIsOpened] = React.useState(false);
   const [importId, setImportId] = React.useState<string | null>(null);
 
   const form = useForm<FormValues>({
@@ -104,10 +110,32 @@ const UploadStudentsFile = () => {
 
   const isDisabled = !data || data.status !== 'DONE';
 
+  const tutorial = useTutorialStore(state => ({
+    tutorial: state.tutorial,
+    paused: state.paused,
+    setPaused: state.setPaused,
+    setNextStep: state.setNextStep,
+  }));
+
+  const isInTutorial = tutorial.tutorial?.id === TUTORIAL_ID && !tutorial.paused;
+
+  const setIsOpened = (value: boolean) => {
+    if (!value && isInTutorial) {
+      return;
+    }
+    _setIsOpened(value);
+    if (value && isInTutorial) {
+      setTimeout(() => {
+        tutorial.setPaused(false);
+        tutorial.setNextStep();
+      }, 100);
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setIsOpened}>
       <DialogTrigger asChild>
-        <Button variant="stroke-primary-main" className="text-sub">
+        <Button variant="stroke-primary-main" className="text-sub" id={UPLOAD_BUTTON}>
           <IconDownload className="h-4 w-4" />
           <span className="hidden @2xl/main:inline">{t('headerActions.import.label')}</span>
         </Button>
@@ -115,6 +143,7 @@ const UploadStudentsFile = () => {
       <DialogContent
         className="max-h-[80%] overflow-hidden sm:max-w-screen-sm"
         onOpenAutoFocus={e => e.preventDefault()}
+        id={UPLOAD_MODAL}
       >
         <DialogHeader>
           <DialogTitle className="text-label-md text-main">Upload files</DialogTitle>
@@ -157,13 +186,17 @@ const UploadStudentsFile = () => {
         <FileCard form={form} response={data} />
         <Separator className="scale-x-110" />
         <div className="flex gap-2">
-          <Button variant="stroke-primary-main" className="flex-1" onClick={() => setOpen(false)}>
+          <Button
+            variant="stroke-primary-main"
+            className="flex-1"
+            onClick={() => setIsOpened(false)}
+          >
             Cancel
           </Button>
           <Button
             variant="filled-primary"
             className="flex-1"
-            onClick={() => setOpen(false)}
+            onClick={() => setIsOpened(false)}
             disabled={isDisabled}
             asChild
           >

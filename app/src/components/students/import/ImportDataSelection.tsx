@@ -34,6 +34,7 @@ import {
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
 import type { StudentsImportStore } from '~/store/students/import/import.store.ts';
+import { IMPORT_CONTENT_NAVIGATION } from '~/store/tutorial/data/upload-students/constants.ts';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
@@ -73,6 +74,7 @@ const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
           aria-label="pagination"
           className="max-h-64 overflow-auto pr-4 @4xl/main:max-h-[40vh]"
           ref={parentRef}
+          id={IMPORT_CONTENT_NAVIGATION}
         >
           <ul
             className="space-y-1"
