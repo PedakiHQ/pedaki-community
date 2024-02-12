@@ -16,15 +16,41 @@ import type { CreateProperty } from '@pedaki/services/students/properties/proper
 import { propertiesFields } from '~/components/students/import/student/constants.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
-import { PROPERTIES_ADD_BUTTON } from '~/store/tutorial/data/schema-student/constants.ts';
+import {
+  PROPERTIES_ADD_BUTTON,
+  PROPERTIES_ADD_FORM,
+  TUTORIAL_ID,
+} from '~/store/tutorial/data/schema-student/constants.ts';
+import { useTutorialStore } from '~/store/tutorial/tutorial.store.ts';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const AddNewPropertyTrigger = () => {
   const t = useScopedI18n('students.schema.properties.new');
-  const [isOpened, setIsOpened] = React.useState(false);
+  const [isOpened, _setIsOpened] = React.useState(false);
 
   const addPropertyMutation = api.students.properties.create.useMutation();
+  const tutorial = useTutorialStore(state => ({
+    tutorial: state.tutorial,
+    paused: state.paused,
+    setPaused: state.setPaused,
+    setNextStep: state.setNextStep,
+  }));
+
+  const isInTutorial = tutorial.tutorial?.id === TUTORIAL_ID && !tutorial.paused;
+
+  const setIsOpened = (value: boolean) => {
+    if (!value && isInTutorial) {
+      return;
+    }
+    _setIsOpened(value);
+    if (value && isInTutorial) {
+      setTimeout(() => {
+        tutorial.setPaused(false);
+        tutorial.setNextStep();
+      }, 100);
+    }
+  };
 
   const utils = api.useUtils();
 
@@ -68,6 +94,7 @@ const AddNewPropertyTrigger = () => {
         side="top"
         className="w-[300px] md:w-[400px]"
         onOpenAutoFocus={e => e.preventDefault()}
+        id={PROPERTIES_ADD_FORM}
       >
         <AddPropertyForm onSubmit={onSubmit} title={t('title')} />
       </PopoverContent>
