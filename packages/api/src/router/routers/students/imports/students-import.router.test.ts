@@ -52,10 +52,10 @@ describe('studentImports', () => {
   });
 
   describe('scenarios', () => {
-    test.each([userSession, internalSession])('upload siecle file - $type', async ({ api }) => {
-      const siecleFile = readFileSync(__dirname + '/../../../../../data/valid-onde.csv');
+    test.each([userSession, internalSession])('upload onde file - $type', async ({ api }) => {
+      const ondeFile = readFileSync(__dirname + '/../../../../../data/valid-onde.csv');
       const response = await api.students.imports.upload({
-        buffer: Buffer.from(siecleFile),
+        buffer: Buffer.from(ondeFile),
         mimeType: 'text/csv',
         name: 'test',
       });
@@ -72,7 +72,7 @@ describe('studentImports', () => {
 
       expect(status.status).toBe('DONE');
       expect(status.data).toBeDefined();
-      expect(status.data!.family).toBe('siecle');
+      expect(status.data!.family).toBe('onde');
       expect(status.data!.students!.mappedCount).toBe(1);
       expect(status.data!.students!.insertedCount).toBe(367);
       expect(status.data!.levels!.mappedCount).toBe(2);
