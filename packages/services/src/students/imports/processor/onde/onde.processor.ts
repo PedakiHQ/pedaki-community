@@ -10,8 +10,6 @@ import type {
 import { parse } from 'csv-parse/sync';
 import { z } from 'zod';
 
-// TODO: renommer siecle en onde
-
 const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
 
 const schema = z.object({
@@ -51,8 +49,8 @@ const schema = z.object({
 
 type SiecleRow = z.infer<typeof schema>;
 
-export class SiecleProcessor implements FileProcessor {
-  name = 'siecle' as const;
+export class OndeProcessor implements FileProcessor {
+  name = 'onde' as const;
 
   #data: SiecleRow[] | null = null;
 

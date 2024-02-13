@@ -53,7 +53,7 @@ describe('studentImports', () => {
 
   describe('scenarios', () => {
     test.each([userSession, internalSession])('upload siecle file - $type', async ({ api }) => {
-      const siecleFile = readFileSync(__dirname + '/../../../../../data/valid-siecle.csv');
+      const siecleFile = readFileSync(__dirname + '/../../../../../data/valid-onde.csv');
       const response = await api.students.imports.upload({
         buffer: Buffer.from(siecleFile),
         mimeType: 'text/csv',
