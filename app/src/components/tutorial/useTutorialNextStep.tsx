@@ -9,13 +9,6 @@ export const useTutorialNextStep = (tutorialId: string, expectedStep: number) =>
   const setStepIndex = useTutorialStore(state => state.setStepIndex);
 
   useEffect(() => {
-    console.log({
-      tutorial,
-      paused,
-      stepIndex,
-      tutorialId,
-      expectedStep,
-    });
     if (!tutorial || !paused) return;
     if (tutorial.id !== tutorialId) return;
     if (stepIndex !== expectedStep) return;
