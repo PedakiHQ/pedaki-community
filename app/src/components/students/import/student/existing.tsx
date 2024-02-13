@@ -14,6 +14,10 @@ import type { StudentData } from '~/components/students/list/columns.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useStudentsImportStore } from '~/store/students/import/import.store.ts';
+import {
+  IMPORT_ACTIONS,
+  IMPORT_DIFF_LINK,
+} from '~/store/tutorial/data/upload-students/constants.ts';
 import type { OutputType } from '~api/router/router.ts';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -120,7 +124,7 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
         {() => {
           return (
             <>
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end" id={IMPORT_ACTIONS}>
                 <div className={cn('pr-2', !loading && 'hidden')}>
                   <IconSpinner className="h-5 w-5 animate-spin text-primary-base" />
                 </div>
@@ -171,7 +175,7 @@ const SelectAnotherBaseStudent = ({
   return (
     <div className="flex">
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger className="text-label-sm text-sub hover:underline">
+        <SheetTrigger className="text-label-sm text-sub hover:underline" id={IMPORT_DIFF_LINK}>
           {!isLinked
             ? t('linkToStudent')
             : t(

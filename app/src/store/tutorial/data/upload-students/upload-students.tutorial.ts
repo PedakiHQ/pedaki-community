@@ -1,7 +1,9 @@
-import { MAIN_CONTENT, SIDEBAR_STUDENTS_BUTTON } from '~/store/tutorial/data/constants.ts';
+import { SIDEBAR_STUDENTS_BUTTON } from '~/store/tutorial/data/constants.ts';
 import {
+  IMPORT_ACTIONS,
   IMPORT_CONTENT_NAVIGATION,
   IMPORT_DIFF_LEFT,
+  IMPORT_DIFF_LINK,
   IMPORT_DIFF_RIGHT,
   STUDENTS_IMPORT_PAGE_BUTTON,
   TUTORIAL_ID,
@@ -34,7 +36,7 @@ export const uploadStudentsTutorial: Tutorial = {
       // Open collapsible
       if (isForward(props.action) && nextStepIndex === 1) {
         const button = document.querySelector(props.step.target as string)!.parentElement!;
-        const isOpen = button.getAttribute('data-state') === 'open';
+        const isOpen = button?.getAttribute('data-state') === 'open';
         if (!isOpen) {
           button.click();
         }
@@ -89,13 +91,13 @@ export const uploadStudentsTutorial: Tutorial = {
       },
       {
         target: `#${UPLOAD_BUTTON}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        content: t(`${TUTORIAL_ID}.steps.importButton.content`),
         placement: 'bottom',
         disableBeacon: true,
       },
       {
         target: `#${UPLOAD_MODAL}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        content: t(`${TUTORIAL_ID}.steps.modal.content`),
         placement: 'bottom',
         disableBeacon: true,
         styles: {
@@ -108,25 +110,38 @@ export const uploadStudentsTutorial: Tutorial = {
       },
       {
         target: `#${STUDENTS_IMPORT_PAGE_BUTTON}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        content: t(`${TUTORIAL_ID}.steps.studentTab.content`),
         placement: 'bottom',
         disableBeacon: true,
+        hideBackButton: true,
       },
       {
         target: `#${IMPORT_CONTENT_NAVIGATION}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        content: t(`${TUTORIAL_ID}.steps.navigation.content`),
         placement: 'right',
         disableBeacon: true,
       },
       {
         target: `#${IMPORT_DIFF_LEFT}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        content: t(`${TUTORIAL_ID}.steps.leftSide.content`),
         placement: 'right',
         disableBeacon: true,
       },
       {
         target: `#${IMPORT_DIFF_RIGHT}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
+        content: t(`${TUTORIAL_ID}.steps.rightSide.content`),
+        placement: 'left',
+        disableBeacon: true,
+      },
+      {
+        target: `#${IMPORT_DIFF_LINK}`,
+        content: t(`${TUTORIAL_ID}.steps.link.content`),
+        placement: 'left',
+        disableBeacon: true,
+      },
+      {
+        target: `#${IMPORT_ACTIONS}`,
+        content: t(`${TUTORIAL_ID}.steps.actions.content`),
         placement: 'left',
         disableBeacon: true,
       },
