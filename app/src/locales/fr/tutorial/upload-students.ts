@@ -13,7 +13,7 @@ export default {
     },
     modal: {
       content:
-        "Ici, vous pouvez importer un fichier CSV contenant la liste des élèves. Le format de de fichier est automatiquement détecté. Essayez d'importer un fichier, le tutoriel continuera après.",
+        "Ici, vous pouvez importer un fichier CSV contenant la liste des élèves. Le format de fichier est automatiquement détecté. Essayez d'importer un fichier, le tutoriel continuera après.",
     },
     studentTab: {
       content: "Aller à l'onglet 'Élèves'",

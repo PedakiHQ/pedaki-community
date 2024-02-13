@@ -6,7 +6,7 @@ export default {
       content: 'Déroulez le menu latéral concernant les élèves.',
     },
     navigate: {
-      content: "Accédez à la page de gestion des Schéma d'élèves",
+      content: "Accédez à la page de gestion des Schémas d'élèves",
     },
     baseInfo: {
       content:
@@ -21,7 +21,7 @@ export default {
     },
     propertiesForm: {
       content:
-        "C'est ici que vous renseignez le nom, et le type de la propriété que vous souhaitez ajouter. Pour le moment seul les notes sont disponibles.",
+        "C'est ici que vous renseignez le nom et le type de la propriété que vous souhaitez ajouter. Pour le moment seul les notes sont disponibles.",
     },
   },
 } as const;
