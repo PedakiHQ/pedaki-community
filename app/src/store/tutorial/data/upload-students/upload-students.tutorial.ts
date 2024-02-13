@@ -100,6 +100,7 @@ export const uploadStudentsTutorial: Tutorial = {
         content: t(`${TUTORIAL_ID}.steps.modal.content`),
         placement: 'bottom',
         disableBeacon: true,
+        hideBackButton: true,
         styles: {
           tooltip: {
             // TODO: maybe move this to the global styles
