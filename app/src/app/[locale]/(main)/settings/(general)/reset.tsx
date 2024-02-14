@@ -19,7 +19,7 @@ const ResetWorkspaceButton = () => {
   const utils = api.useUtils();
 
   const handleReset = async () => {
-    resetWorkspaceMutation.mutate(['import', 'student']);
+    resetWorkspaceMutation.mutate(['import', 'student', 'class', 'property']);
 
     await utils.students.invalidate();
     await utils.classes.invalidate();
