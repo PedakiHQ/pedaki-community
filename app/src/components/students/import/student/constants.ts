@@ -10,6 +10,7 @@ export type BaseFields =
       type: 'select';
       placeholder?: string;
       options: string[];
+      default?: string;
     }
   | {
       type: 'number';
@@ -34,6 +35,7 @@ export const fields = {
   gender: {
     type: 'select',
     options: ['M', 'F', 'O'],
+    default: 'O',
   },
 } as const satisfies Record<string, BaseFields>;
 

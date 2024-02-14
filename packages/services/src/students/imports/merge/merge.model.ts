@@ -60,6 +60,7 @@ export const StudentOutputSchema = StudentSchema.pick({
   otherName: true,
   gender: true,
   birthDate: true,
+  properties: true,
 });
 
 export const MergeGetOneStudentOutput = z.object({

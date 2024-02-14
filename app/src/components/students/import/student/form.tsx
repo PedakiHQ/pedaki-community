@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import type { BaseFields } from '~/components/students/import/student/constants.ts';
+import { propertiesFields } from '~/components/students/import/student/constants.ts';
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
@@ -29,6 +30,7 @@ interface FormProps<T extends PossibleStudentData = PossibleStudentData> {
   importedData?: PossibleStudentData | null;
   onSubmitted?: (data: NonNullable<T>) => void;
   fields: Record<string, BaseFields>;
+  properties: OutputType['students']['properties']['getMany'];
 }
 
 const BaseForm = ({
@@ -38,6 +40,7 @@ const BaseForm = ({
   importedData,
   onSubmitted,
   fields,
+  properties,
   schema,
 }: FormProps) => {
   const form = useForm({
@@ -55,40 +58,59 @@ const BaseForm = ({
     }
   }, [data, form]);
 
-  const mergeAction = (field: keyof NonNullable<PossibleStudentData>) => {
+  const mergeAction = (field: string) => {
     return () => {
+      // TODO: fix this
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       form.setValue(field, importedData![field]);
       void form.trigger(field);
     };
   };
 
-  const cleanAction = (field: keyof NonNullable<PossibleStudentData>, type: BaseFields) => {
+  const cleanAction = (field: string, type: BaseFields) => {
     return () => {
       form.setValue(field, type.type === 'text' ? '' : null);
       void form.trigger(field);
     };
   };
 
+  const submit = (values: NonNullable<PossibleStudentData>) => {
+    // remove _ in properties
+    const properties = Object.fromEntries(
+      Object.entries(values.properties).map(([key, value]) => {
+        return [key.replace('_', ''), Number(value)]; // TODO handle other types
+      }),
+    );
+    const data = {
+      ...values,
+      properties,
+    };
+    onSubmitted?.(data);
+  };
+
   return (
     <Form {...form}>
       <TooltipProvider>
         <form
-          onSubmit={onSubmitted && form.handleSubmit(onSubmitted)}
+          onSubmit={onSubmitted && form.handleSubmit(submit)}
           className="flex flex-col gap-4 py-2"
         >
           {Object.entries(fields).map(([field, type]) => (
             <FormField
               key={field}
               control={form.control}
-              name={field as keyof NonNullable<PossibleStudentData>}
+              name={field}
               render={({ field: f }) => {
                 const isImported = !importedData;
                 const isEquivalent = importedData
-                  ? importedData?.[f.name]?.toString() === f.value?.toString()
+                  ? // TODO: fix this
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+                    importedData?.[f.name]?.toString() === f.value?.toString()
                   : true;
                 const isEmpty = f.value === '' || f.value === null;
                 return (
                   <FormItem>
+                    {/* @ts-expect-error: type is incorrect*/}
                     <FormLabel>{tField(`${f.name}.label`)}</FormLabel>
                     <div className="relative flex w-full">
                       <div className="flex w-full items-center gap-1">
@@ -97,7 +119,7 @@ const BaseForm = ({
                           field={f}
                           form={form}
                           type={type}
-                          disabled={false}
+                          disabled={isImported}
                           // @ts-expect-error: type is incorrect
                           t={tField}
                           placeholder={!isImported}
@@ -112,6 +134,46 @@ const BaseForm = ({
               }}
             />
           ))}
+          {Object.entries(properties).map(([id, props]) => {
+            const key = `properties._${id}` as const;
+            {
+              /* @ts-expect-error: type is incorrect*/
+            }
+            const type = propertiesFields[props.type];
+            return (
+              <FormField
+                key={key}
+                control={form.control}
+                name={key}
+                render={({ field: f }) => {
+                  const isImported = !importedData;
+                  const isEmpty = f.value === '' || f.value === null || f.value === undefined;
+                  return (
+                    <FormItem>
+                      {/* @ts-expect-error: type is incorrect*/}
+                      <FormLabel>{props.name}</FormLabel>
+                      <div className="relative flex w-full">
+                        <div className="flex w-full items-center gap-1">
+                          <GenericField
+                            field={f}
+                            form={form}
+                            type={type}
+                            disabled={isImported}
+                            // @ts-expect-error: type is incorrect
+                            t={tField}
+                            placeholder={true}
+                          />
+                          {!disabled && (
+                            <CleanButton onClick={cleanAction(f.name, type)} disabled={isEmpty} />
+                          )}
+                        </div>
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+            );
+          })}
           {children && children(form)}
         </form>
       </TooltipProvider>

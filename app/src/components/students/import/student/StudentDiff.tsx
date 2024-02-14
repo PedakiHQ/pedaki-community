@@ -11,6 +11,7 @@ import {
   IMPORT_DIFF_LEFT,
   IMPORT_DIFF_RIGHT,
 } from '~/store/tutorial/data/upload-students/constants.ts';
+import type { OutputType } from '~api/router/router.ts';
 import React, { Suspense, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -44,11 +45,31 @@ const NoContent = () => {
   return <Card className="h-full w-full">No content</Card>;
 };
 
+// in the result data add _ in prefix to every properties
+const transformData = (
+  student: OutputType['students']['imports']['students']['getOne']['current'],
+) => {
+  if (!student) return null;
+  const transformedStudent = { ...student, properties: {} } as typeof student & {
+    properties: Record<string, any>;
+  };
+  for (const [key, value] of Object.entries(student.properties!)) {
+    transformedStudent.properties[`_${key}`] = value;
+  }
+  return transformedStudent;
+};
+
 const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => {
   const [result, { isError, isLoading }] = api.students.imports.students.getOne.useSuspenseQuery({
     importId,
     id,
   });
+
+  const {
+    data: properties,
+    isLoading: propertiesLoading,
+    isError: propertiesError,
+  } = api.students.properties.getMany.useQuery(undefined);
 
   useEffect(() => {
     if (isError) {
@@ -58,23 +79,24 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
     }
   }, [isError]);
 
-  if (isLoading || isError) {
+  if (isLoading || isError || propertiesLoading || propertiesError) {
     return <SuspenseCard />;
   }
 
   return (
     <Card className="relative flex h-min w-full flex-row">
       <div className="flex-1" id={IMPORT_DIFF_LEFT}>
-        <Imported baseData={result.import} status={result.status} />
+        <Imported baseData={result.import} status={result.status} properties={properties} />
       </div>
       <Separator orientation="vertical" />
       <div className="flex-1" id={IMPORT_DIFF_RIGHT}>
         <Existing
-          baseData={result.current}
-          importedData={result.import}
+          baseData={transformData(result.current)}
+          importedData={transformData(result.import)!}
           importId={importId}
           key={id}
           status={result.status}
+          properties={properties}
         />
       </div>
     </Card>

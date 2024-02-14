@@ -54,9 +54,13 @@ const GenericField = <F extends FieldValues>({
           }}
         />
       ) : type.type === 'select' ? (
-        <Select>
+        <Select
+          {...field}
+          // @ts-expect-error:  todo not correctly typed
+          onValueChange={value => form.setValue(field.name, value)}
+        >
           <SelectTrigger>
-            <SelectValue placeholder={placeholderText} disabled={disabled} {...field} />
+            <SelectValue placeholder={placeholderText} />
           </SelectTrigger>
           <SelectContent>
             {type.options?.map(option => (

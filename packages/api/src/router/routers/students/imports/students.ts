@@ -50,6 +50,7 @@ export const studentImportsStudents = router({
           gender: true,
           birthDate: true,
           studentId: true,
+          properties: true,
           student: {
             select: {
               id: true,
@@ -58,6 +59,7 @@ export const studentImportsStudents = router({
               otherName: true,
               birthDate: true,
               gender: true,
+              properties: true,
             },
           },
         },
@@ -70,12 +72,26 @@ export const studentImportsStudents = router({
         otherName: data.otherName,
         gender: data.gender,
         birthDate: data.birthDate,
+        properties: (data.properties as Record<string, any>) ?? {},
       };
+
+      const currentData = !data.student
+        ? null
+        : {
+            ...data.student,
+            properties: data.student.properties as Record<string, any>,
+          };
+
+      console.log({
+        status: data.status,
+        import: importData,
+        current: currentData,
+      });
 
       return {
         status: data.status,
         import: importData,
-        current: data.student,
+        current: currentData,
       };
     }),
 
@@ -116,6 +132,7 @@ export const studentImportsStudents = router({
             birthDate: data?.birthDate,
             gender: data.gender,
             studentId: studentId,
+            properties: data.properties,
           },
         });
       }
@@ -140,9 +157,13 @@ export const studentImportsStudents = router({
           otherName: true,
           birthDate: true,
           gender: true,
+          properties: true,
         },
       });
 
-      return data;
+      return {
+        ...data,
+        properties: data.properties as Record<string, any>,
+      };
     }),
 });
