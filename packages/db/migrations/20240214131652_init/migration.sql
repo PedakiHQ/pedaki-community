@@ -197,6 +197,7 @@ CREATE TABLE "import_students" (
     "other_name" VARCHAR(255),
     "birth_date" DATE NOT NULL,
     "gender" CHAR(1),
+    "properties" JSONB,
 
     CONSTRAINT "import_students_pkey" PRIMARY KEY ("id")
 );
