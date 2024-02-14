@@ -5,7 +5,7 @@ export default {
   },
   wrapper: {
     title: 'Bonjour {name} !',
-    description: "Avant d'accéder ay workspace, choisissez un mot de passe",
+    description: "Avant d'accéder au workspace, choisissez un mot de passe",
   },
   fields: {
     password: {

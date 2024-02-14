@@ -7,6 +7,10 @@ import { useIdParam } from '~/components/students/import/parameters.ts';
 import Existing from '~/components/students/import/student/existing.tsx';
 import Imported from '~/components/students/import/student/imported.tsx';
 import { api } from '~/server/clients/client.ts';
+import {
+  IMPORT_DIFF_LEFT,
+  IMPORT_DIFF_RIGHT,
+} from '~/store/tutorial/data/upload-students/constants.ts';
 import React, { Suspense, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -60,11 +64,11 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
 
   return (
     <Card className="relative flex h-min w-full flex-row">
-      <div className="flex-1">
+      <div className="flex-1" id={IMPORT_DIFF_LEFT}>
         <Imported baseData={result.import} status={result.status} />
       </div>
       <Separator orientation="vertical" />
-      <div className="flex-1">
+      <div className="flex-1" id={IMPORT_DIFF_RIGHT}>
         <Existing
           baseData={result.current}
           importedData={result.import}

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ImportFamilySchema = z.enum(['siecle']);
+export const ImportFamilySchema = z.enum(['onde', 'siecle']);
 export type ImportFamily = z.infer<typeof ImportFamilySchema>;
 
 export const ImportUploadSchema = z.object({

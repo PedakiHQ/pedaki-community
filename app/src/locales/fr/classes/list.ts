@@ -37,7 +37,7 @@ export default {
       },
     },
     footer: {
-      perPage: 'Elèves par page',
+      perPage: 'Classes par page',
     },
   },
 } as const;

@@ -1,6 +1,7 @@
 'use client';
 
 import { Navigation } from '~/components/HorizontalMenu/navigation.tsx';
+import { STUDENTS_IMPORT_PAGE_BUTTON } from '~/store/tutorial/data/upload-students/constants.ts';
 import React from 'react';
 
 const items = [
@@ -13,6 +14,7 @@ const items = [
     labelKey: 'students',
     href: '/students',
     segment: 'students',
+    id: STUDENTS_IMPORT_PAGE_BUTTON,
   },
 ] as const;
 

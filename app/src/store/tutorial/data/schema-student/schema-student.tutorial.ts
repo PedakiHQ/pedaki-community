@@ -1,5 +1,11 @@
-import { MAIN_CONTENT, SIDEBAR_STUDENTS_BUTTON } from '~/store/tutorial/data/constants.ts';
-import { TUTORIAL_ID } from '~/store/tutorial/data/schema-student/constants.ts';
+import { SIDEBAR_STUDENTS_BUTTON } from '~/store/tutorial/data/constants.ts';
+import {
+  BASE_INFO,
+  PROPERTIES,
+  PROPERTIES_ADD_BUTTON,
+  PROPERTIES_ADD_FORM,
+  TUTORIAL_ID,
+} from '~/store/tutorial/data/schema-student/constants.ts';
 import {
   getNextStepIndex,
   isCompleted,
@@ -32,6 +38,17 @@ export const schemaStudentTutorial: Tutorial = {
         }
       }
 
+      // Open form
+      if (isForward(props.action) && nextStepIndex === 5) {
+        const button: HTMLButtonElement = document.querySelector(props.step.target as string)!;
+        const isOpen = button.getAttribute('data-state') === 'open';
+        if (!isOpen) {
+          button.click();
+          methods.setPaused(true);
+          return;
+        }
+      }
+
       if (isForward(props.action) && nextStepIndex === 2) {
         methods.setPaused(true);
         methods.push('/students/schema');
@@ -56,9 +73,27 @@ export const schemaStudentTutorial: Tutorial = {
         disableBeacon: true,
       },
       {
-        target: `#${MAIN_CONTENT}`,
-        content: t(`${TUTORIAL_ID}.steps.mainContent.content`),
-        placement: 'center',
+        target: `#${BASE_INFO}`,
+        content: t(`${TUTORIAL_ID}.steps.baseInfo.content`),
+        placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: `#${PROPERTIES}`,
+        content: t(`${TUTORIAL_ID}.steps.properties.content`),
+        placement: 'top',
+        disableBeacon: true,
+      },
+      {
+        target: `#${PROPERTIES_ADD_BUTTON}`,
+        content: t(`${TUTORIAL_ID}.steps.propertiesButton.content`),
+        placement: 'top',
+        disableBeacon: true,
+      },
+      {
+        target: `#${PROPERTIES_ADD_FORM}`,
+        content: t(`${TUTORIAL_ID}.steps.propertiesForm.content`),
+        placement: 'top',
         disableBeacon: true,
       },
     ];

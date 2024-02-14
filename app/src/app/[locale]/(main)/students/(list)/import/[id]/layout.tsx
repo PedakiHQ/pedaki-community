@@ -31,6 +31,7 @@ export default async function StudentsImportLayout({
       >
         <ValidateButton importId={id} />
       </PageHeader>
+
       <ImportNavigation importId={id} />
       <div className="h-full max-h-full pt-6" id={MAIN_CONTENT}>
         {children}

@@ -8,6 +8,7 @@ export interface TutorialStore {
 
   stepIndex: number;
   setStepIndex: (stepIndex: number) => void;
+  setNextStep: () => void;
 
   tutorial: Tutorial | null; // started if not null
   setTutorial: (tutorial: Tutorial | null) => void;
@@ -40,6 +41,7 @@ export const initializeStore = (preloadedState: Partial<TutorialStore> = {}) => 
     ...preloadedState,
     setPaused: (paused: boolean) => set({ paused }),
     setStepIndex: (stepIndex: number) => set({ stepIndex }),
+    setNextStep: () => set({ stepIndex: get().stepIndex + 1 }),
     setTutorial: (tutorial: Tutorial | null) => set({ tutorial, stepIndex: 0, paused: false }),
     addCompleted: (id: string) => set({ completed: [...get().completed, id] }),
     setCompleted: (ids: string[]) => set({ completed: ids }),

@@ -1,6 +1,6 @@
 import type { ImportClass, ImportClassLevel, ImportStudent } from '@prisma/client';
 import type { ImportFamily, ImportUpload } from '~/students/imports/import.model.ts';
-import { SiecleProcessor } from '~/students/imports/processor/siecle/siecle.processor.ts';
+import { OndeProcessor } from '~/students/imports/processor/onde/onde.processor.ts';
 
 export interface FileProcessor {
   name: ImportFamily;
@@ -16,7 +16,7 @@ export interface FileProcessor {
   getStudents(): StudentImport[];
 }
 
-export const FILE_PROCESSORS = [SiecleProcessor];
+export const FILE_PROCESSORS = [OndeProcessor];
 
 export type StudentImport = Omit<
   ImportStudent,

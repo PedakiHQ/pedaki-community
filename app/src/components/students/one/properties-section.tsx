@@ -9,6 +9,7 @@ import { propertiesFields } from '~/components/students/import/student/constants
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
+import { PROPERTIES } from '~/store/tutorial/data/schema-student/constants.ts';
 import type { OutputType } from '~api/router/router.ts';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -25,7 +26,7 @@ const PropertiesSection = ({ initialProperties }: PropertiesSectionProps) => {
   });
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4" id={PROPERTIES}>
       {/*TODO trads*/}
       <h2 className="text-label-sm font-medium text-main">Properties</h2>
       <PropertiesFields properties={properties} />
