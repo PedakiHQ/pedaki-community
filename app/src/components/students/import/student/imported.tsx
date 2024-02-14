@@ -8,10 +8,11 @@ type PossibleStudentData = OutputType['students']['imports']['students']['getOne
 
 interface ImportedProps {
   baseData: PossibleStudentData;
+  properties: OutputType['students']['properties']['getMany'];
   status: string;
 }
 
-const Imported = ({ baseData, status }: ImportedProps) => {
+const Imported = ({ baseData, status, properties }: ImportedProps) => {
   const t = useScopedI18n('students.import.imported');
 
   return (
@@ -24,7 +25,13 @@ const Imported = ({ baseData, status }: ImportedProps) => {
         <p>&nbsp;</p>
       </div>
 
-      <BaseForm data={baseData} disabled fields={fields} key={`${baseData?.id}`} />
+      <BaseForm
+        data={baseData}
+        disabled
+        fields={fields}
+        key={`${baseData?.id}`}
+        properties={properties}
+      />
     </>
   );
 };

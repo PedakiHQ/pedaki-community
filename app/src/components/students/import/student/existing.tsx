@@ -28,11 +28,12 @@ type PossibleStudentData = OutputType['students']['imports']['students']['getPos
 interface ExistingProps {
   baseData: OutputType['students']['imports']['students']['getOne']['current'];
   importedData: OutputType['students']['imports']['students']['getOne']['import'];
+  properties: OutputType['students']['properties']['getMany'];
   importId: string;
   status: string;
 }
 
-const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
+const Existing = ({ baseData, importedData, importId, properties }: ExistingProps) => {
   const [visible] = useVisibleParams();
   const items = useStudentsImportStore(state => state.items);
   const setItems = useStudentsImportStore(state => state.setItems);
@@ -117,6 +118,7 @@ const Existing = ({ baseData, importedData, importId }: ExistingProps) => {
       <BaseForm
         data={hasChangedPossibleStudent.current ? possibleStudent ?? importedData : importedData}
         importedData={importedData}
+        properties={properties}
         fields={fields}
         schema={StudentSchema}
         onSubmitted={updateImport}

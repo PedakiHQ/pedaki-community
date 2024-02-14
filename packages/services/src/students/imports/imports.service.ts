@@ -417,6 +417,8 @@ class StudentImportsService {
               classes: {
                 set: importStudent.importClasses.map(ic => ({ id: ic.classId! })) ?? undefined,
               },
+              // TODO: type
+              properties: (importStudent.properties as Record<string, any>) ?? {},
             },
           });
         }
@@ -427,7 +429,8 @@ class StudentImportsService {
             birthDate: importStudent.birthDate,
             otherName: importStudent.otherName ?? undefined,
             gender: importStudent.gender,
-            properties: {},
+            // TODO: type
+            properties: (importStudent.properties as Record<string, any>) ?? {},
             classes: {
               connect: importStudent.importClasses.map(ic => ({ id: ic.classId! })) ?? undefined,
             },

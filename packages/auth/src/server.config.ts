@@ -17,6 +17,7 @@ export const authOptions: NextAuthConfig = {
     verifyRequest: '/',
     newUser: '/',
   },
+  // @ts-expect-error: TODO: Fix types
   adapter: PrismaAdapter(prisma),
   callbacks: {
     jwt: ({ token, user, trigger, session }) => {

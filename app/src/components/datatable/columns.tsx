@@ -27,6 +27,11 @@ export const levelCell = <T extends ColumnDef<any>>(
     loadingCell: () => {
       return <Skeleton className="h-4 w-20" />;
     },
+    cell: ({ row }) => {
+      const data = row.original as { properties: Record<string, number> };
+      const propertyId = accessorKey.split('.', 2)[1];
+      return <div>{(propertyId && data?.properties?.[propertyId]) ?? '-'}</div>;
+    },
   };
 };
 

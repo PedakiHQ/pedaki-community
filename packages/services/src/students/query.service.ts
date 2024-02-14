@@ -48,7 +48,7 @@ class StudentQueryService {
         }
       }
 
-      return `${orderByField} ${order}`;
+      return `${orderByField} ${order} NULLS ${order === 'asc' ? 'FIRST' : 'LAST'}`;
     });
     return `ORDER BY ${orderByClauses.join(', ')}`;
   }

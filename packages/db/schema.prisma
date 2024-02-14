@@ -304,6 +304,8 @@ model ImportStudent {
   birthDate DateTime @map("birth_date") @db.Date
   gender    String?  @db.Char(1)
 
+  properties Json? @db.JsonB
+
   importClasses ImportClass[]
 
   @@unique([importId, studentId])
