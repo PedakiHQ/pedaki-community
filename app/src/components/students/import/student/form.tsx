@@ -61,26 +61,32 @@ const BaseForm = ({
   const mergeAction = (field: string) => {
     return () => {
       // TODO: fix this
+      /* @ts-expect-error: type is incorrect*/
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       form.setValue(field, importedData![field]);
+      /* @ts-expect-error: type is incorrect*/
       void form.trigger(field);
     };
   };
 
   const cleanAction = (field: string, type: BaseFields) => {
     return () => {
+      /* @ts-expect-error: type is incorrect*/
       form.setValue(field, type.type === 'text' ? '' : null);
+      /* @ts-expect-error: type is incorrect*/
       void form.trigger(field);
     };
   };
 
   const submit = (values: NonNullable<PossibleStudentData>) => {
     // remove _ in properties
-    const properties = Object.fromEntries(
-      Object.entries(values.properties).map(([key, value]) => {
-        return [key.replace('_', ''), Number(value)]; // TODO handle other types
-      }),
-    );
+    const properties = !values.properties
+      ? {}
+      : Object.fromEntries(
+          Object.entries(values.properties).map(([key, value]) => {
+            return [key.replace('_', ''), Number(value)]; // TODO handle other types
+          }),
+        );
     const data = {
       ...values,
       properties,
@@ -99,11 +105,13 @@ const BaseForm = ({
             <FormField
               key={field}
               control={form.control}
+              // @ts-expect-error: type is incorrect
               name={field}
               render={({ field: f }) => {
                 const isImported = !importedData;
                 const isEquivalent = importedData
                   ? // TODO: fix this
+                    // @ts-expect-error: type is incorrect
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                     importedData?.[f.name]?.toString() === f.value?.toString()
                   : true;
@@ -136,9 +144,6 @@ const BaseForm = ({
           ))}
           {Object.entries(properties).map(([id, props]) => {
             const key = `properties._${id}` as const;
-            {
-              /* @ts-expect-error: type is incorrect*/
-            }
             const type = propertiesFields[props.type];
             return (
               <FormField
@@ -150,7 +155,6 @@ const BaseForm = ({
                   const isEmpty = f.value === '' || f.value === null || f.value === undefined;
                   return (
                     <FormItem>
-                      {/* @ts-expect-error: type is incorrect*/}
                       <FormLabel>{props.name}</FormLabel>
                       <div className="relative flex w-full">
                         <div className="flex w-full items-center gap-1">

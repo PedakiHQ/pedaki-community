@@ -57,6 +57,7 @@ const PropertiesFields = ({
           if (old) {
             delete old[data.id];
           }
+          return old;
         });
       },
       {
