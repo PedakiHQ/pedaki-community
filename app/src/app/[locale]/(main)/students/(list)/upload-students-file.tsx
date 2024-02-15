@@ -147,7 +147,7 @@ const UploadStudentsFile = () => {
       >
         <DialogHeader>
           <DialogTitle className="text-label-md text-main">Upload files</DialogTitle>
-          <DialogDescription className="text-p-sm text-sub">dd</DialogDescription>
+          {/* <DialogDescription className="text-p-sm text-sub">dd</DialogDescription> */}
         </DialogHeader>
         <OldUploadStudentsFile />
         <div className="pb-4">
