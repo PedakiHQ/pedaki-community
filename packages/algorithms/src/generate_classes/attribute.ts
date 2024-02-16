@@ -6,7 +6,7 @@
  * - Un ou plusieurs niveaux d'option
  */
 import type { Input, RawAttribute } from './input';
-import type { Gender, Student } from './student';
+import type { Student } from './student';
 
 export class Attribute {
   private readonly attribute: RawAttribute;
@@ -40,7 +40,7 @@ export class Attribute {
     return [this.attribute.levels];
   }
 
-  public genders(): Gender[] {
+  public genders(): string[] {
     if (Array.isArray(this.attribute.genders)) return this.attribute.genders;
     if (!this.attribute.genders) return [];
     return [this.attribute.genders];

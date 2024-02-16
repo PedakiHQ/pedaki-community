@@ -1,12 +1,21 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { algorithmRules } from '@pedaki/algorithms/input';
 import type { RawAttribute, RawRule, RuleType } from '@pedaki/algorithms/input';
+import { algorithmRules, rawAttributesType } from '@pedaki/algorithms/input';
 import { Button } from '@pedaki/design/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@pedaki/design/ui/dialog';
-import { Form, FormControl, FormField, FormItem } from '@pedaki/design/ui/form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@pedaki/design/ui/form';
 import { IconPlus, IconTrash } from '@pedaki/design/ui/icons';
+import { Input } from '@pedaki/design/ui/input';
 import {
   Select,
   SelectContent,
@@ -19,6 +28,7 @@ import { useGenerateClassesRulesStore } from '~/store/classes/generate/rules.sto
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
 
 interface RuleProps {
   rule: RawRule;
@@ -153,26 +163,28 @@ interface AttributesProps {
 }
 
 const AttributesInput = (params: AttributesProps) => {
+  const [attributes, setAttributes] = useState(params.rule.attributes);
+
   return (
-    <div className={'flex flex-row gap-2'}>
-      {params.rule.attributes.map((attribute, i) => (
-        <div key={i} className={'rounded-lg border'}>
-          <p>options: {attribute.options}</p>
-          <p>levels: {attribute.levels}</p>
-          <p>genders: {attribute.genders}</p>
-          <p>extras: {attribute.extras}</p>
-        </div>
-      ))}
+    <div>
+      <div className={"flex flex-row"}>
+        {attributes.map((attribute, i) => (
+          <AttributeForm setAttribute={value => params.setAttribute(i, value)} attribute={attribute} />
+        ))}
+      </div>
       <button
+        type={'button'}
         className={'rounded-lg border'}
-        onClick={() =>
-          params.setAttribute(params.rule.attributes.length, {
-            options: ['allemand'],
-            levels: [1, 2],
-            genders: ['M'],
-            extras: [],
-          })
-        }
+        onClick={() => {
+          setAttributes(attributes =>
+            attributes.concat({
+              options: [],
+              levels: [],
+              genders: [],
+              extras: [],
+            }),
+          );
+        }}
       >
         <IconPlus />
       </button>
@@ -180,19 +192,132 @@ const AttributesInput = (params: AttributesProps) => {
   );
 };
 
+const AttributeForm = (params: {
+  attribute: RawAttribute;
+  setAttribute: (attribute: RawAttribute) => void;
+}) => {
+  const form = useForm<RawAttribute>({
+    resolver: zodResolver(rawAttributesType),
+    mode: 'onChange',
+    defaultValues: params.attribute,
+  });
+
+  const handleFormSubmit = (value: RawAttribute) => {
+    params.setAttribute(value);
+  };
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        className="flex w-full flex-col justify-between"
+      >
+        <FormField
+          control={form.control}
+          name={"options"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Options</FormLabel>
+              <FormControl>
+                <Input
+                  type="string"
+                  {...field}
+                  onChange={e => {
+                    field.onChange(e.target);
+                  }}
+                />
+              </FormControl>
+              <FormMessage>
+                <FormDescription>oui</FormDescription>
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"levels"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Options</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  {...field}
+                  onChange={e => {
+                    field.onChange(e.target.valueAsNumber);
+                  }}
+                />
+              </FormControl>
+              <FormMessage>
+                <FormDescription>oui</FormDescription>
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"options"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Options</FormLabel>
+              <FormControl>
+                <Input
+                  type="string"
+                  {...field}
+                  onChange={e => {
+                    field.onChange(e.target);
+                  }}
+                />
+              </FormControl>
+              <FormMessage>
+                <FormDescription>oui</FormDescription>
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"options"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Options</FormLabel>
+              <FormControl>
+                <Input
+                  type="string"
+                  {...field}
+                  onChange={e => {
+                    field.onChange(e.target);
+                  }}
+                />
+              </FormControl>
+              <FormMessage>
+                <FormDescription>oui</FormDescription>
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+};
+
 export const RulesInput = () => {
   const [modalRule, setModalRule] = useState<number | undefined>();
 
-  const { rules, newRule, deleteRule, setAttribute } = useGenerateClassesRulesStore(store => ({
-    rules: store.rules,
-    newRule: store.newRule,
-    deleteRule: store.deleteRule,
-    setAttribute: store.setAttribute,
-  }));
+  const { rules, newRule, deleteRule, setAttribute, setAttributes } = useGenerateClassesRulesStore(
+    store => ({
+      rules: store.rules,
+      newRule: store.newRule,
+      deleteRule: store.deleteRule,
+      setAttribute: store.setAttribute,
+      setAttributes: store.setAttributes,
+    }),
+  );
 
   return (
     <Dialog>
       <div className={'flex w-full flex-col gap-1'}>
+        <NewRule onCreate={newRule} />
         {rules.map((rule, position) => (
           <Rule
             key={rule.rule}
@@ -202,7 +327,6 @@ export const RulesInput = () => {
             onDelete={() => deleteRule(position)}
           />
         ))}
-        <NewRule onCreate={newRule} />
       </div>
       <DialogContent
         className="max-h-[80%] md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"

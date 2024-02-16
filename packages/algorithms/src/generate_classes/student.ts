@@ -4,14 +4,12 @@ import type { Input } from './input';
 export interface RawStudent {
   id: string;
   birthdate: Date;
-  gender: Gender | Gender[];
+  gender: string | string[];
   relationships?: Record<string, number>;
   // Je pars du principe que les niveaux présents indiquent les options choisies
   levels: Record<string, number>;
   extra?: Record<string, boolean>;
 }
-
-export type Gender = 'F' | 'M';
 
 /**
  * Chaque instance d'élève est unique et commune à toutes les configurations.
@@ -51,7 +49,7 @@ export class Student {
     return this._levels;
   }
 
-  public genders(): Gender[] {
+  public genders(): string[] {
     if (Array.isArray(this.student.gender)) return this.student.gender;
     return [this.student.gender];
   }

@@ -5,6 +5,7 @@ import { createStore, useStore as useZustandStore } from 'zustand';
 export interface GenerateClassesRulesStore {
   newRule: (type: RuleType) => void;
   setAttribute: (ruleIndex: number, attributeIndex: number, attribute: RawAttribute) => void;
+  setAttributes: (ruleIndex: number, attributes: RawAttribute[]) => void;
   deleteRule: (position: number) => void;
   rules: RawRule[];
 }
@@ -55,5 +56,17 @@ export const initializeStore = () => {
             .concat(...state.rules.slice(ruleIndex + 1, state.rules.length)),
         };
       }),
+    setAttributes: (ruleIndex, attributes) =>
+      set(state => {
+        const rule = state.rules[ruleIndex];
+        if (!rule) return state;
+        rule.attributes = attributes
+        return {
+          rules: state.rules
+            .slice(0, ruleIndex)
+            .concat(Object.assign({}, rule))
+            .concat(...state.rules.slice(ruleIndex + 1, state.rules.length)),
+        };
+      })
   }));
 };

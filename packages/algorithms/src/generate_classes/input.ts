@@ -8,7 +8,8 @@ import { NegativeRelationshipsRule } from './rules/negative_relationships';
 import { PositiveRelationshipsRule } from './rules/positive_relationships';
 import type { Rule } from './rules/rule';
 import { Student } from './student';
-import type { Gender, RawStudent } from './student';
+import type { RawStudent } from './student';
+import { z } from 'zod';
 
 export interface RawInput {
   constraints: {
@@ -24,12 +25,15 @@ export interface RawRule {
   attributes: RawAttribute[];
 }
 
-export interface RawAttribute {
-  options?: string | string[];
-  levels?: number | number[];
-  genders?: Gender | Gender[];
-  extras?: string | string[];
-}
+export const rawAttributesType = z.object({
+  options: z.union([z.string(), z.string().array()]).optional(),
+  levels: z.union([z.number(), z.number().array()]).optional(),
+  genders: z.union([z.string(), z.string().array()]).optional(),
+  extras: z.union([z.string(), z.string().array()]).optional()
+})
+// TODO levels dans options
+
+export type RawAttribute = z.infer<typeof rawAttributesType>
 
 export const algorithmRules = [
   // Regrouper un ou plusieurs attributs dans un minimum de classes.

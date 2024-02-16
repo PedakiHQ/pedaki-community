@@ -44,14 +44,14 @@ export default async function ClassesGeneratePage({ params }: PageType) {
         <div
           className={'col-span-2 flex flex-col justify-between justify-items-center border-r pr-6'}
         >
-          <ConstraintsForm />
           <div className={'flex w-full'}>
             <StudentsListWrapper>
-              <ImportStudents />
+              <ImportStudents/>
             </StudentsListWrapper>
           </div>
+          <ConstraintsForm/>
           <GenerateClassesRulesWrapper>
-            <RulesInput />
+            <RulesInput/>
           </GenerateClassesRulesWrapper>
         </div>
         <div className={'col-span-3 grid items-center justify-items-center'}>
