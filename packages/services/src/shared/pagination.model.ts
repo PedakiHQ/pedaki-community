@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const PaginationInputSchema = z.object({
-  page: z.number().min(0).default(1), // the first page is 1
+  page: z.number().min(1).default(1), // the first page is 1
   limit: z.number().min(0).default(30),
 });
 

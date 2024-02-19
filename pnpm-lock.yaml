@@ -227,6 +227,9 @@ importers:
       '@opentelemetry/api':
         specifier: ^1.7.0
         version: 1.7.0
+      '@pedaki/algorithms':
+        specifier: workspace:*
+        version: link:../algorithms/dist
       '@pedaki/auth':
         specifier: workspace:*
         version: link:../auth/src
