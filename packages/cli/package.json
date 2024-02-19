@@ -30,7 +30,7 @@
     "@pedaki/mailer": "0.5.2-beta.7",
     "@pedaki/services": "workspace:*",
     "chalk": "^5.3.0",
-    "dotenv": "^16.4.2",
+    "dotenv": "^16.4.4",
     "inquirer": "^9.2.14",
     "meow": "^13.2.0",
     "ora": "^7.0.1",
