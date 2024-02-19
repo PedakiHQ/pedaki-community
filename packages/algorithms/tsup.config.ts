@@ -1,6 +1,7 @@
 import cpy from 'cpy';
 import { defineConfig } from 'tsup';
 import type { Options } from 'tsup';
+import { $ } from "execa";
 
 export default defineConfig((options: Options) => ({
   treeshake: true,
@@ -16,6 +17,8 @@ export default defineConfig((options: Options) => ({
   bundle: false,
   onSuccess: async () => {
     await cpy(['package.json', 'README.md'], 'dist');
+    await $`pnpm exec tsconfig-replace-paths`;
+    await $`node ../../scripts/fix-ts-paths.js`;
   },
   ...options,
 }));

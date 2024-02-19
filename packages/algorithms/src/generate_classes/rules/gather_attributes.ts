@@ -34,14 +34,17 @@ export class GatherAttributesRule extends Rule {
 
     // S'il a l'un des attributs, il ne doit pas être dans une classe qui ne les regroupe pas.
     if (student.student.hasAttribute(...this.attributes())) {
+      const studentClassIndex = student.studentClass.index.toString();
+      const excludedClassValue = excludedClasses[studentClassIndex];
+
       // S'il est dans une classe qui regroupe les attributs, il est déjà bien placé.
       // Sinon, on retourne le nombre d'élèves bien placés (s'il est le seul mal placé, il est vraiment très mal placé).
       // Les pires classes sont celles qui ne regroupent pas les attributs.
       return {
-        value: !(student.studentClass.index.toString() in excludedClasses)
-          ? 0
-          : entry.algo().input().classSize() -
-            excludedClasses[student.studentClass.index.toString()],
+        value:
+          excludedClassValue === undefined
+            ? 0
+            : entry.algo().input().classSize() - excludedClassValue,
         worseClasses: Object.keys(excludedClasses).map(classKey => entry.class(classKey)!),
       };
     }
@@ -63,7 +66,7 @@ export class GatherAttributesRule extends Rule {
   ): Record<string, number> => {
     // On dénombre les élèves concernés.
     let studentsAmount;
-    if (attributes.length === 1) studentsAmount = attributes[0].count();
+    if (attributes.length === 1) studentsAmount = attributes[0]!.count();
     else {
       // Il ne suffit pas d'additionner chaque dénombrement d'attribut, puisque chaque élève peut posséder plusieurs des attributs concernés.
       studentsAmount = entry
