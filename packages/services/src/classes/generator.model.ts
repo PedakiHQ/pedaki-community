@@ -7,5 +7,10 @@ export const ClassGeneratorInputWithRefinementSchema = ClassGeneratorInputSchema
 }).merge(
   z.object({
     where: FilterSchemaWithRefinement.array().optional(),
+    rules: z.any().array(), // TODO zod schema from algorithm
+    constraints: z.object({
+      class_size_limit: z.number(),
+      class_amount_limit: z.number(),
+    }),
   }),
 );

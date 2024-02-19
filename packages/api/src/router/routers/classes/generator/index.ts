@@ -11,7 +11,7 @@ export const classGeneratorRouter = router({
       const queryData = studentQueryService.buildSelectPreparedQuery(
         {
           where: input.where,
-          fields: ['id'],
+          fields: ['id', 'gender', 'birthDate'], // TODO: add properties based on the input
           pagination: {
             page: 1,
             limit: -1, // Skip pagination
@@ -22,10 +22,25 @@ export const classGeneratorRouter = router({
         },
       );
 
-      const data = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData);
+      const data =
+        await prisma.$queryRawUnsafe<
+          { id: number; gender: string; birthDate: string; [key: string]: any }[]
+        >(queryData);
 
       // TODO: transform data to match algorithm input
 
-      // const algo = new Algorithm();
+      const students = data.map(student => {
+        return {
+          id: student.id,
+          birthdate: student.birthDate,
+          gender: student.gender,
+          levels: {},
+        };
+      });
+
+      const algo = new Algorithm(students, {
+        constraints: input.constraints,
+        rules: input.rules,
+      });
     }),
 });
