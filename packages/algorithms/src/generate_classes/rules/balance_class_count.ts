@@ -136,19 +136,22 @@ export class BalanceClassCountRule extends Rule {
       const unrelatedAttributesKey = student.attributesKey(...this.attributes());
       if (!(unrelatedAttributesKey in attributesAmount))
         attributesAmount[unrelatedAttributesKey] = {};
+
       for (const relatedAttribute of this.attributes()) {
         if (!student.hasAttribute(relatedAttribute)) continue;
-        if (!(relatedAttribute.key() in attributesAmount[unrelatedAttributesKey]))
-          attributesAmount[unrelatedAttributesKey][relatedAttribute.key()] = 0;
+
+        const relatedAttributeKey = relatedAttribute.key();
+        const currentAmount = attributesAmount[unrelatedAttributesKey]!;
+
+        if (!(relatedAttributeKey in currentAmount)) currentAmount[relatedAttributeKey] = 0;
 
         if (
-          attributesAmount[unrelatedAttributesKey][relatedAttribute.key()] >=
-          unrelatedAttributesInClass[unrelatedAttributesKey]
+          currentAmount[relatedAttributeKey]! >= unrelatedAttributesInClass[unrelatedAttributesKey]!
         )
           // On arrête de compter puisqu'on a atteint le dénombrement actuel dans la classe.
           continue;
 
-        attributesAmount[unrelatedAttributesKey][relatedAttribute.key()]++;
+        currentAmount[relatedAttributeKey]++;
       }
     }
 

@@ -30,7 +30,7 @@ export class Attribute {
   }
 
   public option(): string {
-    if (Array.isArray(this.attribute.options)) return this.attribute.options[0];
+    if (Array.isArray(this.attribute.options)) return this.attribute.options[0]!;
     return this.attribute.options!;
   }
 

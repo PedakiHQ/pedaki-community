@@ -55,8 +55,7 @@ export default class Entry {
   public class(index: number | string): Class | null {
     const intIndex: number = typeof index === 'string' ? parseInt(index) : index;
 
-    if (!(intIndex in this._classes)) return null;
-    return this._classes[intIndex];
+    return this._classes[intIndex] ?? null;
   }
 
   public getClassesWithAttribute(attribute: Attribute) {
@@ -68,7 +67,7 @@ export default class Entry {
     const index = this._studentClass.get(student)!;
     return {
       index: index,
-      class: this.classes()[index],
+      class: this.classes()[index]!,
     };
   }
 

@@ -163,13 +163,19 @@ export class Input {
       if (!student.raw().relationships) continue;
       for (const [studentId, value] of Object.entries(student.raw().relationships!)) {
         const otherStudent = this.student(studentId)!;
-        if (!(value in student.relationships())) student.relationships()[value] = [];
-        if (!(value in otherStudent.relationships())) otherStudent.relationships()[value] = [];
-        if (!student.relationships()[value].includes(otherStudent))
-          student.relationships()[value].push(otherStudent);
-        if (!otherStudent.relationships()[value].includes(student))
-          otherStudent.relationships()[value].push(student);
+        this.prepareRelationships(value, student, otherStudent);
+        this.prepareRelationships(value, otherStudent, student);
       }
+    }
+  }
+
+  private prepareRelationships(index: number, student1: Student, student2: Student) {
+    const relationship = student1.relationships()[index];
+    if (relationship === undefined) {
+      student1.relationships()[index] = [student2];
+    } else {
+      if (relationship.includes(student2)) return;
+      relationship.push(student2);
     }
   }
 

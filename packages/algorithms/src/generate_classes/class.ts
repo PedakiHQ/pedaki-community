@@ -102,7 +102,7 @@ export default class Class {
         const value = entry.value(rule);
 
         // Si la valeur est déjà supérieure à la meilleure, on abandonne cette configuration.
-        if (bestValues && value > bestValues[index]) break;
+        if (bestValues && value > bestValues[index]!) break;
 
         // On définit la valeur de cette règle avec cette configuration.
         values[index] = value;
@@ -145,20 +145,24 @@ export default class Class {
 
     for (const student of this._students) {
       for (const [attribute, level] of Object.entries(student.levels())) {
-        attributeCount[attribute] = attributeCount[attribute] ? attributeCount[attribute] + 1 : 1;
-        if (!levelCount[attribute]) levelCount[attribute] = {};
-        levelCount[attribute][level] = levelCount[attribute][level]
-          ? levelCount[attribute][level] + 1
-          : 1;
+        attributeCount[attribute] = (attributeCount[attribute] ?? 1) + 1;
+
+        if (!levelCount[attribute]) {
+          levelCount[attribute] = {
+            [level]: 1,
+          };
+        } else {
+          levelCount[attribute]![level] += 1;
+        }
       }
     }
 
     for (const [option, count] of Object.entries(attributeCount)) {
       if (!keysMask.includes(option)) continue;
       str += `${option}: ${count}`;
-      if (showLevel && Object.keys(levelCount[option]).length > 1) {
+      if (showLevel && Object.keys(levelCount[option]!).length > 1) {
         str += ' (';
-        for (const [level, c] of Object.entries(levelCount[option])) {
+        for (const [level, c] of Object.entries(levelCount[option]!)) {
           str += `${level}: ${c}, `;
         }
         str = str.slice(0, -2) + ')';
