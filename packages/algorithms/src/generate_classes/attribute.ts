@@ -9,6 +9,8 @@ import type { Input } from './input';
 import type { RawAttribute } from './input.schema';
 import type { Student } from './student';
 
+const EMPTY_ARRAY = [] as const;
+
 export class Attribute {
   private readonly attribute: RawAttribute;
   private readonly input: Input;
@@ -24,33 +26,20 @@ export class Attribute {
     this._students = new Set(this.correspondingStudents(input.students()));
   }
 
-  public options(): string[] {
-    if (Array.isArray(this.attribute.options)) return this.attribute.options;
-    if (!this.attribute.options) return [];
-    return [this.attribute.options];
+  public options(): readonly string[] {
+    return this.attribute.options ?? EMPTY_ARRAY;
   }
 
-  public option(): string {
-    if (Array.isArray(this.attribute.options)) return this.attribute.options[0]!;
-    return this.attribute.options!;
+  public levels(): readonly number[] {
+    return this.attribute.levels ?? EMPTY_ARRAY;
   }
 
-  public levels(): number[] {
-    if (Array.isArray(this.attribute.levels)) return this.attribute.levels;
-    if (this.attribute.levels === undefined) return [];
-    return [this.attribute.levels];
+  public genders(): readonly string[] {
+    return this.attribute.genders ?? EMPTY_ARRAY;
   }
 
-  public genders(): string[] {
-    if (Array.isArray(this.attribute.genders)) return this.attribute.genders;
-    if (!this.attribute.genders) return [];
-    return [this.attribute.genders];
-  }
-
-  public extras(): string[] {
-    if (Array.isArray(this.attribute.extras)) return this.attribute.extras;
-    if (!this.attribute.extras) return [];
-    return [this.attribute.extras];
+  public extras(): readonly string[] {
+    return this.attribute.extras ?? EMPTY_ARRAY;
   }
 
   /**
@@ -107,7 +96,7 @@ export class Attribute {
     return this._key;
   }
 
-  private attributeString<T>(name: string, values: T[]): string {
+  private attributeString<T>(name: string, values: readonly T[]): string {
     let string = '';
     if (values.length) {
       string += name + ':(';

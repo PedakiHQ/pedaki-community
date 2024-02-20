@@ -45,7 +45,7 @@ export class Algorithm {
     }
 
     // Récupération des pourcentages de respect de chaque règle.
-    result.rules = []
+    result.rules = [];
     for (const rule of this.input().rules().keys()) {
       result.rules[rule.initialIndex()] = { respect_percent: rule.getRespectPercent(entry) };
     }

@@ -9,7 +9,7 @@
 			"priority": 2,
 			"attributes": [
 				{
-					"options": "allemand"
+					"options": ["allemand"]
 				}
 			]
 		},
@@ -18,10 +18,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"genders": "M"
+					"genders": ["M"]
 				},
 				{
-					"genders": "F"
+					"genders": ["F"]
 				}
 			]
 		},
@@ -30,28 +30,28 @@
 			"priority": 2,
 			"attributes": [
 				{
-					"options": "allemand",
-					"levels": 0
+					"options": ["allemand"],
+					"levels": [0]
 				},
 				{
-					"options": "allemand",
-					"levels": 1
+					"options": ["allemand"],
+					"levels": [1]
 				},
 				{
-					"options": "allemand",
-					"levels": 2
+					"options": ["allemand"],
+					"levels": [2]
 				},
 				{
-					"options": "allemand",
-					"levels": 3
+					"options": ["allemand"],
+					"levels": [3]
 				},
 				{
-					"options": "allemand",
-					"levels": 4
+					"options": ["allemand"],
+					"levels": [4]
 				},
 				{
-					"options": "allemand",
-					"levels": 5
+					"options": ["allemand"],
+					"levels": [5]
 				}
 			]
 		}

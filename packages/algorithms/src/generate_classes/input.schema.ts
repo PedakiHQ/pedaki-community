@@ -47,16 +47,16 @@ export const RuleOrder: Record<
 
 export const RawAttributeSchema = z.object({
   // TODO levels dans options
-  options: z.union([z.string(), z.string().array()]).optional(),
-  levels: z.union([z.number(), z.number().array()]).optional(),
-  genders: z.union([z.string(), z.string().array()]).optional(),
-  extras: z.union([z.string(), z.string().array()]).optional(),
+  options: z.string().array().readonly().optional(),
+  levels: z.number().array().readonly().optional(),
+  genders: z.string().array().readonly().optional(),
+  extras: z.string().array().readonly().optional(),
 });
 
 export const RawRuleSchema = z.object({
   rule: z.enum(algorithmRules),
   priority: z.number().optional(),
-  attributes: RawAttributeSchema.array(),
+  attributes: RawAttributeSchema.array().optional(),
 });
 
 export const RawInputSchema = z.object({
