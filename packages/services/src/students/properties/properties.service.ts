@@ -13,7 +13,7 @@ class StudentPropertiesService {
   async reload() {
     // Skip in ci
     if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith('{{{')) return;
-    console.log('Reloading student properties');
+    if (process.env.NODE_ENV !== 'test') console.log('Reloading student properties');
     const properties = await prisma.property.findMany({
       select: {
         id: true,
@@ -31,7 +31,8 @@ class StudentPropertiesService {
       };
       return acc;
     }, {} as GetManyProperties);
-    console.log('Student properties reloaded', this.#studentProperties);
+    if (process.env.NODE_ENV !== 'test')
+      console.log('Student properties reloaded', this.#studentProperties);
   }
 
   getProperties() {
