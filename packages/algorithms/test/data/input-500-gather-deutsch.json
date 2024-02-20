@@ -9,7 +9,9 @@
       "priority": 1,
       "attributes": [
         {
-          "options": ["allemand"]
+          "options": [{
+            "option": "allemand"
+          }]
         }
       ]
     }

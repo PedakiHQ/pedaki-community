@@ -1,8 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { RawAttribute, RawRule, RuleType } from '@pedaki/algorithms/input';
-import { algorithmRules, rawAttributesType } from '@pedaki/algorithms/input';
+import type { RawAttribute, RawRule, RuleType } from '@pedaki/algorithms';
+import {RawAttributeSchema, algorithmRules } from '@pedaki/algorithms';
 import { Button } from '@pedaki/design/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@pedaki/design/ui/dialog';
 import {
@@ -169,6 +169,7 @@ const AttributesInput = (params: AttributesProps) => {
       <div className={'flex flex-row'}>
         {attributes.map((attribute, i) => (
           <AttributeForm
+            key={i}
             setAttribute={value => params.setAttribute(i, value)}
             attribute={attribute}
           />
@@ -199,7 +200,7 @@ const AttributeForm = (params: {
   setAttribute: (attribute: RawAttribute) => void;
 }) => {
   const form = useForm<RawAttribute>({
-    resolver: zodResolver(rawAttributesType),
+    resolver: zodResolver(z.array(RawAttributeSchema)),
     mode: 'onChange',
     defaultValues: params.attribute,
   });
@@ -240,7 +241,7 @@ const AttributeForm = (params: {
           name={'levels'}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Options</FormLabel>
+              <FormLabel>Niveaux</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -258,10 +259,10 @@ const AttributeForm = (params: {
         />
         <FormField
           control={form.control}
-          name={'options'}
+          name={'genders'}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Options</FormLabel>
+              <FormLabel>Genres</FormLabel>
               <FormControl>
                 <Input
                   type="string"
@@ -279,10 +280,10 @@ const AttributeForm = (params: {
         />
         <FormField
           control={form.control}
-          name={'options'}
+          name={'extras'}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Options</FormLabel>
+              <FormLabel>Extras</FormLabel>
               <FormControl>
                 <Input
                   type="string"

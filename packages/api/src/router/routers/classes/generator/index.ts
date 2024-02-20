@@ -1,4 +1,4 @@
-import { default as Algorithm } from '@pedaki/algorithms/generate_classes/algorithm.js';
+import { GenerateClassesAlgorithm } from '@pedaki/algorithms';
 import { prisma } from '@pedaki/db';
 import { ClassGeneratorInputWithRefinementSchema } from '@pedaki/services/classes/generator.model.js';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
@@ -38,7 +38,7 @@ export const classGeneratorRouter = router({
         };
       });
 
-      const algo = new Algorithm(students, {
+      const algo = new GenerateClassesAlgorithm(students, {
         constraints: input.constraints,
         rules: input.rules,
       });

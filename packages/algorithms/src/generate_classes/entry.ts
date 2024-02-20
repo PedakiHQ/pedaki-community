@@ -1,4 +1,4 @@
-import type { Algorithm } from './algorithm';
+import type { GenerateClassesAlgorithm } from './algorithm';
 import type { Attribute } from './attribute';
 import type { ClassWithIndex } from './class';
 import Class from './class';
@@ -16,7 +16,7 @@ export interface StudentWithClass {
  * Représente donc une liste de classes.
  */
 export default class Entry {
-  private readonly _algo: Algorithm;
+  private readonly _algo: GenerateClassesAlgorithm;
   private _classes: Class[];
 
   // La valeur actuelle de cette configuration pour chaque règle. Elle est invalidée à chaque modification.
@@ -28,7 +28,7 @@ export default class Entry {
   // L'indice de la classe actuelle de chaque élève.
   private _studentClass = new Map<Student, number>();
 
-  constructor(algo: Algorithm, classes: Class[]) {
+  constructor(algo: GenerateClassesAlgorithm, classes: Class[]) {
     this._algo = algo;
     this._classes = classes;
 
@@ -151,7 +151,7 @@ export default class Entry {
     this._studentClass.set(student, to.index);
   }
 
-  public static default(algo: Algorithm): Entry {
+  public static default(algo: GenerateClassesAlgorithm): Entry {
     const length = Math.ceil(algo.input().students().length / algo.input().classSize());
     return new Entry(
       algo,

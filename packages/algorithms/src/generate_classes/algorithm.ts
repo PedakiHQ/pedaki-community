@@ -18,7 +18,7 @@ export interface Result {
  * La modification des solutions est guidée par des valeurs associées à chaque élève,
  * relative à son placement et à la règle courante, ainsi qu'une liste de destinations envisageables.
  */
-export class Algorithm {
+export class GenerateClassesAlgorithm {
   private readonly _input: Input;
 
   constructor(students: RawStudent[], rawInput: RawInput) {

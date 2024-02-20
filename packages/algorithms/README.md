@@ -3,9 +3,9 @@
 ### Usage
 
 ```ts
-import Algorithm from "@pedaki/algorithms/algorithm";
+import {GenerateClassesAlgorithm} from "@pedaki/algorithms";
 
-const algorithm = new Algorithm(students, input)
+const algorithm = new GenerateClassesAlgorithm(students, input)
 const {entry, duration, rules} = algorithm.solve()
 ```
 

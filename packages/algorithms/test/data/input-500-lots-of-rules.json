@@ -9,7 +9,9 @@
       "priority": 3,
       "attributes": [
         {
-          "options": ["allemand"]
+          "options": [{
+            "option": "allemand"
+          }]
         }
       ]
     },
@@ -22,28 +24,46 @@
       "priority": 2,
       "attributes": [
         {
-          "options": ["anglais"],
-          "levels": [0]
+          "options": [
+            {
+              "option": "anglais",
+              "levels": [0]
+            }]
         },
         {
-          "options": ["anglais"],
-          "levels": [1]
+          "options": [
+            {
+              "option": "anglais",
+              "levels": [1]
+            }]
         },
         {
-          "options": ["anglais"],
-          "levels": [2]
+          "options": [
+            {
+              "option": "anglais",
+              "levels": [2]
+            }]
         },
         {
-          "options": ["anglais"],
-          "levels": [3]
+          "options": [
+            {
+              "option": "anglais",
+              "levels": [3]
+            }]
         },
         {
-          "options": ["anglais"],
-          "levels": [4]
+          "options": [
+            {
+              "option": "anglais",
+              "levels": [4]
+            }]
         },
         {
-          "options": ["anglais"],
-          "levels": [5]
+          "options": [
+            {
+              "option": "anglais",
+              "levels": [5]
+            }]
         }
       ]
     },

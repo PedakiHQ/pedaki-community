@@ -1,12 +1,12 @@
-import type { Input } from '~/generate_classes/input.ts';
-import { BalanceClassCountRule } from '~/generate_classes/rules/balance_class_count.ts';
-import { BalanceCountRule } from '~/generate_classes/rules/balance_count.ts';
-import { GatherAttributesRule } from '~/generate_classes/rules/gather_attributes.ts';
-import { MaximizeClassSizeRule } from '~/generate_classes/rules/maximize_class_size.ts';
-import { MaximizeClassesRule } from '~/generate_classes/rules/maximize_classes.ts';
-import { NegativeRelationshipsRule } from '~/generate_classes/rules/negative_relationships.ts';
-import { PositiveRelationshipsRule } from '~/generate_classes/rules/positive_relationships.ts';
-import type { Rule } from '~/generate_classes/rules/rule.ts';
+import type { Input } from '~/generate_classes/input';
+import { BalanceClassCountRule } from '~/generate_classes/rules/balance_class_count';
+import { BalanceCountRule } from '~/generate_classes/rules/balance_count';
+import { GatherAttributesRule } from '~/generate_classes/rules/gather_attributes';
+import { MaximizeClassSizeRule } from '~/generate_classes/rules/maximize_class_size';
+import { MaximizeClassesRule } from '~/generate_classes/rules/maximize_classes';
+import { NegativeRelationshipsRule } from '~/generate_classes/rules/negative_relationships';
+import { PositiveRelationshipsRule } from '~/generate_classes/rules/positive_relationships';
+import type { Rule } from '~/generate_classes/rules/rule';
 import { z } from 'zod';
 
 export const algorithmRules = [
@@ -45,10 +45,13 @@ export const RuleOrder: Record<
   balance_class_count: { rule: BalanceClassCountRule, priority: 1 },
 };
 
+const RawAttributeOptionSchema = z.object({
+  option: z.string(),
+  levels: z.number().array().readonly().optional()
+})
+
 export const RawAttributeSchema = z.object({
-  // TODO levels dans options
-  options: z.string().array().readonly().optional(),
-  levels: z.number().array().readonly().optional(),
+  options: RawAttributeOptionSchema.array().readonly().optional(),
   genders: z.string().array().readonly().optional(),
   extras: z.string().array().readonly().optional(),
 });
@@ -68,6 +71,7 @@ export const RawInputSchema = z.object({
 });
 
 export type RawAttribute = z.infer<typeof RawAttributeSchema>;
+export type RawAttributeOption = z.infer<typeof RawAttributeOptionSchema>;
 export type RawRule = z.infer<typeof RawRuleSchema>;
 export type RawInput = z.infer<typeof RawInputSchema>;
 export type RuleType = (typeof algorithmRules)[number];

@@ -6,7 +6,7 @@ import { $ } from "execa";
 export default defineConfig((options: Options) => ({
   treeshake: true,
   splitting: true,
-  entry: ['src/**/*.ts'],
+  entry: ['src/**/*'],
   format: ['esm'],
   dts: process.env.NODE_ENV !== 'production',
   sourcemap: process.env.NODE_ENV !== 'production',

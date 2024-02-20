@@ -9,7 +9,9 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"]
+					"options": [{
+						"option": "allemand"
+					}]
 				}
 			]
 		},
@@ -18,8 +20,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"],
-					"levels": [0]
+					"options": [{
+						"option": "allemand",
+						"levels": [0]
+					}]
 				}
 			]
 		},
@@ -28,8 +32,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"],
-					"levels": [1]
+					"options": [{
+						"option": "allemand",
+						"levels": [1]
+					}]
 				}
 			]
 		},
@@ -38,8 +44,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"],
-					"levels": [2]
+					"options": [{
+						"option": "allemand",
+						"levels": [2]
+					}]
 				}
 			]
 		},
@@ -48,8 +56,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"],
-					"levels": [3]
+					"options": [{
+						"option": "allemand",
+						"levels": [3]
+					}]
 				}
 			]
 		},
@@ -58,8 +68,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"],
-					"levels": [4]
+					"options": [{
+						"option": "allemand",
+						"levels": [4]
+					}]
 				}
 			]
 		},
@@ -68,8 +80,10 @@
 			"priority": 1,
 			"attributes": [
 				{
-					"options": ["allemand"],
-					"levels": [5]
+					"options": [{
+						"option": "allemand",
+						"levels": [5]
+					}]
 				}
 			]
 		}
