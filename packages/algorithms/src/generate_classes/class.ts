@@ -152,7 +152,8 @@ export default class Class {
             [level]: 1,
           };
         } else {
-          levelCount[attribute]![level] += 1;
+          if (!levelCount[attribute]![level]) levelCount[attribute]![level] = 1;
+          else levelCount[attribute]![level] += 1;
         }
       }
     }
