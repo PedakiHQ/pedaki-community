@@ -1,6 +1,7 @@
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
-import type { Input, RawRule } from '../input';
+import type { Input } from '../input';
+import type { RawRule } from '../input.schema';
 import { Rule, RuleType } from './rule';
 import type { StudentValue } from './rule';
 

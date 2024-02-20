@@ -5,7 +5,8 @@
  * - Un ou plusieurs extras (booléens)
  * - Un ou plusieurs niveaux d'option
  */
-import type { Input, RawAttribute } from './input';
+import type { Input } from './input';
+import type { RawAttribute } from './input.schema';
 import type { Student } from './student';
 
 export class Attribute {

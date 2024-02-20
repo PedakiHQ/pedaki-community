@@ -1,6 +1,7 @@
+import type { RawRule } from '~/generate_classes/input.schema.ts';
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
-import type { Input, RawRule } from '../input';
+import type { Input } from '../input';
 import { Rule, RuleType } from './rule';
 import type { StudentValue } from './rule';
 

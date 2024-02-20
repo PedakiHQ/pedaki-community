@@ -3,7 +3,8 @@ import { Attribute } from '../attribute';
 import type Class from '../class';
 import type Entry from '../entry';
 import type { StudentWithClass } from '../entry';
-import type { Input, RawRule } from '../input';
+import type { Input } from '../input';
+import type { RawRule } from '../input.schema';
 
 export interface StudentValue {
   value: number;

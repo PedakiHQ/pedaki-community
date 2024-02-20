@@ -29,7 +29,6 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-
 interface RuleProps {
   rule: RawRule;
   position: number;
@@ -167,9 +166,12 @@ const AttributesInput = (params: AttributesProps) => {
 
   return (
     <div>
-      <div className={"flex flex-row"}>
+      <div className={'flex flex-row'}>
         {attributes.map((attribute, i) => (
-          <AttributeForm setAttribute={value => params.setAttribute(i, value)} attribute={attribute} />
+          <AttributeForm
+            setAttribute={value => params.setAttribute(i, value)}
+            attribute={attribute}
+          />
         ))}
       </div>
       <button
@@ -214,7 +216,7 @@ const AttributeForm = (params: {
       >
         <FormField
           control={form.control}
-          name={"options"}
+          name={'options'}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Options</FormLabel>
@@ -235,7 +237,7 @@ const AttributeForm = (params: {
         />
         <FormField
           control={form.control}
-          name={"levels"}
+          name={'levels'}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Options</FormLabel>
@@ -256,7 +258,7 @@ const AttributeForm = (params: {
         />
         <FormField
           control={form.control}
-          name={"options"}
+          name={'options'}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Options</FormLabel>
@@ -277,7 +279,7 @@ const AttributeForm = (params: {
         />
         <FormField
           control={form.control}
-          name={"options"}
+          name={'options'}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Options</FormLabel>

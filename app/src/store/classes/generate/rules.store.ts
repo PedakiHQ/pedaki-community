@@ -60,13 +60,13 @@ export const initializeStore = () => {
       set(state => {
         const rule = state.rules[ruleIndex];
         if (!rule) return state;
-        rule.attributes = attributes
+        rule.attributes = attributes;
         return {
           rules: state.rules
             .slice(0, ruleIndex)
             .concat(Object.assign({}, rule))
             .concat(...state.rules.slice(ruleIndex + 1, state.rules.length)),
         };
-      })
+      }),
   }));
 };

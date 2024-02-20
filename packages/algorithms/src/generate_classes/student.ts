@@ -34,7 +34,7 @@ export class Student {
 
     this._levels = this.student.levels;
     for (const gender of this.genders()) {
-      this._levels = { ...this._levels, [gender as string]: input.maxLevel() };
+      this._levels = { ...this._levels, [gender]: input.maxLevel() };
     }
     for (const extra of this.extras()) {
       this._levels = { ...this._levels, [extra]: input.maxLevel() };
