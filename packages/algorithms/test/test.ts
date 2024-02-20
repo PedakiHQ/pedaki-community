@@ -4,6 +4,7 @@ import { Algorithm } from '~/generate_classes/algorithm';
 import Class from '../src/generate_classes/class';
 import type { RawInput } from '~/generate_classes/input.schema';
 import type { RawStudent } from '~/generate_classes/student';
+import {RawInputSchema} from "~/generate_classes/input.schema";
 
 // Classe modèle ayant pour but d'être comparée à une véritable classe pour déterminer leur égalité.
 interface OptionValueOutputClass {
@@ -32,7 +33,8 @@ export async function runTest(
 ) {
   return Promise.all([readJsonFile(studentsFile), readJsonFile(inputFile)]).then(
     ([students, input]) => {
-      const algo = new Algorithm(students as RawStudent[], input as RawInput);
+      const rawInput = RawInputSchema.parse(input);
+      const algo = new Algorithm(students as RawStudent[], rawInput);
       const { entry, duration, rules } = algo.solve();
       console.log(`duration: ${duration}`);
       for (const [i, { respect_percent }] of Object.entries(rules)) {
