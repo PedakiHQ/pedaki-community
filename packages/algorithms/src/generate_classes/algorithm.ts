@@ -1,6 +1,6 @@
 import Entry from './entry';
 import { Input } from './input';
-import type { RawInput } from './input';
+import type { RawInput } from './input.schema';
 import type { RawStudent } from './student';
 
 export const DEFAULT_PRIORITY = 1;
@@ -42,7 +42,11 @@ export class Algorithm {
         // On effectue les déplacements voulus por la règle courante.
         moves = entry.moveStudents(rule);
       }
-      if (!result.rules) result.rules = [];
+    }
+
+    // Récupération des pourcentages de respect de chaque règle.
+    result.rules = []
+    for (const rule of this.input().rules().keys()) {
       result.rules[rule.initialIndex()] = { respect_percent: rule.getRespectPercent(entry) };
     }
 

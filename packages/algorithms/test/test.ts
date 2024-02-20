@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import { expect } from 'vitest';
-import { Algorithm } from '../src/generate_classes/algorithm';
+import { Algorithm } from '~/generate_classes/algorithm';
 import Class from '../src/generate_classes/class';
-import type { RawInput } from '../src/generate_classes/input';
-import { RawStudent } from '../src/generate_classes/student';
+import type { RawInput } from '~/generate_classes/input.schema';
+import type { RawStudent } from '~/generate_classes/student';
 
 // Classe modèle ayant pour but d'être comparée à une véritable classe pour déterminer leur égalité.
 interface OptionValueOutputClass {
@@ -44,7 +44,7 @@ export async function runTest(
         for (const [i, { respect_percent }] of Object.entries(rules)) {
           if (!(i in respectPercents)) break;
           expect(
-            respect_percent < respectPercents[parseInt(i)],
+            respect_percent < respectPercents[parseInt(i)]!,
             `Respect percent of rule ${i} (${respect_percent}) does not match requirement (${
               respectPercents[parseInt(i)]
             }).`,
@@ -63,7 +63,7 @@ export async function runTest(
             const validClasses = classesToValidate.filter(c => c && isClassValid(c, outputClass));
             expect(validClasses.length, 'Cant find a valid model for a resulted class').not.toBe(0);
             if (validClasses.length > minClassesMatching) continue;
-            classesToValidate.splice(classesToValidate.indexOf(validClasses[0]), 1);
+            classesToValidate.splice(classesToValidate.indexOf(validClasses[0]!), 1);
             output.splice(output.indexOf(outputClass), 1);
           }
           ++minClassesMatching;

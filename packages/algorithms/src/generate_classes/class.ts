@@ -145,7 +145,7 @@ export default class Class {
 
     for (const student of this._students) {
       for (const [attribute, level] of Object.entries(student.levels())) {
-        attributeCount[attribute] = (attributeCount[attribute] ?? 1) + 1;
+        attributeCount[attribute] = (attributeCount[attribute] ?? 0) + 1;
 
         if (!levelCount[attribute]) {
           levelCount[attribute] = {
