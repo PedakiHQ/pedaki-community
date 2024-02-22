@@ -11,17 +11,12 @@ import { useClassesGenerateStore } from '~/store/classes/generate/generate.store
 import React, { useRef } from 'react';
 
 const SelectStudents = () => {
-  const studentsCount = useClassesGenerateStore(state => state.studentsCount);
   const setStudentsCount = useClassesGenerateStore(state => state.setStudentsCount);
 
   return (
     <div className="flex items-center justify-between">
-      <InitialCache />
-      <span>
-        {studentsCount && studentsCount > 0
-          ? `${studentsCount} élèves sélectionnés`
-          : 'Aucun élève sélectionné'}
-      </span>
+      <StudentCount />
+
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="stroke-primary-main" size="sm" className="flex items-center space-x-2">
@@ -43,9 +38,10 @@ const SelectStudents = () => {
   );
 };
 
-const InitialCache = () => {
+const StudentCount = () => {
   const [filters] = useFilterParams(searchParams);
   const lock = useRef(false);
+  const studentsCount = useClassesGenerateStore(state => state.studentsCount);
 
   const { data } = api.students.getMany.useQuery(
     {
@@ -61,13 +57,13 @@ const InitialCache = () => {
     },
   );
 
-  const setStudentsCount = useClassesGenerateStore(state => state.setStudentsCount);
   if (data?.meta.totalCount && !lock.current) {
-    setStudentsCount(data?.meta.totalCount ?? 0);
     lock.current = true;
   }
 
-  return null;
+  const value = studentsCount ?? (data?.meta.totalCount && lock.current ? data.meta.totalCount : 0);
+
+  return <span>{value > 0 ? `${value} élèves sélectionnés` : 'Aucun élève sélectionné'}</span>;
 };
 
 export default SelectStudents;

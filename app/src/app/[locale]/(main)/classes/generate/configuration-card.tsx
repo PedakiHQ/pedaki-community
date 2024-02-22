@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import { IconSettings } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
+import ConfigFields from '~/components/classes/generate/config-fields.tsx';
 import SelectStudents from '~/components/classes/generate/select-students.tsx';
 import React from 'react';
 
@@ -16,8 +17,9 @@ const ConfigurationCard = () => {
         </div>
       </CardHeader>
       <Separator className="-ml-4 w-[calc(100%+2rem)]" />
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <SelectStudents />
+        <ConfigFields />
       </CardContent>
     </Card>
   );

@@ -55,13 +55,13 @@ export const createSearchParams = <
   T extends DefaultFilter = DefaultFilter,
   U extends CreateFiltersParser<T> = CreateFiltersParser<T>,
 >(
-  columns: Record<string, boolean>,
+  defaultColumns: Record<string, boolean>,
   filterParser: U,
 ) => ({
   page: parseAsInteger.withDefault(1),
   perPage: parseAsNumberLiteral(possiblesPerPage).withDefault(25),
   sorting: parseAsArrayOf(sortingParser).withDefault([]),
-  columns: parseAsJson<Record<string, boolean>>().withDefault(columns),
+  columns: parseAsJson<Record<string, boolean>>().withDefault(defaultColumns),
   filters: parseAsArrayOf(filterParser).withDefault([]),
 });
 export type CreateSearchParams<
