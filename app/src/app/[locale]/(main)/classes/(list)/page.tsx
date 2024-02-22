@@ -30,7 +30,7 @@ export default async function ClassesListPage({ params }: PageType) {
         icon={IconUserGroups}
       ></PageHeader>
 
-      <div className="h-full pt-6" id={MAIN_CONTENT}>
+      <div className="h-full @4xl:pt-6" id={MAIN_CONTENT}>
         <ClassesListWrapper>
           <ClassesListPageClient />
         </ClassesListWrapper>

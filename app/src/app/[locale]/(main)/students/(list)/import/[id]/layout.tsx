@@ -33,7 +33,7 @@ export default async function StudentsImportLayout({
       </PageHeader>
 
       <ImportNavigation importId={id} />
-      <div className="h-full max-h-full pt-6" id={MAIN_CONTENT}>
+      <div className="h-full max-h-full @4xl:pt-6" id={MAIN_CONTENT}>
         {children}
       </div>
     </>

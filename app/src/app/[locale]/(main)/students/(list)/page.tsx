@@ -35,7 +35,7 @@ export default async function StudentsListPage({ params }: PageType) {
         <HeaderActions />
       </PageHeader>
       <TutorialTrigger id={TUTORIAL_ID} step={1} />
-      <div className="h-full pt-6" id={MAIN_CONTENT}>
+      <div className="h-full @4xl:pt-6" id={MAIN_CONTENT}>
         <StudentsListWrapper>
           <StudentsListPageClient />
         </StudentsListWrapper>

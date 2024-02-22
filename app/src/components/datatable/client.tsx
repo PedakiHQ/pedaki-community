@@ -12,7 +12,10 @@ export const usePageParams = <
   searchParams: CreateSearchParams<T, U>,
   startTransition?: TransitionStartFunction,
 ) => {
-  return useQueryState('page', searchParams.page.withOptions({ history: 'push', startTransition }));
+  return useQueryState(
+    'page',
+    searchParams.page.withOptions({ history: 'push', startTransition, clearOnDefault: true }),
+  );
 };
 
 export const useSortingParams = <
@@ -24,7 +27,7 @@ export const useSortingParams = <
 ) => {
   return useQueryState(
     'sorting',
-    searchParams.sorting.withOptions({ history: 'replace', startTransition }),
+    searchParams.sorting.withOptions({ history: 'replace', startTransition, clearOnDefault: true }),
   );
 };
 
@@ -37,7 +40,7 @@ export const useFilterParams = <
 ) => {
   return useQueryState(
     'filter',
-    searchParams.filters.withOptions({ history: 'push', startTransition }),
+    searchParams.filters.withOptions({ history: 'push', startTransition, clearOnDefault: true }),
   );
 };
 
@@ -50,7 +53,7 @@ export const usePerPageParams = <
 ) => {
   return useQueryState(
     'perPage',
-    searchParams.perPage.withOptions({ history: 'replace', startTransition }),
+    searchParams.perPage.withOptions({ history: 'replace', startTransition, clearOnDefault: true }),
   );
 };
 
@@ -63,6 +66,6 @@ export const useColumnsVisibilityParams = <
 ) => {
   return useQueryState(
     'columns',
-    searchParams.columns.withOptions({ history: 'replace', startTransition }),
+    searchParams.columns.withOptions({ history: 'replace', startTransition, clearOnDefault: true }),
   );
 };

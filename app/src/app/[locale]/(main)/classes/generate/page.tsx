@@ -1,11 +1,12 @@
 import { IconBookUser } from '@pedaki/design/ui/icons';
+import ConfigurationCard from '~/app/[locale]/(main)/classes/generate/configuration-card.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
-import DrawerWrapper from '~/components/students/list/drawer-wrapper.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper';
-import { getScopedI18n } from '~/locales/server.ts';
 import type { LocaleCode } from '~/locales/server.ts';
+import { getScopedI18n } from '~/locales/server.ts';
 import { setStaticParamsLocale } from '~/locales/utils';
+import StoreProvider from '~/store/classes/generate/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
 
@@ -30,11 +31,20 @@ export default async function ClassesGeneratePage({ params }: PageType) {
         icon={IconBookUser}
       />
 
-      <div className="h-full pt-6" id={MAIN_CONTENT}>
+      <StoreProvider>
         <StudentsListWrapper>
-          <DrawerWrapper />
+          <div
+            className="flex h-full flex-col-reverse gap-6 @4xl:flex-row @4xl:pt-6"
+            id={MAIN_CONTENT}
+          >
+            <div className="flex min-w-[350px] flex-col gap-4">
+              <ConfigurationCard />
+              <ConfigurationCard />
+            </div>
+            <div className="flex-1 bg-green-dark"></div>
+          </div>
         </StudentsListWrapper>
-      </div>
+      </StoreProvider>
     </>
   );
 }

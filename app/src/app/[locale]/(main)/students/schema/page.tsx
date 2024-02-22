@@ -36,7 +36,7 @@ export default async function StudentSchemaPage({ params }: PageType) {
         icon={IconUserGroups}
       />
       <TutorialTrigger id={TUTORIAL_ID} step={1} />
-      <div className="flex h-full flex-col gap-6 pt-6" id={MAIN_CONTENT}>
+      <div className="flex h-full flex-col gap-6 @4xl:pt-6" id={MAIN_CONTENT}>
         <PersonalInfoForm />
         <Separator />
         <PropertiesSection initialProperties={initialProperties} />
