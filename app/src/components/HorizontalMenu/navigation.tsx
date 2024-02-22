@@ -36,7 +36,7 @@ const MobileNavigation = <TKey extends TranslationGroup>({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="block py-3 @sm/main:hidden">
+      <DropdownMenuTrigger className="block py-3 @sm:hidden">
         <div>
           <span className="text-p-sm font-medium text-sub">
             {t(currentItem?.labelKey ?? 'default')}
@@ -85,7 +85,7 @@ const Item = <TKey extends TranslationGroup>({
   const t = useScopedI18n(tKey);
 
   return (
-    <Link className="group relative hidden py-3 @sm/main:block" href={href} id={id}>
+    <Link className="group relative hidden py-3 @sm:block" href={href} id={id}>
       <span
         className={cn(
           'text-p-sm font-medium text-sub ',
