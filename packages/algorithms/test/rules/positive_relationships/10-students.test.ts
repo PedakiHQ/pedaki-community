@@ -17,5 +17,9 @@ test('Respecter les relations positives (10 élèves)', async () => {
         [2, 9, 4, 8, 10],
       ],
     },
-  ]);
+  ],
+    undefined,
+    undefined,
+    undefined,
+    true);
 });
