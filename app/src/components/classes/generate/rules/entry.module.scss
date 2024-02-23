@@ -1,8 +1,12 @@
 .item {
+  --size: 0.8rem;
+
   position: relative;
   display: flex;
   margin-left: 0.5rem;
   align-items: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 
   &:before{
     content: "";
@@ -13,6 +17,18 @@
     background-color: var(--tw-stroke-soft);
     display: block;
     width: 1px;
+  }
+}
+
+li:global(:first-of-type) .item {
+  &:before {
+    top: 50%;
+  }
+}
+
+li:global(:last-of-type) .item {
+  &:before {
+    bottom: 50%;
   }
 }
 
@@ -30,7 +46,6 @@ ul:global(.overlay) .item {
 }
 
 .badge {
-  --size: 1rem;
   flex-shrink: 0;
   position: relative;
   border-radius: 50%;

@@ -38,7 +38,7 @@ export default async function ClassesGeneratePage({ params }: PageType) {
             className="flex h-full flex-col-reverse gap-6 @4xl:flex-row @4xl:pt-6"
             id={MAIN_CONTENT}
           >
-            <div className="relative flex min-w-[350px] flex-col gap-4">
+            <div className="relative flex min-w-[400px] flex-col gap-4">
               <ConfigurationCard />
               <RulesCard />
             </div>

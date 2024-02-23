@@ -1,12 +1,13 @@
 import type { DraggableSyntheticListeners, UniqueIdentifier } from '@dnd-kit/core';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { IconGripVertical } from '@pedaki/design/ui/icons';
+import { cn } from '@pedaki/design/utils';
 import React, { createContext, useContext, useMemo } from 'react';
 import type { CSSProperties, PropsWithChildren } from 'react';
 
 interface Props {
   id: UniqueIdentifier;
+  className?: string;
 }
 
 interface Context {
@@ -21,7 +22,7 @@ const SortableItemContext = createContext<Context>({
   ref() {},
 });
 
-export function SortableItem({ children, id }: PropsWithChildren<Props>) {
+export function SortableItem({ children, id, className }: PropsWithChildren<Props>) {
   const {
     attributes,
     isDragging,
@@ -47,7 +48,7 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
 
   return (
     <SortableItemContext.Provider value={context}>
-      <li ref={setNodeRef} style={style} className="w-full list-none">
+      <li ref={setNodeRef} style={style} className={cn('w-full list-none', className)}>
         {children}
       </li>
     </SortableItemContext.Provider>

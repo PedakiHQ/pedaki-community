@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import { IconListOrdered } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
 import Entry from '~/components/classes/generate/rules/entry.tsx';
@@ -16,11 +16,15 @@ const RulesCard = () => {
   return (
     <Card className={demoBannerVisible ? 'h-[calc(100vh-31rem)]' : 'h-[calc(100vh-28rem)]'}>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between space-x-4">
           <div className="flex items-center space-x-2">
             <IconListOrdered className="h-6 text-sub" />
-            <CardTitle>Regles</CardTitle>
+            <div>
+              <CardTitle>Regles</CardTitle>
+              <CardDescription>Les règles s&apos;éxecutent de haut en bas</CardDescription>
+            </div>
           </div>
+
           <RulesTrigger />
         </div>
       </CardHeader>
