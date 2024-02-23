@@ -1,5 +1,6 @@
 import { IconBookUser } from '@pedaki/design/ui/icons';
 import ConfigurationCard from '~/app/[locale]/(main)/classes/generate/configuration-card.tsx';
+import RulesCard from '~/app/[locale]/(main)/classes/generate/rules-card.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper';
@@ -37,9 +38,9 @@ export default async function ClassesGeneratePage({ params }: PageType) {
             className="flex h-full flex-col-reverse gap-6 @4xl:flex-row @4xl:pt-6"
             id={MAIN_CONTENT}
           >
-            <div className="flex min-w-[350px] flex-col gap-4">
+            <div className="relative flex min-w-[350px] flex-col gap-4">
               <ConfigurationCard />
-              <ConfigurationCard />
+              <RulesCard />
             </div>
             <div className="flex-1 bg-green-dark"></div>
           </div>

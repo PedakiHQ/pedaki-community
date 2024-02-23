@@ -3,8 +3,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import { IconSettings } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
-import ConfigFields from '~/components/classes/generate/config-fields.tsx';
-import SelectStudents from '~/components/classes/generate/select-students.tsx';
+import ConfigFields from '~/components/classes/generate/config/config-fields.tsx';
+import SelectStudents from '~/components/classes/generate/config/select-students.tsx';
 import React from 'react';
 
 const ConfigurationCard = () => {

@@ -19,9 +19,9 @@ const SelectStudents = () => {
 
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="stroke-primary-main" size="sm" className="flex items-center space-x-2">
-            <IconSearch className="h-4 text-soft" />
-            <span>Filtrer</span>
+          <Button variant="stroke-primary-main" size="xs" className="flex items-center space-x-0.5">
+            <IconSearch className="h-4 pl-1 text-soft" />
+            <span className="px-1 text-label-sm text-sub">Filtrer</span>
           </Button>
         </SheetTrigger>
         <SheetContent
