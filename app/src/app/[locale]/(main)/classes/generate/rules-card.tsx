@@ -44,7 +44,7 @@ const DragArea = () => {
     <SortableList
       items={rules ?? []}
       onChange={setRules}
-      renderItem={item => <Entry item={item} />}
+      renderItem={(item, index) => <Entry item={item} index={index} />}
     />
   );
 };

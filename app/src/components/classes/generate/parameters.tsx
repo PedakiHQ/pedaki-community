@@ -1,5 +1,6 @@
 import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
 import { createParser, parseAsArrayOf, useQueryState } from 'nuqs';
+import { useMemo } from 'react';
 
 const configParam = createParser({
   parse: (value: string) => {
@@ -26,18 +27,31 @@ export const useConfigurationParams = () => {
 
 const ruleParam = createParser({
   parse: (value: string) => {
-    // TODO: rule type
-    return { id: value as LevelRuleType };
+    // TODO: rule type and check if it's valid
+    return { key: value as LevelRuleType };
   },
-  serialize: (value: { id: LevelRuleType }) => {
+  serialize: (value: { key: LevelRuleType }) => {
     // TODO: rule type
-    return value.id;
+    return value.key;
   },
 });
 
 export const useRulesParams = () => {
-  return useQueryState(
+  const [rules, setRules] = useQueryState(
     'rules',
-    parseAsArrayOf(ruleParam).withOptions({ history: 'push', clearOnDefault: true }),
+    parseAsArrayOf(ruleParam)
+      .withOptions({ history: 'push', clearOnDefault: true })
+      .withDefault([]),
   );
+
+  // add id to rules
+  const rulesWithId = useMemo(
+    () =>
+      rules?.map((rule, index) => ({
+        ...rule,
+        id: rule.key + index,
+      })),
+    [rules],
+  );
+  return [rulesWithId, setRules] as const;
 };

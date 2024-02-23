@@ -17,12 +17,13 @@ import React from 'react';
 import classes from './entry.module.scss';
 
 interface EntryProps {
-  item: { id: LevelRuleType };
+  item: { id: string; key: LevelRuleType };
+  index: number | null;
 }
 
 // TODO: rule type
-const Entry = ({ item }: EntryProps) => {
-  const mappedRule = ruleMapping[item.id];
+const Entry = ({ item, index }: EntryProps) => {
+  const mappedRule = ruleMapping[item.key];
 
   const hasAttributes = mappedRule.attributesCount !== 'none';
 
@@ -41,15 +42,15 @@ const Entry = ({ item }: EntryProps) => {
                 backgroundColor: mappedRule.color,
               }}
             >
-              {item.id}
+              {item.key}
             </Badge>
             <p className="text-label-sm text-sub">description</p>
           </div>
 
           <TooltipProvider>
             <div className="flex items-center justify-end gap-1">
-              {!hasAttributes && <DeleteAction item={item} />}
-              {hasAttributes && <EditAction item={item} />}
+              {!hasAttributes && <DeleteAction item={item} index={index} />}
+              {hasAttributes && <EditAction item={item} index={index} />}
 
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -73,7 +74,7 @@ const Entry = ({ item }: EntryProps) => {
   );
 };
 
-const DeleteAction = ({ item }: EntryProps) => {
+const DeleteAction = ({ index }: EntryProps) => {
   const [_, setRules] = useRulesParams();
 
   const removeRule = async () => {
@@ -81,7 +82,7 @@ const DeleteAction = ({ item }: EntryProps) => {
       if (!oldRules) {
         return [];
       }
-      return oldRules.filter(rule => rule.id !== item.id);
+      return oldRules.filter((_, i) => i !== index);
     });
   };
 

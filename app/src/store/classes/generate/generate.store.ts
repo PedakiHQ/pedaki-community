@@ -1,9 +1,13 @@
+import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface ClassesGenerateStore {
   studentsCount: number | null;
   setStudentsCount: (count: number) => void;
+
+  activeCreateRule: LevelRuleType | null;
+  setActiveCreateRule: (rule: LevelRuleType | null) => void;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;
@@ -28,5 +32,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
     ...preloadedState,
     studentsCount: null,
     setStudentsCount: count => set({ studentsCount: count }),
+    activeCreateRule: null,
+    setActiveCreateRule: rule => set({ activeCreateRule: rule }),
   }));
 };

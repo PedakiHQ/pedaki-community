@@ -27,7 +27,7 @@ interface BaseItem {
 interface Props<T extends BaseItem> {
   items: T[];
   onChange(items: T[]): void;
-  renderItem(item: T): ReactNode;
+  renderItem(item: T, index: number | null): ReactNode;
 }
 
 const dropAnimationConfig: DropAnimation = {
@@ -60,6 +60,7 @@ export function SortableList<T extends BaseItem>({ items, onChange, renderItem }
         if (over && active.id !== over?.id) {
           const activeIndex = items.findIndex(({ id }) => id === active.id);
           const overIndex = items.findIndex(({ id }) => id === over.id);
+          if (activeIndex === overIndex) return;
 
           onChange(arrayMove(items, activeIndex, overIndex));
         }
@@ -71,15 +72,15 @@ export function SortableList<T extends BaseItem>({ items, onChange, renderItem }
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <ul role="application" className="relative">
-          {items.map(item => (
-            <React.Fragment key={item.id}>{renderItem(item)}</React.Fragment>
+          {items.map((item, index) => (
+            <React.Fragment key={item.id}>{renderItem(item, index)}</React.Fragment>
           ))}
         </ul>
       </SortableContext>
       {typeof document !== 'undefined' &&
         createPortal(
           <DragOverlay dropAnimation={dropAnimationConfig} wrapperElement="ul" className="overlay">
-            {activeItem ? renderItem(activeItem) : null}
+            {activeItem ? renderItem(activeItem, null) : null}
           </DragOverlay>,
           document.body,
         )}

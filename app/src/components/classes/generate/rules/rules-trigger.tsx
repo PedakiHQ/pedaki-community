@@ -13,10 +13,27 @@ import { IconPlus } from '@pedaki/design/ui/icons';
 import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import type { RuleMappingValue } from '~/components/classes/generate/rules/constants.ts';
+import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-input.tsx';
+import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
 
+const BODY_CLASS = 'h-full overflow-y-auto py-8 px-4';
+
 const RulesTrigger = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, _setOpen] = React.useState(false);
+  const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
+
+  const setOpen = (open: boolean) => {
+    open && setActiveCreateRule(null);
+    _setOpen(open);
+    if (!open) {
+      setTimeout(() => {
+        // Wait for the modal animation to finish
+        setActiveCreateRule(null);
+      }, 100);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -29,20 +46,48 @@ const RulesTrigger = () => {
         className="block h-[80%] overflow-y-hidden md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
         onOpenAutoFocus={e => e.preventDefault()}
       >
-        <DialogHeader>
-          <DialogTitle>Choisir une règle</DialogTitle>
-        </DialogHeader>
-        <div className="h-full overflow-y-auto py-8 pl-1 pr-4">
-          <div className="grid grid-cols-3 gap-4">
-            {Object.values(ruleMapping)
-              .toSorted()
-              .map(rule => (
-                <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
-              ))}
-          </div>
-        </div>
+        <DialogBody setOpen={setOpen} />
       </DialogContent>
     </Dialog>
+  );
+};
+
+const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
+  const activeCreateRule = useClassesGenerateStore(state => state.activeCreateRule);
+  const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
+
+  if (activeCreateRule) {
+    return (
+      <>
+        <DialogHeader>
+          <DialogTitle>Choisir une règle - {activeCreateRule}</DialogTitle>
+        </DialogHeader>
+        <div className={BODY_CLASS}>
+          <GenericRuleInput
+            ruleMapping={ruleMapping[activeCreateRule]}
+            onCanceled={() => setActiveCreateRule(null)}
+            onSaved={() => setActiveCreateRule(null)}
+          />
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle>Choisir une règle</DialogTitle>
+      </DialogHeader>
+      <div className={BODY_CLASS}>
+        <div className="grid grid-cols-3 gap-4">
+          {Object.values(ruleMapping)
+            .toSorted()
+            .map(rule => (
+              <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
+            ))}
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -55,15 +100,24 @@ const RuleCard = ({
 }) => {
   const Icon = rule.icon;
   const [_, setRules] = useRulesParams();
+  const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
 
   const addRule = async () => {
     setOpen(false);
     await setRules(oldRules => {
       if (!oldRules) {
-        return [{ id: rule.key }];
+        return [{ key: rule.key }];
       }
-      return oldRules.concat({ id: rule.key });
+      return oldRules.concat({ key: rule.key });
     });
+  };
+
+  const handleCreateRule = async () => {
+    if (rule.attributesCount === 'none') {
+      await addRule();
+      return;
+    }
+    setActiveCreateRule(rule.key);
   };
 
   return (
@@ -73,7 +127,7 @@ const RuleCard = ({
         style={{
           backgroundColor: rule.color,
         }}
-        onClick={addRule}
+        onClick={handleCreateRule}
       >
         <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
           <Icon className="m-auto h-12 w-12 text-main" />
