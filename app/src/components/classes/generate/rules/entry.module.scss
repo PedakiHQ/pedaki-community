@@ -16,6 +16,19 @@
   }
 }
 
+ul:global(.overlay) .item {
+  &:before {
+      display: none;
+  }
+  .badge {
+    display: none;
+  }
+  & {
+    //margin-left: -4rem;
+    padding-left: 0.5rem;
+  }
+}
+
 .badge {
   --size: 1rem;
   flex-shrink: 0;
