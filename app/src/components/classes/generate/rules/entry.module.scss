@@ -1,5 +1,5 @@
 .item {
-  --size: 0.8rem;
+  --size: 0.6rem;
 
   position: relative;
   display: flex;
@@ -55,4 +55,8 @@ ul:global(.overlay) .item {
   margin-left: calc(var(--size) * -0.5);
   z-index: 1;
   align-items: center;
+}
+
+ul:global(.overlay) ~ div .tooltip {
+  display: none;
 }

@@ -1,6 +1,14 @@
 import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
 import type { IconType } from '@pedaki/design/ui/icons';
-import { IconGripVertical } from '@pedaki/design/ui/icons';
+import {
+  IconBookUser,
+  IconCalendar,
+  IconCircle,
+  IconGripVertical,
+  IconPlus,
+  IconSettings2,
+  IconX,
+} from '@pedaki/design/ui/icons';
 
 type RuleMapping = {
   [key in LevelRuleType]: {
@@ -22,19 +30,19 @@ export type RuleMappingValue = RuleMapping[keyof RuleMapping];
 export const ruleMapping = {
   balance_class_count: {
     key: 'balance_class_count',
-    icon: IconGripVertical,
+    icon: IconCircle,
     attributesCount: 'two_or_more',
     color: '#D6E6FF',
   },
   balance_count: {
     key: 'balance_count',
-    icon: IconGripVertical,
+    icon: IconCalendar,
     attributesCount: 'one_or_more',
     color: '#D7F9F8',
   },
   gather_attributes: {
     key: 'gather_attributes',
-    icon: IconGripVertical,
+    icon: IconSettings2,
     attributesCount: 'one_or_more',
     color: '#FFFFEA',
   },
@@ -46,19 +54,19 @@ export const ruleMapping = {
   },
   maximize_classes: {
     key: 'maximize_classes',
-    icon: IconGripVertical,
+    icon: IconBookUser,
     attributesCount: 'none',
     color: '#FBE0E0',
   },
   negative_relationships: {
     key: 'negative_relationships',
-    icon: IconGripVertical,
+    icon: IconX,
     attributesCount: 'none',
     color: '#FFF0D5',
   },
   positive_relationships: {
     key: 'positive_relationships',
-    icon: IconGripVertical,
+    icon: IconPlus,
     attributesCount: 'none',
     color: '#FFDCF4',
   },

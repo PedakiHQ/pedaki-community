@@ -1,4 +1,5 @@
-import { createParser, useQueryState } from 'nuqs';
+import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
+import { createParser, parseAsArrayOf, useQueryState } from 'nuqs';
 
 const configParam = createParser({
   parse: (value: string) => {
@@ -20,5 +21,23 @@ export const useConfigurationParams = () => {
   return useQueryState(
     'config',
     configParam.withOptions({ history: 'replace', clearOnDefault: true }),
+  );
+};
+
+const ruleParam = createParser({
+  parse: (value: string) => {
+    // TODO: rule type
+    return { id: value as LevelRuleType };
+  },
+  serialize: (value: { id: LevelRuleType }) => {
+    // TODO: rule type
+    return value.id;
+  },
+});
+
+export const useRulesParams = () => {
+  return useQueryState(
+    'rules',
+    parseAsArrayOf(ruleParam).withOptions({ history: 'push', clearOnDefault: true }),
   );
 };

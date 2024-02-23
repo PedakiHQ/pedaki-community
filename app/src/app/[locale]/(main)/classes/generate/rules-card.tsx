@@ -3,11 +3,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import { IconListOrdered } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
+import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import Entry from '~/components/classes/generate/rules/entry.tsx';
 import RulesTrigger from '~/components/classes/generate/rules/rules-trigger.tsx';
 import { SortableList } from '~/components/dnd/SortableList.tsx';
 import { useGlobalStore } from '~/store/global/global.store.ts';
-import React, { useState } from 'react';
+import React from 'react';
 
 const RulesCard = () => {
   // TODO: this is disgusting, find a better way to handle this
@@ -37,14 +38,14 @@ const RulesCard = () => {
 };
 
 const DragArea = () => {
-  const [items, setItems] = useState(() =>
-    Array(3)
-      .fill(0)
-      .map((_, i) => ({ id: `Item ${i}` })),
-  );
+  const [rules, setRules] = useRulesParams();
 
   return (
-    <SortableList items={items} onChange={setItems} renderItem={item => <Entry item={item} />} />
+    <SortableList
+      items={rules ?? []}
+      onChange={setRules}
+      renderItem={item => <Entry item={item} />}
+    />
   );
 };
 
