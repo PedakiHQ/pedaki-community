@@ -446,6 +446,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.515.0
         version: 3.515.0
+      '@pedaki/algorithms':
+        specifier: workspace:*
+        version: link:../algorithms/dist
       '@pedaki/auth':
         specifier: workspace:*
         version: link:../auth/src

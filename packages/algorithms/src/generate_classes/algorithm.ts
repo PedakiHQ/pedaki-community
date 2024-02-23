@@ -1,15 +1,9 @@
 import Entry from './entry';
 import { Input } from './input';
-import type { RawInput } from './input.schema';
-import type { RawStudent } from './student';
+import type {RawInput, RawStudent} from './input.schema';
+import type {Output} from "~/generate_classes/output.schema.ts";
 
 export const DEFAULT_PRIORITY = 1;
-
-export interface Result {
-  entry: Entry;
-  duration: number;
-  rules: { respect_percent: number }[];
-}
 
 /**
  * On exécute une liste de règles dans un certain ordre.
@@ -20,6 +14,7 @@ export interface Result {
  */
 export class GenerateClassesAlgorithm {
   private readonly _input: Input;
+  private _entry?: Entry
 
   constructor(students: RawStudent[], rawInput: RawInput) {
     this._input = new Input(rawInput, students);
@@ -29,29 +24,33 @@ export class GenerateClassesAlgorithm {
     return this._input;
   }
 
-  public solve(): Result {
+  public entry() {
+    return this._entry;
+  }
+
+  public solve(): Output {
     const startTime = Date.now();
-    const entry = Entry.default(this);
-    const result: Partial<Result> = {};
+    this._entry = Entry.default(this);
+    const output: Partial<Output> = {};
 
     // On fait respecter chaque règle en respectant l'ordre de priorité.
     for (const rule of this.input().rules().keys()) {
       // On effectue les déplacements jusqu'à ce que cette règle soit respectée, ou que plus aucun déplacement ne soit possible.
       let moves = Number.MAX_VALUE;
-      while (entry.value(rule) > 0 && moves > 0) {
+      while (this._entry.value(rule) > 0 && moves > 0) {
         // On effectue les déplacements voulus por la règle courante.
-        moves = entry.moveStudents(rule);
+        moves = this._entry.moveStudents(rule);
       }
     }
 
     // Récupération des pourcentages de respect de chaque règle.
-    result.rules = [];
+    output.rules = [];
     for (const rule of this.input().rules().keys()) {
-      result.rules[rule.initialIndex()] = { respect_percent: rule.getRespectPercent(entry) };
+      output.rules[rule.initialIndex()] = { respect_percent: rule.getRespectPercent(this._entry) };
     }
 
-    result.entry = entry;
-    result.duration = (Date.now() - startTime) / 1000;
-    return result as Result;
+    output.classes = this._entry.classes().map(c => ({students: [...c.students()].map(s => s.id())}));
+    output.duration = (Date.now() - startTime) / 1000;
+    return output as Output;
   }
 }

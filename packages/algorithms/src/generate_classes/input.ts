@@ -1,9 +1,9 @@
 import type { Attribute } from './attribute';
-import { RuleOrder } from './input.schema';
+import { RuleOrder} from './input.schema';
+import type {RawStudent} from './input.schema';
 import type { RawInput } from './input.schema';
 import type { Rule } from './rules/rule';
 import { Student } from './student';
-import type { RawStudent } from './student';
 
 export class Input {
   private readonly input: RawInput;

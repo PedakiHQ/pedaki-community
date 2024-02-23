@@ -1,15 +1,6 @@
 import type { Attribute } from './attribute';
 import type { Input } from './input';
-
-export interface RawStudent {
-  id: string;
-  birthdate: Date;
-  gender: string | string[];
-  relationships?: Record<string, number>;
-  // Je pars du principe que les niveaux présents indiquent les options choisies
-  levels: Record<string, number>;
-  extra?: Record<string, boolean>;
-}
+import type {RawStudent} from "~/generate_classes/input.schema.ts";
 
 /**
  * Chaque instance d'élève est unique et commune à toutes les configurations.

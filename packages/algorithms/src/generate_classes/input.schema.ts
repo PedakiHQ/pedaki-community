@@ -70,8 +70,18 @@ export const RawInputSchema = z.object({
   rules: RawRuleSchema.array(),
 });
 
+export const RawStudentSchema = z.object({
+  id: z.string(),
+  birthdate: z.date(),
+  gender: z.string().or(z.string().array()),
+  relationships: z.record(z.number()).optional(),
+  levels: z.record(z.number()),
+  extra: z.record(z.boolean()).optional()
+})
+
 export type RawAttribute = z.infer<typeof RawAttributeSchema>;
 export type RawAttributeOption = z.infer<typeof RawAttributeOptionSchema>;
 export type RawRule = z.infer<typeof RawRuleSchema>;
 export type RawInput = z.infer<typeof RawInputSchema>;
 export type RuleType = (typeof algorithmRules)[number];
+export type RawStudent = z.infer<typeof RawStudentSchema>;

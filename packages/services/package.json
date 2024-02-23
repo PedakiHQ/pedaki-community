@@ -25,6 +25,7 @@
     "@pedaki/common": "0.5.2-beta.7",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
+    "@pedaki/algorithms": "workspace:*",
     "@t3-oss/env-core": "^0.9.2",
     "csv": "^6.3.6",
     "dayjs": "^1.11.10",

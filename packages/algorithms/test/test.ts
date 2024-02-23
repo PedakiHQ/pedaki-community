@@ -2,8 +2,7 @@ import fs from 'fs/promises';
 import { expect } from 'vitest';
 import { GenerateClassesAlgorithm } from '~/generate_classes/algorithm';
 import Class from '../src/generate_classes/class';
-import type { RawStudent } from '~/generate_classes/student';
-import {RawInputSchema} from "~/generate_classes/input.schema";
+import {RawInputSchema, type RawStudent} from "~/generate_classes/input.schema";
 
 // Classe modèle ayant pour but d'être comparée à une véritable classe pour déterminer leur égalité.
 interface OptionValueOutputClass {
@@ -34,7 +33,8 @@ export async function runTest(
     ([students, input]) => {
       const rawInput = RawInputSchema.parse(input);
       const algo = new GenerateClassesAlgorithm(students as RawStudent[], rawInput);
-      const { entry, duration, rules } = algo.solve();
+      const { duration, rules } = algo.solve();
+      const entry = algo.entry()!
       console.log(`duration: ${duration}`);
       for (const [i, { respect_percent }] of Object.entries(rules)) {
         console.log(`respect percent of rule ${i}: ${respect_percent}`);
