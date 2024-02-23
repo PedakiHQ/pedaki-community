@@ -29,24 +29,24 @@ const RulesTrigger = () => {
         <DialogHeader>
           <DialogTitle>Choisir une règle</DialogTitle>
         </DialogHeader>
-        <div className="h-full overflow-y-auto py-8 pr-4">
+        <div className="h-full overflow-y-auto py-8 pr-4 pl-1">
           <div className="grid grid-cols-3 gap-4">
             {Object.values(ruleMapping)
               .toSorted()
               .map(rule => {
                 const Icon = rule.icon;
                 return (
-                  <button key={rule.key} className="focus-ring p-0">
+                  <button key={rule.key} className="focus-ring p-0 rounded-lg group">
                     <Card
-                      className="group h-full p-0 transition-all duration-200 hover:bg-weak"
+                      className="h-full p-0 transition-all duration-200"
                       style={{
                         backgroundColor: rule.color,
                       }}
                     >
-                      <div className="flex h-32 items-center justify-center transition-all group-hover:h-24">
+                      <div className="flex h-32 items-center justify-center transition-all group-hover:h-24 group-focus-within:h-24">
                         <Icon className="m-auto h-12 w-12 text-main" />
                       </div>
-                      <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-hover:h-24">
+                      <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-hover:h-24 group-focus-within:h-24">
                         <span className="text-p-md">{rule.key}</span>
                         <p className="text-p-sm text-soft">description</p>
                       </div>
