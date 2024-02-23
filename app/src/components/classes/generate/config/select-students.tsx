@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@pedaki/design/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@pedaki/design/ui/dialog';
 import { IconSearch } from '@pedaki/design/ui/icons';
-import { Sheet, SheetContent, SheetTrigger } from '@pedaki/design/ui/sheet';
 import { useFilterParams } from '~/components/datatable/client.tsx';
 import Client from '~/components/students/list/client.tsx';
 import { searchParams } from '~/components/students/list/parameters.ts';
@@ -17,23 +17,20 @@ const SelectStudents = () => {
     <div className="flex items-center justify-between">
       <StudentCount />
 
-      <Sheet>
-        <SheetTrigger asChild>
+      <Dialog>
+        <DialogTrigger asChild>
           <Button variant="stroke-primary-main" size="xs" className="flex items-center space-x-0.5">
             <IconSearch className="h-4 pl-1 text-soft" />
             <span className="px-1 text-label-sm text-sub">Filtrer</span>
           </Button>
-        </SheetTrigger>
-        <SheetContent
-          side="right"
-          className="md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
+        </DialogTrigger>
+        <DialogContent
+          className="h-[80%] overflow-y-hidden pt-12 md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
           onOpenAutoFocus={e => e.preventDefault()}
         >
-          <div className="h-full pt-8">
-            <Client onDataChange={(_, meta) => setStudentsCount(meta.totalCount)} />
-          </div>
-        </SheetContent>
-      </Sheet>
+          <Client onDataChange={(_, meta) => setStudentsCount(meta.totalCount)} className="px-1" />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

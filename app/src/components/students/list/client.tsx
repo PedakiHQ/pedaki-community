@@ -100,7 +100,7 @@ const Client = ({ className, onClickRow, selectedRows, onDataChange }: ClientPro
   const isLoading = isQueryLoading || isTransitionLoading || isError;
 
   return (
-    <div className={cn('flex h-full flex-col gap-4', className)}>
+    <div className={cn('flex h-full flex-col gap-4 overflow-y-auto', className)}>
       <div className="flex gap-4">
         <Filters filters={filters} setFilters={setFilters} type="students" />
         <ColumnSelector
