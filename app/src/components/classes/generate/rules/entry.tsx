@@ -2,7 +2,7 @@ import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
 import { Badge } from '@pedaki/design/ui/badge';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
-import { IconCircle, IconGripVertical2, IconTrash } from '@pedaki/design/ui/icons';
+import { IconCircle, IconGripVertical2, IconPencil, IconTrash } from '@pedaki/design/ui/icons';
 import {
   Tooltip,
   TooltipContent,
@@ -16,19 +16,15 @@ import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import React from 'react';
 import classes from './entry.module.scss';
 
-// TODO: rule type
-const Entry = ({ item }: { item: { id: LevelRuleType } }) => {
-  const mappedRule = ruleMapping[item.id];
-  const [_, setRules] = useRulesParams();
+interface EntryProps {
+  item: { id: LevelRuleType };
+}
 
-  const removeRule = async () => {
-    await setRules(oldRules => {
-      if (!oldRules) {
-        return [];
-      }
-      return oldRules.filter(rule => rule.id !== item.id);
-    });
-  };
+// TODO: rule type
+const Entry = ({ item }: EntryProps) => {
+  const mappedRule = ruleMapping[item.id];
+
+  const hasAttributes = mappedRule.attributesCount !== 'none';
 
   return (
     <SortableItem id={item.id}>
@@ -52,18 +48,9 @@ const Entry = ({ item }: { item: { id: LevelRuleType } }) => {
 
           <TooltipProvider>
             <div className="flex items-center justify-end gap-1">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost-error" size="icon" className="h-6 w-6 p-0">
-                    <IconTrash className="h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipPortal>
-                  <TooltipContent>
-                    <span>Supprimer</span>
-                  </TooltipContent>
-                </TooltipPortal>
-              </Tooltip>
+              {!hasAttributes && <DeleteAction item={item} />}
+              {hasAttributes && <EditAction item={item} />}
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span>
@@ -83,6 +70,51 @@ const Entry = ({ item }: { item: { id: LevelRuleType } }) => {
         </Card>
       </div>
     </SortableItem>
+  );
+};
+
+const DeleteAction = ({ item }: EntryProps) => {
+  const [_, setRules] = useRulesParams();
+
+  const removeRule = async () => {
+    await setRules(oldRules => {
+      if (!oldRules) {
+        return [];
+      }
+      return oldRules.filter(rule => rule.id !== item.id);
+    });
+  };
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="ghost-error" size="icon" className="h-6 w-6 p-0" onClick={removeRule}>
+          <IconTrash className="h-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipPortal>
+        <TooltipContent>
+          <span>Supprimer</span>
+        </TooltipContent>
+      </TooltipPortal>
+    </Tooltip>
+  );
+};
+
+const EditAction = ({ item }: EntryProps) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="ghost-sub" size="icon" className="h-6 w-6 p-0">
+          <IconPencil className="h-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipPortal>
+        <TooltipContent>
+          <span>Editer</span>
+        </TooltipContent>
+      </TooltipPortal>
+    </Tooltip>
   );
 };
 
