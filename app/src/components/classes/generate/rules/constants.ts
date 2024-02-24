@@ -10,7 +10,7 @@ import {
   IconX,
 } from '@pedaki/design/ui/icons';
 
-type CanBeAdded = (rules: LevelRuleType[]) => readonly [string, string] | null; // error code or null
+type CanBeAdded = (rules: LevelRuleType[]) => readonly [string, LevelRuleType] | null; // error code or null
 
 type RuleMapping = {
   [key in LevelRuleType]: {
