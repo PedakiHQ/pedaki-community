@@ -1,5 +1,6 @@
 'use client';
 
+import type { RawAttribute } from '@pedaki/algorithms';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
 import {
@@ -69,13 +70,25 @@ const RulesTrigger = () => {
 const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
   const activeCreateRule = useClassesGenerateStore(state => state.activeCreateRule);
   const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
+  const [_, setRules] = useRulesParams();
 
   if (activeCreateRule) {
+    const onSubmitted = async (data: RawAttribute[]) => {
+      await setRules(oldRules => {
+        const value = { rule: activeCreateRule, attributes: data };
+        if (!oldRules) {
+          return [value];
+        }
+        return oldRules.concat(value);
+      });
+      setActiveCreateRule(null);
+    };
+
     return (
       <GenericRuleInput
         ruleMapping={ruleMapping[activeCreateRule]}
         onCanceled={() => setActiveCreateRule(null)}
-        onSaved={() => setActiveCreateRule(null)}
+        onSaved={onSubmitted}
       />
     );
   }
@@ -104,16 +117,16 @@ const RuleCard = ({
   const [rules, setRules] = useRulesParams();
   const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
 
-  const canBeAddedResult = rule.canBeAdded(rules.map(r => r.key));
+  const canBeAddedResult = rule.canBeAdded(rules.map(r => r.rule));
   const canBeAdded = canBeAddedResult === null;
 
   const addRule = async () => {
     setOpen(false);
     await setRules(oldRules => {
       if (!oldRules) {
-        return [{ key: rule.key }];
+        return [{ rule: rule.key }];
       }
-      return oldRules.concat({ key: rule.key });
+      return oldRules.concat({ rule: rule.key });
     });
   };
 

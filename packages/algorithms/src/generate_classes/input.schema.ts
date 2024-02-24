@@ -50,11 +50,16 @@ const RawAttributeOptionSchema = z.object({
   levels: z.number().array().readonly().optional(),
 });
 
-export const RawAttributeSchema = z.object({
-  options: RawAttributeOptionSchema.array().readonly().optional(),
-  genders: z.string().array().readonly().optional(),
-  extras: z.string().array().readonly().optional(),
-});
+export const RawAttributeSchema = z
+  .object({
+    options: RawAttributeOptionSchema.array().min(1).readonly().optional(),
+    genders: z.string().array().min(1).readonly().optional(),
+    extras: z.string().array().min(1).readonly().optional(),
+  })
+  .refine(value => {
+    // at least one of the properties must be defined
+    return value.options !== undefined || value.genders !== undefined || value.extras !== undefined;
+  });
 
 export const RawRuleSchema = z.object({
   rule: z.enum(algorithmRules),

@@ -1,6 +1,8 @@
-import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
+import type { RawRule } from '@pedaki/algorithms/generate_classes/input.schema';
+import { RawRuleSchema } from '@pedaki/algorithms/generate_classes/input.schema';
 import { createParser, parseAsArrayOf, useQueryState } from 'nuqs';
 import { useMemo } from 'react';
+import { z } from 'zod';
 
 const configParam = createParser({
   parse: (value: string) => {
@@ -28,13 +30,17 @@ export const useConfigurationParams = () => {
 const ruleParam = createParser({
   parse: (value: string) => {
     // TODO: rule type and check if it's valid
-    return { key: value as LevelRuleType };
+    return RawRuleSchema.merge(z.object({ description: z.string().max(24).optional() })).parse(
+      JSON.parse(value),
+    );
   },
-  serialize: (value: { key: LevelRuleType }) => {
+  serialize: (value: Omit<RawRule, 'priority'>) => {
     // TODO: rule type
-    return value.key;
+    return JSON.stringify(value);
   },
 });
+
+export const ruleId = (rule: RawRule, index: number) => `${rule.rule}-${index}`;
 
 export const useRulesParams = () => {
   const [rules, setRules] = useQueryState(
@@ -49,7 +55,7 @@ export const useRulesParams = () => {
     () =>
       rules?.map((rule, index) => ({
         ...rule,
-        id: rule.key + index,
+        id: ruleId(rule, index),
       })),
     [rules],
   );

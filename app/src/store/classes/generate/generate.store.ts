@@ -1,4 +1,4 @@
-import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
+import type { RuleType } from '@pedaki/algorithms';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
@@ -6,8 +6,8 @@ export interface ClassesGenerateStore {
   studentsCount: number | null;
   setStudentsCount: (count: number) => void;
 
-  activeCreateRule: LevelRuleType | null;
-  setActiveCreateRule: (rule: LevelRuleType | null) => void;
+  activeCreateRule: RuleType | null;
+  setActiveCreateRule: (rule: RuleType | null) => void;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;

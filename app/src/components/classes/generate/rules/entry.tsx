@@ -1,8 +1,9 @@
-import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
+import type { RuleType } from '@pedaki/algorithms';
 import { Badge } from '@pedaki/design/ui/badge';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
 import { IconCircle, IconGripVertical2, IconPencil, IconTrash } from '@pedaki/design/ui/icons';
+import { Input } from '@pedaki/design/ui/input';
 import {
   Tooltip,
   TooltipContent,
@@ -10,20 +11,54 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
-import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
+import { ruleId, useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import React from 'react';
 import classes from './entry.module.scss';
 
 interface EntryProps {
-  item: { id: string; key: LevelRuleType };
+  item: { id: string; rule: RuleType; description: string };
   index: number | null;
 }
 
+const Description = ({ item }: EntryProps) => {
+  const [description, _setDescription] = React.useState(item.description);
+  const [_, setRules] = useRulesParams();
+
+  const setDescription = (value: string) => {
+    if (value.length > 24) return;
+    _setDescription(value);
+    void setRules(oldRules => {
+      if (!oldRules) {
+        return [];
+      }
+      return oldRules.map((oldRule, i) => {
+        if (ruleId(oldRule, i) === item.id) {
+          oldRule.description = value;
+        }
+        return oldRule;
+      });
+    });
+  };
+
+  {
+    /*TODO trads*/
+  }
+  return (
+    <Input
+      className="h-4 max-w-[24ch] overflow-hidden text-ellipsis rounded-sm border-transparent pl-0 text-label-sm text-sub"
+      value={description}
+      placeholder="Ajouter une description"
+      maxLength={24}
+      onChange={e => setDescription(e.target.value)}
+    />
+  );
+};
+
 // TODO: rule type
 const Entry = ({ item, index }: EntryProps) => {
-  const mappedRule = ruleMapping[item.key];
+  const mappedRule = ruleMapping[item.rule];
 
   const hasAttributes = mappedRule.attributesCount !== 'none';
 
@@ -37,15 +72,14 @@ const Entry = ({ item, index }: EntryProps) => {
         <Card className="ml-2 flex flex-1 flex-row justify-between">
           <div className="flex flex-col gap-2">
             <Badge
-              className="-ml-1 text-sub-2xs uppercase"
+              className="-ml-1 w-max text-sub-2xs uppercase"
               style={{
                 backgroundColor: mappedRule.color,
               }}
             >
-              {item.key}
+              {item.rule}
             </Badge>
-            {/*TODO: trads*/}
-            <p className="text-label-sm text-sub">description</p>
+            <Description item={item} index={index} />
           </div>
 
           <TooltipProvider>

@@ -37,9 +37,9 @@ type Rule = {
   defaultValues?: RawAttribute[];
   onCanceled?: () => void;
   onDeleted?: () => void;
-  onSaved?: (rule: RuleMappingValue) => void;
+  onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-  | { onCanceled: () => void; onSaved: (rule: RuleMappingValue) => void }
+  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
   | { onDeleted: () => void }
 );
 
@@ -67,33 +67,42 @@ const GenericRuleInputForm = (props: Rule) => {
     },
   });
 
+  const { isValid } = form.formState;
+
+  const onSubmit = async (data: FormValues) => {
+    if (onSaved) {
+      await onSaved(data.attributes);
+    }
+  };
+
   return (
     <div className="flex h-full flex-col">
       <Form {...form}>
-        <GenericRuleInput form={form} ruleMapping={ruleMapping} />
-        <pre>{JSON.stringify(form.watch(), null, 2)}</pre>
-      </Form>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex h-full flex-col">
+          <GenericRuleInput form={form} ruleMapping={ruleMapping} />
 
-      <DialogFooter>
-        {onCanceled && (
-          <Button variant="stroke-primary-main" onClick={onCanceled} type="button">
-            {/*TODO: trads*/}
-            Retour
-          </Button>
-        )}
-        {onDeleted && (
-          <Button variant="stroke-danger-main" onClick={onDeleted} type="button">
-            {/*TODO: trads*/}
-            Supprimer
-          </Button>
-        )}
-        {onSaved && (
-          <Button variant="filled-primary" onClick={() => onSaved(ruleMapping)}>
-            {/*TODO: trads*/}
-            Enregistrer
-          </Button>
-        )}
-      </DialogFooter>
+          <DialogFooter>
+            {onCanceled && (
+              <Button variant="stroke-primary-main" onClick={onCanceled} type="button">
+                {/*TODO: trads*/}
+                Retour
+              </Button>
+            )}
+            {onDeleted && (
+              <Button variant="stroke-danger-main" onClick={onDeleted} type="button">
+                {/*TODO: trads*/}
+                Supprimer
+              </Button>
+            )}
+            {onSaved && (
+              <Button variant="filled-primary" type="submit" disabled={!isValid}>
+                {/*TODO: trads*/}
+                Enregistrer
+              </Button>
+            )}
+          </DialogFooter>
+        </form>
+      </Form>
     </div>
   );
 };
@@ -111,10 +120,6 @@ const GenericRuleInput = ({
 
   const attributesCount = fields.length;
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
-
   const canAddMoreAttributes = ruleMapping.attributesCount === 'two_or_more';
   const canRemoveAttributes = ruleMapping.attributesCount === 'two_or_more' && attributesCount > 2;
 
@@ -130,19 +135,21 @@ const GenericRuleInput = ({
           </span>
           <span>entre toutes les classes</span>
         </h3>
-        {canAddMoreAttributes && (
-          <Button
-            variant="stroke-primary-main"
-            size="xs"
-            onClick={() => append({})}
-            disabled={attributesCount >= MAX_ATTRIBUTES}
-          >
-            <IconPlus className="h-4 w-4" />
-            <span>Ajouter un attribut</span>
-          </Button>
-        )}
+        <div>
+          {canAddMoreAttributes && (
+            <Button
+              variant="stroke-primary-main"
+              size="xs"
+              onClick={() => append({})}
+              disabled={attributesCount >= MAX_ATTRIBUTES}
+            >
+              <IconPlus className="h-4 w-4" />
+              <span>Ajouter un attribut</span>
+            </Button>
+          )}
+        </div>
       </div>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-4">
+      <div className="flex flex-1 flex-col gap-4">
         <TooltipProvider>
           {fields.map(({ id }, index) => (
             <div key={id} className="flex flex-row items-start gap-4">
@@ -160,7 +167,7 @@ const GenericRuleInput = ({
             </div>
           ))}
         </TooltipProvider>
-      </form>
+      </div>
     </div>
   );
 };
