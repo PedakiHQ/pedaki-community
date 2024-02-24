@@ -97,7 +97,6 @@ const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
     <TooltipProvider>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {Object.values(ruleMapping)
-          .toSorted()
           .map(rule => (
             <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
           ))}
