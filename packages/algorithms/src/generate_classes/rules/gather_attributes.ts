@@ -1,12 +1,15 @@
-import type { Attribute } from '../attribute.ts';
-import type { StudentWithClass } from '../entry.ts';
-import type Entry from '../entry.ts';
-import type { Input, RawRule } from '../input.ts';
-import { Rule, RuleType } from './rule.ts';
-import type { StudentValue } from './rule.ts';
+import type { Attribute } from '../attribute';
+import type { StudentWithClass } from '../entry';
+import type Entry from '../entry';
+import type { Input } from '../input';
+import type { RawRule } from '../input.schema';
+import { Rule, RuleType } from './rule';
+import type { StudentValue } from './rule';
 
 /**
  * Regrouper un ou plusieurs attributs dans un minimum de classes.
+ * S'il y a plusieurs attributs, ils sont regroupés ensemble.
+ * S'il y a plusieurs règles, les attributs ne sont pas forcément regroupés.
  */
 export class GatherAttributesRule extends Rule {
   protected _ruleType = RuleType.ATTRIBUTES;

@@ -1,8 +1,9 @@
-import type { StudentWithClass } from '../entry.ts';
-import type Entry from '../entry.ts';
-import type { Input, RawRule } from '../input.ts';
-import { Rule, RuleType } from './rule.ts';
-import type { StudentValue } from './rule.ts';
+import type { RawRule } from '~/generate_classes/input.schema.ts';
+import type { StudentWithClass } from '../entry';
+import type Entry from '../entry';
+import type { Input } from '../input';
+import { Rule, RuleType } from './rule';
+import type { StudentValue } from './rule';
 
 /**
  * Respecter les relations positives entre élèves qui veulent être dans la même classe.

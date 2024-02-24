@@ -1,8 +1,9 @@
-import type { StudentWithClass } from '../entry.ts';
-import type Entry from '../entry.ts';
-import type { Input, RawRule } from '../input.ts';
-import { Rule, RuleType } from './rule.ts';
-import type { StudentValue } from './rule.ts';
+import type { RawRule } from '~/generate_classes/input.schema.ts';
+import type Entry from '../entry';
+import type { StudentWithClass } from '../entry';
+import type { Input } from '../input';
+import type { StudentValue } from './rule';
+import { Rule, RuleType } from './rule';
 
 /**
  * Maximiser le nombre d'élèves dans chaque classe, en respectant les contraintes.
@@ -38,5 +39,17 @@ export class MaximizeClassSizeRule extends Rule {
         .classes()
         .filter(c => c.students().size < student.studentClass.class.students().size),
     };
+  }
+
+  /**
+   * Le pourcentage de respect correspond ici au nombre minimum de classes par rapport au nombre actuel.
+   * @param entry
+   */
+  override getRespectPercent(entry: Entry): number {
+    // Obtention du nombre minimum de classes, par rapport au nombre d'élèves et à la taille maximale des classes.
+    const minClassAmount =
+      entry.algo().input().students().length / entry.algo().input().classSize();
+
+    return minClassAmount / entry.classes().length;
   }
 }

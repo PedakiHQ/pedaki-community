@@ -1,17 +1,6 @@
-import type { Attribute } from './attribute.ts';
-import type { Input } from './input.ts';
-
-export interface RawStudent {
-  id: string;
-  birthdate: Date;
-  gender: Gender | Gender[];
-  relationships?: Record<string, number>;
-  // Je pars du principe que les niveaux présents indiquent les options choisies
-  levels: Record<string, number>;
-  extra?: Record<string, boolean>;
-}
-
-export type Gender = 'F' | 'M';
+import type { RawStudent } from '~/generate_classes/input.schema.ts';
+import type { Attribute } from './attribute';
+import type { Input } from './input';
 
 /**
  * Chaque instance d'élève est unique et commune à toutes les configurations.
@@ -36,7 +25,7 @@ export class Student {
 
     this._levels = this.student.levels;
     for (const gender of this.genders()) {
-      this._levels = { ...this._levels, [gender as string]: input.maxLevel() };
+      this._levels = { ...this._levels, [gender]: input.maxLevel() };
     }
     for (const extra of this.extras()) {
       this._levels = { ...this._levels, [extra]: input.maxLevel() };
@@ -51,7 +40,7 @@ export class Student {
     return this._levels;
   }
 
-  public genders(): Gender[] {
+  public genders(): string[] {
     if (Array.isArray(this.student.gender)) return this.student.gender;
     return [this.student.gender];
   }
