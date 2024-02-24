@@ -46,6 +46,7 @@ const RulesTrigger = () => {
       <DialogTrigger asChild>
         <Button variant="stroke-primary-main" size="xs" className="flex items-center">
           <IconPlus className="h-4 text-soft" />
+          {/*TODO: trads*/}
           <span className="pr-1 text-label-sm text-sub">Ajouter</span>
         </Button>
       </DialogTrigger>
@@ -67,6 +68,7 @@ const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
     return (
       <>
         <DialogHeader>
+          {/*TODO: trads*/}
           <DialogTitle>Choisir une règle - {activeCreateRule}</DialogTitle>
         </DialogHeader>
         <div className={BODY_CLASS}>
@@ -83,6 +85,7 @@ const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
   return (
     <>
       <DialogHeader>
+        {/*TODO: trads*/}
         <DialogTitle>Choisir une règle</DialogTitle>
       </DialogHeader>
       <div className={BODY_CLASS}>
@@ -154,11 +157,13 @@ const RuleCard = ({
             </div>
             <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24">
               <span className="text-p-md">{rule.key}</span>
+              {/*TODO: trads*/}
               <p className="text-p-sm text-soft">description</p>
             </div>
           </Card>
         </button>
       </TooltipTrigger>
+      {/*TODO: trads*/}
       <TooltipContent>Ne peut être ajouté qu'une seule fois</TooltipContent>
     </Tooltip>
   );

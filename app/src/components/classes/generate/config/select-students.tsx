@@ -21,6 +21,7 @@ const SelectStudents = () => {
         <DialogTrigger asChild>
           <Button variant="stroke-primary-main" size="xs" className="flex items-center space-x-0.5">
             <IconSearch className="h-4 pl-1 text-soft" />
+            {/*TODO: trads*/}
             <span className="px-1 text-label-sm text-sub">Filtrer</span>
           </Button>
         </DialogTrigger>
@@ -60,6 +61,7 @@ const StudentCount = () => {
 
   const value = studentsCount ?? (data?.meta.totalCount && lock.current ? data.meta.totalCount : 0);
 
+  {/*TODO: trads*/}
   return <span>{value > 0 ? `${value} élèves sélectionnés` : 'Aucun élève sélectionné'}</span>;
 };
 

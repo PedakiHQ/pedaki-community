@@ -21,6 +21,7 @@ const RulesCard = () => {
           <div className="flex items-center space-x-2">
             <IconListOrdered className="h-6 text-sub" />
             <div>
+                {/*TODO: trads*/}
               <CardTitle>Regles</CardTitle>
               <CardDescription>Les règles s&apos;éxecutent de haut en bas</CardDescription>
             </div>

@@ -46,16 +46,19 @@ const GenericRuleInput = ({ ruleMapping, defaultValues, onCanceled, onDeleted, o
       <DialogFooter>
         {onCanceled && (
           <Button variant="stroke-primary-main" onClick={onCanceled} type="button">
+            {/*TODO: trads*/}
             Retour
           </Button>
         )}
         {onDeleted && (
           <Button variant="stroke-danger-main" onClick={onDeleted} type="button">
+            {/*TODO: trads*/}
             Supprimer
           </Button>
         )}
         {onSaved && (
           <Button variant="filled-primary" onClick={() => onSaved(ruleMapping)}>
+            {/*TODO: trads*/}
             Enregistrer
           </Button>
         )}

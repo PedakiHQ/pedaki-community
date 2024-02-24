@@ -44,6 +44,7 @@ const Entry = ({ item, index }: EntryProps) => {
             >
               {item.key}
             </Badge>
+            {/*TODO: trads*/}
             <p className="text-label-sm text-sub">description</p>
           </div>
 
@@ -62,6 +63,7 @@ const Entry = ({ item, index }: EntryProps) => {
                 </TooltipTrigger>
                 <TooltipPortal>
                   <TooltipContent className={classes.tooltip}>
+                    {/*TODO: trads*/}
                     <span>Déplacer</span>
                   </TooltipContent>
                 </TooltipPortal>
@@ -95,6 +97,7 @@ const DeleteAction = ({ index }: EntryProps) => {
       </TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>
+          {/*TODO: trads*/}
           <span>Supprimer</span>
         </TooltipContent>
       </TooltipPortal>
@@ -112,6 +115,7 @@ const EditAction = ({ item }: EntryProps) => {
       </TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>
+          {/*TODO: trads*/}
           <span>Editer</span>
         </TooltipContent>
       </TooltipPortal>

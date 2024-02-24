@@ -13,6 +13,7 @@ const ConfigurationCard = () => {
       <CardHeader>
         <div className="flex items-center space-x-2">
           <IconSettings className="h-6 text-sub" />
+            {/*TODO: trads*/}
           <CardTitle>Configuration</CardTitle>
         </div>
       </CardHeader>
