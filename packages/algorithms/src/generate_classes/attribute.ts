@@ -20,16 +20,16 @@ export class Attribute {
   // Indice de l'attribut.
   private _key: number | null = null;
   // Liste des noms d'options.
-  private _options: string[] | null = null;
+  private readonly _options: string[];
 
   constructor(attribute: RawAttribute, input: Input) {
     this.attribute = attribute;
     this.input = input;
+    this._options = this.attribute.options?.map(option => option.option) ?? []
     this._students = new Set(this.correspondingStudents(input.students()));
   }
 
   public options(): readonly string[] {
-    if (this._options === null) this._options = this.attribute.options?.map(option => option.option) ?? []
     return this._options
   }
 
