@@ -10,6 +10,13 @@ import {
   DialogTrigger,
 } from '@pedaki/design/ui/dialog';
 import { IconPlus } from '@pedaki/design/ui/icons';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@pedaki/design/ui/tooltip';
+import { cn } from '@pedaki/design/utils';
 import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import type { RuleMappingValue } from '~/components/classes/generate/rules/constants.ts';
@@ -17,7 +24,7 @@ import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-i
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
 
-const BODY_CLASS = 'h-full overflow-y-auto py-8 px-4';
+const BODY_CLASS = 'h-full overflow-y-auto py-8 px-4 relative block';
 
 const RulesTrigger = () => {
   const [open, _setOpen] = React.useState(false);
@@ -79,13 +86,15 @@ const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
         <DialogTitle>Choisir une règle</DialogTitle>
       </DialogHeader>
       <div className={BODY_CLASS}>
-        <div className="grid grid-cols-3 gap-4">
-          {Object.values(ruleMapping)
-            .toSorted()
-            .map(rule => (
-              <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
-            ))}
-        </div>
+        <TooltipProvider>
+          <div className="grid grid-cols-3 gap-4">
+            {Object.values(ruleMapping)
+              .toSorted()
+              .map(rule => (
+                <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
+              ))}
+          </div>
+        </TooltipProvider>
       </div>
     </>
   );
@@ -99,8 +108,12 @@ const RuleCard = ({
   setOpen: (open: boolean) => void;
 }) => {
   const Icon = rule.icon;
-  const [_, setRules] = useRulesParams();
+  const [rules, setRules] = useRulesParams();
   const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
+
+  const canBeAdded =
+    rule.maxOccurrences === 'many' ||
+    (rule.maxOccurrences === 'one' && !rules?.find(r => r.key === rule.key));
 
   const addRule = async () => {
     setOpen(false);
@@ -113,6 +126,7 @@ const RuleCard = ({
   };
 
   const handleCreateRule = async () => {
+    if (!canBeAdded) return;
     if (rule.attributesCount === 'none') {
       await addRule();
       return;
@@ -121,23 +135,32 @@ const RuleCard = ({
   };
 
   return (
-    <button key={rule.key} className="focus-ring group rounded-lg p-0">
-      <Card
-        className="h-full p-0 transition-all duration-200"
-        style={{
-          backgroundColor: rule.color,
-        }}
-        onClick={handleCreateRule}
-      >
-        <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
-          <Icon className="m-auto h-12 w-12 text-main" />
-        </div>
-        <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24">
-          <span className="text-p-md">{rule.key}</span>
-          <p className="text-p-sm text-soft">description</p>
-        </div>
-      </Card>
-    </button>
+    <Tooltip open={canBeAdded ? false : undefined}>
+      <TooltipTrigger asChild>
+        <button key={rule.key} className="focus-ring group rounded-lg p-0">
+          <Card
+            className={cn(
+              'h-full p-0 transition-all duration-200',
+              !canBeAdded && 'cursor-not-allowed opacity-50',
+            )}
+            style={{
+              backgroundColor: rule.color,
+            }}
+            onClick={handleCreateRule}
+            aria-disabled={!canBeAdded}
+          >
+            <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
+              <Icon className="m-auto h-12 w-12 text-main" />
+            </div>
+            <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24">
+              <span className="text-p-md">{rule.key}</span>
+              <p className="text-p-sm text-soft">description</p>
+            </div>
+          </Card>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>Ne peut être ajouté qu'une seule fois</TooltipContent>
+    </Tooltip>
   );
 };
 
