@@ -1,6 +1,6 @@
+import type { RawStudent } from '~/generate_classes/input.schema.ts';
 import type { Attribute } from './attribute';
 import type { Input } from './input';
-import type {RawStudent} from "~/generate_classes/input.schema.ts";
 
 /**
  * Chaque instance d'élève est unique et commune à toutes les configurations.

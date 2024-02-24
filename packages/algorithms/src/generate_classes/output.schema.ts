@@ -1,18 +1,17 @@
-import {z} from "zod"
+import { z } from 'zod';
 
 export const ClassSchema = z.object({
-	students: z.string().array()
-})
+  students: z.string().array(),
+});
 
 export const RuleOutputSchema = z.object({
-	respect_percent: z.number()
-})
+  respect_percent: z.number(),
+});
 
 export const OutputSchema = z.object({
-	classes: ClassSchema.array(),
-	duration: z.number(),
-	rules: RuleOutputSchema.array()
-})
-
+  classes: ClassSchema.array(),
+  duration: z.number(),
+  rules: RuleOutputSchema.array(),
+});
 
 export type Output = z.infer<typeof OutputSchema>;

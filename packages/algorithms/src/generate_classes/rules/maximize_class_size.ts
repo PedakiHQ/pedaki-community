@@ -5,7 +5,6 @@ import type { Input } from '../input';
 import type { StudentValue } from './rule';
 import { Rule, RuleType } from './rule';
 
-
 /**
  * Maximiser le nombre d'élèves dans chaque classe, en respectant les contraintes.
  * Règle inverse de "maximize_classes", ne peut pas être utilisé en même temps.
@@ -48,8 +47,9 @@ export class MaximizeClassSizeRule extends Rule {
    */
   override getRespectPercent(entry: Entry): number {
     // Obtention du nombre minimum de classes, par rapport au nombre d'élèves et à la taille maximale des classes.
-    const minClassAmount = entry.algo().input().students().length / entry.algo().input().classSize()
+    const minClassAmount =
+      entry.algo().input().students().length / entry.algo().input().classSize();
 
-    return minClassAmount / entry.classes().length
+    return minClassAmount / entry.classes().length;
   }
 }

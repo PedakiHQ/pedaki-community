@@ -1,7 +1,7 @@
+import type { Output } from '~/generate_classes/output.schema.ts';
 import Entry from './entry';
 import { Input } from './input';
-import type {RawInput, RawStudent} from './input.schema';
-import type {Output} from "~/generate_classes/output.schema.ts";
+import type { RawInput, RawStudent } from './input.schema';
 
 export const DEFAULT_PRIORITY = 1;
 
@@ -14,7 +14,7 @@ export const DEFAULT_PRIORITY = 1;
  */
 export class GenerateClassesAlgorithm {
   private readonly _input: Input;
-  private _entry?: Entry
+  private _entry?: Entry;
 
   constructor(students: RawStudent[], rawInput: RawInput) {
     this._input = new Input(rawInput, students);
@@ -49,7 +49,9 @@ export class GenerateClassesAlgorithm {
       output.rules[rule.initialIndex()] = { respect_percent: rule.getRespectPercent(this._entry) };
     }
 
-    output.classes = this._entry.classes().map(c => ({students: [...c.students()].map(s => s.id())}));
+    output.classes = this._entry
+      .classes()
+      .map(c => ({ students: [...c.students()].map(s => s.id()) }));
     output.duration = (Date.now() - startTime) / 1000;
     return output as Output;
   }
