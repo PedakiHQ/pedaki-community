@@ -24,6 +24,7 @@
     "@pedaki/auth": "workspace:*",
     "@pedaki/common": "0.5.2-beta.8",
     "@pedaki/db": "workspace:*",
+    "@pedaki/algorithms": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.9.2",
     "csv": "^6.3.6",

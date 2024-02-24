@@ -54,7 +54,15 @@ const RulesTrigger = () => {
         className="block h-[80%] overflow-y-hidden md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
         onOpenAutoFocus={e => e.preventDefault()}
       >
-        <DialogBody setOpen={setOpen} />
+        <DialogHeader>
+          {/*TODO: trads*/}
+          <DialogTitle>
+            Choisir une règle
+          </DialogTitle>
+        </DialogHeader>
+        <div className={BODY_CLASS}>
+          <DialogBody setOpen={setOpen} />
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -66,40 +74,24 @@ const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 
   if (activeCreateRule) {
     return (
-      <>
-        <DialogHeader>
-          {/*TODO: trads*/}
-          <DialogTitle>Choisir une règle - {activeCreateRule}</DialogTitle>
-        </DialogHeader>
-        <div className={BODY_CLASS}>
-          <GenericRuleInput
-            ruleMapping={ruleMapping[activeCreateRule]}
-            onCanceled={() => setActiveCreateRule(null)}
-            onSaved={() => setActiveCreateRule(null)}
-          />
-        </div>
-      </>
+      <GenericRuleInput
+        ruleMapping={ruleMapping[activeCreateRule]}
+        onCanceled={() => setActiveCreateRule(null)}
+        onSaved={() => setActiveCreateRule(null)}
+      />
     );
   }
 
   return (
-    <>
-      <DialogHeader>
-        {/*TODO: trads*/}
-        <DialogTitle>Choisir une règle</DialogTitle>
-      </DialogHeader>
-      <div className={BODY_CLASS}>
-        <TooltipProvider>
-          <div className="grid grid-cols-3 gap-4">
-            {Object.values(ruleMapping)
-              .toSorted()
-              .map(rule => (
-                <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
-              ))}
-          </div>
-        </TooltipProvider>
+    <TooltipProvider>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {Object.values(ruleMapping)
+          .toSorted()
+          .map(rule => (
+            <RuleCard rule={rule} key={rule.key} setOpen={setOpen} />
+          ))}
       </div>
-    </>
+    </TooltipProvider>
   );
 };
 
@@ -139,17 +131,18 @@ const RuleCard = ({
   return (
     <Tooltip open={canBeAdded ? false : undefined}>
       <TooltipTrigger asChild>
-        <button key={rule.key} className="focus-ring group rounded-lg p-0">
-          <Card
-            className={cn(
-              'h-full p-0 transition-all duration-200',
-              !canBeAdded && 'cursor-not-allowed opacity-50',
+        <span className="w-full">
+        <button key={rule.key} className={cn("focus-ring group rounded-lg p-0 w-full",
+            !canBeAdded && 'cursor-not-allowed opacity-50',
             )}
+        disabled={!canBeAdded}
+                onClick={handleCreateRule}
+        >
+          <Card
+            className='h-full p-0 transition-all duration-200'
             style={{
               backgroundColor: rule.color,
             }}
-            onClick={handleCreateRule}
-            aria-disabled={!canBeAdded}
           >
             <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
               <Icon className="m-auto h-12 w-12 text-main" />
@@ -161,6 +154,7 @@ const RuleCard = ({
             </div>
           </Card>
         </button>
+          </span>
       </TooltipTrigger>
       {/*TODO: trads*/}
       <TooltipContent>{!canBeAddedResult ? '-' : canBeAddedResult.join(',')}</TooltipContent>

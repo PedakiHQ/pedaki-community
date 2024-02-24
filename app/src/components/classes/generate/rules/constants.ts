@@ -1,4 +1,4 @@
-import type { LevelRuleType } from '@pedaki/algorithms/generate_classes/input';
+import type { RuleType } from '@pedaki/algorithms';
 import type { IconType } from '@pedaki/design/ui/icons';
 import {
   IconBookUser,
@@ -10,10 +10,10 @@ import {
   IconX,
 } from '@pedaki/design/ui/icons';
 
-type CanBeAdded = (rules: LevelRuleType[]) => readonly [string, LevelRuleType] | null; // error code or null
+type CanBeAdded = (rules: RuleType[]) => readonly [string, RuleType] | null; // error code or null
 
 type RuleMapping = {
-  [key in LevelRuleType]: {
+  [key in RuleType]: {
     key: key;
     icon: IconType;
     color: `#${string}`;
@@ -23,8 +23,8 @@ type RuleMapping = {
 };
 export type RuleMappingValue = RuleMapping[keyof RuleMapping];
 
-const onlyOneOfType = (type: LevelRuleType) => {
-  return (rules: LevelRuleType[]) => {
+const onlyOneOfType = (type: RuleType) => {
+  return (rules: RuleType[]) => {
     if (rules.includes(type)) {
       return ['only_one_of_type', type] as const;
     }
@@ -32,8 +32,8 @@ const onlyOneOfType = (type: LevelRuleType) => {
   };
 };
 
-const incompatibleWith = (type: LevelRuleType) => {
-  return (rules: LevelRuleType[]) => {
+const incompatibleWith = (type: RuleType) => {
+  return (rules: RuleType[]) => {
     if (rules.includes(type)) {
       return ['incompatible_with', type] as const;
     }
@@ -41,7 +41,7 @@ const incompatibleWith = (type: LevelRuleType) => {
   };
 };
 
-const noCondition = (_: LevelRuleType[]) => {
+const noCondition = (_: RuleType[]) => {
   return null;
 };
 
@@ -56,6 +56,16 @@ const chain = (...conditions: CanBeAdded[]): CanBeAdded => {
     return null;
   };
 };
+
+export const MAX_ATTRIBUTES = 5;
+
+export const ATTRIBUTES_COLORS = [
+  '#D6E6FF',
+  '#D7F9F8',
+  '#FFFFEA',
+  '#E5D4EF',
+  '#FBE0E0',
+] as const;
 
 export const ruleMapping = {
   balance_class_count: {
