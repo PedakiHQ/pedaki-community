@@ -1,7 +1,7 @@
-import type { Attribute } from './attribute.ts';
-import type Entry from './entry.ts';
-import type { Rule } from './rules/rule.ts';
-import type { Student } from './student.ts';
+import type { Attribute } from './attribute';
+import type Entry from './entry';
+import type { Rule } from './rules/rule';
+import type { Student } from './student';
 
 export interface ClassWithIndex {
   class: Class;
@@ -80,8 +80,8 @@ export default class Class {
   ): Student {
     // On récupère une liste réduite d'élèves, mais qui contient quand même l'ensemble des cas.
     const sample = entry.getStudentSample(students, toRule, false, ...ignoreStudents);
-    let bestValues: number[] | undefined = undefined;
-    let bestStudent: Student | undefined = undefined;
+    let bestValues: Map<number, number> | undefined;
+    let bestStudent: Student | undefined;
 
     // On teste le nombre de règles respectées pour chaque élève, s'il est déplacé dans la classe.
     const classIndex = entry.classes().indexOf(this);
@@ -94,24 +94,24 @@ export default class Class {
         index: classIndex,
       });
 
-      const values: number[] = [];
+      const values = new Map<number, number>();
+      let index = 0;
       for (const rule of entry.algo().input().rules().keys()) {
-        const index = entry.algo().input().ruleKey(rule)!;
-
         // On récupère la valeur de la configuration pour cette règle.
         const value = entry.value(rule);
 
         // Si la valeur est déjà supérieure à la meilleure, on abandonne cette configuration.
-        if (bestValues && value > bestValues[index]!) break;
+        if (bestValues && value > bestValues.get(index)!) break;
 
         // On définit la valeur de cette règle avec cette configuration.
-        values[index] = value;
+        values.set(index, value);
 
         // Si on a atteint la règle limite, on ne va pas plus loin pour cette configuration.
         if (rule === toRule) break;
+        index++;
       }
 
-      if (!bestValues || values.length === bestValues.length) {
+      if (!bestValues || values.size === bestValues.size) {
         bestValues = values;
         bestStudent = student;
       }
@@ -145,14 +145,15 @@ export default class Class {
 
     for (const student of this._students) {
       for (const [attribute, level] of Object.entries(student.levels())) {
-        attributeCount[attribute] = (attributeCount[attribute] ?? 1) + 1;
+        attributeCount[attribute] = (attributeCount[attribute] ?? 0) + 1;
 
         if (!levelCount[attribute]) {
           levelCount[attribute] = {
             [level]: 1,
           };
         } else {
-          levelCount[attribute]![level] += 1;
+          if (!levelCount[attribute]![level]) levelCount[attribute]![level] = 1;
+          else levelCount[attribute]![level] += 1;
         }
       }
     }

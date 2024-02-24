@@ -5,8 +5,11 @@
  * - Un ou plusieurs extras (booléens)
  * - Un ou plusieurs niveaux d'option
  */
-import type { Input, RawAttribute } from './input.ts';
-import type { Gender, Student } from './student.ts';
+import type { Input } from './input';
+import type {RawAttribute, RawAttributeOption} from './input.schema';
+import type { Student } from './student';
+
+const EMPTY_ARRAY = [] as const;
 
 export class Attribute {
   private readonly attribute: RawAttribute;
@@ -16,6 +19,8 @@ export class Attribute {
   private readonly _students = new Set<Student>();
   // Indice de l'attribut.
   private _key: number | null = null;
+  // Liste des noms d'options.
+  private _options: string[] | null = null;
 
   constructor(attribute: RawAttribute, input: Input) {
     this.attribute = attribute;
@@ -23,33 +28,21 @@ export class Attribute {
     this._students = new Set(this.correspondingStudents(input.students()));
   }
 
-  public options(): string[] {
-    if (Array.isArray(this.attribute.options)) return this.attribute.options;
-    if (!this.attribute.options) return [];
-    return [this.attribute.options];
+  public options(): readonly string[] {
+    if (this._options === null) this._options = this.attribute.options?.map(option => option.option) ?? []
+    return this._options
   }
 
-  public option(): string {
-    if (Array.isArray(this.attribute.options)) return this.attribute.options[0]!;
-    return this.attribute.options!;
+  public optionsWithLevels(): readonly RawAttributeOption[] {
+    return this.attribute.options ?? EMPTY_ARRAY;
   }
 
-  public levels(): number[] {
-    if (Array.isArray(this.attribute.levels)) return this.attribute.levels;
-    if (this.attribute.levels === undefined) return [];
-    return [this.attribute.levels];
+  public genders(): readonly string[] {
+    return this.attribute.genders ?? EMPTY_ARRAY;
   }
 
-  public genders(): Gender[] {
-    if (Array.isArray(this.attribute.genders)) return this.attribute.genders;
-    if (!this.attribute.genders) return [];
-    return [this.attribute.genders];
-  }
-
-  public extras(): string[] {
-    if (Array.isArray(this.attribute.extras)) return this.attribute.extras;
-    if (!this.attribute.extras) return [];
-    return [this.attribute.extras];
+  public extras(): readonly string[] {
+    return this.attribute.extras ?? EMPTY_ARRAY;
   }
 
   /**
@@ -73,12 +66,13 @@ export class Attribute {
     // S'il n'a pas toutes les options de la liste, il n'est pas concerné.
     if (this.options().some(o => !(o in student.levels()))) return false;
 
-    // S'il n'a pas l'un des niveaux de la liste pour chaque option, il n'est pas concerné non plus.
-    if (
-      this.levels().length &&
-      this.options().some(o => !this.levels().some(l => student.levels()[o] === l))
-    )
-      return false;
+    // Pour chacune des options, s'il n'a pas l'un des niveaux associés, il n'est pas concerné non plus.
+    for (const option of this.optionsWithLevels()) {
+      // Si aucun niveau n'est renseigné, on ignore l'option, puisque cela ne correspond à personne.
+      if (!option.levels?.length) continue
+      // Si le niveau de l'élève ne correspond pas à ceux de l'option, il n'est pas concerné.
+      if (!option.levels.some(l => student.levels()[option.option] === l)) return false
+    }
 
     // S'il n'a pas le ou les genres de la liste, il n'est toujours pas concerné.
     if (this.genders().some(g => !student.genders().includes(g))) return false;
@@ -106,7 +100,7 @@ export class Attribute {
     return this._key;
   }
 
-  private attributeString<T>(name: string, values: T[]): string {
+  private attributeString<T>(name: string, values: readonly T[]): string {
     let string = '';
     if (values.length) {
       string += name + ':(';
@@ -121,8 +115,7 @@ export class Attribute {
 
   public toString(): string {
     let string = 'Attribute{';
-    string += this.attributeString('options', this.options());
-    string += this.attributeString('levels', this.levels());
+    string += this.attributeString('options', this.optionsWithLevels());
     string += this.attributeString('genders', this.genders());
     string += this.attributeString('extras', this.extras());
     return string.slice(0, -2) + '}';
