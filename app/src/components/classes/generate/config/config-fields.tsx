@@ -50,7 +50,7 @@ const ConfigFields = () => {
           name="class_size_limit"
           render={({ field }) => (
             <FormItem>
-                {/*TODO: trads*/}
+              {/*TODO: trads*/}
               <FormLabel>Nombre de classes maximum</FormLabel>
               <FormControl>
                 <Input
@@ -73,7 +73,7 @@ const ConfigFields = () => {
           name="class_amount_limit"
           render={({ field }) => (
             <FormItem>
-                {/*TODO: trads*/}
+              {/*TODO: trads*/}
               <FormLabel>Taille des classes maximum</FormLabel>
               <FormControl>
                 <Input

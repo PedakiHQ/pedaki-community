@@ -114,9 +114,8 @@ const RuleCard = ({
   const [rules, setRules] = useRulesParams();
   const setActiveCreateRule = useClassesGenerateStore(state => state.setActiveCreateRule);
 
-  const canBeAdded =
-    rule.maxOccurrences === 'many' ||
-    (rule.maxOccurrences === 'one' && !rules?.find(r => r.key === rule.key));
+  const canBeAddedResult = rule.canBeAdded(rules.map(r => r.key));
+  const canBeAdded = canBeAddedResult === null;
 
   const addRule = async () => {
     setOpen(false);
@@ -164,7 +163,7 @@ const RuleCard = ({
         </button>
       </TooltipTrigger>
       {/*TODO: trads*/}
-      <TooltipContent>Ne peut être ajouté qu'une seule fois</TooltipContent>
+      <TooltipContent>{!canBeAddedResult ? '-' : canBeAddedResult.join(',')}</TooltipContent>
     </Tooltip>
   );
 };

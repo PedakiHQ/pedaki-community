@@ -10,23 +10,52 @@ import {
   IconX,
 } from '@pedaki/design/ui/icons';
 
+type CanBeAdded = (rules: LevelRuleType[]) => readonly [string, string] | null; // error code or null
+
 type RuleMapping = {
   [key in LevelRuleType]: {
     key: key;
     icon: IconType;
     color: `#${string}`;
-    attributesCount: 'none' | 'one_or_more' | 'two_or_more';
-    maxOccurrences: 'one' | 'many';
-  } & (
-    | {
-        attributesCount: 'one_or_more' | 'two_or_more';
-      }
-    | {
-        attributesCount: 'none';
-      }
-  );
+    attributesCount: 'none' | 'one' | 'two_or_more';
+    canBeAdded: CanBeAdded; // error code or null
+  };
 };
 export type RuleMappingValue = RuleMapping[keyof RuleMapping];
+
+const onlyOneOfType = (type: LevelRuleType) => {
+  return (rules: LevelRuleType[]) => {
+    if (rules.includes(type)) {
+      return ['only_one_of_type', type] as const;
+    }
+    return null;
+  };
+};
+
+const incompatibleWith = (type: LevelRuleType) => {
+  return (rules: LevelRuleType[]) => {
+    if (rules.includes(type)) {
+      return ['incompatible_with', type] as const;
+    }
+    return null;
+  };
+};
+
+const noCondition = (_: LevelRuleType[]) => {
+  return null;
+};
+
+const chain = (...conditions: CanBeAdded[]): CanBeAdded => {
+  return rules => {
+    for (const condition of conditions) {
+      const result = condition(rules);
+      if (result !== null) {
+        return result;
+      }
+    }
+    return null;
+  };
+};
 
 export const ruleMapping = {
   balance_class_count: {
@@ -34,48 +63,48 @@ export const ruleMapping = {
     icon: IconCircle,
     attributesCount: 'two_or_more',
     color: '#D6E6FF',
-    maxOccurrences: 'many',
+    canBeAdded: noCondition,
   },
   balance_count: {
     key: 'balance_count',
     icon: IconCalendar,
-    attributesCount: 'one_or_more',
+    attributesCount: 'one',
     color: '#D7F9F8',
-    maxOccurrences: 'one',
+    canBeAdded: noCondition,
   },
   gather_attributes: {
     key: 'gather_attributes',
     icon: IconSettings2,
-    attributesCount: 'one_or_more',
+    attributesCount: 'one',
     color: '#FFFFEA',
-    maxOccurrences: 'one',
+    canBeAdded: noCondition,
   },
   maximize_class_size: {
     key: 'maximize_class_size',
     icon: IconGripVertical,
     attributesCount: 'none',
     color: '#E5D4EF',
-    maxOccurrences: 'one',
+    canBeAdded: chain(incompatibleWith('maximize_classes'), onlyOneOfType('maximize_class_size')),
   },
   maximize_classes: {
     key: 'maximize_classes',
     icon: IconBookUser,
     attributesCount: 'none',
     color: '#FBE0E0',
-    maxOccurrences: 'one',
+    canBeAdded: chain(incompatibleWith('maximize_class_size'), onlyOneOfType('maximize_classes')),
   },
   negative_relationships: {
     key: 'negative_relationships',
     icon: IconX,
     attributesCount: 'none',
     color: '#FFF0D5',
-    maxOccurrences: 'one',
+    canBeAdded: onlyOneOfType('negative_relationships'),
   },
   positive_relationships: {
     key: 'positive_relationships',
     icon: IconPlus,
     attributesCount: 'none',
     color: '#FFDCF4',
-    maxOccurrences: 'one',
+    canBeAdded: onlyOneOfType('positive_relationships'),
   },
 } as const satisfies RuleMapping;

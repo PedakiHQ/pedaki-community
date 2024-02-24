@@ -61,7 +61,9 @@ const StudentCount = () => {
 
   const value = studentsCount ?? (data?.meta.totalCount && lock.current ? data.meta.totalCount : 0);
 
-  {/*TODO: trads*/}
+  {
+    /*TODO: trads*/
+  }
   return <span>{value > 0 ? `${value} élèves sélectionnés` : 'Aucun élève sélectionné'}</span>;
 };
 
