@@ -1,6 +1,5 @@
 import {z} from "zod"
 
-// TODO déjà défini ailleurs ?
 export const ClassSchema = z.object({
 	students: z.string().array()
 })
