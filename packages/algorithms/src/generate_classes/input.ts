@@ -1,8 +1,9 @@
 import type { Attribute } from './attribute';
-import { RuleOrder } from './input.schema';
 import type { RawInput, RawStudent } from './input.schema';
+import { RuleOrder } from './input.schema';
 import type { Rule } from './rules/rule';
 import { Student } from './student';
+
 
 export class Input {
   private readonly input: RawInput;
@@ -75,10 +76,7 @@ export class Input {
 
     const rules: Rule[] = [];
     for (const rawRule of Object.values(this.input.rules)) {
-      if (!(rawRule.rule in RuleOrder)) {
-        console.error(`Unknown rule ${rawRule.rule}`);
-        continue;
-      }
+      if (!(rawRule.rule in RuleOrder)) throw new Error(`Unknown rule ${rawRule.rule}`)
       rules.push(new RuleOrder[rawRule.rule].rule(rawRule, this));
     }
 
