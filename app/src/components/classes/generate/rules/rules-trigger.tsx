@@ -56,9 +56,7 @@ const RulesTrigger = () => {
       >
         <DialogHeader>
           {/*TODO: trads*/}
-          <DialogTitle>
-            Choisir une règle
-          </DialogTitle>
+          <DialogTitle>Choisir une règle</DialogTitle>
         </DialogHeader>
         <div className={BODY_CLASS}>
           <DialogBody setOpen={setOpen} />
@@ -132,29 +130,32 @@ const RuleCard = ({
     <Tooltip open={canBeAdded ? false : undefined}>
       <TooltipTrigger asChild>
         <span className="w-full">
-        <button key={rule.key} className={cn("focus-ring group rounded-lg p-0 w-full",
-            !canBeAdded && 'cursor-not-allowed opacity-50',
+          <button
+            key={rule.key}
+            className={cn(
+              'focus-ring group w-full rounded-lg p-0',
+              !canBeAdded && 'cursor-not-allowed opacity-50',
             )}
-        disabled={!canBeAdded}
-                onClick={handleCreateRule}
-        >
-          <Card
-            className='h-full p-0 transition-all duration-200'
-            style={{
-              backgroundColor: rule.color,
-            }}
+            disabled={!canBeAdded}
+            onClick={handleCreateRule}
           >
-            <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
-              <Icon className="m-auto h-12 w-12 text-main" />
-            </div>
-            <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24">
-              <span className="text-p-md">{rule.key}</span>
-              {/*TODO: trads*/}
-              <p className="text-p-sm text-soft">description</p>
-            </div>
-          </Card>
-        </button>
-          </span>
+            <Card
+              className="h-full p-0 transition-all duration-200"
+              style={{
+                backgroundColor: rule.color,
+              }}
+            >
+              <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
+                <Icon className="m-auto h-12 w-12 text-main" />
+              </div>
+              <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24">
+                <span className="text-p-md">{rule.key}</span>
+                {/*TODO: trads*/}
+                <p className="text-p-sm text-soft">description</p>
+              </div>
+            </Card>
+          </button>
+        </span>
       </TooltipTrigger>
       {/*TODO: trads*/}
       <TooltipContent>{!canBeAddedResult ? '-' : canBeAddedResult.join(',')}</TooltipContent>
