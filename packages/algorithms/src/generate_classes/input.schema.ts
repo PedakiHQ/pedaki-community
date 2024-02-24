@@ -47,8 +47,8 @@ export const RuleOrder: Record<
 
 const RawAttributeOptionSchema = z.object({
   option: z.string(),
-  levels: z.number().array().readonly().optional()
-})
+  levels: z.number().array().readonly().optional(),
+});
 
 export const RawAttributeSchema = z.object({
   options: RawAttributeOptionSchema.array().readonly().optional(),
@@ -76,8 +76,8 @@ export const RawStudentSchema = z.object({
   gender: z.string().or(z.string().array()),
   relationships: z.record(z.number()).optional(),
   levels: z.record(z.number()),
-  extra: z.record(z.boolean()).optional()
-})
+  extra: z.record(z.boolean()).optional(),
+});
 
 export type RawAttribute = z.infer<typeof RawAttributeSchema>;
 export type RawAttributeOption = z.infer<typeof RawAttributeOptionSchema>;

@@ -11,6 +11,26 @@ import { Rule, RuleType } from './rule';
  * Équilibrer le dénombrement de plusieurs attributs dans un maximum de classes.
  * Elle est faite après les répartitions d'attributs.
  * S'adapte à la configuration actuelle des attributs non concernés, et ne modifie pas leur dénombrement.
+ *
+ * La différence avec balance_count, c'est qu'on équilibre ici les attributs entre eux, à l'intérieur des classes.
+ * Dans balance_count, on équilibre chaque attribut individuellement sur l'ensemble des classes.
+ * En le représentant de cette manière :
+ *
+ * Classe 1 : X allemand, X anglais
+ * Classe 1 : X allemand, X anglais
+ * Classe 1 : X allemand, X anglais
+ *
+ * Dans cette règle, on équilibre horizontalement, alors que dans balance_count c'est vertical.
+ * Il n'y a qu'une seule règle horizontale, c'est celle-ci.
+ *
+ * On peut par exemple équilibrer l'allemand et l'anglais dans toutes les classes qui en ont.
+ * C'est-à-dire qu'on a une répartition parfaite dans chaque classe, sauf la dernière à cause du déséquilibre de base.
+ * Si on a 22 allemands et 15 anglais, dans des classes de 10, on obtient :
+ * Classe 1 : 5 allemands et 5 anglais
+ * Classe 2 : 5 allemands et 5 anglais
+ * Classe 3 : 5 allemands et 5 anglais
+ * Classe 4 : 5 allemands
+ * Classe 5 : 2 allemands
  */
 export class BalanceClassCountRule extends Rule {
   protected _ruleType = RuleType.ATTRIBUTES;

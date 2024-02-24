@@ -9,7 +9,16 @@ import type { StudentValue } from './rule';
 /**
  * Répartir équitablement le nombre d'élèves dans chaque classe.
  * Si un attribut est associée à la règle, alors seulement cet attribut sera pris en compte.
+ * On n'autorise pas plusieurs attributs pour rester cohérent et compréhensible par rapport aux autres règles.
  * Elle est faite après les répartitions d'attributs.
+ *
+ * À l'inverse de balance_class_count, on équilibre ici sur toutes les classes, donc il y aura la même différence partout (ou presque).
+ * Si on a 22 allemands et 15 anglais, dans des classes de 10, on obtient :
+ * Classe 1 : 4 allemands et 3 anglais
+ * Classe 2 : 4 allemands et 3 anglais
+ * Classe 3 : 5 allemands et 3 anglais
+ * Classe 4 : 4 allemands et 3 anglais
+ * Classe 4 : 5 allemands et 3 anglais
  */
 export class BalanceCountRule extends Rule {
   protected _ruleType = RuleType.ATTRIBUTES;

@@ -1,10 +1,9 @@
 import type Entry from '../entry';
-import type {StudentWithClass} from '../entry';
+import type { StudentWithClass } from '../entry';
 import type { Input } from '../input';
 import type { RawRule } from '../input.schema';
 import type { StudentValue } from './rule';
 import { Rule, RuleType } from './rule';
-
 
 /**
  * Maximiser le nombre de classes, en respectant les contraintes.
@@ -45,6 +44,6 @@ export class MaximizeClassesRule extends Rule {
    * Le pourcentage de respect correspond ici au nombre de classes par rapport au maximum défini.
    */
   override getRespectPercent(entry: Entry): number {
-    return entry.classes().length / entry.algo().input().classAmount()
+    return entry.classes().length / entry.algo().input().classAmount();
   }
 }

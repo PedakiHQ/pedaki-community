@@ -6,7 +6,7 @@
  * - Un ou plusieurs niveaux d'option
  */
 import type { Input } from './input';
-import type {RawAttribute, RawAttributeOption} from './input.schema';
+import type { RawAttribute, RawAttributeOption } from './input.schema';
 import type { Student } from './student';
 
 const EMPTY_ARRAY = [] as const;
@@ -20,17 +20,17 @@ export class Attribute {
   // Indice de l'attribut.
   private _key: number | null = null;
   // Liste des noms d'options.
-  private _options: string[] | null = null;
+  private readonly _options: string[];
 
   constructor(attribute: RawAttribute, input: Input) {
     this.attribute = attribute;
     this.input = input;
+    this._options = this.attribute.options?.map(option => option.option) ?? [];
     this._students = new Set(this.correspondingStudents(input.students()));
   }
 
   public options(): readonly string[] {
-    if (this._options === null) this._options = this.attribute.options?.map(option => option.option) ?? []
-    return this._options
+    return this._options;
   }
 
   public optionsWithLevels(): readonly RawAttributeOption[] {
@@ -69,9 +69,9 @@ export class Attribute {
     // Pour chacune des options, s'il n'a pas l'un des niveaux associés, il n'est pas concerné non plus.
     for (const option of this.optionsWithLevels()) {
       // Si aucun niveau n'est renseigné, on ignore l'option, puisque cela ne correspond à personne.
-      if (!option.levels?.length) continue
+      if (!option.levels?.length) continue;
       // Si le niveau de l'élève ne correspond pas à ceux de l'option, il n'est pas concerné.
-      if (!option.levels.some(l => student.levels()[option.option] === l)) return false
+      if (!option.levels.some(l => student.levels()[option.option] === l)) return false;
     }
 
     // S'il n'a pas le ou les genres de la liste, il n'est toujours pas concerné.

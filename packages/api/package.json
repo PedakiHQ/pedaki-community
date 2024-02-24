@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@pedaki/tests": "workspace:*",
-    "@types/node": "^20.11.19",
+    "@types/node": "^20.11.20",
     "next": "14.1.0",
     "typescript": "^5.3.3"
   },
