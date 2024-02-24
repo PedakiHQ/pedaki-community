@@ -8,6 +8,8 @@ import type { StudentValue } from './rule';
 
 /**
  * Regrouper un ou plusieurs attributs dans un minimum de classes.
+ * S'il y a plusieurs attributs, ils sont regroupés ensemble.
+ * S'il y a plusieurs règles, les attributs ne sont pas forcément regroupés.
  */
 export class GatherAttributesRule extends Rule {
   protected _ruleType = RuleType.ATTRIBUTES;
