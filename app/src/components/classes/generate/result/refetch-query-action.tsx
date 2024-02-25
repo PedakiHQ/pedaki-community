@@ -23,22 +23,17 @@ const RefetchQueryAction = () => {
 
   const { data } = api.students.getMany.useQuery(
     {
-      fields: [],
+      fields: ['firstName', 'lastName'],
       where: filters,
       pagination: {
         page: 1,
         limit: 1000,
       },
-      t: rules,
     },
     {
       enabled: !hasEdited,
     },
   );
-
-  useEffect(() => {
-    alert('Data has been refetched');
-  }, [data]);
 
   if (!hasEdited) return null;
 

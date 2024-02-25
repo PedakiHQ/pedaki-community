@@ -54,7 +54,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
   renderItem,
   renderContainer,
 }: Props<T, C>) {
-  const [activeContainer, setActiveColumn] = useState<C | undefined>(undefined);
+  const [activeContainer, setActiveContainer] = useState<C | undefined>(undefined);
   const [activeItem, setActiveItem] = useState<T | undefined>(undefined);
   const containerIds = useMemo(() => containers.map(container => container.id), [containers]);
   const itemsByContainer = useMemo(() => {
@@ -79,8 +79,9 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
   );
 
   const onDragStart = (event: DragStartEvent) => {
+    console.log('DRAG START', event.active.id, event.active.data.current?.type);
     if (event.active.data.current?.type === 'container') {
-      setActiveColumn(containers.find(container => container.id === event.active.id));
+      setActiveContainer(containers.find(container => container.id === event.active.id));
       return;
     }
 
@@ -91,7 +92,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
   };
 
   const onDragEnd = (event: DragEndEvent) => {
-    setActiveColumn(undefined);
+    setActiveContainer(undefined);
     setActiveItem(undefined);
 
     const { active, over } = event;
@@ -103,7 +104,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
     if (activeId === overId) return;
 
     const isActiveAContainer = active.data.current?.type === 'container';
-    if (!isActiveAContainer) return;
+    if (!isActiveAContainer) return; // Dropping column
 
     onChangeContainers(columns => {
       const activeContainerIndex = columns.findIndex(col => col.id === activeId);
@@ -114,7 +115,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
 
   const onDragOver = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over || active.id === over.id) {
+    if (!over) {
       return;
     }
 
@@ -138,15 +139,15 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
       });
     }
 
-    const isOverAColumn = over.data.current?.type === 'Column';
+    const isOverAContainer = over.data.current?.type === 'container';
 
-    // Im dropping a Task over a column
-    if (isActiveATask && isOverAColumn) {
-      onChangeItems(tasks => {
-        const activeIndex = tasks.findIndex(t => t.id === active.id);
-        tasks[activeIndex]!.containerId = over.id;
+    // Im dropping a Task over a container
+    if (isActiveATask && isOverAContainer) {
+      onChangeItems(item => {
+        const activeIndex = item.findIndex(t => t.id === active.id);
+        item[activeIndex]!.containerId = over.id;
         console.log('DROPPING TASK OVER COLUMN', { activeIndex });
-        return arrayMove(tasks, activeIndex, activeIndex);
+        return arrayMove(item, activeIndex, activeIndex);
       });
     }
   };

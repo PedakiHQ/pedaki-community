@@ -9,6 +9,7 @@ interface Props {
   id: UniqueIdentifier;
   className?: string;
   type?: 'item' | 'container';
+  enabled?: boolean;
 }
 
 interface Context {
@@ -23,7 +24,13 @@ const SortableItemContext = createContext<Context>({
   ref() {},
 });
 
-export function SortableItem({ children, id, className, type }: PropsWithChildren<Props>) {
+export function SortableItem({
+  children,
+  id,
+  className,
+  type,
+  enabled = true,
+}: PropsWithChildren<Props>) {
   const {
     attributes,
     isDragging,
@@ -60,7 +67,7 @@ export function SortableItem({ children, id, className, type }: PropsWithChildre
     <SortableItemContext.Provider value={context}>
       <li
         ref={setNodeRef}
-        style={style}
+        style={enabled ? style : undefined}
         className={cn(
           'w-full list-none',
           className,
