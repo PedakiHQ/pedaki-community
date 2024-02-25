@@ -24,7 +24,9 @@ const configParam = createParser({
 export const useConfigurationParams = () => {
   return useQueryState(
     'config',
-    configParam.withOptions({ history: 'replace', clearOnDefault: true }).withDefault(defaultConfig),
+    configParam
+      .withOptions({ history: 'replace', clearOnDefault: true })
+      .withDefault(defaultConfig),
   );
 };
 

@@ -38,9 +38,8 @@ const ConfigFields = () => {
 
   const parseValue = (value: string) => {
     const parsed = parseInt(value);
-    return isNaN(parsed) ? 0 : Math.max(parsed, 0);
+    return isNaN(parsed) ? 1 : Math.max(parsed, 1);
   };
-
 
   return (
     <Form {...form}>
@@ -60,7 +59,7 @@ const ConfigFields = () => {
                   onChange={e => {
                     const value = parseValue(e.target.value);
                     field.onChange(value);
-                    void setConfig(config => ({ count: config?.count ?? 30, size: value }));
+                    void setConfig(config => ({ count: config.count, size: value }));
                   }}
                 />
               </FormControl>
@@ -83,7 +82,7 @@ const ConfigFields = () => {
                   onChange={e => {
                     const value = parseValue(e.target.value);
                     field.onChange(value);
-                    void setConfig(config => ({ count: value, size: config?.size ?? 6 }));
+                    void setConfig(config => ({ count: value, size: config.size }));
                   }}
                 />
               </FormControl>
