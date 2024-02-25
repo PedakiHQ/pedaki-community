@@ -29,18 +29,17 @@ export const useConfigurationParams = () => {
 
 const ruleParam = createParser({
   parse: (value: string) => {
-    // TODO: rule type and check if it's valid
     return RawRuleSchema.merge(z.object({ description: z.string().max(24).optional() })).parse(
       JSON.parse(value),
     );
   },
   serialize: (value: Omit<RawRule, 'priority'>) => {
-    // TODO: rule type
     return JSON.stringify(value);
   },
 });
 
-export const ruleId = (rule: RawRule, index: number) => `${rule.rule}-${index}`;
+// Ignore description when comparing rules to avoid unnecessary updates
+export const ruleId = (rule: RawRule) => JSON.stringify({ ...rule, description: '' });
 
 export const useRulesParams = () => {
   const [rules, setRules] = useQueryState(
@@ -53,9 +52,9 @@ export const useRulesParams = () => {
   // add id to rules
   const rulesWithId = useMemo(
     () =>
-      rules?.map((rule, index) => ({
+      rules?.map(rule => ({
         ...rule,
-        id: ruleId(rule, index),
+        id: ruleId(rule),
       })),
     [rules],
   );

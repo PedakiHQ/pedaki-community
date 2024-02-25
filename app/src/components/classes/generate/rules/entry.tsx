@@ -43,8 +43,8 @@ const Description = ({ item }: EntryProps) => {
       if (!oldRules) {
         return [];
       }
-      return oldRules.map((oldRule, i) => {
-        if (ruleId(oldRule, i) === item.id) {
+      return oldRules.map(oldRule => {
+        if (ruleId(oldRule) === item.id) {
           oldRule.description = value;
         }
         return oldRule;
@@ -87,6 +87,7 @@ const Entry = ({ item, index }: EntryProps) => {
                 backgroundColor: mappedRule.color,
               }}
             >
+              {/*TODO: trads*/}
               {item.rule}
             </Badge>
             <Description item={item} index={index} />
@@ -161,8 +162,8 @@ const EditAction = ({ item }: EntryProps) => {
       if (!oldRules) {
         return [value];
       }
-      return oldRules.map((oldRule, i) => {
-        if (ruleId(oldRule, i) === item.id) {
+      return oldRules.map(oldRule => {
+        if (ruleId(oldRule) === item.id) {
           return value;
         }
         return oldRule;
@@ -177,8 +178,8 @@ const EditAction = ({ item }: EntryProps) => {
       if (!oldRules) {
         return [];
       }
-      return oldRules.filter((oldRule, i) => {
-        return ruleId(oldRule, i) !== item.id;
+      return oldRules.filter(oldRule => {
+        return ruleId(oldRule) !== item.id;
       });
     });
     setOpen(false);
