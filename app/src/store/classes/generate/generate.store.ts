@@ -8,6 +8,9 @@ export interface ClassesGenerateStore {
 
   activeCreateRule: RuleType | null;
   setActiveCreateRule: (rule: RuleType | null) => void;
+
+  hasEdited: boolean;
+  setHasEdited: (hasEdited: boolean) => void;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;
@@ -34,5 +37,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
     setStudentsCount: count => set({ studentsCount: count }),
     activeCreateRule: null,
     setActiveCreateRule: rule => set({ activeCreateRule: rule }),
+    hasEdited: false,
+    setHasEdited: hasEdited => set({ hasEdited }),
   }));
 };

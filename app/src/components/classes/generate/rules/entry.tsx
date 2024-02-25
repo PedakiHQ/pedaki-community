@@ -30,7 +30,7 @@ import React from 'react';
 import classes from './entry.module.scss';
 
 interface EntryProps {
-  item: { id: string; rule: RuleType; description: string };
+  item: { id: string; rule: RuleType; description?: string };
   index: number | null;
 }
 
@@ -68,7 +68,6 @@ const Description = ({ item }: EntryProps) => {
   );
 };
 
-// TODO: rule type
 const Entry = ({ item, index }: EntryProps) => {
   const mappedRule = ruleMapping[item.rule];
 
@@ -156,7 +155,7 @@ const EditAction = ({ item }: EntryProps) => {
   const [open, setOpen] = React.useState(false);
   const [rules, setRules] = useRulesParams();
 
-  const currentRule = rules?.find((r, i) => ruleId(r, i) === item.id);
+  const currentRule = rules?.find((r, i) => ruleId(r) === item.id);
 
   const onSubmitted = async (data: RawAttribute[]) => {
     await setRules(oldRules => {

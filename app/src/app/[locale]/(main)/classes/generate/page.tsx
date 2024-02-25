@@ -10,6 +10,7 @@ import { setStaticParamsLocale } from '~/locales/utils';
 import StoreProvider from '~/store/classes/generate/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
+import ResultCard from "~/app/[locale]/(main)/classes/generate/result-card.tsx";
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
@@ -42,7 +43,9 @@ export default async function ClassesGeneratePage({ params }: PageType) {
               <ConfigurationCard />
               <RulesCard />
             </div>
-            <div className="flex-1 bg-green-dark"></div>
+            <div className="flex-1">
+              <ResultCard />
+            </div>
           </div>
         </StudentsListWrapper>
       </StoreProvider>
