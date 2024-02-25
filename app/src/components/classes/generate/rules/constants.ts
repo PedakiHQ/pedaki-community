@@ -17,7 +17,7 @@ type RuleMapping = {
     key: key;
     icon: IconType;
     color: `#${string}`;
-    attributesCount: 'none' | 'one' | 'two_or_more';
+    attributesCount: 'none' | 'one' | 'one_or_more' | 'two_or_more';
     canBeAdded: CanBeAdded; // error code or null
   };
 };
@@ -79,7 +79,7 @@ export const ruleMapping = {
   gather_attributes: {
     key: 'gather_attributes',
     icon: IconSettings2,
-    attributesCount: 'one',
+    attributesCount: 'one_or_more',
     color: '#FFFFEA',
     canBeAdded: noCondition,
   },

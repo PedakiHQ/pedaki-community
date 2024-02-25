@@ -60,7 +60,7 @@ const GenericRuleInputForm = (props: Rule) => {
     defaultValues: {
       attributes: props.defaultValues
         ? props.defaultValues
-        : ruleMapping.attributesCount === 'one'
+        : ruleMapping.attributesCount === 'one' || ruleMapping.attributesCount === 'one_or_more'
           ? [{}]
           : ruleMapping.attributesCount === 'two_or_more'
             ? [{}, {}]
@@ -121,8 +121,10 @@ const GenericRuleInput = ({
 
   const attributesCount = fields.length;
 
-  const canAddMoreAttributes = ruleMapping.attributesCount === 'two_or_more';
-  const canRemoveAttributes = ruleMapping.attributesCount === 'two_or_more' && attributesCount > 2;
+  const canAddMoreAttributes = ruleMapping.attributesCount !== 'one';
+  const canRemoveAttributes =
+    (ruleMapping.attributesCount === 'two_or_more' && attributesCount > 2) ||
+    (ruleMapping.attributesCount === 'one_or_more' && attributesCount > 1);
 
   return (
     <div className="flex-1 space-y-6">
