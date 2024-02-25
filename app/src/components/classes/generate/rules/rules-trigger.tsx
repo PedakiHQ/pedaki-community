@@ -38,7 +38,7 @@ const RulesTrigger = () => {
       setTimeout(() => {
         // Wait for the modal animation to finish
         setActiveCreateRule(null);
-      }, 100);
+      }, 150);
     }
   };
 
@@ -81,7 +81,7 @@ const DialogBody = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
         }
         return oldRules.concat(value);
       });
-      setActiveCreateRule(null);
+      setOpen(false);
     };
 
     return (
