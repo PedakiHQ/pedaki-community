@@ -44,7 +44,11 @@ export function SortableList<T extends BaseItem>({ items, onChange, renderItem }
   const [active, setActive] = useState<Active | null>(null);
   const activeItem = useMemo(() => items.find(item => item.id === active?.id), [active, items]);
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),

@@ -1,5 +1,6 @@
 import { IconBookUser } from '@pedaki/design/ui/icons';
 import ConfigurationCard from '~/app/[locale]/(main)/classes/generate/configuration-card.tsx';
+import ResultCard from '~/app/[locale]/(main)/classes/generate/result-card.tsx';
 import RulesCard from '~/app/[locale]/(main)/classes/generate/rules-card.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
@@ -10,7 +11,6 @@ import { setStaticParamsLocale } from '~/locales/utils';
 import StoreProvider from '~/store/classes/generate/StoreProvider.tsx';
 import { MAIN_CONTENT } from '~/store/tutorial/data/constants.ts';
 import React from 'react';
-import ResultCard from "~/app/[locale]/(main)/classes/generate/result-card.tsx";
 
 export const generateMetadata = async ({ params }: { params: { locale: LocaleCode } }) => {
   setStaticParamsLocale(params.locale);
