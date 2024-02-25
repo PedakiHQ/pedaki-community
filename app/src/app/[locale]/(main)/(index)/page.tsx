@@ -23,8 +23,8 @@ export default function IndexPage({ params }: PageType) {
     <>
       <Header description={dayjs().format('LL')} />
 
-      <div className="grid grid-cols-12 gap-6 pt-6" id={MAIN_CONTENT}>
-        <div className="col-span-12 @4xl/main:col-span-6">
+      <div className="grid grid-cols-12 gap-6 @4xl:pt-6" id={MAIN_CONTENT}>
+        <div className="col-span-12 @4xl:col-span-6">
           <TutorialStatusCard />
         </div>
       </div>

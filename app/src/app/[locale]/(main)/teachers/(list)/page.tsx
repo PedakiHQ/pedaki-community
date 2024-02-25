@@ -28,7 +28,7 @@ export default async function StudentsListPage({ params }: PageType) {
         icon={IconUserGroups}
       />
 
-      <div className="pt-6" id={MAIN_CONTENT}></div>
+      <div className="@4xl:pt-6" id={MAIN_CONTENT}></div>
     </>
   );
 }

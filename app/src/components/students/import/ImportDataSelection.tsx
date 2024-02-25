@@ -60,7 +60,7 @@ const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
   });
 
   return (
-    <div className="shrink-0 @4xl/main:w-[320px]">
+    <div className="shrink-0 @4xl:w-[320px]">
       <Card className="max-h-full gap-2">
         <div className="flex items-center justify-between">
           <h2 className="text-label-sm font-medium text-soft">{t(`title.${type}`)}</h2>
@@ -72,7 +72,7 @@ const ImportDataSelection = ({ type }: ImportDataSelectionProps) => {
         <div
           role="navigation"
           aria-label="pagination"
-          className="max-h-64 overflow-auto pr-4 @4xl/main:max-h-[40vh]"
+          className="max-h-64 overflow-auto pr-4 @4xl:max-h-[40vh]"
           ref={parentRef}
           id={IMPORT_CONTENT_NAVIGATION}
         >

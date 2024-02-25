@@ -137,7 +137,7 @@ const UploadStudentsFile = () => {
       <DialogTrigger asChild>
         <Button variant="stroke-primary-main" className="text-sub" id={UPLOAD_BUTTON}>
           <IconDownload className="h-4 w-4" />
-          <span className="hidden @2xl/main:inline">{t('headerActions.import.label')}</span>
+          <span className="hidden @2xl:inline">{t('headerActions.import.label')}</span>
         </Button>
       </DialogTrigger>
       <DialogContent

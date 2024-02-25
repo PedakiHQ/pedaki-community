@@ -26,12 +26,12 @@ export const useClassesListStore = <T>(selector: (state: ClassesListStore) => T)
   return useZustandStore(store, selector);
 };
 
-export const initializeStore = (
-  preloadedState: Omit<
-    ClassesListStore,
-    'translatedColumns' | 'propertySchemaMapping' | 'setTranslatedColumns'
-  >,
-) => {
+type InitialStore = Pick<
+  ClassesListStore,
+  'teacherMapping' | 'academicYearMapping' | 'classBranchMapping' | 'classLevelMapping'
+>;
+
+export const initializeStore = (preloadedState: InitialStore) => {
   return createStore<ClassesListStore>(set => ({
     ...preloadedState,
     translatedColumns: [],

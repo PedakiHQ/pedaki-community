@@ -13,7 +13,7 @@ import {
 } from '@pedaki/design/ui/select';
 import { CreatePropertySchema } from '@pedaki/services/students/properties/properties.model';
 import type { CreateProperty } from '@pedaki/services/students/properties/properties.model';
-import { propertiesFields } from '~/components/students/import/student/constants.ts';
+import { propertyFields } from '~/components/students/import/student/constants.ts';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import {
@@ -150,10 +150,10 @@ const AddPropertyForm = ({
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.keys(propertiesFields).map(type => (
+                          {Object.keys(propertyFields).map(type => (
                             <SelectItem key={type} value={type}>
                               {t(
-                                `fields.${field.name}.options.${type as keyof typeof propertiesFields}.label`,
+                                `fields.${field.name}.options.${type as keyof typeof propertyFields}.label`,
                               )}
                             </SelectItem>
                           ))}

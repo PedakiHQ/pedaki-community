@@ -17,7 +17,7 @@ const TutorialStatusCard = async () => {
           <span>{t('main.title')}</span>
         </CardTitle>
       </CardHeader>
-      <Separator />
+      <Separator className="-ml-4 w-[calc(100%+2rem)]" />
       <CardContent>
         <ScrollArea className="h-96">
           <TutorialCardBody />

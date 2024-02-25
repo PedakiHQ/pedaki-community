@@ -19,15 +19,16 @@ import { searchParams, serialize } from '~/components/students/list/parameters.t
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 interface ClientProps {
   className?: string;
   onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>, value: StudentData) => void;
   selectedRows?: Record<StudentData['id'], boolean>;
+  onDataChange?: (students: Object[], meta: { totalCount: number }) => void; // TODO: type this
 }
 
-const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
+const Client = ({ className, onClickRow, selectedRows, onDataChange }: ClientProps) => {
   const t = useScopedI18n('students.list.table');
 
   const { setTranslatedColumns, propertyMapping, classMapping, teacherMapping } =
@@ -90,17 +91,16 @@ const Client = ({ className, onClickRow, selectedRows }: ClientProps) => {
 
   const students = data?.data;
   const meta = data?.meta;
+  students && meta && onDataChange?.(students, meta);
 
-  useEffect(() => {
-    if (meta?.pageCount && page > meta.pageCount) {
-      void setPage(meta.pageCount);
-    }
-  }, [setPage, meta?.pageCount, page]);
+  if (meta?.pageCount && page > meta.pageCount) {
+    void setPage(meta.pageCount);
+  }
 
   const isLoading = isQueryLoading || isTransitionLoading || isError;
 
   return (
-    <div className={cn('flex h-full flex-col gap-4', className)}>
+    <div className={cn('flex h-full flex-col gap-4 overflow-y-auto', className)}>
       <div className="flex gap-4">
         <Filters filters={filters} setFilters={setFilters} type="students" />
         <ColumnSelector

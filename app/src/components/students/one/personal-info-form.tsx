@@ -38,12 +38,12 @@ const PersonalInfoForm = () => {
       <h2 className="text-label-sm font-medium text-main">Base info</h2>
       <Form {...form}>
         <form className="grid grid-cols-12 gap-6">
-          <div className="@4xl/main:order-0 order-1 col-span-12 @4xl/main:col-span-9">
+          <div className="@4xl:order-0 order-1 col-span-12 @4xl:col-span-9">
             <div className="flex flex-col gap-4">
               <BaseData form={form} />
             </div>
           </div>
-          <div className="order-0 col-span-12 flex flex-col justify-start space-y-1 @4xl/main:order-1 @4xl/main:col-span-3">
+          <div className="order-0 col-span-12 flex flex-col justify-start space-y-1 @4xl:order-1 @4xl:col-span-3">
             <label className="flex items-center space-x-1 text-label-sm font-medium text-main">
               Image
             </label>
@@ -87,7 +87,6 @@ const BaseData = ({ form }: { form: Form }) => {
                     <div className="flex w-full items-center gap-1">
                       <GenericField
                         field={f}
-                        form={form}
                         type={type}
                         disabled={false}
                         // @ts-expect-error: type is incorrect

@@ -3,7 +3,7 @@ export default {
     title: 'Générer les classes',
   },
   header: {
-    title: 'Générer les classes',
-    description: ' ',
+    title: 'Classes',
+    description: 'Générer les classes',
   },
 } as const;

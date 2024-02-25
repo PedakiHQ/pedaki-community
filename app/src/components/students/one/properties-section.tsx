@@ -5,7 +5,7 @@ import { Button } from '@pedaki/design/ui/button';
 import { Form, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
 import { IconTrash } from '@pedaki/design/ui/icons';
 import ConfirmDangerModal from '~/components/ConfirmDangerModal.tsx';
-import { propertiesFields } from '~/components/students/import/student/constants.ts';
+import { propertyFields } from '~/components/students/import/student/constants.ts';
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { api } from '~/server/clients/client.ts';
@@ -29,13 +29,13 @@ const PropertiesSection = ({ initialProperties }: PropertiesSectionProps) => {
     <section className="space-y-4" id={PROPERTIES}>
       {/*TODO trads*/}
       <h2 className="text-label-sm font-medium text-main">Properties</h2>
-      <PropertiesFields properties={properties} />
+      <PropertyFields properties={properties} />
       <AddNewProperty />
     </section>
   );
 };
 
-const PropertiesFields = ({
+const PropertyFields = ({
   properties,
 }: {
   properties: PropertiesSectionProps['initialProperties'];
@@ -107,8 +107,7 @@ const PropertiesFields = ({
                       <div className="flex w-full items-center gap-1">
                         <GenericField
                           field={f}
-                          form={form}
-                          type={propertiesFields[props.type]}
+                          type={propertyFields[props.type]}
                           disabled={false}
                           placeholder={props.name}
                           // @ts-expect-error: type is incorrect
