@@ -41,11 +41,11 @@ export const fields = {
 
 // Duplicate of PROPERTIES_VALIDATION in services package
 
-export const propertiesFields = {
+export const propertyFields = {
   LEVEL: {
     type: 'number',
     min: 0,
-    max: 100,
-    placeholder: '0-100',
+    max: 20,
+    placeholder: '0-20',
   },
 } as const satisfies Readonly<Record<string, BaseFields>>;

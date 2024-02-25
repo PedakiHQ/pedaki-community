@@ -23,7 +23,8 @@ import { TooltipProvider } from '@pedaki/design/ui/tooltip';
 import AttributeIcon from '~/components/classes/generate/rules/attribute-icon.tsx';
 import type { RuleMappingValue } from '~/components/classes/generate/rules/constants.ts';
 import { MAX_ATTRIBUTES } from '~/components/classes/generate/rules/constants.ts';
-import { fields } from '~/components/students/import/student/constants';
+import { fields, propertyFields } from '~/components/students/import/student/constants';
+import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 import React, { useEffect } from 'react';
@@ -398,12 +399,19 @@ const AttributeOptionFieldSingle = ({
   const [operator, setOperator] = React.useState<PartialOperator | undefined>(undefined);
   const [number, setNumber] = React.useState<number | undefined>(undefined);
   const tOperator = useScopedI18n('components.datatable.filters.form.operator.names');
+  const tFields = useScopedI18n('students.schema.fields');
+
+  const selectedProperty = value.option ? propertyMapping[value.option] : undefined;
+  const propertyType = selectedProperty ? propertyFields[selectedProperty.type] : undefined;
 
   useEffect(() => {
-    if (operator === undefined || number === undefined) return;
-    const levelArray = generateLevelArray(operator, number, 0, 20);
-    update({ option: value.option, levels: levelArray });
-  }, [value.option, operator, number]);
+    if (operator === undefined || number === undefined || propertyType == undefined) return;
+    if (propertyType.type === 'number') {
+      // TODO: currently only number type is supported
+      const levelArray = generateLevelArray(operator, number, propertyType.min, propertyType.max);
+      update({ option: value.option, levels: levelArray });
+    }
+  }, [value.option, propertyType, operator, number]);
 
   return (
     <div className="relative flex w-full items-center gap-2">
@@ -442,16 +450,20 @@ const AttributeOptionFieldSingle = ({
           ))}
         </SelectContent>
       </Select>
-      {/*    TODO: format level */}
-      {/*TODO: trads*/}
-      <Input
-        type="number"
+      <GenericField
+        field={{
+          value: number,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNumber(Number(e.target.value));
+          },
+        }}
+        type={propertyType}
+        disabled={!selectedProperty}
+        placeholder
+        withForm={false}
+        // @ts-expect-error: type is incorrect
+        t={tFields}
         className="w-32"
-        value={number}
-        onChange={e => setNumber(Number(e.target.value))}
-        placeholder="TODO trads"
-        min={0}
-        max={20}
       />
 
       <DeleteAttributeButton onClick={remove} type="filter" />

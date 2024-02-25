@@ -8,43 +8,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@pedaki/design/ui/select';
+import { cn } from '@pedaki/design/utils';
 import dayjs from '~/locales/dayjs.ts';
 import React from 'react';
-import type { ControllerRenderProps, FieldValues, useForm } from 'react-hook-form';
+import type { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import type { BaseFields } from '../import/student/constants';
 
 interface GenericFieldProps<F extends FieldValues = FieldValues> {
-  field: ControllerRenderProps<F, any>;
-  form: ReturnType<typeof useForm<F>>;
-  type: BaseFields;
+  field: Partial<ControllerRenderProps<F, any>> & Pick<ControllerRenderProps<F, any>, 'onChange'>;
+  type: BaseFields | undefined;
   disabled: boolean;
   placeholder?: string | boolean;
   t: (key: string) => string;
+  className?: string;
+  withForm?: boolean;
 }
 
 const GenericField = <F extends FieldValues>({
   field,
-  form,
   type,
   disabled,
   placeholder,
   t,
+  className,
+  withForm = true,
 }: GenericFieldProps<F>) => {
   const placeholderText = !placeholder
     ? t(`${field.name}.placeholder`)
-    : type.placeholder ?? undefined;
+    : type?.placeholder ?? undefined;
+
+  const Wrapper = withForm ? FormControl : React.Fragment;
 
   return (
-    <FormControl>
-      {type.type === 'date' ? (
+    <Wrapper>
+      {type?.type === 'date' ? (
         <DayPicker
           {...field}
           disabled={disabled}
           date={field.value ?? undefined}
-          // @ts-expect-error:  todo not correctly typed
-          setDate={date => form.setValue(field.name, date)}
+          setDate={date => field.onChange(date)}
           format={date => dayjs(date).format('L')}
-          className="flex-1"
+          className={cn('flex-1', className)}
           calendarProps={{
             ISOWeek: true,
             fromYear: 1900,
@@ -53,13 +57,9 @@ const GenericField = <F extends FieldValues>({
             defaultMonth: field.value ? dayjs(field.value).toDate() : undefined,
           }}
         />
-      ) : type.type === 'select' ? (
-        <Select
-          {...field}
-          // @ts-expect-error:  todo not correctly typed
-          onValueChange={value => form.setValue(field.name, value)}
-        >
-          <SelectTrigger>
+      ) : type?.type === 'select' ? (
+        <Select {...field} onValueChange={value => field.onChange(value)}>
+          <SelectTrigger className={cn('flex-1', className)}>
             <SelectValue placeholder={placeholderText} />
           </SelectTrigger>
           <SelectContent>
@@ -70,14 +70,14 @@ const GenericField = <F extends FieldValues>({
             ))}
           </SelectContent>
         </Select>
-      ) : type.type === 'number' ? (
+      ) : type?.type === 'number' ? (
         <Input
           placeholder={placeholderText}
           disabled={disabled}
           type="number"
           {...field}
           value={field.value ?? ''}
-          wrapperClassName="flex-1"
+          wrapperClassName={cn('flex-1', className)}
           min={type.min}
           max={type.max}
         />
@@ -87,10 +87,10 @@ const GenericField = <F extends FieldValues>({
           disabled={disabled}
           {...field}
           value={field.value ?? ''}
-          wrapperClassName="flex-1"
+          wrapperClassName={cn('flex-1', className)}
         />
       )}
-    </FormControl>
+    </Wrapper>
   );
 };
 

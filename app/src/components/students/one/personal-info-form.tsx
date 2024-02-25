@@ -87,7 +87,6 @@ const BaseData = ({ form }: { form: Form }) => {
                     <div className="flex w-full items-center gap-1">
                       <GenericField
                         field={f}
-                        form={form}
                         type={type}
                         disabled={false}
                         // @ts-expect-error: type is incorrect
