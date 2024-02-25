@@ -4,11 +4,12 @@ import { createParser, parseAsArrayOf, useQueryState } from 'nuqs';
 import { useMemo } from 'react';
 import { z } from 'zod';
 
+const defaultConfig = { count: 6, size: 40 };
 const configParam = createParser({
   parse: (value: string) => {
     const [count, size] = value.split(':', 2);
     if (!count || !size) {
-      return { count: 0, size: 10 };
+      return defaultConfig;
     }
     return {
       count: Math.max(parseInt(count, 10), 0),
@@ -23,7 +24,7 @@ const configParam = createParser({
 export const useConfigurationParams = () => {
   return useQueryState(
     'config',
-    configParam.withOptions({ history: 'replace', clearOnDefault: true }),
+    configParam.withOptions({ history: 'replace', clearOnDefault: true }).withDefault(defaultConfig),
   );
 };
 

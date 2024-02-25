@@ -22,12 +22,13 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>;
 
 const ConfigFields = () => {
+  const [config, setConfig] = useConfigurationParams();
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
     defaultValues: {
-      class_size_limit: 30,
-      class_amount_limit: 6,
+      class_size_limit: config.size,
+      class_amount_limit: config.count,
     },
   });
 
@@ -40,7 +41,6 @@ const ConfigFields = () => {
     return isNaN(parsed) ? 0 : Math.max(parsed, 0);
   };
 
-  const [_, setConfig] = useConfigurationParams();
 
   return (
     <Form {...form}>
