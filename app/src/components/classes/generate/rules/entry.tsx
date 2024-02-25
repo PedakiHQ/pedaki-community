@@ -1,7 +1,15 @@
 import type { RuleType } from '@pedaki/algorithms';
+import { RawAttribute } from '@pedaki/algorithms';
 import { Badge } from '@pedaki/design/ui/badge';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@pedaki/design/ui/dialog';
 import { IconCircle, IconGripVertical2, IconPencil, IconTrash } from '@pedaki/design/ui/icons';
 import { Input } from '@pedaki/design/ui/input';
 import {
@@ -13,7 +21,9 @@ import {
 } from '@pedaki/design/ui/tooltip';
 import { ruleId, useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
+import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-input.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
+import { DIALOG_BODY_CLASS } from '~/constants.ts';
 import React from 'react';
 import classes from './entry.module.scss';
 
@@ -140,20 +150,79 @@ const DeleteAction = ({ index }: EntryProps) => {
 };
 
 const EditAction = ({ item }: EntryProps) => {
+  const [open, setOpen] = React.useState(false);
+  const [rules, setRules] = useRulesParams();
+
+  const currentRule = rules?.find((r, i) => ruleId(r, i) === item.id);
+
+  const onSubmitted = async (data: RawAttribute[]) => {
+    await setRules(oldRules => {
+      const value = { rule: item.rule, attributes: data };
+      if (!oldRules) {
+        return [value];
+      }
+      return oldRules.map((oldRule, i) => {
+        if (ruleId(oldRule, i) === item.id) {
+          return value;
+        }
+        return oldRule;
+      });
+    });
+
+    setOpen(false);
+  };
+
+  const deleteRule = async () => {
+    await setRules(oldRules => {
+      if (!oldRules) {
+        return [];
+      }
+      return oldRules.filter((oldRule, i) => {
+        return ruleId(oldRule, i) !== item.id;
+      });
+    });
+    setOpen(false);
+  };
+
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button variant="ghost-sub" size="icon" className="h-6 w-6 p-0">
-          <IconPencil className="h-4" />
-        </Button>
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost-sub" size="icon" className="h-6 w-6 p-0">
+                <IconPencil className="h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent>
+                {/*TODO: trads*/}
+                <span>Editer</span>
+              </TooltipContent>
+            </TooltipPortal>
+          </Tooltip>
+        </span>
+      </DialogTrigger>
+
+      <DialogContent
+        className="block h-[80%] overflow-y-hidden md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
+        <DialogHeader>
           {/*TODO: trads*/}
-          <span>Editer</span>
-        </TooltipContent>
-      </TooltipPortal>
-    </Tooltip>
+          <DialogTitle>Editer une règle</DialogTitle>
+        </DialogHeader>
+        <div className={DIALOG_BODY_CLASS}>
+          <GenericRuleInput
+            defaultValues={currentRule?.attributes}
+            ruleMapping={ruleMapping[item.rule]}
+            onCanceled={() => setOpen(false)}
+            onDeleted={deleteRule}
+            onSaved={onSubmitted}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -11,7 +11,6 @@ import {
 } from '@pedaki/design/ui/dropdown-menu';
 import { Form, FormControl, FormField, FormItem } from '@pedaki/design/ui/form';
 import { IconArrowDownRight, IconPlus } from '@pedaki/design/ui/icons';
-import { Input } from '@pedaki/design/ui/input';
 import {
   Select,
   SelectContent,
@@ -59,8 +58,9 @@ const GenericRuleInputForm = (props: Rule) => {
     resolver: zodResolver(z.object({ attributes: RawAttributeSchema.array() })),
     mode: 'onChange',
     defaultValues: {
-      attributes:
-        props.defaultValues ?? ruleMapping.attributesCount === 'one'
+      attributes: props.defaultValues
+        ? props.defaultValues
+        : ruleMapping.attributesCount === 'one'
           ? [{}]
           : ruleMapping.attributesCount === 'two_or_more'
             ? [{}, {}]
@@ -90,7 +90,7 @@ const GenericRuleInputForm = (props: Rule) => {
               </Button>
             )}
             {onDeleted && (
-              <Button variant="stroke-danger-main" onClick={onDeleted} type="button">
+              <Button variant="filled-error" onClick={onDeleted} type="button">
                 {/*TODO: trads*/}
                 Supprimer
               </Button>

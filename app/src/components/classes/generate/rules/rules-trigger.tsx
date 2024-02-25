@@ -22,10 +22,9 @@ import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import type { RuleMappingValue } from '~/components/classes/generate/rules/constants.ts';
 import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-input.tsx';
+import { DIALOG_BODY_CLASS } from '~/constants.ts';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
-
-const BODY_CLASS = 'h-full overflow-y-auto py-8 px-4 relative block';
 
 const RulesTrigger = () => {
   const [open, _setOpen] = React.useState(false);
@@ -59,7 +58,7 @@ const RulesTrigger = () => {
           {/*TODO: trads*/}
           <DialogTitle>Choisir une règle</DialogTitle>
         </DialogHeader>
-        <div className={BODY_CLASS}>
+        <div className={DIALOG_BODY_CLASS}>
           <DialogBody setOpen={setOpen} />
         </div>
       </DialogContent>
