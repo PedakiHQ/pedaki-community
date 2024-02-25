@@ -79,7 +79,6 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
   );
 
   const onDragStart = (event: DragStartEvent) => {
-    console.log('DRAG START', event.active.id, event.active.data.current?.type);
     if (event.active.data.current?.type === 'container') {
       setActiveContainer(containers.find(container => container.id === event.active.id));
       return;
@@ -146,7 +145,6 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
       onChangeItems(item => {
         const activeIndex = item.findIndex(t => t.id === active.id);
         item[activeIndex]!.containerId = over.id;
-        console.log('DROPPING TASK OVER COLUMN', { activeIndex });
         return arrayMove(item, activeIndex, activeIndex);
       });
     }

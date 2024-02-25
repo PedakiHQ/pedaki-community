@@ -17,6 +17,7 @@ import {
 import { MultiContainerSortable } from '~/components/dnd/MultiContainerSortable.tsx';
 import type { BaseItem, Container } from '~/components/dnd/MultiContainerSortable.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
+import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
 
 const _containers = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -31,10 +32,19 @@ const _items = Array.from({ length: _containers.length }, (_, containerIndex) =>
   });
 }).flat();
 
+type Item = BaseItem & { name: string };
+
 const ClassesGrid = () => {
   const [containers, setContainers] = React.useState<Container[]>(_containers);
   // @ts-ignore
-  const [items, setItems] = React.useState<(BaseItem & { name: string })[]>(_items);
+  const [items, _setItems] = React.useState<Item[]>(_items);
+
+  const setHasEdited = useClassesGenerateStore(state => state.setHasEdited);
+
+  const setItems: React.Dispatch<React.SetStateAction<Item[]>> = newItems => {
+    setHasEdited(true);
+    return _setItems(newItems);
+  };
 
   return (
     <div className="grid grid-cols-1 gap-4 @2xl/classes:grid-cols-2 @5xl/classes:grid-cols-3">
