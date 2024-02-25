@@ -396,7 +396,7 @@ const AttributeOptionFieldSingle = ({
 }) => {
   const propertyMapping = useStudentsListStore(state => state.propertyMapping);
 
-  const [operator, setOperator] = React.useState<PartialOperator | undefined>(undefined);
+  const [operator, setOperator] = React.useState<PartialOperator | 'none' | undefined>(undefined);
   const [number, setNumber] = React.useState<number | undefined>(undefined);
   const tOperator = useScopedI18n('components.datatable.filters.form.operator.names');
   const tFields = useScopedI18n('students.schema.fields');
@@ -408,7 +408,10 @@ const AttributeOptionFieldSingle = ({
     if (operator === undefined || number === undefined || propertyType == undefined) return;
     if (propertyType.type === 'number') {
       // TODO: currently only number type is supported
-      const levelArray = generateLevelArray(operator, number, propertyType.min, propertyType.max);
+      const levelArray =
+        operator === 'none'
+          ? undefined
+          : generateLevelArray(operator, number, propertyType.min, propertyType.max);
       update({ option: value.option, levels: levelArray });
     }
   }, [value.option, propertyType, operator, number]);
@@ -437,12 +440,13 @@ const AttributeOptionFieldSingle = ({
       </Select>
       <Select value={operator} onValueChange={newValue => setOperator(newValue as PartialOperator)}>
         <SelectTrigger className="w-max min-w-32 shrink-0">
-          <SelectValue placeholder="TODO trads" className="w-full shrink-0">
+          <SelectValue placeholder="Filtre" className="w-full shrink-0">
             {/*TODO: trads*/}
-            {(operator && tOperator(operator)) ?? 'TODO trads'}
+            {operator ? (operator === 'none' ? 'Pas de filtre' : tOperator(operator)) : 'Filtre'}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="none">Pas de filtre</SelectItem>
           {partialOperators.map(op => (
             <SelectItem key={op} value={op}>
               {tOperator(op)}
@@ -450,21 +454,23 @@ const AttributeOptionFieldSingle = ({
           ))}
         </SelectContent>
       </Select>
-      <GenericField
-        field={{
-          value: number,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            setNumber(Number(e.target.value));
-          },
-        }}
-        type={propertyType}
-        disabled={!selectedProperty}
-        placeholder
-        withForm={false}
-        // @ts-expect-error: type is incorrect
-        t={tFields}
-        className="w-32"
-      />
+      {operator && operator !== 'none' && (
+        <GenericField
+          field={{
+            value: number,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+              setNumber(Number(e.target.value));
+            },
+          }}
+          type={propertyType}
+          disabled={!selectedProperty}
+          placeholder
+          withForm={false}
+          // @ts-expect-error: type is incorrect
+          t={tFields}
+          className="w-32"
+        />
+      )}
 
       <DeleteAttributeButton onClick={remove} type="filter" />
     </div>

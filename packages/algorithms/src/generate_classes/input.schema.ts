@@ -46,8 +46,8 @@ export const RuleOrder: Record<
 };
 
 const RawAttributeOptionSchema = z.object({
-  option: z.string(),
-  levels: z.number().array().readonly().optional(),
+  option: z.string().min(1),
+  levels: z.number().array().min(1).readonly().optional(),
 });
 
 export const RawAttributeSchema = z
