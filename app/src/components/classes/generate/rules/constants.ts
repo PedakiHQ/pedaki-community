@@ -57,9 +57,8 @@ const chain = (...conditions: CanBeAdded[]): CanBeAdded => {
   };
 };
 
-export const MAX_ATTRIBUTES = 5;
-
 export const ATTRIBUTES_COLORS = ['#D6E6FF', '#D7F9F8', '#FFFFEA', '#E5D4EF', '#FBE0E0'] as const;
+export const MAX_ATTRIBUTES = ATTRIBUTES_COLORS.length;
 
 export const ruleMapping = {
   balance_class_count: {

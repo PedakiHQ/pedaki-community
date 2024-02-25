@@ -130,12 +130,14 @@ const GenericRuleInput = ({
     <div className="flex-1 space-y-6">
       <div className="space-y-4">
         <h3 className="text-sub-sm font-medium">
+          {/*TODO: trads*/}
           <span>Equilibrer</span>
           <span className="space-x-2 px-2">
             {fields.map(({ id }, index) => (
               <AttributeIcon key={id} index={index} />
             ))}
           </span>
+          {/*TODO: trads*/}
           <span>entre toutes les classes</span>
         </h3>
         <div>
@@ -147,6 +149,7 @@ const GenericRuleInput = ({
               disabled={attributesCount >= MAX_ATTRIBUTES}
             >
               <IconPlus className="h-4 w-4" />
+              {/*TODO: trads*/}
               <span>Ajouter un attribut</span>
             </Button>
           )}
@@ -223,12 +226,14 @@ const AttributeField = ({ index, control }: { index: number; control: Control<Fo
                   disabled={hasGenders}
                   onClick={() => addAttributeOption(field, 'genders')}
                 >
+                  {/*TODO: trads*/}
                   Genre
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   disabled={hasOptions}
                   onClick={() => addAttributeOption(field, 'options')}
                 >
+                  {/*TODO: trads*/}
                   Option
                 </DropdownMenuItem>
               </DropdownMenuContent>
