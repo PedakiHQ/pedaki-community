@@ -8,6 +8,12 @@ import { Avatar, AvatarFallback } from '@pedaki/design/ui/avatar';
 import { Button } from '@pedaki/design/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import { Separator } from '@pedaki/design/ui/separator';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@pedaki/design/ui/tooltip';
 import { MultiContainerSortable } from '~/components/dnd/MultiContainerSortable.tsx';
 import type { BaseItem, Container } from '~/components/dnd/MultiContainerSortable.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
@@ -32,16 +38,18 @@ const ClassesGrid = () => {
 
   return (
     <div className="grid grid-cols-1 gap-4 @2xl/classes:grid-cols-2 @5xl/classes:grid-cols-3">
-      <MultiContainerSortable
-        renderContainer={(container, items) => (
-          <ContainerWrapper container={container} items={items} />
-        )}
-        renderItem={item => <Item item={item} />}
-        containers={containers}
-        onChangeContainers={setContainers}
-        items={items}
-        onChangeItems={setItems}
-      />
+      <TooltipProvider disableHoverableContent>
+        <MultiContainerSortable
+          renderContainer={(container, items) => (
+            <ContainerWrapper container={container} items={items} />
+          )}
+          renderItem={item => <Item item={item} />}
+          containers={containers}
+          onChangeContainers={setContainers}
+          items={items}
+          onChangeItems={setItems}
+        />
+      </TooltipProvider>
     </div>
   );
 };
@@ -107,11 +115,18 @@ const Item = ({
 
   return (
     <SortableItem id={item.id} type="item">
-      <DragHandle>
-        <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
-          <AvatarFallback>{twoLettersFromName(item.name)}</AvatarFallback>
-        </Avatar>
-      </DragHandle>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span>
+            <DragHandle>
+              <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
+                <AvatarFallback>{twoLettersFromName(item.name)}</AvatarFallback>
+              </Avatar>
+            </DragHandle>
+          </span>
+        </TooltipTrigger>
+        <TooltipContent side="right">description</TooltipContent>
+      </Tooltip>
     </SortableItem>
   );
 };
