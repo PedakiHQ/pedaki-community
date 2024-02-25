@@ -31,8 +31,8 @@ importers:
         specifier: 0.5.2-beta.7
         version: 0.5.2-beta.7(@tanstack/eslint-plugin-query@5.20.1)(@typescript-eslint/eslint-plugin@6.20.0)(@typescript-eslint/parser@6.20.0)(eslint-config-next@14.1.0)(eslint-config-prettier@9.1.0)(eslint-plugin-node@11.1.0)(eslint@8.56.0)
       '@pedaki/prettier-config':
-        specifier: 0.5.2-beta.7
-        version: 0.5.2-beta.7(prettier@3.2.5)
+        specifier: 0.5.2-beta.10
+        version: 0.5.2-beta.10(prettier@3.2.5)
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
@@ -3853,8 +3853,8 @@ packages:
       - supports-color
     dev: true
 
-  /@pedaki/prettier-config@0.5.2-beta.7(prettier@3.2.5):
-    resolution: {integrity: sha512-jwz1+KMJXJs8xylo66WAaOoRoR3hlOExBpyoSO+eM9UEvdWIU87qK2zd7bNwDnVVhjRHpMEL9RAyy1/DFKCOnQ==}
+  /@pedaki/prettier-config@0.5.2-beta.10(prettier@3.2.5):
+    resolution: {integrity: sha512-XYUAK4Mqfs3tErNv+mGTG3ZUrYry58X6KTUPeb8/yi+QYG5p5WSZgK0mN+/Cq7Cujd5e+D0D8mePpVGOh9U9QA==}
     peerDependencies:
       prettier: ^3.0.2
     dependencies:
@@ -10945,18 +10945,6 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /postcss-import@15.1.0(postcss@8.4.32):
-    resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      postcss: ^8.0.0
-    dependencies:
-      postcss: 8.4.32
-      postcss-value-parser: 4.2.0
-      read-cache: 1.0.0
-      resolve: 1.22.8
-    dev: false
-
   /postcss-import@15.1.0(postcss@8.4.35):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
     engines: {node: '>=14.0.0'}
@@ -10967,16 +10955,6 @@ packages:
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
-
-  /postcss-js@4.0.1(postcss@8.4.32):
-    resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
-    engines: {node: ^12 || ^14 || >= 16}
-    peerDependencies:
-      postcss: ^8.4.21
-    dependencies:
-      camelcase-css: 2.0.1
-      postcss: 8.4.32
-    dev: false
 
   /postcss-js@4.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
@@ -11019,16 +10997,6 @@ packages:
       lilconfig: 3.1.1
       postcss: 8.4.35
       yaml: 2.3.4
-
-  /postcss-nested@6.0.1(postcss@8.4.32):
-    resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
-    engines: {node: '>=12.0'}
-    peerDependencies:
-      postcss: ^8.2.14
-    dependencies:
-      postcss: 8.4.32
-      postcss-selector-parser: 6.0.15
-    dev: false
 
   /postcss-nested@6.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
@@ -12332,7 +12300,7 @@ packages:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
       fast-glob: 3.3.2
@@ -12344,11 +12312,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.32
-      postcss-import: 15.1.0(postcss@8.4.32)
-      postcss-js: 4.0.1(postcss@8.4.32)
-      postcss-load-config: 4.0.2(postcss@8.4.32)
-      postcss-nested: 6.0.1(postcss@8.4.32)
+      postcss: 8.4.35
+      postcss-import: 15.1.0(postcss@8.4.35)
+      postcss-js: 4.0.1(postcss@8.4.35)
+      postcss-load-config: 4.0.2(postcss@8.4.35)
+      postcss-nested: 6.0.1(postcss@8.4.35)
       postcss-selector-parser: 6.0.15
       resolve: 1.22.8
       sucrase: 3.35.0
