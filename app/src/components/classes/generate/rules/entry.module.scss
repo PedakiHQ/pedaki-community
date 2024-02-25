@@ -8,8 +8,8 @@
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 
-  &:before{
-    content: "";
+  &:before {
+    content: '';
     left: 0;
     top: 0;
     bottom: 0;
@@ -20,13 +20,13 @@
   }
 }
 
-li:global(:first-of-type) .item {
+li:global(.first) .item {
   &:before {
     top: 50%;
   }
 }
 
-li:global(:last-of-type) .item {
+li:global(.last) .item {
   &:before {
     bottom: 50%;
   }
@@ -34,7 +34,7 @@ li:global(:last-of-type) .item {
 
 ul:global(.overlay) .item {
   &:before {
-      display: none;
+    display: none;
   }
   .badge {
     display: none;
@@ -51,7 +51,7 @@ ul:global(.overlay) .item {
   border-radius: 50%;
   display: flex;
   width: var(--size);
-  height:  var(--size);
+  height: var(--size);
   margin-left: calc(var(--size) * -0.5);
   z-index: 1;
   align-items: center;

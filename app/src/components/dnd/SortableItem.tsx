@@ -27,6 +27,8 @@ export function SortableItem({ children, id, className }: PropsWithChildren<Prop
     attributes,
     isDragging,
     listeners,
+    newIndex,
+    items,
     setNodeRef,
     setActivatorNodeRef,
     transform,
@@ -48,7 +50,16 @@ export function SortableItem({ children, id, className }: PropsWithChildren<Prop
 
   return (
     <SortableItemContext.Provider value={context}>
-      <li ref={setNodeRef} style={style} className={cn('w-full list-none', className)}>
+      <li
+        ref={setNodeRef}
+        style={style}
+        className={cn(
+          'w-full list-none',
+          className,
+          newIndex === 0 ? 'first' : undefined,
+          newIndex === items.length - 1 ? 'last' : undefined,
+        )}
+      >
         {children}
       </li>
     </SortableItemContext.Provider>

@@ -1,5 +1,4 @@
-import type { RuleType } from '@pedaki/algorithms';
-import { RawAttribute } from '@pedaki/algorithms';
+import type { RawAttribute, RuleType } from '@pedaki/algorithms';
 import { Badge } from '@pedaki/design/ui/badge';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
