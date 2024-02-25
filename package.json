@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@manypkg/get-packages": "^2.2.0",
-    "@pedaki/eslint-config": "0.5.2-beta.7",
+    "@pedaki/eslint-config": "0.5.2-beta.10",
     "@pedaki/prettier-config": "0.5.2-beta.7",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/fs-extra": "^11.0.4",
