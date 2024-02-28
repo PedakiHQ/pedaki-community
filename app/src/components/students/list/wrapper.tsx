@@ -14,6 +14,7 @@ const StudentsListWrapper = async ({ children }: StudentsListWrapperProps) => {
     api.classes.getMany.query(),
     api.teachers.getMany.query(),
   ]);
+
   return (
     <StoreProvider
       propertyMapping={propertyMapping}

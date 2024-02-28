@@ -19,21 +19,6 @@ const DrawerWrapper = () => {
         </SheetContent>
       </Sheet>
 
-      <Sheet>
-        <SheetTrigger asChild>
-          <button>Drawer ⬅️</button>
-        </SheetTrigger>
-        <SheetContent
-          side="right"
-          className="md:max-w-screen-md lg:max-w-screen-lg 2xl:max-w-screen-xl"
-          onOpenAutoFocus={e => e.preventDefault()}
-        >
-          <div className="h-full p-4">
-            <Client />
-          </div>
-        </SheetContent>
-      </Sheet>
-
       <Dialog>
         <DialogTrigger asChild>
           <button>Modal</button>

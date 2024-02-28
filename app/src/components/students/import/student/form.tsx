@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import type { BaseFields } from '~/components/students/import/student/constants.ts';
-import { propertiesFields } from '~/components/students/import/student/constants.ts';
+import { propertyFields } from '~/components/students/import/student/constants.ts';
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import type { OutputType } from '~api/router/router.ts';
@@ -125,7 +125,6 @@ const BaseForm = ({
                         {!isEquivalent && <MergeButton onClick={mergeAction(f.name)} />}
                         <GenericField
                           field={f}
-                          form={form}
                           type={type}
                           disabled={isImported}
                           // @ts-expect-error: type is incorrect
@@ -144,7 +143,7 @@ const BaseForm = ({
           ))}
           {Object.entries(properties).map(([id, props]) => {
             const key = `properties._${id}` as const;
-            const type = propertiesFields[props.type];
+            const type = propertyFields[props.type];
             return (
               <FormField
                 key={key}
@@ -160,7 +159,6 @@ const BaseForm = ({
                         <div className="flex w-full items-center gap-1">
                           <GenericField
                             field={f}
-                            form={form}
                             type={type}
                             disabled={isImported}
                             // @ts-expect-error: type is incorrect

@@ -20,7 +20,7 @@ export default async function StudentsImportStudentsPage({ params }: PageType<{ 
   ]);
 
   return (
-    <div className="flex h-full flex-col gap-4 @4xl/main:flex-row">
+    <div className="flex h-full flex-col gap-4 @4xl:flex-row">
       <TutorialTrigger id={TUTORIAL_ID} step={4} />
 
       <StoreProvider

@@ -1,0 +1,62 @@
+.item {
+  --size: 0.6rem;
+
+  position: relative;
+  display: flex;
+  margin-left: 0.5rem;
+  align-items: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  &:before {
+    content: '';
+    left: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    background-color: var(--tw-stroke-soft);
+    display: block;
+    width: 1px;
+  }
+}
+
+li:global(.first) .item {
+  &:before {
+    top: 50%;
+  }
+}
+
+li:global(.last) .item {
+  &:before {
+    bottom: 50%;
+  }
+}
+
+ul:global(.overlay) .item {
+  &:before {
+    display: none;
+  }
+  .badge {
+    display: none;
+  }
+  & {
+    //margin-left: -4rem;
+    padding-left: 0.5rem;
+  }
+}
+
+.badge {
+  flex-shrink: 0;
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  width: var(--size);
+  height: var(--size);
+  margin-left: calc(var(--size) * -0.5);
+  z-index: 1;
+  align-items: center;
+}
+
+ul:global(.overlay) ~ div .tooltip {
+  display: none;
+}

@@ -35,7 +35,7 @@ export default async function SettingsLayout({ children }: LayoutType) {
         icon={IconSettings}
       />
       <SettingsNavigation />
-      <div className="pt-6" id={MAIN_CONTENT}>
+      <div className="@4xl:pt-6" id={MAIN_CONTENT}>
         {children}
       </div>
     </>
