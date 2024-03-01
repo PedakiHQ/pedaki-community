@@ -1,6 +1,5 @@
 import { IconBookUser } from '@pedaki/design/ui/icons';
 import ConfigurationCard from '~/app/[locale]/(main)/classes/generate/configuration-card.tsx';
-import ResultCard from '~/app/[locale]/(main)/classes/generate/result-card.tsx';
 import RulesCard from '~/app/[locale]/(main)/classes/generate/rules-card.tsx';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
