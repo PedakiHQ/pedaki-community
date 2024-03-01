@@ -46,9 +46,7 @@ export const GetManyStudentsByIdInputSchema = z.object({
 });
 export type GetManyStudentsByIdInput = z.infer<typeof GetManyStudentsByIdInputSchema>;
 
-export const GetManyStudentsByIdOutputSchema = z.array(
-  StudentSchema.pick({ id: true, properties: true }),
-);
+export const GetManyStudentsByIdOutputSchema = z.array(StudentSchema);
 export type GetManyStudentsByIdOutput = z.infer<typeof GetManyStudentsByIdOutputSchema>;
 
 export * from '~/students/student_base.model.ts';

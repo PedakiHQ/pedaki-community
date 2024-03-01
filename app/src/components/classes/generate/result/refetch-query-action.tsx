@@ -40,7 +40,7 @@ const RefetchQueryAction = () => {
   const hasEdited = useClassesGenerateStore(store => store.hasEdited);
   const setHasEdited = useClassesGenerateStore(store => store.setHasEdited);
 
-  const { data } = api.classes.generator.create.useQuery(
+  const { data: generatedClasses } = api.classes.generator.create.useQuery(
     {
       where: filters,
       // @ts-expect-error: It's bugged ?
@@ -56,7 +56,22 @@ const RefetchQueryAction = () => {
     },
   );
 
-  const flatIds = data && data.classes.map(c => c.students).flat();
+  const flatIds = generatedClasses
+    ? generatedClasses.classes
+        .map(c => c.students)
+        .flat()
+        .map(i => parseInt(i, 10))
+        .filter(Boolean)
+    : undefined;
+
+  api.students.getManyById.useQuery(
+    {
+      where: flatIds,
+    },
+    {
+      enabled: flatIds && flatIds.length > 0,
+    },
+  );
 
   useEffect(() => {
     const filtersChanged = deepEqual(previousFilters.current, filters);
