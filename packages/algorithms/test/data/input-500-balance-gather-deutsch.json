@@ -10,7 +10,7 @@
       "attributes": [
         {
           "options": [{
-            "option": "allemand"
+            "option": "properties.allemand"
           }]
         }
       ]
@@ -21,7 +21,7 @@
       "attributes": [
         {
           "options": [{
-            "option": "allemand"
+            "option": "properties.allemand"
           }]
         }
       ]

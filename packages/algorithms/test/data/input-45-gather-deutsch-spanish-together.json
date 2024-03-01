@@ -10,12 +10,12 @@
       "attributes": [
         {
           "options": [{
-            "option": "allemand"
+            "option": "properties.allemand"
           }]
         },
         {
           "options": [{
-            "option": "espagnol"
+            "option": "properties.espagnol"
           }]
         }
       ]
