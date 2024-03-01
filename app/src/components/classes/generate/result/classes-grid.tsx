@@ -14,19 +14,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
+import { cn } from '@pedaki/design/utils';
 import { MultiContainerSortable } from '~/components/dnd/MultiContainerSortable.tsx';
 import type { BaseItem, Container } from '~/components/dnd/MultiContainerSortable.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
 
-const _containers = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+const _containers = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
 const _items = Array.from({ length: _containers.length }, (_, containerIndex) => {
   return Array.from({ length: 2 }, (_, index) => {
     return {
-      id: `item-` + (containerIndex - 1) * 35 + index,
-      containerId: containerIndex,
+      id: `item-` + (containerIndex * 35 + index),
+      containerId: containerIndex + 1,
       name: randomId(),
     };
   });
@@ -38,6 +39,19 @@ const ClassesGrid = () => {
   const [containers, setContainers] = React.useState<Container[]>(_containers);
   // @ts-ignore
   const [items, _setItems] = React.useState<Item[]>(_items);
+  const usedContainerCount = new Set(items.map(i => i.containerId)).size;
+  const containerWithNoItems = containers.filter(
+    container => !items.some(i => i.containerId === container.id),
+  );
+  if (usedContainerCount + 1 > containers.length) {
+    // add container
+    containers.push({ id: randomId() });
+    setContainers(containers);
+  }
+  if (containerWithNoItems.length > 1) {
+    // remove container
+    setContainers(containers.filter(container => container.id !== containerWithNoItems[0]!.id));
+  }
 
   const setHasEdited = useClassesGenerateStore(state => state.setHasEdited);
 
@@ -50,8 +64,8 @@ const ClassesGrid = () => {
     <div className="grid grid-cols-1 gap-4 @2xl/classes:grid-cols-2 @5xl/classes:grid-cols-3">
       <TooltipProvider disableHoverableContent>
         <MultiContainerSortable
-          renderContainer={(container, items) => (
-            <ContainerWrapper container={container} items={items} />
+          renderContainer={(container, items, index) => (
+            <ContainerWrapper container={container} items={items} index={index} />
           )}
           renderItem={item => <Item item={item} />}
           containers={containers}
@@ -67,21 +81,24 @@ const ClassesGrid = () => {
 const ContainerWrapper = ({
   container,
   items,
+  index,
 }: {
   container: { id: UniqueIdentifier };
   items: (BaseItem & { name: string })[];
+  index: number | null;
 }) => {
   const itemIds = items.map(item => item.id);
+  const isEmpty = items.length === 0;
 
   return (
     <SortableItem id={container.id} type="container" enabled={false}>
-      <Card className="gap-2 py-2" data-container={container.id}>
+      <Card className={cn('gap-2 py-2', isEmpty && 'border-dashed')} data-container={container.id}>
         <CardHeader>
           <div className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-2">
               <div>
                 {/*TODO: trads*/}
-                <CardTitle>Classe {container.id}</CardTitle>
+                <CardTitle className={isEmpty ? 'text-soft' : ''}>Classe {index}</CardTitle>
               </div>
             </div>
             <ContainerInfo container={container} />
