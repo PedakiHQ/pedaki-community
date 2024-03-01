@@ -1,10 +1,17 @@
 import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import type { Student } from '@pedaki/services/students/student_base.model';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 
 export interface ClassesGenerateStore {
   studentsCount: number | null;
   setStudentsCount: (count: number) => void;
+
+  studentData: (Student & { containerId: number })[];
+  setStudentData: (studentData: ClassesGenerateStore['studentData']) => void;
+
+  classesData: { id: number | string }[];
+  setClassesData: (classesData: ClassesGenerateStore['classesData']) => void;
 
   activeCreateRule: RuleType | null;
   setActiveCreateRule: (rule: RuleType | null) => void;
@@ -39,5 +46,9 @@ export const initializeStore = (preloadedState: InitialStore) => {
     setActiveCreateRule: rule => set({ activeCreateRule: rule }),
     hasEdited: false,
     setHasEdited: hasEdited => set({ hasEdited }),
+    studentData: [],
+    setStudentData: studentData => set({ studentData }),
+    classesData: [],
+    setClassesData: classesData => set({ classesData }),
   }));
 };

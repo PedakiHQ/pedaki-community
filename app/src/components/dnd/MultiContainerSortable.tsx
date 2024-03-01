@@ -29,8 +29,8 @@ interface Props<T extends BaseItem = BaseItem, C extends Container = Container> 
   containers: C[];
   items: T[];
 
-  onChangeContainers: React.Dispatch<React.SetStateAction<C[]>>;
-  onChangeItems: React.Dispatch<React.SetStateAction<T[]>>;
+  onChangeContainers: (containers: C[]) => void;
+  onChangeItems: (items: T[]) => void;
 
   renderContainer(container: C, items: T[], index: number | null): ReactNode;
   renderItem(item: T, index: number | null): ReactNode;
@@ -105,11 +105,11 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
     const isActiveAContainer = active.data.current?.type === 'container';
     if (!isActiveAContainer) return; // Dropping column
 
-    onChangeContainers(columns => {
-      const activeContainerIndex = columns.findIndex(col => col.id === activeId);
-      const overContainerIndex = columns.findIndex(col => col.id === overId);
-      return arrayMove(columns, activeContainerIndex, overContainerIndex);
-    });
+    const activeContainerIndex = containers.findIndex(col => col.id === activeId);
+    const overContainerIndex = containers.findIndex(col => col.id === overId);
+    const newContainers = arrayMove(containers, activeContainerIndex, overContainerIndex);
+
+    onChangeContainers(newContainers);
   };
 
   const onDragOver = (event: DragEndEvent) => {
@@ -125,28 +125,29 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
 
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
-      onChangeItems(tasks => {
-        const activeIndex = tasks.findIndex(t => t.id === active.id);
-        const overIndex = tasks.findIndex(t => t.id === over.id);
+      const activeIndex = items.findIndex(t => t.id === active.id);
+      const overIndex = items.findIndex(t => t.id === over.id);
 
-        if (tasks[activeIndex]!.containerId != tasks[overIndex]!.containerId) {
-          tasks[activeIndex]!.containerId = tasks[overIndex]!.containerId;
-          return arrayMove(tasks, activeIndex, overIndex - 1);
-        }
+      if (items[activeIndex]!.containerId != items[overIndex]!.containerId) {
+        items[activeIndex]!.containerId = items[overIndex]!.containerId;
+        onChangeItems(arrayMove(items, activeIndex, overIndex - 1));
+        return;
+      }
 
-        return arrayMove(tasks, activeIndex, overIndex);
-      });
+      onChangeItems(arrayMove(items, activeIndex, overIndex));
     }
 
     const isOverAContainer = over.data.current?.type === 'container';
 
     // Im dropping a Task over a container
     if (isActiveATask && isOverAContainer) {
-      onChangeItems(item => {
-        const activeIndex = item.findIndex(t => t.id === active.id);
-        item[activeIndex]!.containerId = over.id;
-        return arrayMove(item, activeIndex, activeIndex);
-      });
+      const newTasks = (i: typeof items) => {
+        const activeIndex = i.findIndex(t => t.id === active.id);
+        i[activeIndex]!.containerId = over.id;
+        return arrayMove(i, activeIndex, activeIndex);
+      };
+
+      onChangeItems(newTasks(items));
     }
   };
 

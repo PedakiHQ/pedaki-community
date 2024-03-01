@@ -16,29 +16,24 @@ import {
 } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
 import { MultiContainerSortable } from '~/components/dnd/MultiContainerSortable.tsx';
-import type { BaseItem, Container } from '~/components/dnd/MultiContainerSortable.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
-import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
+import {
+  useClassesGenerateStore,
+  type ClassesGenerateStore,
+} from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
 
-const _containers = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-
-const _items = Array.from({ length: _containers.length }, (_, containerIndex) => {
-  return Array.from({ length: 2 }, (_, index) => {
-    return {
-      id: `item-` + (containerIndex * 35 + index),
-      containerId: containerIndex + 1,
-      name: randomId(),
-    };
-  });
-}).flat();
-
-type Item = BaseItem & { name: string };
+type Item = ClassesGenerateStore['studentData'][number];
 
 const ClassesGrid = () => {
-  const [containers, setContainers] = React.useState<Container[]>(_containers);
-  // @ts-ignore
-  const [items, _setItems] = React.useState<Item[]>(_items);
+  const items = useClassesGenerateStore(store => store.studentData);
+  const _setItems = useClassesGenerateStore(store => store.setStudentData);
+
+  const containers = useClassesGenerateStore(store => store.classesData);
+  const setContainers = useClassesGenerateStore(store => store.setClassesData);
+
+  console.log({ items, containers });
+
   const usedContainerCount = new Set(items.map(i => i.containerId)).size;
   const containerWithNoItems = containers.filter(
     container => !items.some(i => i.containerId === container.id),
@@ -46,18 +41,18 @@ const ClassesGrid = () => {
   if (usedContainerCount + 1 > containers.length) {
     // add container
     containers.push({ id: randomId() });
-    setContainers(containers);
+    //setContainers(containers);
   }
   if (containerWithNoItems.length > 1) {
     // remove container
-    setContainers(containers.filter(container => container.id !== containerWithNoItems[0]!.id));
+    //setContainers(containers.filter(container => container.id !== containerWithNoItems[0]!.id));
   }
 
   const setHasEdited = useClassesGenerateStore(state => state.setHasEdited);
 
-  const setItems: React.Dispatch<React.SetStateAction<Item[]>> = newItems => {
+  const setItems = (items: Item[]) => {
     setHasEdited(true);
-    return _setItems(newItems);
+    _setItems(items);
   };
 
   return (
@@ -84,7 +79,7 @@ const ContainerWrapper = ({
   index,
 }: {
   container: { id: UniqueIdentifier };
-  items: (BaseItem & { name: string })[];
+  items: Item[];
   index: number | null;
 }) => {
   const itemIds = items.map(item => item.id);
@@ -131,12 +126,8 @@ const twoLettersFromName = (name: unknown) => {
   return (first![0]?.toUpperCase() ?? '') + (second[0] ?? '');
 };
 
-const Item = ({
-  item,
-}: {
-  item: { id: UniqueIdentifier; containerId: UniqueIdentifier; name: string };
-}) => {
-  const nameHash = hashCode(item.name);
+const Item = ({ item }: { item: Item }) => {
+  const nameHash = hashCode(item.firstName);
   const hue = nameHash % 360;
   const hsl = `hsl(${hue}, 100%, 90%)`;
 
@@ -147,7 +138,9 @@ const Item = ({
           <span>
             <DragHandle>
               <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
-                <AvatarFallback>{twoLettersFromName(item.name)}</AvatarFallback>
+                <AvatarFallback>
+                  {twoLettersFromName(item.firstName + ' ' + item.lastName)}
+                </AvatarFallback>
               </Avatar>
             </DragHandle>
           </span>

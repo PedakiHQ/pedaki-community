@@ -9,7 +9,10 @@ import {
 import { useFilterParams } from '~/components/datatable/client.tsx';
 import { searchParams } from '~/components/students/list/parameters.ts';
 import { api } from '~/server/clients/client.ts';
-import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
+import {
+  useClassesGenerateStore,
+  type ClassesGenerateStore,
+} from '~/store/classes/generate/generate.store.ts';
 import deepEqual from 'fast-deep-equal';
 import { useEffect, useRef } from 'react';
 
@@ -27,6 +30,10 @@ const RefetchQueryAction = () => {
   const [filters] = useFilterParams(searchParams);
   const [rules] = useRulesParams();
   const [config] = useConfigurationParams();
+
+  const setStudentData = useClassesGenerateStore(store => store.setStudentData);
+  const setClassesData = useClassesGenerateStore(store => store.setClassesData);
+
   const rulesWithoutDescription = rules.map(rule => {
     const { description, ...rest } = rule;
     return rest;
@@ -43,7 +50,6 @@ const RefetchQueryAction = () => {
   const { data: generatedClasses } = api.classes.generator.create.useQuery(
     {
       where: filters,
-      // @ts-expect-error: It's bugged ?
       rules: prepareRules(rulesWithoutDescription),
       constraints: {
         class_size_limit: config.size,
@@ -51,7 +57,7 @@ const RefetchQueryAction = () => {
       },
     },
     {
-      enabled: !hasEdited,
+      enabled: !hasEdited && rules.length > 0,
       staleTime: Infinity,
     },
   );
@@ -64,14 +70,33 @@ const RefetchQueryAction = () => {
         .filter(Boolean)
     : undefined;
 
-  api.students.getManyById.useQuery(
+  const { data: students } = api.students.getManyById.useQuery(
     {
       where: flatIds,
     },
     {
-      enabled: flatIds && flatIds.length > 0,
+      enabled: flatIds != null && flatIds.length > 0,
     },
   );
+
+  useEffect(() => {
+    if (!students || !generatedClasses) return;
+
+    const mappedToClasses = students.map(student => {
+      const classId = generatedClasses?.classes.findIndex(c =>
+        c.students.includes(student.id.toString()),
+      );
+      return {
+        ...student,
+        containerId: classId !== undefined ? classId : 0,
+      };
+    });
+
+    const allClassesId = generatedClasses.classes.map((c, index) => ({ id: index }));
+
+    setClassesData(allClassesId);
+    setStudentData(mappedToClasses);
+  }, [students, generatedClasses]);
 
   useEffect(() => {
     const filtersChanged = deepEqual(previousFilters.current, filters);
