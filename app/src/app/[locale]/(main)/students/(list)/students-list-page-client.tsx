@@ -3,13 +3,17 @@
 import { cn } from '@pedaki/design/utils';
 import Client from '~/components/students/list/client';
 import { useGlobalStore } from '~/store/global/global.store';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function StudentsListPageClient() {
   const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
+  const router = useRouter();
 
   return (
     <Client
+      // TODO: show somehow that you can click on a row
+      onClickRow={(_event, { id }) => router.push(`/students/edit/${id}`)}
       className={cn(
         // TODO: find a better way to do this
         // header has a h-14 => 3.5rem, with a pb-3 => 0.75rem

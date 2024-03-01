@@ -10,10 +10,11 @@ import { fields } from '../import/student/constants';
 import type { Form } from './edit-student-form';
 
 const PersonalInfoForm = ({ form }: { form: Form }) => {
+  const t = useScopedI18n('students.schema.personalInfos');
+
   return (
     <section className="space-y-4" id={BASE_INFO}>
-      {/*TODO trads*/}
-      <h2 className="text-label-sm font-medium text-main">Base info</h2>
+      <h2 className="text-label-sm font-medium text-main">{t('title')}</h2>
       <div className="grid grid-cols-12 gap-6">
         <div className={'@4xl:order-0 order-1 col-span-12' /* @4xl:col-span-9 */}>
           <div className="flex flex-col gap-4">
@@ -45,7 +46,7 @@ const PersonalInfoForm = ({ form }: { form: Form }) => {
 // };
 
 const BaseData = ({ form }: { form: Form }) => {
-  const t = useScopedI18n('students.schema.fields');
+  const t = useScopedI18n('students.schema.personalInfos.fields');
 
   return (
     <>

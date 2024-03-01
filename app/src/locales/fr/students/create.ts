@@ -6,7 +6,4 @@ export default {
     title: "Ajout d'élève",
     description: "Ajout d'un nouvel élève",
   },
-  headerActions: {
-    submit: 'Ajouter',
-  },
 } as const;

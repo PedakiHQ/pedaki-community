@@ -2,8 +2,10 @@
 
 import { Button } from '@pedaki/design/ui/button';
 import { Form } from '@pedaki/design/ui/form';
+import { IconSpinner } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
 import type { Student } from '@pedaki/services/students/student_base.model';
+import { useScopedI18n } from '~/locales/client';
 import type { OutputType } from '~api/router/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -30,14 +32,16 @@ const EditStudentForm = ({
   properties: OutputType['students']['properties']['getMany'];
   editSchema?: boolean;
 }) => {
+  const t = useScopedI18n('students.schema');
+
   const form = useForm<FormValues>({
     defaultValues: {
       // avatar: '',
-      firstName: '',
-      lastName: '',
-      otherName: '',
-      birthDate: null,
-      gender: '',
+      firstName: student?.firstName ?? '',
+      lastName: student?.lastName ?? '',
+      otherName: student?.otherName ?? '',
+      birthDate: student?.birthDate ?? null,
+      gender: student?.gender ?? '',
     },
   });
 
@@ -46,6 +50,8 @@ const EditStudentForm = ({
     if (editSchema) return;
     console.log(values);
   }
+
+  const { isSubmitting } = form.formState;
 
   return (
     <>
@@ -58,9 +64,12 @@ const EditStudentForm = ({
               <div>TODO: properties</div>
             </>
           )}
-          <Button variant="filled-primary" type="submit" size="sm">
-            aaa
-          </Button>
+          <div className="flex justify-end">
+            <Button variant="filled-primary" type="submit" size="sm" disabled={isSubmitting}>
+              {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
+              {t(student ? 'edit.submit' : 'create.submit')}
+            </Button>
+          </div>
         </form>
       </Form>
       {!student && editSchema && (
