@@ -11,10 +11,12 @@ import { classGeneratorRouter } from '~api/router/routers/classes/generator';
 import { classLevelsRouter } from '~api/router/routers/classes/levels';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { filtersArrayToPrismaWhere, orderByArrayToPrismaOrderBy } from '~api/router/utils';
+import {classesCreateRouter} from "~api/router/routers/classes/create";
 
 export const classesRouter = router({
   branches: classBranchesRouter,
   generator: classGeneratorRouter,
+  create: classesCreateRouter,
   levels: classLevelsRouter,
 
   getMany: privateProcedure.output(GetManyClassesSchema).query(async () => {

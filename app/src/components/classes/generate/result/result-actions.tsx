@@ -1,12 +1,22 @@
 'use client';
 
 import { Button } from '@pedaki/design/ui/button';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useCallback } from 'react';
+import { api } from '~/server/clients/client.ts';
+
 
 const ResultActions = () => {
+  const router = useRouter()
+  
+  const confirm = useCallback(() => {
+    api.classes.create()
+    router.push("/classes/edit/")
+  }, [router])
+
   return (
     <div>
-      <Button size="sm">Valider</Button>
+      <Button size="sm" onClick={confirm}>Valider</Button>
     </div>
   );
 };
