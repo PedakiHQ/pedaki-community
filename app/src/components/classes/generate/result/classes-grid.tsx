@@ -18,9 +18,9 @@ import { cn } from '@pedaki/design/utils';
 import { MultiContainerSortable } from '~/components/dnd/MultiContainerSortable.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import {
-  useClassesGenerateStore,
-  type ClassesGenerateStore,
+  useClassesGenerateStore
 } from '~/store/classes/generate/generate.store.ts';
+import type {ClassesGenerateStore} from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
 
 type Item = ClassesGenerateStore['studentData'][number];
