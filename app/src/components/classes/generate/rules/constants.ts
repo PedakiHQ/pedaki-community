@@ -17,7 +17,7 @@ type RuleMapping = {
     key: key;
     icon: IconType;
     color: `#${string}`;
-    attributesCount: 'none' | 'one' | 'one_or_more' | 'two_or_more';
+    attributesCount: 'none' | 'none_or_one' | 'one' | 'one_or_more' | 'two_or_more';
     canBeAdded: CanBeAdded; // error code or null
   };
 };
@@ -71,7 +71,7 @@ export const ruleMapping = {
   balance_count: {
     key: 'balance_count',
     icon: IconCalendar,
-    attributesCount: 'one',
+    attributesCount: 'none_or_one',
     color: '#D7F9F8',
     canBeAdded: noCondition,
   },
