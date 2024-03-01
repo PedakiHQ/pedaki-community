@@ -19,7 +19,6 @@ export const classGeneratorRouter = router({
     .output(OutputSchema)
     .mutation(async ({ input }): Promise<Output> => {
       // Get all fields from input
-      // TODO faire mieux ?
       const options: Field[] = [];
       const extras: Field[] = [];
       for (const rule of input.rules as RawRule[]) {
@@ -45,8 +44,8 @@ export const classGeneratorRouter = router({
           where: input.where,
           fields: ['id', 'gender', ...options, ...extras],
           pagination: {
-            page: 1,
-            limit: 99999999, // Skip pagination todo erreur avec -1
+            page: 0,
+            limit: -1, // Skip pagination
           },
         },
         {
@@ -58,8 +57,6 @@ export const classGeneratorRouter = router({
         await prisma.$queryRawUnsafe<
           { id: number; gender: string; birthDate: string; [key: string]: any }[]
         >(queryData);
-
-      // TODO: transform data to match algorithm input
 
       const fieldsFromArray = (student: object, array: Field[]) => {
         return Object.fromEntries(

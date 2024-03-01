@@ -511,6 +511,28 @@ describe('studentsRouter', () => {
     );
   });
 
+  describe('GetManyById', () => {
+    test.each([anonymousSession, userSession, internalSession])(
+      'need to be authenticated to use this route - $type',
+      async ({ api, type }) => {
+        await assertIsAuthenticated(() => api.students.getManyById({ where: [1] }), {
+          shouldWork: type !== 'anonymousUserSession',
+        });
+      },
+    );
+
+    test.each([userSession, internalSession])(
+      'returns properties of multiple students - $type',
+      async ({ api }) => {
+        const students = await api.students.getManyById({ where: [1, 2, 3] });
+        students.forEach((student, index) => {
+          expect(student).toBeDefined();
+          expect(student.id).toBe(index + 1);
+        });
+      },
+    );
+  });
+
   describe('getOne', () => {
     test.each([anonymousSession, userSession, internalSession])(
       'need to be authenticated to use this route - $type',

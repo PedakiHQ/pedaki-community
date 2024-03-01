@@ -39,6 +39,10 @@ class StudentPropertiesService {
     return this.#studentProperties;
   }
 
+  getPropertiesKeys() {
+    return Object.keys(this.#studentProperties);
+  }
+
   getPropertySchema(property: string): PropertySchema | null {
     const studentProperties = this.getProperties();
     const propertyType = studentProperties[property] ?? null;
