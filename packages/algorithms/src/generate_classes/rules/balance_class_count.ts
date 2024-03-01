@@ -1,4 +1,4 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type Class from '../class';
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
