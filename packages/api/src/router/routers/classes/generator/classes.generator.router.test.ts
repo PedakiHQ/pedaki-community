@@ -27,7 +27,7 @@ describe('classGeneratorRouter', () => {
     test.each([userSession, internalSession])('maximizes classes', async ({api}) => {
       const output = await api.classes.generator.create({rules: [{rule: "maximize_classes", priority: 1}], constraints: {class_amount_limit: 100, class_size_limit: 30}});
       expect(output.classes.length).toBe(100)
-      expect(output.rules[0].respect_percent).toBe(1)
+      expect(output.rules[0]!.respect_percent).toBe(1)
     })
   });
 });
