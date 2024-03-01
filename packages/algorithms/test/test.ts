@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import { GenerateClassesAlgorithm } from '~/generate_classes/algorithm';
-import { RawInputSchema, type RawStudent } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
+import { RawInputSchema, type RawStudent } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { expect } from 'vitest';
 import Class from '../src/generate_classes/class';
 
