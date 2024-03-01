@@ -1,6 +1,6 @@
 'use client';
 
-import type { RawAttribute } from '@pedaki/algorithms';
+import type { RawAttribute } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
 import {

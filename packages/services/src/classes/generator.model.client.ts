@@ -1,4 +1,4 @@
-import { RawInputSchema } from '@pedaki/algorithms';
+import { RawInputSchema } from '~/algorithms/generate_classes/input.schema.ts';
 import { FilterSchema } from '~/students/query.model.client.ts';
 import { z } from 'zod';
 

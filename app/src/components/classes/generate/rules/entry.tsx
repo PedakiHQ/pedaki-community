@@ -1,4 +1,4 @@
-import type { RawAttribute, RuleType } from '@pedaki/algorithms';
+import type { RawAttribute, RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { Badge } from '@pedaki/design/ui/badge';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';

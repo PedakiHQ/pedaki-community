@@ -1,4 +1,4 @@
-import type { RuleType } from '@pedaki/algorithms';
+import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { IconType } from '@pedaki/design/ui/icons';
 import {
   IconBookUser,

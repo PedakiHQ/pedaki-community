@@ -1,7 +1,7 @@
 import {ClassGeneratorInputSchema} from '~/classes/generator.model.client.ts';
 import {FilterSchemaWithRefinement} from '~/students/query.model.ts';
 import {z} from 'zod';
-import {RawInputSchema} from "@pedaki/algorithms"
+import {RawInputSchema} from "~/algorithms/generate_classes/input.schema.ts";
 
 export const ClassGeneratorInputWithRefinementSchema = ClassGeneratorInputSchema.omit({
   where: true,

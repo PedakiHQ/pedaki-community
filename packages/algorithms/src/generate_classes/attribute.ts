@@ -6,7 +6,7 @@
  * - Un ou plusieurs niveaux d'option
  */
 import type { Input } from './input';
-import type { RawAttribute, RawAttributeOption } from './input.schema';
+import type { RawAttribute, RawAttributeOption } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Student } from './student';
 
 const EMPTY_ARRAY = [] as const;

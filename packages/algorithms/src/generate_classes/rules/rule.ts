@@ -4,7 +4,7 @@ import type Class from '../class';
 import type Entry from '../entry';
 import type { StudentWithClass } from '../entry';
 import type { Input } from '../input';
-import type { RawRule } from '../input.schema';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
 
 export interface StudentValue {
   value: number;

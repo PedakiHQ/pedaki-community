@@ -2,7 +2,7 @@ import type { Attribute } from '../attribute';
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
 import type { Input } from '../input';
-import type { RawRule } from '../input.schema';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { Rule, RuleType } from './rule';
 import type { StudentValue } from './rule';
 

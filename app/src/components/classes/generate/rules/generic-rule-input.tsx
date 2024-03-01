@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { RawAttribute } from '@pedaki/algorithms';
-import { RawAttributeSchema } from '@pedaki/algorithms/generate_classes/input.schema.js';
+import type { RawAttribute } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import { RawAttributeSchema } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import type {Field} from "@pedaki/services/students/query.model.client"
 import { Button } from '@pedaki/design/ui/button';
 import { DialogFooter } from '@pedaki/design/ui/dialog';
 import {
@@ -428,7 +429,7 @@ const AttributeOptionFieldSingle = ({
       {index > 0 && <div className="absolute -left-8 text-sub">et</div>}
       <Select
         value={value.option}
-        onValueChange={newValue => update({ ...value, option: newValue })}
+        onValueChange={newValue => update({ ...value, option: newValue as Field })}
         defaultValue={value.option}
       >
         <SelectTrigger className="w-max shrink-0">
