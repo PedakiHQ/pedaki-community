@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@pedaki/design/ui/button';
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import {
   useConfigurationParams,
   useRulesParams,
@@ -11,10 +10,10 @@ import { searchParams } from '~/components/students/list/parameters.ts';
 import { api } from '~/server/clients/client.ts';
 import {
   useClassesGenerateStore,
-  type ClassesGenerateStore,
 } from '~/store/classes/generate/generate.store.ts';
 import deepEqual from 'fast-deep-equal';
 import { useEffect, useRef } from 'react';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 
 const prepareRules = (rules: RawRule[]): RawRule[] => {
   const length = rules.length;
