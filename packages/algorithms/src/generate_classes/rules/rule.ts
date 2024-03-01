@@ -1,10 +1,10 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
 import { DEFAULT_PRIORITY } from '../algorithm';
 import { Attribute } from '../attribute';
 import type Class from '../class';
 import type Entry from '../entry';
 import type { StudentWithClass } from '../entry';
 import type { Input } from '../input';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 
 export interface StudentValue {
   value: number;
