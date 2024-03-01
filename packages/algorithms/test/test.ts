@@ -1,8 +1,9 @@
 import fs from 'fs/promises';
-import { expect } from 'vitest';
 import { GenerateClassesAlgorithm } from '~/generate_classes/algorithm';
+import { RawInputSchema, type RawStudent } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import { expect } from 'vitest';
 import Class from '../src/generate_classes/class';
-import {RawInputSchema, type RawStudent} from "~/generate_classes/input.schema";
+
 
 // Classe modèle ayant pour but d'être comparée à une véritable classe pour déterminer leur égalité.
 interface OptionValueOutputClass {

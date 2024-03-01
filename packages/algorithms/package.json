@@ -19,8 +19,10 @@
     "format": "prettier --write src"
   },
   "devDependencies": {
+    "@pedaki/logger": "workspace:*",
     "@pedaki/eslint-config": "^0.4.2",
     "@pedaki/prettier-config": "^0.4.2",
+    "@pedaki/services": "workspace:*",
     "ts-node": "^10.9.2"
   },
   "engines": {

@@ -7,12 +7,12 @@ test("Regrouper et équilibrer l'option allemand (500 élèves)", async () => {
     'input-500-balance-gather-deutsch.json',
     [
       {
-        allemand: {
+        "properties.allemand": {
           count: [98, 99],
         },
       },
       {
-        allemand: {
+        "properties.allemand": {
           count: [98, 99],
         },
       },
@@ -20,6 +20,6 @@ test("Regrouper et équilibrer l'option allemand (500 élèves)", async () => {
       {},
       {},
     ],
-    ['allemand'],
+    ['properties.allemand'],
   );
 });

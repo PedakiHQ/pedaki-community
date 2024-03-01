@@ -10,7 +10,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand"
+						"option": "properties.allemand"
 					}]
 				}
 			]
@@ -21,7 +21,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand",
+						"option": "properties.allemand",
 						"levels": [0]
 					}]
 				}
@@ -33,7 +33,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand",
+						"option": "properties.allemand",
 						"levels": [1]
 					}]
 				}
@@ -45,7 +45,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand",
+						"option": "properties.allemand",
 						"levels": [2]
 					}]
 				}
@@ -57,7 +57,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand",
+						"option": "properties.allemand",
 						"levels": [3]
 					}]
 				}
@@ -69,7 +69,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand",
+						"option": "properties.allemand",
 						"levels": [4]
 					}]
 				}
@@ -81,7 +81,7 @@
 			"attributes": [
 				{
 					"options": [{
-						"option": "allemand",
+						"option": "properties.allemand",
 						"levels": [5]
 					}]
 				}

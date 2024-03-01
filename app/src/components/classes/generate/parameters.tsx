@@ -1,5 +1,5 @@
-import type { RawRule } from '@pedaki/algorithms/generate_classes/input.schema';
-import { RawRuleSchema } from '@pedaki/algorithms/generate_classes/input.schema';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import { RawRuleSchema } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { createParser, parseAsArrayOf, useQueryState } from 'nuqs';
 import { useMemo } from 'react';
 import { z } from 'zod';

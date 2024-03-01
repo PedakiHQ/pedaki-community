@@ -1,4 +1,4 @@
-import type { RuleType } from '@pedaki/algorithms';
+import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 

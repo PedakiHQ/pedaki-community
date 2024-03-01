@@ -220,9 +220,15 @@ importers:
       '@pedaki/eslint-config':
         specifier: ^0.4.2
         version: 0.4.2(@tanstack/eslint-plugin-query@5.20.1)(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.13.2)(eslint-config-next@14.1.0)(eslint-config-prettier@9.1.0)(eslint-plugin-node@11.1.0)(eslint@8.57.0)
+      '@pedaki/logger':
+        specifier: workspace:*
+        version: link:../logger/dist
       '@pedaki/prettier-config':
         specifier: ^0.4.2
         version: 0.4.2(prettier@3.2.5)
+      '@pedaki/services':
+        specifier: workspace:*
+        version: link:../services/dist
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.11.20)(typescript@5.3.3)
@@ -452,9 +458,6 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.521.0
         version: 3.521.0
-      '@pedaki/algorithms':
-        specifier: workspace:*
-        version: link:../algorithms/dist
       '@pedaki/auth':
         specifier: workspace:*
         version: link:../auth/src
@@ -12232,7 +12235,7 @@ packages:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
       fast-glob: 3.3.2

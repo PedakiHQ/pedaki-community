@@ -1,8 +1,32 @@
 import type { Attribute } from './attribute';
-import { RuleOrder } from './input.schema';
-import type { RawInput, RawStudent } from './input.schema';
+import type {
+  RawInput,
+  RawRule,
+  RawStudent,
+  RuleType
+} from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Rule } from './rules/rule';
 import { Student } from './student';
+import {GatherAttributesRule} from "~/generate_classes/rules/gather_attributes";
+import {MaximizeClassSizeRule} from "~/generate_classes/rules/maximize_class_size";
+import {MaximizeClassesRule} from "~/generate_classes/rules/maximize_classes";
+import {PositiveRelationshipsRule} from "~/generate_classes/rules/positive_relationships";
+import {NegativeRelationshipsRule} from "~/generate_classes/rules/negative_relationships";
+import {BalanceCountRule} from "~/generate_classes/rules/balance_count";
+import {BalanceClassCountRule} from "~/generate_classes/rules/balance_class_count";
+
+export const RuleOrder: Record<
+  RuleType,
+  { rule: new (rawRule: RawRule, input: Input) => Rule; priority: number }
+> = {
+  gather_attributes: { rule: GatherAttributesRule, priority: 2 },
+  maximize_class_size: { rule: MaximizeClassSizeRule, priority: 2 },
+  maximize_classes: { rule: MaximizeClassesRule, priority: 2 },
+  positive_relationships: { rule: PositiveRelationshipsRule, priority: 2 },
+  negative_relationships: { rule: NegativeRelationshipsRule, priority: 2 },
+  balance_count: { rule: BalanceCountRule, priority: 1 },
+  balance_class_count: { rule: BalanceClassCountRule, priority: 1 },
+};
 
 export class Input {
   private readonly input: RawInput;
@@ -75,10 +99,7 @@ export class Input {
 
     const rules: Rule[] = [];
     for (const rawRule of Object.values(this.input.rules)) {
-      if (!(rawRule.rule in RuleOrder)) {
-        console.error(`Unknown rule ${rawRule.rule}`);
-        continue;
-      }
+      if (!(rawRule.rule in RuleOrder)) throw new Error(`Unknown rule ${rawRule.rule}`)
       rules.push(new RuleOrder[rawRule.rule].rule(rawRule, this));
     }
 

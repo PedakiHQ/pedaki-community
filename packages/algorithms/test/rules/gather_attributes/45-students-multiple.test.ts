@@ -7,19 +7,19 @@ test('Regrouper les options allemand et espagnol ensemble (45 élèves)', async 
     'input-45-gather-deutsch-spanish-together.json',
     [
       {
-        allemand: {
+        "properties.allemand": {
           count: 10,
         },
-        espagnol: {
+        "properties.espagnol": {
           count: 15,
         },
       },
       {
-        anglais: {
+        "properties.anglais": {
           count: 20,
         },
       },
     ],
-    ['allemand', 'anglais', 'espagnol'],
+    ['properties.allemand', 'properties.anglais', 'properties.espagnol'],
   );
 });

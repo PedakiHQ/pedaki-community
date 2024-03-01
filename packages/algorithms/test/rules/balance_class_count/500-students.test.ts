@@ -7,12 +7,12 @@ test("Regrouper et équilibrer le niveau de l'option allemand dans chaque classe
     'input-500-balance-deutsch-class-level.json',
     [
       {
-        allemand: {
+        "properties.allemand": {
           count: [97, 100],
         },
       },
       {
-        allemand: {
+        "properties.allemand": {
           count: [97, 100],
           levels: {
             0: [16, 17],
@@ -28,7 +28,7 @@ test("Regrouper et équilibrer le niveau de l'option allemand dans chaque classe
       {},
       {},
     ],
-    ['allemand'],
+    ['properties.allemand'],
     undefined,
     true
   );

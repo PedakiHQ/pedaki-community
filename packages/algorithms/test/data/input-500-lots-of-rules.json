@@ -10,7 +10,7 @@
       "attributes": [
         {
           "options": [{
-            "option": "allemand"
+            "option": "properties.allemand"
           }]
         }
       ]
@@ -26,42 +26,42 @@
         {
           "options": [
             {
-              "option": "anglais",
+              "option": "properties.anglais",
               "levels": [0]
             }]
         },
         {
           "options": [
             {
-              "option": "anglais",
+              "option": "properties.anglais",
               "levels": [1]
             }]
         },
         {
           "options": [
             {
-              "option": "anglais",
+              "option": "properties.anglais",
               "levels": [2]
             }]
         },
         {
           "options": [
             {
-              "option": "anglais",
+              "option": "properties.anglais",
               "levels": [3]
             }]
         },
         {
           "options": [
             {
-              "option": "anglais",
+              "option": "properties.anglais",
               "levels": [4]
             }]
         },
         {
           "options": [
             {
-              "option": "anglais",
+              "option": "properties.anglais",
               "levels": [5]
             }]
         }
