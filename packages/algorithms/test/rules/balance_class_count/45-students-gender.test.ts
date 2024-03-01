@@ -7,10 +7,10 @@ test('Regrouper les options allemand, anglais et espagnol, et équilibrer le dé
     'input-45-gather-langages-balance-gender-class-level.json',
     [
       {
-        allemand: {
+        "properties.allemand": {
           count: 10,
         },
-        anglais: {
+        "properties.anglais": {
           count: 5,
         },
         M: {
@@ -18,16 +18,16 @@ test('Regrouper les options allemand, anglais et espagnol, et équilibrer le dé
         },
       },
       {
-        espagnol: {
+        "properties.espagnol": {
           count: 15,
         },
       },
       {
-        anglais: {
+        "properties.anglais": {
           count: 15,
         },
       },
     ],
-    ['allemand', 'anglais', 'espagnol', 'M', 'F'],
+    ['properties.allemand', 'properties.anglais', 'properties.espagnol', 'M', 'F'],
   );
 });

@@ -8,11 +8,11 @@ test('Regrouper les options allemand, anglais et espagnol dans 2 classes (45 él
     [
       {},
       {
-        anglais: {
+        "properties.anglais": {
           count: 20,
         },
       },
     ],
-    ['allemand', 'anglais', 'espagnol'],
+    ['properties.allemand', 'properties.anglais', 'properties.espagnol'],
   );
 });

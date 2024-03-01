@@ -7,12 +7,12 @@ test("Regrouper l'option allemand (500 élèves)", async () => {
     'input-500-gather-deutsch.json',
     [
       {
-        allemand: {
+        "properties.allemand": {
           count: [97, 100],
         },
       },
       {
-        allemand: {
+        "properties.allemand": {
           count: [97, 100],
         },
       },
@@ -20,6 +20,6 @@ test("Regrouper l'option allemand (500 élèves)", async () => {
       {},
       {},
     ],
-    ['allemand'],
+    ['properties.allemand'],
   );
 });
