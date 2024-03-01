@@ -4,10 +4,8 @@ import type {
   RawRule,
   RawStudent,
 } from '@pedaki/services/algorithms/generate_classes/input.schema';
-import {
-  OutputSchema,
-  type Output,
-} from '@pedaki/services/algorithms/generate_classes/output.schema';
+import { OutputSchema } from '@pedaki/services/algorithms/generate_classes/output.schema';
+import type { Output } from '@pedaki/services/algorithms/generate_classes/output.schema';
 import { ClassGeneratorInputWithRefinementSchema } from '@pedaki/services/classes/generator.model.js';
 import type { Field } from '@pedaki/services/students/query.model.client';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
@@ -17,7 +15,7 @@ export const classGeneratorRouter = router({
   create: privateProcedure
     .input(ClassGeneratorInputWithRefinementSchema)
     .output(OutputSchema)
-    .mutation(async ({ input }): Promise<Output> => {
+    .query(async ({ input }): Promise<Output> => {
       // Get all fields from input
       const options: Field[] = [];
       const extras: Field[] = [];
