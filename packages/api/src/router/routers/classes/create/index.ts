@@ -28,10 +28,5 @@ export const classesCreateRouter = router({
         }),
       ),
     );
-    // await prisma.class.createMany({data: input.map(c => ({
-    //     ...c,
-    //     levelId: c.level.id,
-    //     academicYearId: c.academicYear.id,
-    //   }))})
   }),
 });
