@@ -34,6 +34,7 @@ interface Props<T extends BaseItem = BaseItem, C extends Container = Container> 
 
   renderContainer(container: C, items: T[], index: number | null): ReactNode;
   renderItem(item: T, index: number | null): ReactNode;
+  instantUpdate?: boolean;
 }
 
 const dropAnimationConfig: DropAnimation = {
@@ -53,6 +54,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
   onChangeItems,
   renderItem,
   renderContainer,
+  instantUpdate = false,
 }: Props<T, C>) {
   const [activeContainer, setActiveContainer] = useState<C | undefined>(undefined);
   const [activeItem, setActiveItem] = useState<T | undefined>(undefined);
@@ -90,6 +92,19 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
     }
   };
 
+  const dropItemInContainer = (activeIndex: number, overIndex: number, isMoving = false) => {
+    if (items[activeIndex]!.containerId != items[overIndex]!.containerId) {
+      items[activeIndex]!.containerId = items[overIndex]!.containerId;
+      onChangeItems(arrayMove(items, activeIndex, overIndex - 1));
+      return;
+    }
+
+    if (isMoving && !instantUpdate) return;
+
+    onChangeItems(arrayMove(items, activeIndex, overIndex));
+    return;
+  };
+
   const onDragEnd = (event: DragEndEvent) => {
     setActiveContainer(undefined);
     setActiveItem(undefined);
@@ -102,14 +117,26 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
 
     if (activeId === overId) return;
 
+    const isActiveATask = active.data.current?.type === 'item';
+    const isOverATask = over.data.current?.type === 'item';
     const isActiveAContainer = active.data.current?.type === 'container';
-    if (!isActiveAContainer) return; // Dropping column
 
-    const activeContainerIndex = containers.findIndex(col => col.id === activeId);
-    const overContainerIndex = containers.findIndex(col => col.id === overId);
-    const newContainers = arrayMove(containers, activeContainerIndex, overContainerIndex);
+    // Im dropping a Task over another Task
+    if (isActiveATask && isOverATask) {
+      const activeIndex = items.findIndex(t => t.key === active.id);
+      const overIndex = items.findIndex(t => t.key === over.id);
 
-    onChangeContainers(newContainers);
+      dropItemInContainer(activeIndex, overIndex, false);
+      return;
+    }
+
+    if (isActiveAContainer) {
+      const activeContainerIndex = containers.findIndex(col => col.id === activeId);
+      const overContainerIndex = containers.findIndex(col => col.id === overId);
+      const newContainers = arrayMove(containers, activeContainerIndex, overContainerIndex);
+
+      onChangeContainers(newContainers);
+    }
   };
 
   const onDragOver = (event: DragEndEvent) => {
@@ -128,13 +155,8 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
       const activeIndex = items.findIndex(t => t.key === active.id);
       const overIndex = items.findIndex(t => t.key === over.id);
 
-      if (items[activeIndex]!.containerId != items[overIndex]!.containerId) {
-        items[activeIndex]!.containerId = items[overIndex]!.containerId;
-        onChangeItems(arrayMove(items, activeIndex, overIndex - 1));
-        return;
-      }
-
-      onChangeItems(arrayMove(items, activeIndex, overIndex));
+      dropItemInContainer(activeIndex, overIndex, true);
+      return;
     }
 
     const isOverAContainer = over.data.current?.type === 'container';
