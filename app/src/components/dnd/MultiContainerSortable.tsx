@@ -17,7 +17,7 @@ import React, { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export interface BaseItem {
-  id: UniqueIdentifier;
+  key: UniqueIdentifier;
   containerId: UniqueIdentifier;
 }
 
@@ -85,7 +85,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
     }
 
     if (event.active.data.current?.type === 'item') {
-      setActiveItem(items.find(item => item.id === event.active.id));
+      setActiveItem(items.find(item => item.key === event.active.id));
       return;
     }
   };
@@ -125,8 +125,8 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
 
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
-      const activeIndex = items.findIndex(t => t.id === active.id);
-      const overIndex = items.findIndex(t => t.id === over.id);
+      const activeIndex = items.findIndex(t => t.key === active.id);
+      const overIndex = items.findIndex(t => t.key === over.id);
 
       if (items[activeIndex]!.containerId != items[overIndex]!.containerId) {
         items[activeIndex]!.containerId = items[overIndex]!.containerId;
@@ -142,7 +142,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
     // Im dropping a Task over a container
     if (isActiveATask && isOverAContainer) {
       const newTasks = (i: typeof items) => {
-        const activeIndex = i.findIndex(t => t.id === active.id);
+        const activeIndex = i.findIndex(t => t.key === active.id);
         i[activeIndex]!.containerId = over.id;
         return arrayMove(i, activeIndex, activeIndex);
       };

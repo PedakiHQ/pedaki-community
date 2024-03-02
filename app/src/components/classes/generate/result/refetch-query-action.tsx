@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@pedaki/design/ui/button';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import {
   useConfigurationParams,
   useRulesParams,
@@ -8,12 +9,12 @@ import {
 import { useFilterParams } from '~/components/datatable/client.tsx';
 import { searchParams } from '~/components/students/list/parameters.ts';
 import { api } from '~/server/clients/client.ts';
-import {
-  useClassesGenerateStore,
-} from '~/store/classes/generate/generate.store.ts';
+import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import deepEqual from 'fast-deep-equal';
 import { useEffect, useRef } from 'react';
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
+
+const studentKey = (student: { id: number }) => `student-${student.id}`;
+const classKey = (index: number) => `container-${index}`;
 
 const prepareRules = (rules: RawRule[]): RawRule[] => {
   const length = rules.length;
@@ -30,8 +31,8 @@ const RefetchQueryAction = () => {
   const [rules] = useRulesParams();
   const [config] = useConfigurationParams();
 
-  const setStudentData = useClassesGenerateStore(store => store.setStudentData);
   const setClassesData = useClassesGenerateStore(store => store.setClassesData);
+  const setStudentsData = useClassesGenerateStore(store => store.setStudentData);
 
   const rulesWithoutDescription = rules.map(rule => {
     const { description, ...rest } = rule;
@@ -49,6 +50,7 @@ const RefetchQueryAction = () => {
   const { data: generatedClasses } = api.classes.generator.create.useQuery(
     {
       where: filters,
+      // @ts-expect-error: type is wrong ?
       rules: prepareRules(rulesWithoutDescription),
       constraints: {
         class_size_limit: config.size,
@@ -71,7 +73,7 @@ const RefetchQueryAction = () => {
 
   const { data: students } = api.students.getManyById.useQuery(
     {
-      where: flatIds,
+      where: flatIds!,
     },
     {
       enabled: flatIds != null && flatIds.length > 0,
@@ -82,19 +84,22 @@ const RefetchQueryAction = () => {
     if (!students || !generatedClasses) return;
 
     const mappedToClasses = students.map(student => {
-      const classId = generatedClasses?.classes.findIndex(c =>
+      const classId = generatedClasses.classes.findIndex(c =>
         c.students.includes(student.id.toString()),
       );
       return {
         ...student,
-        containerId: classId !== undefined ? classId : 0,
+        key: studentKey(student),
+        containerId: classKey(classId),
       };
     });
 
-    const allClassesId = generatedClasses.classes.map((c, index) => ({ id: index }));
+    const allClasses = generatedClasses.classes.map((c, index) => ({
+      id: classKey(index),
+    }));
 
-    setClassesData(allClassesId);
-    setStudentData(mappedToClasses);
+    setStudentsData(mappedToClasses);
+    setClassesData(allClasses);
   }, [students, generatedClasses]);
 
   useEffect(() => {

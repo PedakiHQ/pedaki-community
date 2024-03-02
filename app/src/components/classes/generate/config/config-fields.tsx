@@ -50,7 +50,7 @@ const ConfigFields = () => {
           render={({ field }) => (
             <FormItem>
               {/*TODO: trads*/}
-                <FormLabel>Taille des classes maximum</FormLabel>
+              <FormLabel>Taille des classes maximum</FormLabel>
               <FormControl>
                 <Input
                   type="number"

@@ -1,3 +1,4 @@
+import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Student } from '@pedaki/services/students/student_base.model';
 import { createContext, useContext } from 'react';
@@ -7,10 +8,10 @@ export interface ClassesGenerateStore {
   studentsCount: number | null;
   setStudentsCount: (count: number) => void;
 
-  studentData: (Student & { containerId: number })[];
+  studentData: (Student & { containerId: UniqueIdentifier; key: UniqueIdentifier })[];
   setStudentData: (studentData: ClassesGenerateStore['studentData']) => void;
 
-  classesData: { id: number | string }[];
+  classesData: { id: UniqueIdentifier }[];
   setClassesData: (classesData: ClassesGenerateStore['classesData']) => void;
 
   activeCreateRule: RuleType | null;
