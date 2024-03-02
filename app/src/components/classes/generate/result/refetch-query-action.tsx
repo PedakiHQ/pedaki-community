@@ -98,8 +98,8 @@ const RefetchQueryAction = () => {
       id: classKey(index),
     }));
 
-    setStudentsData(mappedToClasses);
     setClassesData(allClasses);
+    setStudentsData(mappedToClasses);
   }, [students, generatedClasses]);
 
   useEffect(() => {
