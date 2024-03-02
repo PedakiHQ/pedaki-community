@@ -31,14 +31,18 @@ const ClassesGrid = () => {
 
   const setHasEdited = useClassesGenerateStore(state => state.setHasEdited);
 
+  const [isTransitionLoading, startTransition] = React.useTransition();
+
   const setItems = (items: Item[]) => {
-    setHasEdited(true);
-    _setItems(items);
+    startTransition(() => {
+      setHasEdited(true);
+      _setItems(items);
+    });
   };
 
   return (
     <div className="grid grid-cols-1 gap-4 @2xl/classes:grid-cols-2 @5xl/classes:grid-cols-3">
-      <TooltipProvider>
+      <TooltipProvider disableHoverableContent>
         <MultiContainerSortable
           renderContainer={(container, items, index) => (
             <ContainerWrapper container={container} items={items} index={index} />
@@ -126,7 +130,15 @@ const Item = ({ item }: { item: Item }) => {
             </DragHandle>
           </span>
         </TooltipTrigger>
-        <TooltipContent side="right">description</TooltipContent>
+        <TooltipContent side="right">
+          <pre>
+            {JSON.stringify(
+                item,
+              null,
+              2,
+            )}
+          </pre>
+        </TooltipContent>
       </Tooltip>
     </SortableItem>
   );

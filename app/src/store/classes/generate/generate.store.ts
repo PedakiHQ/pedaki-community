@@ -64,7 +64,6 @@ export const initializeStore = (preloadedState: InitialStore) => {
         // keep only the first container
         const noItemsId = containerWithNoItems[0]!.id;
         const filteredContainers = containers.filter(container => container.id !== noItemsId);
-        console.log({ filteredContainers });
         set({ classesData: filteredContainers });
       }
       set({ studentData });
