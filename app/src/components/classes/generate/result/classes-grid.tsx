@@ -31,7 +31,7 @@ const ClassesGrid = () => {
 
   const setHasEdited = useClassesGenerateStore(state => state.setHasEdited);
 
-  const [isTransitionLoading, startTransition] = React.useTransition();
+  const [_, startTransition] = React.useTransition();
 
   const setItems = (items: Item[]) => {
     startTransition(() => {
@@ -86,7 +86,7 @@ const ContainerWrapper = ({
         </CardHeader>
         <Separator className="-ml-4 w-[calc(100%+2rem)]" />
         <CardContent className="flex flex-row ">
-          <ul className="grid min-h-8 grid-cols-11 gap-2 overflow-hidden @2xl/classes:grid-cols-7">
+          <ul className="flex min-h-8 gap-2 overflow-hidden flex-wrap">
             <SortableContext items={itemIds}>
               {items.map(item => (
                 <Item key={item.key} item={item} />
@@ -117,7 +117,7 @@ const Item = ({ item }: { item: Item }) => {
   const hsl = `hsl(${hue}, 100%, 90%)`;
 
   return (
-    <SortableItem id={item.key} type="item">
+    <SortableItem id={item.key} type="item" className='h-8 w-8'>
       <Tooltip>
         <TooltipTrigger asChild>
           <span>
