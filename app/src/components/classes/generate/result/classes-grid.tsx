@@ -19,6 +19,8 @@ import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import type { ClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
+import dayjs from 'dayjs';
+import { useStudentsListStore } from '~/store/students/list/list.store';
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -45,9 +47,9 @@ const ClassesGrid = () => {
       <TooltipProvider disableHoverableContent>
         <MultiContainerSortable
           renderContainer={(container, items, index) => (
-            <ContainerWrapper container={container} items={items} index={index} />
+            <ContainerWrapperMemo container={container} items={items} index={index} />
           )}
-          renderItem={item => <Item item={item} />}
+          renderItem={item => <ItemMemo item={item} />}
           containers={containers}
           onChangeContainers={setContainers}
           items={items}
@@ -86,7 +88,7 @@ const ContainerWrapper = ({
         </CardHeader>
         <Separator className="-ml-4 w-[calc(100%+2rem)]" />
         <CardContent className="flex flex-row ">
-          <ul className="flex min-h-8 gap-2 overflow-hidden flex-wrap">
+          <ul className="flex min-h-8 flex-wrap gap-2 overflow-hidden">
             <SortableContext items={itemIds}>
               {items.map(item => (
                 <Item key={item.key} item={item} />
@@ -98,6 +100,11 @@ const ContainerWrapper = ({
     </SortableItem>
   );
 };
+const ContainerWrapperMemo = React.memo(
+  ContainerWrapper,
+  (prev, next) =>
+    prev.container.id === next.container.id && prev.items.length === next.items.length,
+);
 
 const ContainerInfo = ({ container }: { container: { id: UniqueIdentifier } }) => {
   return <Button variant="ghost-sub">{container.id}</Button>;
@@ -116,8 +123,15 @@ const Item = ({ item }: { item: Item }) => {
   const hue = nameHash % 360;
   const hsl = `hsl(${hue}, 100%, 90%)`;
 
+  let diffBirthDateMonth = dayjs().diff(item.birthDate, 'month');
+  let diffBirthDateYear = Math.floor(diffBirthDateMonth / 12);
+  diffBirthDateMonth = diffBirthDateMonth % 12;
+
+
+  const properties = useStudentsListStore(store => store.propertyMapping);
+
   return (
-    <SortableItem id={item.key} type="item" className='h-8 w-8'>
+    <SortableItem id={item.key} type="item" className="h-8 w-8">
       <Tooltip>
         <TooltipTrigger asChild>
           <span>
@@ -131,17 +145,27 @@ const Item = ({ item }: { item: Item }) => {
           </span>
         </TooltipTrigger>
         <TooltipContent side="right">
-          <pre>
-            {JSON.stringify(
-                item,
-              null,
-              2,
-            )}
-          </pre>
+          <div className="flex flex-col space-y-2">
+            <p className='font-medium'>{item.firstName + ' ' + item.lastName}</p>
+            <ul>
+              <li>
+                <span className="font-semibold">Age:</span> {diffBirthDateYear} ans et {diffBirthDateMonth} mois
+              </li>
+              <li>
+                <span className="font-semibold">Sexe:</span> {item.gender}
+              </li>
+              {item.properties && Object.entries(item.properties).map(([property, value]) => (
+                <li key={property}>
+                  <span className="font-semibold">{properties[property]?.name ?? '-'}:</span> {value}
+                </li>
+              ))}
+            </ul>
+          </div>
         </TooltipContent>
       </Tooltip>
     </SortableItem>
   );
 };
 
+const ItemMemo = React.memo(Item, (prev, next) => prev.item.key === next.item.key);
 export default ClassesGrid;
