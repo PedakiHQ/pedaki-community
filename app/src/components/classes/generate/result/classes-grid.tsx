@@ -21,6 +21,7 @@ import type { ClassesGenerateStore } from '~/store/classes/generate/generate.sto
 import React from 'react';
 import dayjs from 'dayjs';
 import { useStudentsListStore } from '~/store/students/list/list.store';
+import deepEqual from 'fast-deep-equal/react';
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -111,7 +112,7 @@ const ContainerBody = ({ container, items, index }: { container: { id: UniqueIde
 const ContainerBodyMemo = React.memo(
   ContainerBody,
   (prev, next) =>
-    prev.container.id === next.container.id && prev.items.length === next.items.length,
+    prev.container.id === next.container.id && deepEqual(prev.items, next.items)
 );
 
 const ContainerInfo = ({ container }: { container: { id: UniqueIdentifier } }) => {
