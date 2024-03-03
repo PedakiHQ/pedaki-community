@@ -49,7 +49,7 @@ const ClassesGrid = () => {
           renderContainer={(container, items, index) => (
             <ContainerWrapperMemo container={container} items={items} index={index} />
           )}
-          renderItem={item => <ItemMemo item={item} />}
+          renderItem={item => <Item item={item} />}
           containers={containers}
           onChangeContainers={setContainers}
           items={items}
@@ -119,6 +119,14 @@ const twoLettersFromName = (name: unknown) => {
 };
 
 const Item = ({ item }: { item: Item }) => {
+  return (
+    <SortableItem id={item.key} type="item" className="h-8 w-8 select-none">
+      <ItemBodyMemo item={item} />
+    </SortableItem>
+  );
+};
+
+const ItemBody = ({ item }: { item: Item }) => {
   const nameHash = hashCode(item.firstName);
   const hue = nameHash % 360;
   const hsl = `hsl(${hue}, 100%, 90%)`;
@@ -130,42 +138,42 @@ const Item = ({ item }: { item: Item }) => {
 
   const properties = useStudentsListStore(store => store.propertyMapping);
 
-  return (
-    <SortableItem id={item.key} type="item" className="h-8 w-8 select-none">
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span>
-            <DragHandle>
-              <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
-                <AvatarFallback>
-                  {twoLettersFromName(item.firstName + ' ' + item.lastName)}
-                </AvatarFallback>
-              </Avatar>
-            </DragHandle>
-          </span>
-        </TooltipTrigger>
-        <TooltipContent side="right">
-          <div className="flex flex-col select-none space-y-2">
-            <p className='font-medium'>{item.firstName + ' ' + item.lastName}</p>
-            <ul>
-              <li>
-                <span className="font-semibold">Age:</span> {diffBirthDateYear} ans et {diffBirthDateMonth} mois
-              </li>
-              <li>
-                <span className="font-semibold">Sexe:</span> {item.gender}
-              </li>
-              {item.properties && Object.entries(item.properties).map(([property, value]) => (
-                <li key={property}>
-                  <span className="font-semibold">{properties[property]?.name ?? '-'}:</span> {value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </TooltipContent>
-      </Tooltip>
-    </SortableItem>
-  );
-};
+  console.log('rendering item', item.key);
 
-const ItemMemo = React.memo(Item, (prev, next) => prev.item.key === next.item.key);
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span>
+          <DragHandle>
+            <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
+              <AvatarFallback>
+                {twoLettersFromName(item.firstName + ' ' + item.lastName)}
+              </AvatarFallback>
+            </Avatar>
+          </DragHandle>
+        </span>
+      </TooltipTrigger>
+      <TooltipContent side="right">
+        <div className="flex flex-col select-none space-y-2">
+          <p className='font-medium'>{item.firstName + ' ' + item.lastName}</p>
+          <ul>
+            <li>
+              <span className="font-semibold">Age:</span> {diffBirthDateYear} ans et {diffBirthDateMonth} mois
+            </li>
+            <li>
+              <span className="font-semibold">Sexe:</span> {item.gender}
+            </li>
+            {item.properties && Object.entries(item.properties).map(([property, value]) => (
+              <li key={property}>
+                <span className="font-semibold">{properties[property]?.name ?? '-'}:</span> {value}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+const ItemBodyMemo = React.memo(ItemBody, (prev, next) => prev.item.key === next.item.key);
 export default ClassesGrid;
