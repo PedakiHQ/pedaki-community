@@ -70,11 +70,7 @@ export function MultiContainerSortable<T extends BaseItem, C extends Container>(
   }, [containers, items]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 10,
-      },
-    }),
+    useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),

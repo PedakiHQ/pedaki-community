@@ -131,7 +131,7 @@ const Item = ({ item }: { item: Item }) => {
   const properties = useStudentsListStore(store => store.propertyMapping);
 
   return (
-    <SortableItem id={item.key} type="item" className="h-8 w-8">
+    <SortableItem id={item.key} type="item" className="h-8 w-8 select-none">
       <Tooltip>
         <TooltipTrigger asChild>
           <span>
@@ -145,7 +145,7 @@ const Item = ({ item }: { item: Item }) => {
           </span>
         </TooltipTrigger>
         <TooltipContent side="right">
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col select-none space-y-2">
             <p className='font-medium'>{item.firstName + ' ' + item.lastName}</p>
             <ul>
               <li>
