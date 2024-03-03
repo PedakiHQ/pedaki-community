@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { FieldSchemaWithRefinement, FilterSchemaWithRefinement } from './query.model.ts';
 
 export const GetManyStudentsInputSchema = z.object({
-  fields: FieldSchemaWithRefinement.array(),
+  fields: FieldSchemaWithRefinement.array().readonly(),
   where: FilterSchemaWithRefinement.array().optional(),
   orderBy: z.array(z.tuple([FieldSchemaWithRefinement, z.enum(['asc', 'desc'])])).optional(),
   pagination: PaginationInputSchema.optional().default({

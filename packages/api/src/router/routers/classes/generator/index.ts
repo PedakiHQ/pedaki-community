@@ -11,6 +11,13 @@ import type { Field } from '@pedaki/services/students/query.model.client';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
+const fieldsFromArray = (student: object, array: Field[]) => {
+  return Object.fromEntries(
+    Object.entries(student).filter(([k]) => array.includes(k as Field)),
+  );
+};
+
+
 export const classGeneratorRouter = router({
   create: privateProcedure
     .input(ClassGeneratorInputWithRefinementSchema)
@@ -37,35 +44,32 @@ export const classGeneratorRouter = router({
         }
       }
 
+      const fields = [...new Set(['id', 'gender', 'birthDate', ...options, ...extras])] as Field[];
+
       const queryData = studentQueryService.buildSelectPreparedQuery(
         {
           where: input.where,
-          fields: ['id', 'gender', ...options, ...extras],
+          fields,
           pagination: {
             page: 0,
             limit: -1, // Skip pagination
           },
         },
         {
-          selectFields: ['id'],
+          selectFields: fields,
         },
       );
 
       const data =
         await prisma.$queryRawUnsafe<
-          { id: number; gender: string; birthDate: string; [key: string]: any }[]
+          { id: number; gender: string; birthDate: Date;[key: string]: any }[]
         >(queryData);
 
-      const fieldsFromArray = (student: object, array: Field[]) => {
-        return Object.fromEntries(
-          Object.entries(student).filter(([k]) => array.includes(k as Field)),
-        );
-      };
 
       const students: RawStudent[] = data.map(student => {
         return {
           id: student.id.toString(),
-          birthdate: new Date(student.birthDate),
+          birthdate: student.birthDate,
           gender: student.gender,
           levels: fieldsFromArray(student, options),
           extra: fieldsFromArray(student, extras),

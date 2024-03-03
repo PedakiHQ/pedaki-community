@@ -42,7 +42,7 @@ const ruleParam = createParser({
 });
 
 // Ignore description when comparing rules to avoid unnecessary updates
-export const ruleId = (rule: RawRule) => JSON.stringify({ ...rule, description: '' });
+export const ruleId = (rule: RawRule) => JSON.stringify({ ...rule, description: undefined, id: undefined });
 
 export const useRulesParams = () => {
   const [rules, setRules] = useQueryState(

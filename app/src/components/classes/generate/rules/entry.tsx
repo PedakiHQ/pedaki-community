@@ -155,7 +155,7 @@ const EditAction = ({ item }: EntryProps) => {
   const [open, setOpen] = React.useState(false);
   const [rules, setRules] = useRulesParams();
 
-  const currentRule = rules?.find((r, i) => ruleId(r) === item.id);
+  const currentRule = rules.find((r) => ruleId(r) === item.id);
 
   const onSubmitted = async (data: RawAttribute[]) => {
     await setRules(oldRules => {
