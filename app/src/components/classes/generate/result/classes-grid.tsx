@@ -47,7 +47,7 @@ const ClassesGrid = () => {
       <TooltipProvider disableHoverableContent>
         <MultiContainerSortable
           renderContainer={(container, items, index) => (
-            <ContainerWrapperMemo container={container} items={items} index={index} />
+            <ContainerWrapper container={container} items={items} index={index} />
           )}
           renderItem={item => <Item item={item} />}
           containers={containers}
@@ -69,39 +69,47 @@ const ContainerWrapper = ({
   items: Item[];
   index: number | null;
 }) => {
+
+  return (
+    <SortableItem id={container.id} type="container" enabled={false}>
+      <ContainerBodyMemo container={container} items={items} index={index} />
+    </SortableItem>
+  );
+};
+
+const ContainerBody = ({ container, items, index }: { container: { id: UniqueIdentifier }; items: Item[], index: number | null }) => {
   const itemIds = items.map(item => item.key);
   const isEmpty = items.length === 0;
 
   return (
-    <SortableItem id={container.id} type="container" enabled={false}>
-      <Card className={cn('gap-2 py-2', isEmpty && 'border-dashed')} data-container={container.id}>
-        <CardHeader>
-          <div className="flex items-center justify-between space-x-4">
-            <div className="flex items-center space-x-2">
-              <div>
-                {/*TODO: trads*/}
-                <CardTitle className={isEmpty ? 'text-soft' : ''}>Classe {index}</CardTitle>
-              </div>
+    <Card className={cn('gap-2 py-2', isEmpty && 'border-dashed')} data-container={container.id}>
+      <CardHeader>
+        <div className="flex items-center justify-between space-x-4">
+          <div className="flex items-center space-x-2">
+            <div>
+              {/*TODO: trads*/}
+              <CardTitle className={isEmpty ? 'text-soft' : ''}>Classe {index}</CardTitle>
             </div>
-            <ContainerInfo container={container} />
           </div>
-        </CardHeader>
-        <Separator className="-ml-4 w-[calc(100%+2rem)]" />
-        <CardContent className="flex flex-row ">
-          <ul className="flex min-h-8 flex-wrap gap-2 overflow-hidden">
-            <SortableContext items={itemIds}>
-              {items.map(item => (
-                <Item key={item.key} item={item} />
-              ))}
-            </SortableContext>
-          </ul>
-        </CardContent>
-      </Card>
-    </SortableItem>
-  );
-};
-const ContainerWrapperMemo = React.memo(
-  ContainerWrapper,
+          <ContainerInfo container={container} />
+        </div>
+      </CardHeader>
+      <Separator className="-ml-4 w-[calc(100%+2rem)]" />
+      <CardContent className="flex flex-row ">
+        <ul className="flex min-h-8 flex-wrap gap-2 overflow-hidden">
+          <SortableContext items={itemIds}>
+            {items.map(item => (
+              <Item key={item.key} item={item} />
+            ))}
+          </SortableContext>
+        </ul>
+      </CardContent>
+    </Card>
+  )
+}
+
+const ContainerBodyMemo = React.memo(
+  ContainerBody,
   (prev, next) =>
     prev.container.id === next.container.id && prev.items.length === next.items.length,
 );
@@ -137,8 +145,6 @@ const ItemBody = ({ item }: { item: Item }) => {
 
 
   const properties = useStudentsListStore(store => store.propertyMapping);
-
-  console.log('rendering item', item.key);
 
   return (
     <Tooltip>
