@@ -55,7 +55,7 @@ export class BalanceClassCountRule extends Rule {
    */
   override initialize(entry: Entry) {
     this.samples.clear();
-    for (const c of entry.classes()) {
+    for (const c of entry.classes().values()) {
       this.samples.set(c, new Set(entry.getStudentSample([...c.students()], this, true)));
       // TODO inclure davantage d'élèves par rapport à la différence de dénombrement dans la classe, seulement si c'est moins long que refaire un tour d'exécution
     }
@@ -73,7 +73,7 @@ export class BalanceClassCountRule extends Rule {
   override getEntryValue(entry: Entry): number {
     // On compte la différence entre le dénombrement de chaque attribut dans chaque classe.
     let value = 0;
-    for (const c of entry.classes()) {
+    for (const c of entry.classes().values()) {
       if (!this.hasClassAttributes(c)) continue;
       if (!this.canBalanceClass(entry, c)) continue;
       const classValue = this.getClassValue(c);
@@ -94,7 +94,7 @@ export class BalanceClassCountRule extends Rule {
    */
   override getStudentValue(_entry: Entry, student: StudentWithClass): StudentValue {
     return {
-      value: this.samples.get(student.studentClass.class)!.has(student.student) ? 1 : 0,
+      value: this.samples.get(student.studentClass)!.has(student.student) ? 1 : 0,
       // Il n'y a aucune pire classe, on n'est pas capable de les définir.
       worseClasses: [],
     };

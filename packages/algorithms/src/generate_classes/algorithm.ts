@@ -52,9 +52,9 @@ export class GenerateClassesAlgorithm {
       output.rules[rule.initialIndex()] = { respect_percent: rule.getRespectPercent(this._entry) };
     }
 
-    output.classes = this._entry
-      .classes()
-      .map(c => ({ students: [...c.students()].map(s => s.id()) }));
+    output.classes = [...this._entry.classes().values()].map(c => ({
+      students: [...c.students()].map(s => s.id()),
+    }));
     output.duration = (Date.now() - startTime) / 1000;
     return output as Output;
   }

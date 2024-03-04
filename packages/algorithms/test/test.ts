@@ -55,10 +55,10 @@ export async function runTest(
       }
 
       if (output) {
-        expect(entry.classes().length).toBe(output.length);
+        expect(entry.classes().size).toBe(output.length);
 
         // On vérifie que chaque classe du résultat était bien dénombrée à l'identique dans le test.
-        const classesToValidate = entry.classes();
+        const classesToValidate = [...entry.classes().values()];
         let minClassesMatching = 1;
         while (classesToValidate.length) {
           for (const outputClass of output) {

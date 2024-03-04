@@ -37,8 +37,7 @@ export class GatherAttributesRule extends Rule {
 
     // S'il a l'un des attributs, il ne doit pas être dans une classe qui ne les regroupe pas.
     if (student.student.hasAttribute(...this.attributes())) {
-      const studentClassIndex = student.studentClass.index.toString();
-      const excludedClassValue = excludedClasses[studentClassIndex];
+      const excludedClassValue = excludedClasses[student.studentClass.id()];
 
       // S'il est dans une classe qui regroupe les attributs, il est déjà bien placé.
       // Sinon, on retourne le nombre d'élèves bien placés (s'il est le seul mal placé, il est vraiment très mal placé).
@@ -66,7 +65,7 @@ export class GatherAttributesRule extends Rule {
   public getExcludedClasses = (
     entry: Entry,
     attributes: Attribute[] = this.attributes(),
-  ): Record<string, number> => {
+  ): Record<number, number> => {
     // On dénombre les élèves concernés.
     let studentsAmount;
     if (attributes.length === 1) studentsAmount = attributes[0]!.count();
@@ -84,14 +83,8 @@ export class GatherAttributesRule extends Rule {
 
     // Exclure les classes ayant le plus les attributs.
     return Object.fromEntries(
-      Object.keys(entry.classes())
-        .map(
-          classKey =>
-            [classKey, entry.class(classKey)?.count(...this.attributes()!) ?? 0] as [
-              string,
-              number,
-            ],
-        )
+      [...entry.classes().values()]
+        .map(c => [c.id(), c.count(...this.attributes()!) ?? 0] as [number, number])
         .sort((a, b) => a[1] - b[1])
         .slice(0, -classesNeeded),
     );

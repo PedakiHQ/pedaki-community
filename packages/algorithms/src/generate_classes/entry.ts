@@ -1,6 +1,5 @@
 import type { GenerateClassesAlgorithm } from './algorithm';
 import type { Attribute } from './attribute';
-import type { ClassWithIndex } from './class';
 import Class from './class';
 import type { Rule, StudentValue } from './rules/rule';
 import { RuleType } from './rules/rule';
@@ -8,7 +7,7 @@ import { Student } from './student';
 
 export interface StudentWithClass {
   student: Student;
-  studentClass: ClassWithIndex;
+  studentClass: Class;
 }
 
 /**
@@ -17,7 +16,7 @@ export interface StudentWithClass {
  */
 export default class Entry {
   private readonly _algo: GenerateClassesAlgorithm;
-  private _classes: Class[];
+  private _classes = new Map<number, Class>();
 
   // La valeur actuelle de cette configuration pour chaque règle. Elle est invalidée à chaque modification.
   private _values = new Map<Rule, number>();
@@ -26,16 +25,19 @@ export default class Entry {
   private _studentValues = new Map<Rule, Map<Student, StudentValue>>();
 
   // L'indice de la classe actuelle de chaque élève.
-  private _studentClass = new Map<Student, number>();
+  private _studentClass = new Map<Student, Class>();
 
   constructor(algo: GenerateClassesAlgorithm, classes: Class[]) {
     this._algo = algo;
-    this._classes = classes;
+
+    for (const c of classes) {
+      this._classes.set(c.id(), c);
+    }
 
     // On définit une seule fois la position de chaque élève, pour ne pas devoir chercher ensuite.
-    for (const [index, c] of Object.entries(classes)) {
+    for (const c of Object.values(classes)) {
       for (const student of c.students()) {
-        this._studentClass.set(student, parseInt(index));
+        this._studentClass.set(student, c);
       }
     }
   }
@@ -44,41 +46,53 @@ export default class Entry {
     return this._classes;
   }
 
+  public newClass(): Class {
+    // Trouver un identifiant unique
+    const keys = [...this._classes.keys()];
+    let id = keys[keys.length - 1]! + 1;
+    while (this._classes.has(id)) {
+      id++;
+    }
+
+    const newClass = new Class([], id);
+    this._classes.set(id, newClass);
+    return newClass;
+  }
+
   public algo() {
     return this._algo;
   }
 
   public clone() {
-    return new Entry(this.algo(), [...this.classes().map(c => new Class([...c.students()]))]);
+    return new Entry(
+      this.algo(),
+      [...this.classes().values()].map(c => new Class([...c.students()], c.id())),
+    );
   }
 
   public class(index: number | string): Class | null {
     const intIndex: number = typeof index === 'string' ? parseInt(index) : index;
 
-    return this._classes[intIndex] ?? null;
+    return this._classes.get(intIndex) ?? null;
   }
 
   public getClassesWithAttribute(attribute: Attribute) {
-    return this.classes().filter(c => c.count(attribute));
+    return [...this.classes().values()].filter(c => c.count(attribute));
   }
 
-  public studentClass(student: Student): ClassWithIndex | null {
+  public studentClass(student: Student): Class | null {
     if (!this._studentClass.has(student)) return null;
-    const index = this._studentClass.get(student)!;
-    return {
-      index: index,
-      class: this.classes()[index]!,
-    };
+    return this._studentClass.get(student)!;
   }
 
   public students(): StudentWithClass[] {
-    return this.classes()
+    return [...this.classes().values()]
       .map((c, i) => {
         const array = [];
         for (const student of c.students()) {
           array.push({
             student,
-            studentClass: { class: c, index: i } as ClassWithIndex,
+            studentClass: c,
           });
         }
         return array;
@@ -131,24 +145,33 @@ export default class Entry {
   /**
    * Suppression d'une classe dans cette configuration.
    */
-  public deleteClass(classIndex: number) {
-    this.classes().splice(classIndex, 1);
+  public deleteClass(classIndex: number | Class) {
+    if (classIndex instanceof Class) classIndex = classIndex.id();
+    this._classes.delete(classIndex);
   }
 
   /**
    * Déplacer un élève dans une autre classe.
    * Permet d'actualiser les différentes données de la configuration actuelle (sans tout recalculer).
    */
-  public moveStudent(student: Student, to: ClassWithIndex) {
-    this.studentClass(student)!.class.removeStudent(student);
-    to.class.addStudent(student);
+  public moveStudent(student: Student, to: Class, pending = false) {
+    const from = this.studentClass(student)!;
+    if (from.id() === to.id())
+      throw new Error(`Useless student ${student.id()} movement, in class ${from.id()}`);
+    if (!from.students().has(student))
+      throw new Error(`Moving student ${student.id()} from class ${from.id()} where he is not`);
+    from.removeStudent(student);
+    to.addStudent(student);
+
+    // Supprimer la classe s'il n'y a plus d'élèves dedans.
+    if (!pending && from.students().size === 0) this.deleteClass(from);
 
     // On invalide la valeur de la configuration pour chaque règle.
     this._values.clear();
     this._studentValues.clear();
 
     // On modifie l'indice de l'élève concerné.
-    this._studentClass.set(student, to.index);
+    this._studentClass.set(student, to);
   }
 
   public static default(algo: GenerateClassesAlgorithm): Entry {
@@ -166,6 +189,7 @@ export default class Entry {
                 k * algo.input().classSize(),
                 k * algo.input().classSize() + algo.input().classSize(),
               ),
+            k,
           ),
       ),
     );
@@ -216,14 +240,14 @@ export default class Entry {
     if (value <= 0) return undefined;
 
     // On ajoute la classe actuelle de l'élève dans les classes ignorées.
-    if (!worseClasses.includes(student.studentClass.class)) {
-      worseClasses.push(student.studentClass.class);
+    if (!worseClasses.includes(student.studentClass)) {
+      worseClasses.push(student.studentClass);
     }
 
-    // On n'utilise pas les pires classes des règles précédentes puisque ça pourrait retirer de réelles possiblités.
-    // Les retours en arrière sont de toute façon impossible car testés dans "applyRuleForStudent()".
+    // On n'utilise pas les pires classes des règles précédentes puisque ça pourrait retirer de réelles possibilités.
+    // Les retours en arrière sont de toute façon impossible, car testés dans "applyRuleForStudent()".
 
-    return this.classes().filter(c => !worseClasses.includes(c));
+    return [...this.classes().values()].filter(c => !worseClasses.includes(c));
   }
 
   /**
@@ -233,32 +257,27 @@ export default class Entry {
     student: StudentWithClass,
     rule: Rule,
     destination?: Class,
-  ): { student: StudentWithClass; to: ClassWithIndex; exchanged?: Student } | undefined {
+  ): { student: StudentWithClass; to: Class; exchanged?: Student } | undefined {
     if (!destination) {
       // Si on a atteint le nombre maximum de classes, on ne fait rien.
-      if (this.classes().length >= this.algo().input().classAmount()) return undefined;
+      if (this.classes().size >= this.algo().input().classAmount()) return undefined;
       // Création d'une nouvelle classe si aucune n'est définie.
-      destination = new Class([]);
-      this.classes().push(destination);
+      destination = this.newClass();
     }
 
     // Récupération de la liste d'élèves disponibles pour un éventuel échange.
     // C'est-à-dire sans l'élève qui va être rajouté, pour éviter que l'échange annule tout.
     const studentsForExchange = [...destination.students()];
 
-    const to = {
-      class: destination,
-      index: this.classes().indexOf(destination),
-    };
-
     // Déplacer l'élève dans l'autre classe.
-    this.moveStudent(student.student, to);
+    const exchange = destination.students().size + 1 > this.algo().input().classSize();
+    this.moveStudent(student.student, destination, exchange);
 
     // On l'échange avec un élève de sa nouvelle classe si elle est pleine.
-    if (destination.students().size > this.algo().input().classSize()) {
+    if (exchange) {
       // Déterminer l'élève de la classe de destination avec qui échanger.
       // On ignore tous les élèves qui sont équivalents en terme d'attributs.
-      const exchanged: Student | null = student.studentClass.class.findBestStudentFor(
+      const exchanged: Student | null = student.studentClass.findBestStudentFor(
         this,
         studentsForExchange,
         rule,
@@ -273,14 +292,10 @@ export default class Entry {
 
       // Déplacer cet élève dans la classe initiale du premier élève (échanger).
       this.moveStudent(exchanged, student.studentClass);
-      return { student, to, exchanged };
+      return { student, to: destination, exchanged };
     }
 
-    // Supprimer la classe s'il n'y a plus d'élèves dedans.
-    if (student.studentClass?.class.students().size === 0)
-      this.deleteClass(student.studentClass.index);
-
-    return { student, to };
+    return { student, to: destination };
   }
 
   /**
@@ -333,8 +348,10 @@ export default class Entry {
         bestResult = result;
         bestValue = value;
 
-        // Si c'était la dernière destination à tester, on s'arrête tel-quel.
-        if (index == (destinations.length - 1).toString()) return true;
+        // Si c'était la dernière destination à tester, et qu'elle est meilleure que la configuration initiale on s'arrête tel-quel.
+        // Permet de ne pas annuler le mouvement pour le refaire ensuite.
+        if (index == (destinations.length - 1).toString() && bestValue < fromEntry.value(rule))
+          return true;
       }
 
       // Annulation du déplacement, afin de revenir à la configuration initiale.
@@ -387,7 +404,7 @@ export default class Entry {
 
   toString(showLevel?: boolean, showIds?: boolean, ...keysMask: string[]) {
     let str = '';
-    for (const c of this.classes()) {
+    for (const c of this.classes().values()) {
       str += '- ' + c.toString(showLevel, showIds, ...keysMask) + '\n';
     }
 

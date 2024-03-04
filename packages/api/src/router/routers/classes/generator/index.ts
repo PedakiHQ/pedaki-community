@@ -12,11 +12,8 @@ import { studentQueryService } from '@pedaki/services/students/query.service.js'
 import { privateProcedure, router } from '~api/router/trpc.ts';
 
 const fieldsFromArray = (student: object, array: Field[]) => {
-  return Object.fromEntries(
-    Object.entries(student).filter(([k]) => array.includes(k as Field)),
-  );
+  return Object.fromEntries(Object.entries(student).filter(([k]) => array.includes(k as Field)));
 };
-
 
 export const classGeneratorRouter = router({
   create: privateProcedure
@@ -62,9 +59,8 @@ export const classGeneratorRouter = router({
 
       const data =
         await prisma.$queryRawUnsafe<
-          { id: number; gender: string; birthDate: Date;[key: string]: any }[]
+          { id: number; gender: string; birthDate: Date; [key: string]: any }[]
         >(queryData);
-
 
       const students: RawStudent[] = data.map(student => {
         return {
