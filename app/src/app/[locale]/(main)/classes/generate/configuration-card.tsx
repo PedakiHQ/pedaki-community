@@ -1,5 +1,3 @@
-'use server';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import { IconSettings } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';

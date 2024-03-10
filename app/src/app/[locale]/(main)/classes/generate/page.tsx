@@ -2,8 +2,6 @@ import { IconBookUser } from '@pedaki/design/ui/icons';
 import ConfigurationCard from '~/app/[locale]/(main)/classes/generate/configuration-card.tsx';
 import RulesCard from '~/app/[locale]/(main)/classes/generate/rules-card.tsx';
 import type { PageType } from '~/app/types.ts';
-import ImportStudents from '~/components/classes/generate/ImportStudents.tsx';
-import { GenerateClassesRulesWrapper } from '~/components/classes/generate/Wrapper.tsx';
 import PageHeader from '~/components/PageHeader.tsx';
 import StudentsListWrapper from '~/components/students/list/wrapper';
 import type { LocaleCode } from '~/locales/server.ts';
