@@ -1,4 +1,3 @@
-import type { RawAttribute, RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { Badge } from '@pedaki/design/ui/badge';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
@@ -18,6 +17,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
+import type {
+  RawAttribute,
+  RuleType,
+} from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { ruleId, useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-input.tsx';

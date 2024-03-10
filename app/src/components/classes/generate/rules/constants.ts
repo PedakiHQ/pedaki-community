@@ -1,4 +1,3 @@
-import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { IconType } from '@pedaki/design/ui/icons';
 import {
   IconBookUser,
@@ -9,6 +8,7 @@ import {
   IconSettings2,
   IconX,
 } from '@pedaki/design/ui/icons';
+import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 
 type CanBeAdded = (rules: RuleType[]) => readonly [string, RuleType] | null; // error code or null
 

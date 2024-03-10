@@ -4,13 +4,12 @@ import type {
   RawRule,
   RawStudent,
 } from '@pedaki/services/algorithms/generate_classes/input.schema';
-import { OutputSchema  } from '@pedaki/services/algorithms/generate_classes/output.schema';
-import type {Output} from '@pedaki/services/algorithms/generate_classes/output.schema';
+import { OutputSchema } from '@pedaki/services/algorithms/generate_classes/output.schema';
+import type { Output } from '@pedaki/services/algorithms/generate_classes/output.schema';
 import { ClassGeneratorInputWithRefinementSchema } from '@pedaki/services/classes/generator.model.js';
 import type { Field } from '@pedaki/services/students/query.model.client';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
 import { privateProcedure, router } from '~api/router/trpc.ts';
-
 
 export const classGeneratorRouter = router({
   create: privateProcedure

@@ -7,8 +7,8 @@ import {
 import type { GetManyClasses } from '@pedaki/services/classes/class.model.js';
 import type { Prisma } from '@prisma/client';
 import { classBranchesRouter } from '~api/router/routers/classes/branches';
+import { classGeneratorRouter } from '~api/router/routers/classes/generator';
 import { classLevelsRouter } from '~api/router/routers/classes/levels';
-import {classGeneratorRouter} from "~api/router/routers/classes/generator";
 import { privateProcedure, router } from '~api/router/trpc.ts';
 import { filtersArrayToPrismaWhere, orderByArrayToPrismaOrderBy } from '~api/router/utils';
 

@@ -1,19 +1,19 @@
-import type { Attribute } from './attribute';
 import type {
   RawInput,
   RawRule,
   RawStudent,
-  RuleType
+  RuleType,
 } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import { BalanceClassCountRule } from '~/generate_classes/rules/balance_class_count';
+import { BalanceCountRule } from '~/generate_classes/rules/balance_count';
+import { GatherAttributesRule } from '~/generate_classes/rules/gather_attributes';
+import { MaximizeClassSizeRule } from '~/generate_classes/rules/maximize_class_size';
+import { MaximizeClassesRule } from '~/generate_classes/rules/maximize_classes';
+import { NegativeRelationshipsRule } from '~/generate_classes/rules/negative_relationships';
+import { PositiveRelationshipsRule } from '~/generate_classes/rules/positive_relationships';
+import type { Attribute } from './attribute';
 import type { Rule } from './rules/rule';
 import { Student } from './student';
-import {GatherAttributesRule} from "~/generate_classes/rules/gather_attributes";
-import {MaximizeClassSizeRule} from "~/generate_classes/rules/maximize_class_size";
-import {MaximizeClassesRule} from "~/generate_classes/rules/maximize_classes";
-import {PositiveRelationshipsRule} from "~/generate_classes/rules/positive_relationships";
-import {NegativeRelationshipsRule} from "~/generate_classes/rules/negative_relationships";
-import {BalanceCountRule} from "~/generate_classes/rules/balance_count";
-import {BalanceClassCountRule} from "~/generate_classes/rules/balance_class_count";
 
 export const RuleOrder: Record<
   RuleType,
@@ -99,7 +99,7 @@ export class Input {
 
     const rules: Rule[] = [];
     for (const rawRule of Object.values(this.input.rules)) {
-      if (!(rawRule.rule in RuleOrder)) throw new Error(`Unknown rule ${rawRule.rule}`)
+      if (!(rawRule.rule in RuleOrder)) throw new Error(`Unknown rule ${rawRule.rule}`);
       rules.push(new RuleOrder[rawRule.rule].rule(rawRule, this));
     }
 

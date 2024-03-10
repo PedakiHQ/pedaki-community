@@ -1,7 +1,10 @@
+import type {
+  RawInput,
+  RawStudent,
+} from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Output } from '@pedaki/services/algorithms/generate_classes/output.schema';
 import Entry from './entry';
 import { Input } from './input';
-import type { RawInput, RawStudent } from '@pedaki/services/algorithms/generate_classes/input.schema';
 
 export const DEFAULT_PRIORITY = 1;
 

@@ -1,6 +1,5 @@
 'use client';
 
-import type { RawAttribute } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { Button } from '@pedaki/design/ui/button';
 import { Card } from '@pedaki/design/ui/card';
 import {
@@ -18,6 +17,7 @@ import {
   TooltipTrigger,
 } from '@pedaki/design/ui/tooltip';
 import { cn } from '@pedaki/design/utils';
+import type { RawAttribute } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import type { RuleMappingValue } from '~/components/classes/generate/rules/constants.ts';

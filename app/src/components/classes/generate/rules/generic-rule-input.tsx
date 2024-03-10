@@ -1,7 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { RawAttribute } from '@pedaki/services/algorithms/generate_classes/input.schema';
-import { RawAttributeSchema } from '@pedaki/services/algorithms/generate_classes/input.schema';
-import type {Field} from "@pedaki/services/students/query.model.client"
 import { Button } from '@pedaki/design/ui/button';
 import { DialogFooter } from '@pedaki/design/ui/dialog';
 import {
@@ -20,6 +17,9 @@ import {
   SelectValue,
 } from '@pedaki/design/ui/select';
 import { TooltipProvider } from '@pedaki/design/ui/tooltip';
+import type { RawAttribute } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import { RawAttributeSchema } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import type { Field } from '@pedaki/services/students/query.model.client';
 import AttributeIcon from '~/components/classes/generate/rules/attribute-icon.tsx';
 import type { RuleMappingValue } from '~/components/classes/generate/rules/constants.ts';
 import { MAX_ATTRIBUTES } from '~/components/classes/generate/rules/constants.ts';

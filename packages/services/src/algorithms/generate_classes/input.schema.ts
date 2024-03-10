@@ -1,5 +1,5 @@
+import { FieldSchema } from '~/students/query.model.client.ts';
 import { z } from 'zod';
-import {FieldSchema} from "~/students/query.model.client.ts";
 
 export const algorithmRules = [
   // Regrouper un ou plusieurs attributs dans un minimum de classes.

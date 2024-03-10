@@ -5,8 +5,11 @@
  * - Un ou plusieurs extras (booléens)
  * - Un ou plusieurs niveaux d'option
  */
+import type {
+  RawAttribute,
+  RawAttributeOption,
+} from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Input } from './input';
-import type { RawAttribute, RawAttributeOption } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Student } from './student';
 
 const EMPTY_ARRAY = [] as const;
