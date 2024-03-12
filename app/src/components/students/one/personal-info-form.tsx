@@ -1,7 +1,7 @@
 'use client';
 
 // import { Avatar, AvatarFallback, AvatarImage } from '@pedaki/design/ui/avatar';
-import { FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
+import { FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client';
 import { BASE_INFO } from '~/store/tutorial/data/schema-student/constants.ts';
@@ -71,6 +71,7 @@ const BaseData = ({ form }: { form: Form }) => {
                       />
                     </div>
                   </div>
+                  <FormMessage />
                 </FormItem>
               );
             }}

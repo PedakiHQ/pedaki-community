@@ -1,9 +1,11 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@pedaki/design/ui/button';
 import { Form } from '@pedaki/design/ui/form';
 import { IconSpinner } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
+import { StudentSchema } from '@pedaki/services/students/student_base.model';
 import type { Student } from '@pedaki/services/students/student_base.model';
 import { useScopedI18n } from '~/locales/client';
 import type { OutputType } from '~api/router/router';
@@ -23,6 +25,14 @@ interface FormValues {
 
 export type Form = ReturnType<typeof useForm<FormValues>>;
 
+const EditStudentFormSchema = StudentSchema.pick({
+  firstName: true,
+  lastName: true,
+  otherName: true,
+  birthDate: true,
+  gender: true,
+});
+
 const EditStudentForm = ({
   student,
   properties,
@@ -35,6 +45,8 @@ const EditStudentForm = ({
   const t = useScopedI18n('students.schema');
 
   const form = useForm<FormValues>({
+    resolver: !editSchema ? zodResolver(EditStudentFormSchema) : undefined,
+    mode: !editSchema ? 'onChange' : undefined,
     defaultValues: {
       // avatar: '',
       firstName: student?.firstName ?? '',
