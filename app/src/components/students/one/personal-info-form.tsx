@@ -46,7 +46,7 @@ const PersonalInfoForm = ({ form }: { form: Form }) => {
 // };
 
 const BaseData = ({ form }: { form: Form }) => {
-  const t = useScopedI18n('students.schema.personalInfos.fields');
+  const t = useScopedI18n('students.schema.fields');
 
   return (
     <>

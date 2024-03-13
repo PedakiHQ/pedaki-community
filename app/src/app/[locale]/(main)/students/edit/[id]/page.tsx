@@ -25,8 +25,6 @@ export default async function StudentsEditPage({ params }: PageType<{ id: string
 
   return (
     <>
-      {params.id}
-      <pre>{JSON.stringify(student, null, 2)}</pre>
       <PageHeader
         title={t('header.title', { firstName: student.firstName, lastName: student.lastName })}
         description={t('header.description')}

@@ -2,7 +2,7 @@
 
 import { wrapWithLoading } from '@pedaki/common/utils/wrap-with-loading';
 import { Button } from '@pedaki/design/ui/button';
-import { Form, FormField, FormItem, FormLabel } from '@pedaki/design/ui/form';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
 import { IconTrash } from '@pedaki/design/ui/icons';
 import ConfirmDangerModal from '~/components/ConfirmDangerModal.tsx';
 import { propertyFields } from '~/components/students/import/student/constants.ts';
@@ -15,11 +15,11 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import AddNewProperty from '../schema/add-property.tsx';
 
-interface PropertiesSectionProps {
+interface ConfigPropertiesSectionProps {
   initialProperties: OutputType['students']['properties']['getMany'];
 }
 
-const PropertiesSection = ({ initialProperties }: PropertiesSectionProps) => {
+const ConfigPropertiesSection = ({ initialProperties }: ConfigPropertiesSectionProps) => {
   const { data: properties } = api.students.properties.getMany.useQuery(undefined, {
     initialData: initialProperties,
     enabled: false,
@@ -38,7 +38,7 @@ const PropertiesSection = ({ initialProperties }: PropertiesSectionProps) => {
 const PropertyFields = ({
   properties,
 }: {
-  properties: PropertiesSectionProps['initialProperties'];
+  properties: ConfigPropertiesSectionProps['initialProperties'];
 }) => {
   const t = useScopedI18n('students.schema.fields');
 
@@ -113,6 +113,7 @@ const PropertyFields = ({
                           // @ts-expect-error: type is incorrect
                           t={t}
                         />
+                        <FormMessage />
                       </div>
                     </div>
                   </FormItem>
@@ -126,4 +127,4 @@ const PropertyFields = ({
   );
 };
 
-export default PropertiesSection;
+export default ConfigPropertiesSection;

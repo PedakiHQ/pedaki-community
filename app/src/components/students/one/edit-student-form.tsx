@@ -2,28 +2,20 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@pedaki/design/ui/button';
-import { Form } from '@pedaki/design/ui/form';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
 import { IconSpinner } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
 import { StudentSchema } from '@pedaki/services/students/student_base.model';
 import type { Student } from '@pedaki/services/students/student_base.model';
+import { propertyFields } from '~/components/students/import/student/constants.ts';
 import { useScopedI18n } from '~/locales/client';
 import type { OutputType } from '~api/router/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import ConfigPropertiesSection from './config-properties-section';
+import GenericField from './generic-field';
 import PersonalInfoForm from './personal-info-form';
-import PropertiesSection from './properties-section';
-
-interface FormValues {
-  // avatar: string;
-  firstName: string;
-  lastName: string;
-  otherName?: string;
-  birthDate: Date | null;
-  gender?: string;
-}
-
-export type Form = ReturnType<typeof useForm<FormValues>>;
 
 const EditStudentFormSchema = StudentSchema.pick({
   firstName: true,
@@ -31,7 +23,11 @@ const EditStudentFormSchema = StudentSchema.pick({
   otherName: true,
   birthDate: true,
   gender: true,
+  properties: true,
 });
+type FormValues = z.infer<typeof EditStudentFormSchema>;
+
+export type Form = ReturnType<typeof useForm<FormValues>>;
 
 const EditStudentForm = ({
   student,
@@ -52,8 +48,9 @@ const EditStudentForm = ({
       firstName: student?.firstName ?? '',
       lastName: student?.lastName ?? '',
       otherName: student?.otherName ?? '',
-      birthDate: student?.birthDate ?? null,
+      birthDate: student?.birthDate ?? undefined,
       gender: student?.gender ?? '',
+      properties: student?.properties ?? {},
     },
   });
 
@@ -73,7 +70,7 @@ const EditStudentForm = ({
           {!editSchema && (
             <>
               <Separator />
-              <div>TODO: properties</div>
+              <EditStudentPropertiesForm form={form} properties={properties} />
             </>
           )}
           <div className="flex justify-end">
@@ -87,10 +84,57 @@ const EditStudentForm = ({
       {!student && editSchema && (
         <>
           <Separator />
-          <PropertiesSection initialProperties={properties} />
+          <ConfigPropertiesSection initialProperties={properties} />
         </>
       )}
     </>
   );
 };
+
+const EditStudentPropertiesForm = ({
+  form,
+  properties,
+}: {
+  form: Form;
+  properties: OutputType['students']['properties']['getMany'];
+}) => {
+  const t = useScopedI18n('students.schema.properties');
+
+  return (
+    <>
+      <div className="grid grid-cols-12 gap-4">
+        {Object.entries(properties).map(([id, props]) => {
+          return (
+            <FormField
+              key={id}
+              control={form.control}
+              name={`properties.${id}`}
+              render={({ field: f }) => {
+                return (
+                  <FormItem className="col-span-6">
+                    <FormLabel className="flex items-center gap-2">{props.name}</FormLabel>
+                    <div className="relative flex w-full">
+                      <div className="flex w-full items-center gap-1">
+                        <GenericField
+                          field={f}
+                          type={propertyFields[props.type]}
+                          disabled={false}
+                          placeholder={props.name}
+                          // @ts-expect-error: type is incorrect
+                          t={t}
+                        />
+                      </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
 export default EditStudentForm;

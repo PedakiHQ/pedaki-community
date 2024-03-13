@@ -9,33 +9,34 @@ export default {
 
   personalInfos: {
     title: 'Informations de base',
-    fields: {
-      firstName: {
-        label: 'Prénom',
-        // TODO
-        placeholder: 'Guillaume',
+  },
+
+  fields: {
+    firstName: {
+      label: 'Prénom',
+      // TODO
+      placeholder: 'Guillaume',
+    },
+    lastName: {
+      label: 'Nom',
+      placeholder: 'Jobard',
+    },
+    gender: {
+      label: 'Genre',
+      placeholder: 'Genre',
+      options: {
+        M: 'Masculin',
+        F: 'Féminin',
+        O: 'Autre',
       },
-      lastName: {
-        label: 'Nom',
-        placeholder: 'Jobard',
-      },
-      gender: {
-        label: 'Genre',
-        placeholder: 'Genre',
-        options: {
-          M: 'Masculin',
-          F: 'Féminin',
-          O: 'Autre',
-        },
-      },
-      otherName: {
-        label: 'Troisième nom',
-        placeholder: 'ElChapo',
-      },
-      birthDate: {
-        label: 'Date de naissance',
-        placeholder: '01/01/2000',
-      },
+    },
+    otherName: {
+      label: 'Troisième nom',
+      placeholder: 'ElChapo',
+    },
+    birthDate: {
+      label: 'Date de naissance',
+      placeholder: '01/01/2000',
     },
   },
 
