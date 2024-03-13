@@ -21,13 +21,8 @@ import ConfigPropertiesSection from './config-properties-section';
 import GenericField from './generic-field';
 import PersonalInfoForm from './personal-info-form';
 
-const EditStudentFormSchema = StudentSchema.pick({
-  firstName: true,
-  lastName: true,
-  otherName: true,
-  birthDate: true,
-  gender: true,
-  properties: true,
+const EditStudentFormSchema = StudentSchema.omit({
+  id: true,
 });
 type FormValues = z.infer<typeof EditStudentFormSchema>;
 

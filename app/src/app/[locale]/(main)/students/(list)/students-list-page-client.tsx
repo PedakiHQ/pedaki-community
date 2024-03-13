@@ -15,17 +15,15 @@ export default function StudentsListPageClient() {
   return (
     <Client
       actionColumn={({ id }) => (
-        <>
-          <Button
-            variant="lighter-primary"
-            size="icon"
-            className="h-6 w-6 shrink-0"
-            onClick={_event => router.push(`/students/edit/${id}`)}
-            disabled={!id}
-          >
-            <IconPencil className="h-4 w-4" />
-          </Button>
-        </>
+        <Button
+          variant="lighter-primary"
+          size="icon"
+          className="h-6 w-6 shrink-0"
+          onClick={_event => router.push(`/students/edit/${id}`)}
+          disabled={!id}
+        >
+          <IconPencil className="h-4 w-4" />
+        </Button>
       )}
       className={cn(
         // TODO: find a better way to do this

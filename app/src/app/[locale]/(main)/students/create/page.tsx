@@ -29,7 +29,7 @@ export default async function StudentsCreatePage({ params }: PageType) {
         title={t('header.title')}
         description={t('header.description')}
         icon={IconUserPlus}
-      ></PageHeader>
+      />
       <div className="flex h-full flex-col gap-6 @4xl:pt-6">
         <EditStudentForm properties={properties} />
       </div>

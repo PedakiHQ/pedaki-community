@@ -1,6 +1,6 @@
 'use client';
 
-// import { Avatar, AvatarFallback, AvatarImage } from '@pedaki/design/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@pedaki/design/ui/avatar';
 import { FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
 import GenericField from '~/components/students/one/generic-field.tsx';
 import { useScopedI18n } from '~/locales/client';
@@ -16,34 +16,35 @@ const PersonalInfoForm = ({ form }: { form: Form }) => {
     <section className="space-y-4" id={BASE_INFO}>
       <h2 className="text-label-sm font-medium text-main">{t('title')}</h2>
       <div className="grid grid-cols-12 gap-6">
-        <div className={'@4xl:order-0 order-1 col-span-12' /* @4xl:col-span-9 */}>
+        <div className={'@4xl:order-0 order-1 col-span-12 @4xl:col-span-9'}>
           <div className="flex flex-col gap-4">
             <BaseData form={form} />
           </div>
         </div>
-        {/* <div className="order-0 col-span-12 flex flex-col justify-start space-y-1 @4xl:order-1 @4xl:col-span-3">
-            <label className="flex items-center space-x-1 text-label-sm font-medium text-main">
-              Image
-            </label>
-            <UserImage form={form} />
-          </div> */}
+        <div className="order-0 col-span-12 flex flex-col justify-start space-y-1 @4xl:order-1 @4xl:col-span-3">
+          <label className="flex items-center space-x-1 text-label-sm font-medium text-main">
+            Image
+          </label>
+          <UserImage form={form} />
+        </div>
       </div>
     </section>
   );
 };
 
-// const UserImage = ({ form }: { form: Form }) => {
-//   return (
-//     <div className="rounded-none">
-//       <Avatar className="aspect-square h-full max-h-[400px] min-h-[150px] w-auto rounded-md border bg-weak">
-//         <AvatarImage src={form.watch('avatar')} alt="avatar" className="rounded-none" />
-//         <AvatarFallback className="select-none rounded-none text-label-sm text-sub">
-//           No image
-//         </AvatarFallback>
-//       </Avatar>
-//     </div>
-//   );
-// };
+const UserImage = ({ form: _form }: { form: Form }) => {
+  return (
+    <div className="rounded-none">
+      <Avatar className="aspect-square h-full max-h-[400px] min-h-[150px] w-auto rounded-md border bg-weak">
+        <AvatarImage alt="avatar" className="rounded-none" />
+        {/* src={form.watch('avatar')} */}
+        <AvatarFallback className="select-none rounded-none text-label-sm text-sub">
+          No image
+        </AvatarFallback>
+      </Avatar>
+    </div>
+  );
+};
 
 const BaseData = ({ form }: { form: Form }) => {
   const t = useScopedI18n('students.schema.fields');
