@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   setColumnVisibility?: React.Dispatch<React.SetStateAction<VisibilityState>>;
   tableClassName?: string;
   onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>, value: TData) => void;
+  actionColumn?: (data: TData) => React.ReactNode;
   selectedRows?: Record<string, boolean>;
 }
 
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   tableClassName,
   onClickRow,
   selectedRows = {},
+  actionColumn,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const t = useScopedI18n('components.datatable');
   const table = useReactTable({
@@ -86,6 +88,9 @@ export function DataTable<TData, TValue>({
                 </TableHead>
               );
             })}
+            {actionColumn && (
+              <TableHead style={{ width: `50px` }}>{t('columns.actions')}</TableHead>
+            )}
           </TableRow>
         ))}
       </TableHeader>
@@ -106,6 +111,11 @@ export function DataTable<TData, TValue>({
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
+              {actionColumn && (
+                <TableCell className="py-2" style={{ width: `50px` }}>
+                  {actionColumn(row.original)}
+                </TableCell>
+              )}
             </TableRow>
           ))
         ) : (

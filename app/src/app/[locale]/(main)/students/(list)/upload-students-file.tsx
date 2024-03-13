@@ -146,6 +146,7 @@ const UploadStudentsFile = () => {
         id={UPLOAD_MODAL}
       >
         <DialogHeader>
+          {/* TODO: trad */}
           <DialogTitle className="text-label-md text-main">Upload files</DialogTitle>
           <DialogDescription className="text-p-sm text-sub">dd</DialogDescription>
         </DialogHeader>
@@ -169,11 +170,13 @@ const UploadStudentsFile = () => {
                   >
                     <IconDownload className="h-6 w-6" />
                     <div className="flex flex-col items-center">
+                      {/* TODO: trad */}
                       <p className="text-lg font-medium text-main">Drag and drop your file here</p>
                       <FormMessage />
                     </div>
                     <div>
                       <Button variant="stroke-primary-main" className="w-full">
+                        {/* TODO: trad */}
                         Browse files
                       </Button>
                     </div>
@@ -191,6 +194,7 @@ const UploadStudentsFile = () => {
             className="flex-1"
             onClick={() => setIsOpened(false)}
           >
+            {/* TODO: trad */}
             Cancel
           </Button>
           <Button
@@ -201,6 +205,7 @@ const UploadStudentsFile = () => {
             asChild
           >
             <Link href={`/students/import/${importId}`} data-disabled={isDisabled}>
+              {/* TODO: trad */}
               Continue
             </Link>
           </Button>
@@ -263,6 +268,7 @@ const FileCardStatusLabel = ({
   const status = response?.status;
 
   if (status === undefined || status == 'PENDING' || status == 'PROCESSING')
+    /* TODO: trad */
     return <span>Uploading...</span>;
   if (status === 'ERROR') {
     const errorCode = response?.data?.message;
@@ -320,6 +326,7 @@ const OldUploadStudentsFile = () => {
                       </div>
                       <div className="flex items-center">
                         <Button size="sm" variant="ghost-sub" asChild>
+                          {/* TODO: trad */}
                           <Link href={`/students/import/${id}`}>Ouvrir</Link>
                         </Button>
                         <Tooltip>
@@ -332,6 +339,7 @@ const OldUploadStudentsFile = () => {
                               <IconX className="h-4 w-4" />
                             </Button>
                           </TooltipTrigger>
+                          {/* TODO: trad */}
                           <TooltipContent side="left">Supprimer</TooltipContent>
                         </Tooltip>
                       </div>

@@ -24,11 +24,18 @@ import React, { useMemo } from 'react';
 interface ClientProps {
   className?: string;
   onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>, value: StudentData) => void;
+  actionColumn?: (data: StudentData) => React.ReactNode;
   selectedRows?: Record<StudentData['id'], boolean>;
   onDataChange?: (students: Object[], meta: { totalCount: number }) => void; // TODO: type this
 }
 
-const Client = ({ className, onClickRow, selectedRows, onDataChange }: ClientProps) => {
+const Client = ({
+  className,
+  onClickRow,
+  actionColumn,
+  selectedRows,
+  onDataChange,
+}: ClientProps) => {
   const t = useScopedI18n('students.list.table');
 
   const { setTranslatedColumns, propertyMapping, classMapping, teacherMapping } =
@@ -119,6 +126,7 @@ const Client = ({ className, onClickRow, selectedRows, onDataChange }: ClientPro
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
         onClickRow={onClickRow}
+        actionColumn={actionColumn}
         selectedRows={selectedRows}
       />
       <Footer
@@ -147,6 +155,7 @@ const TableElement = ({
   columnVisibility,
   setColumnVisibility,
   onClickRow,
+  actionColumn,
   selectedRows,
 }: {
   columns: StudentColumnDef[];
@@ -158,6 +167,7 @@ const TableElement = ({
   columnVisibility: Record<string, boolean>;
   setColumnVisibility: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   onClickRow?: ClientProps['onClickRow'];
+  actionColumn?: ClientProps['actionColumn'];
   selectedRows?: ClientProps['selectedRows'];
 }) => {
   const t = useScopedI18n('students.list.table');
@@ -195,6 +205,7 @@ const TableElement = ({
       setColumnVisibility={setColumnVisibility}
       onClickRow={onClickRow}
       selectedRows={selectedRows}
+      actionColumn={actionColumn}
     />
   );
 };

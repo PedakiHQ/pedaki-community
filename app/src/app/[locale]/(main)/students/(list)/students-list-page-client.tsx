@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@pedaki/design/ui/button';
+import { IconPencil } from '@pedaki/design/ui/icons';
 import { cn } from '@pedaki/design/utils';
 import Client from '~/components/students/list/client';
 import { useGlobalStore } from '~/store/global/global.store';
@@ -12,8 +14,19 @@ export default function StudentsListPageClient() {
 
   return (
     <Client
-      // TODO: show somehow that you can click on a row
-      onClickRow={(_event, { id }) => router.push(`/students/edit/${id}`)}
+      actionColumn={({ id }) => (
+        <>
+          <Button
+            variant="lighter-primary"
+            size="icon"
+            className="h-6 w-6 shrink-0"
+            onClick={_event => router.push(`/students/edit/${id}`)}
+            disabled={!id}
+          >
+            <IconPencil className="h-4 w-4" />
+          </Button>
+        </>
+      )}
       className={cn(
         // TODO: find a better way to do this
         // header has a h-14 => 3.5rem, with a pb-3 => 0.75rem
