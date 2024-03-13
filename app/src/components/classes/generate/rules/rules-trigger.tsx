@@ -25,7 +25,7 @@ import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-i
 import { DIALOG_BODY_CLASS } from '~/constants.ts';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import React from 'react';
-import {useScopedI18n} from "~/locales/client.ts";
+import { useScopedI18n } from "~/locales/client.ts";
 
 const RulesTrigger = () => {
   const [open, _setOpen] = React.useState(false);
@@ -161,7 +161,7 @@ const RuleCard = ({
               <div className="flex h-32 items-center justify-center transition-all group-focus-within:h-24 group-hover:h-24">
                 <Icon className="m-auto h-12 w-12 text-main" />
               </div>
-              <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24">
+              <div className="h-16 rounded-b-lg border-t bg-white p-2 text-left transition-all group-focus-within:h-24 group-hover:h-24 overflow-y-hidden">
                 <span className="text-p-md">{t(`${rule.key}.name`)}</span>
                 <p className="text-p-sm text-soft">{t(`${rule.key}.description`)}</p>
               </div>
