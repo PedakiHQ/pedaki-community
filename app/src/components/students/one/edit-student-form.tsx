@@ -1,6 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import wait from '@pedaki/common/utils/wait';
+import { wrapWithLoading } from '@pedaki/common/utils/wrap-with-loading';
 import { Button } from '@pedaki/design/ui/button';
 import { Form, FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
 import { IconSpinner } from '@pedaki/design/ui/icons';
@@ -9,6 +11,7 @@ import { StudentSchema } from '@pedaki/services/students/student_base.model';
 import type { Student } from '@pedaki/services/students/student_base.model';
 import { propertyFields } from '~/components/students/import/student/constants.ts';
 import { useScopedI18n } from '~/locales/client';
+import { api } from '~/server/clients/client';
 import type { OutputType } from '~api/router/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -54,10 +57,40 @@ const EditStudentForm = ({
     },
   });
 
+  const updateMutation = api.students.updateOne.useMutation();
+  const createMutation = api.students.createOne.useMutation();
+
   function onSubmit(values: FormValues) {
     // No submit on edit schema
     if (editSchema) return;
-    console.log(values);
+
+    const type = student?.id !== undefined ? 'edit' : 'create';
+    return wrapWithLoading(
+      async () => {
+        if (type === 'edit') {
+          return wait(updateMutation.mutateAsync({ ...values, id: student!.id }), 200);
+        } else {
+          return wait(createMutation.mutateAsync(values), 200);
+        }
+      },
+      {
+        loadingProps: {
+          title: t(`${type}.submit.loading.title`),
+          description: t(`${type}.submit.loading.description`),
+        },
+        successProps: {
+          title: t(`${type}.submit.success.title`),
+          description: t(`${type}.submit.success.description`),
+        },
+        errorProps: _error => {
+          return {
+            title: t(`${type}.submit.error.title`),
+            description: t(`${type}.submit.error.description`),
+          };
+        },
+        throwOnError: true,
+      },
+    );
   }
 
   const { isSubmitting } = form.formState;
@@ -76,7 +109,7 @@ const EditStudentForm = ({
           <div className="flex justify-end">
             <Button variant="filled-primary" type="submit" size="sm" disabled={isSubmitting}>
               {isSubmitting && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-              {t(student ? 'edit.submit' : 'create.submit')}
+              {t(student ? 'edit.submit.label' : 'create.submit.label')}
             </Button>
           </div>
         </form>

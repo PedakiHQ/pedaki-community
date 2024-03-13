@@ -3,7 +3,7 @@ export default {
     title: "Ajout d'élève",
   },
   header: {
-    title: "Ajout d'élève",
+    title: 'Elève',
     description: "Ajout d'un nouvel élève",
   },
 } as const;

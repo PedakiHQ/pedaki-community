@@ -3,7 +3,7 @@ export default {
     title: "Edition d'élève",
   },
   header: {
-    title: "Edition d'élève - {firstName} {lastName}",
+    title: 'Elève - {firstName} {lastName}',
     description: "Edtion d'un élève",
   },
 } as const;

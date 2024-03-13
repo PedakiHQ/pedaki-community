@@ -7,7 +7,7 @@ export const StudentSchema = z.object({
 
   firstName: z.string().min(1).max(255),
   lastName: z.string().min(1).max(255),
-  otherName: z.string().min(1).max(255).nullable().optional(),
+  otherName: z.string().min(0).max(255).nullable().optional(),
 
   gender: z.string().length(1).nullable(),
 
