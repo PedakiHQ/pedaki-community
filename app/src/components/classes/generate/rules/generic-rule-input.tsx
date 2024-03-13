@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-  | { onDeleted: () => void }
-);
+    | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+    | { onDeleted: () => void }
+  );
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -80,7 +80,6 @@ const GenericRuleInputForm = (props: Rule) => {
   return (
     <div className="flex h-full flex-col">
       <Form {...form}>
-        <pre>{JSON.stringify(form.watch(), null, 2)}</pre>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex h-full flex-col">
           <GenericRuleInput form={form} ruleMapping={ruleMapping} />
 
