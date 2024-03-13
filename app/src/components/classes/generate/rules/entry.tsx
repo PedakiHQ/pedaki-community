@@ -28,6 +28,7 @@ import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import { DIALOG_BODY_CLASS } from '~/constants.ts';
 import React from 'react';
 import classes from './entry.module.scss';
+import {useScopedI18n} from "~/locales/client.ts";
 
 interface EntryProps {
   item: { id: string; rule: RuleType; description?: string };
@@ -73,6 +74,8 @@ const Entry = ({ item, index }: EntryProps) => {
 
   const hasAttributes = mappedRule.attributesCount !== 'none';
 
+  const t = useScopedI18n('classes.generate.input.rules.types')
+
   return (
     <SortableItem id={item.id}>
       <div className={classes.item}>
@@ -88,8 +91,7 @@ const Entry = ({ item, index }: EntryProps) => {
                 backgroundColor: mappedRule.color,
               }}
             >
-              {/*TODO: trads*/}
-              {item.rule}
+              {t(`${item.rule}.name`)}
             </Badge>
             <Description item={item} index={index} />
           </div>

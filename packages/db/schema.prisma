@@ -262,6 +262,7 @@ model Class {
 enum ClassStatus {
   ACTIVE // The class is active and can be used
   ARCHIVED // The class is archived and cannot be used
+  PENDING
 }
 
 enum TokenType {

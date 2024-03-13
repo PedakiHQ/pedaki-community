@@ -10,6 +10,8 @@ export const classesCreateRouter = router({
           select: { id: true },
           data: {
             ...c,
+            status: 'PENDING',
+            mainTeacher: undefined,
             level: {
               connect: {
                 id: c.level.id,
