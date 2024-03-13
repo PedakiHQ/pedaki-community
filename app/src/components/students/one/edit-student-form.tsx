@@ -13,6 +13,7 @@ import { propertyFields } from '~/components/students/import/student/constants.t
 import { useScopedI18n } from '~/locales/client';
 import { api } from '~/server/clients/client';
 import type { OutputType } from '~api/router/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -57,6 +58,7 @@ const EditStudentForm = ({
     },
   });
 
+  const router = useRouter();
   const updateMutation = api.students.updateOne.useMutation();
   const createMutation = api.students.createOne.useMutation();
 
@@ -90,7 +92,13 @@ const EditStudentForm = ({
         },
         throwOnError: true,
       },
-    );
+    )
+      .then(() => {
+        router.push('/students');
+      })
+      .catch(() => {
+        // nothing
+      });
   }
 
   const { isSubmitting } = form.formState;
