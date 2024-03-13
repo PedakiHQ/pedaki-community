@@ -5,6 +5,7 @@ import EditStudentForm from '~/components/students/one/edit-student-form';
 import { getScopedI18n } from '~/locales/server';
 import { setStaticParamsLocale } from '~/locales/utils.ts';
 import { api } from '~/server/clients/internal';
+import { notFound } from 'next/navigation';
 import React from 'react';
 
 export const generateMetadata = async ({ params }: PageType) => {
@@ -19,8 +20,16 @@ export const generateMetadata = async ({ params }: PageType) => {
 export default async function StudentsEditPage({ params }: PageType<{ id: string }>) {
   setStaticParamsLocale(params.locale);
   const t = await getScopedI18n('students.edit');
+  const id = Number(params.id);
 
-  const student = await api.students.getOne.query({ id: Number(params.id) });
+  if (isNaN(id)) {
+    return notFound();
+  }
+  const student = await api.students.getOne.query({ id });
+  if (!student) {
+    return notFound();
+  }
+
   const properties = await api.students.properties.getMany.query(undefined);
 
   return (
