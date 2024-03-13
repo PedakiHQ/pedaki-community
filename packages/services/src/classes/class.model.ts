@@ -5,6 +5,7 @@ import { PaginationInputSchema, PaginationOutputSchema } from '~/shared/paginati
 import { TeacherSchema } from '~/teachers/teachers.model.ts';
 import { z } from 'zod';
 import { FieldSchema, FilterSchema } from './query.model.ts';
+import {ClassStatus} from '@prisma/client'
 
 export const ClassesSchema = z.object({
   id: z.number().min(0),
@@ -14,6 +15,7 @@ export const ClassesSchema = z.object({
   level: ClassLevelSchema,
   branches: z.array(ClassBranchSchema),
   mainTeacher: TeacherSchema.nullable().optional(),
+  status: z.nativeEnum(ClassStatus).default('ACTIVE')
 });
 export type Class = z.infer<typeof ClassesSchema>;
 
@@ -35,21 +37,16 @@ export type GetPaginatedManyClassesInput = z.infer<typeof GetPaginatedManyClasse
 
 export const GetPaginatedManyClassesOutputSchema = z.object({
   data: z.array(
-    ClassesSchema.pick({ id: true, name: true, description: true, mainTeacher: true })
+    ClassesSchema
       .merge(
         z.object({
-          mainTeacher: TeacherSchema.pick({ id: true, name: true }).partial().nullable(),
+          mainTeacher: TeacherSchema.partial().nullable(),
           branches: z.array(
-            ClassBranchSchema.pick({ id: true, name: true, description: true }).partial(),
+            ClassBranchSchema.omit({ color: true }).partial(),
           ),
-          academicYear: AcademicYearSchema.pick({
-            id: true,
-            name: true,
-            stardDate: true,
-            endDate: true,
-          }).partial(),
-          level: ClassLevelSchema.pick({ id: true, name: true, description: true }).partial(),
-          teachers: z.array(TeacherSchema.pick({ id: true, name: true }).partial()),
+          academicYear: AcademicYearSchema.partial(),
+          level: ClassLevelSchema.omit({ color: true }).partial(),
+          teachers: z.array(TeacherSchema.partial()),
         }),
       )
       .partial(),

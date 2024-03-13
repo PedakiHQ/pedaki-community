@@ -48,12 +48,18 @@ export const classesRouter = router({
 
       const relations = ['branches', 'teachers'];
 
+      const where = filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where, {
+        relations,
+      })
+      delete where['status']['mode'] // TODO: faire ça propre
+
       const [data, meta] = await prisma.class
         .paginate({
           select: {
             id: fields.id,
             name: fields.name,
             description: fields.description,
+            status: fields.status,
             academicYear:
               input.fields.filter(field => field.startsWith('academicYear.')).length <= 0
                 ? undefined
@@ -113,9 +119,7 @@ export const classesRouter = router({
                     ),
                   },
           },
-          where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where, {
-            relations,
-          }),
+          where,
           orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
             input.orderBy,
             { ignoreStartsWith: relations },
