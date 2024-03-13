@@ -50,8 +50,11 @@ export const classesRouter = router({
 
       const where = filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where, {
         relations,
-      })
-      delete where['status']['mode'] // TODO: faire ça propre
+      });
+
+      if ((where?.status as any)?.mode) {
+        delete (where['status'] as any)['mode']; // TODO: faire ça propre
+      }
 
       const [data, meta] = await prisma.class
         .paginate({
