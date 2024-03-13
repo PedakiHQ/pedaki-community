@@ -11,20 +11,8 @@ export const classesCreateRouter = router({
           data: {
             ...c,
             status: 'PENDING',
-            mainTeacher: undefined,
-            level: {
-              connect: {
-                id: c.level.id,
-              },
-            },
             students: {
               connect: c.students.map(id => ({ id: id })),
-            },
-            academicYear: {
-              connect: { id: c.academicYear.id },
-            },
-            branches: {
-              connect: c.branches.map(branch => ({ id: branch.id })),
             },
           },
         }),

@@ -18,10 +18,6 @@ const ResultActions = () => {
   const confirm = useCallback(async () => {
     const classes = classesData.map(c => ({
       name: c.id,
-      description: 'oui',
-      academicYear: { id: 1 },
-      level: { id: 1 },
-      branches: [{ id: 1 }],
       students: studentData.filter(s => s.containerId === c.id).map(s => s.id),
     })).filter(c => c.students.length)
 
@@ -37,7 +33,7 @@ const ResultActions = () => {
         },
       ],
       columns: {
-        ...defaultColumns,
+        name: true,
         status: true,
       },
     });
