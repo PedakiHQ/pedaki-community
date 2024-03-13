@@ -410,7 +410,9 @@ const AttributeOptionFieldSingle = ({
   const tOperator = useScopedI18n('components.datatable.filters.form.operator.names');
   const tFields = useScopedI18n('students.schema.fields');
 
-  const selectedProperty = value.option ? propertyMapping[value.option] : undefined;
+  const selectedPropertyId = value.option ? value.option.split(".", 2)[1] : undefined;
+
+  const selectedProperty = selectedPropertyId ? propertyMapping[selectedPropertyId] : undefined;
   const propertyType = selectedProperty ? propertyFields[selectedProperty.type] : undefined;
 
   useEffect(() => {
@@ -436,7 +438,7 @@ const AttributeOptionFieldSingle = ({
         <SelectTrigger className="w-max shrink-0">
           <SelectValue placeholder="TODO trads">
             {/*TODO: trads*/}
-            {(value && propertyMapping[value.option]?.name) ?? 'TODO trads'}
+            {(selectedPropertyId && propertyMapping[selectedPropertyId]?.name) ?? 'TODO trads'}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
