@@ -18,10 +18,10 @@ import { MultiContainerSortable } from '~/components/dnd/MultiContainerSortable.
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import type { ClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
-import React from 'react';
-import dayjs from 'dayjs';
 import { useStudentsListStore } from '~/store/students/list/list.store';
+import dayjs from 'dayjs';
 import deepEqual from 'fast-deep-equal/react';
+import React from 'react';
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -70,7 +70,6 @@ const ContainerWrapper = ({
   items: Item[];
   index: number | null;
 }) => {
-
   return (
     <SortableItem id={container.id} type="container" enabled={false}>
       <ContainerBodyMemo container={container} items={items} index={index} />
@@ -78,7 +77,15 @@ const ContainerWrapper = ({
   );
 };
 
-const ContainerBody = ({ container, items, index }: { container: { id: UniqueIdentifier }; items: Item[], index: number | null }) => {
+const ContainerBody = ({
+  container,
+  items,
+  index,
+}: {
+  container: { id: UniqueIdentifier };
+  items: Item[];
+  index: number | null;
+}) => {
   const itemIds = items.map(item => item.key);
   const isEmpty = items.length === 0;
 
@@ -106,13 +113,12 @@ const ContainerBody = ({ container, items, index }: { container: { id: UniqueIde
         </ul>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 const ContainerBodyMemo = React.memo(
   ContainerBody,
-  (prev, next) =>
-    prev.container.id === next.container.id && deepEqual(prev.items, next.items)
+  (prev, next) => prev.container.id === next.container.id && deepEqual(prev.items, next.items),
 );
 
 const ContainerInfo = ({ container }: { container: { id: UniqueIdentifier } }) => {
@@ -144,7 +150,6 @@ const ItemBody = ({ item }: { item: Item }) => {
   let diffBirthDateYear = Math.floor(diffBirthDateMonth / 12);
   diffBirthDateMonth = diffBirthDateMonth % 12;
 
-
   const properties = useStudentsListStore(store => store.propertyMapping);
 
   return (
@@ -161,26 +166,29 @@ const ItemBody = ({ item }: { item: Item }) => {
         </span>
       </TooltipTrigger>
       <TooltipContent side="right">
-        <div className="flex flex-col select-none space-y-2">
-          <p className='font-medium'>{item.firstName + ' ' + item.lastName}</p>
+        <div className="flex select-none flex-col space-y-2">
+          <p className="font-medium">{item.firstName + ' ' + item.lastName}</p>
           <ul>
             <li>
-              <span className="font-semibold">Age:</span> {diffBirthDateYear} ans et {diffBirthDateMonth} mois
+              <span className="font-semibold">Age:</span> {diffBirthDateYear} ans et{' '}
+              {diffBirthDateMonth} mois
             </li>
             <li>
               <span className="font-semibold">Sexe:</span> {item.gender}
             </li>
-            {item.properties && Object.entries(item.properties).map(([property, value]) => (
-              <li key={property}>
-                <span className="font-semibold">{properties[property]?.name ?? '-'}:</span> {value}
-              </li>
-            ))}
+            {item.properties &&
+              Object.entries(item.properties).map(([property, value]) => (
+                <li key={property}>
+                  <span className="font-semibold">{properties[property]?.name ?? '-'}:</span>{' '}
+                  {value}
+                </li>
+              ))}
           </ul>
         </div>
       </TooltipContent>
     </Tooltip>
   );
-}
+};
 
 const ItemBodyMemo = React.memo(ItemBody, (prev, next) => prev.item.key === next.item.key);
 export default ClassesGrid;

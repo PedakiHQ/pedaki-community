@@ -80,6 +80,7 @@ const GenericRuleInputForm = (props: Rule) => {
   return (
     <div className="flex h-full flex-col">
       <Form {...form}>
+        <pre>{JSON.stringify(form.watch(), null, 2)}</pre>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex h-full flex-col">
           <GenericRuleInput form={form} ruleMapping={ruleMapping} />
 
@@ -441,7 +442,7 @@ const AttributeOptionFieldSingle = ({
         </SelectTrigger>
         <SelectContent>
           {Object.values(propertyMapping).map(property => (
-            <SelectItem key={property.id} value={String(property.id)}>
+            <SelectItem key={property.id} value={`properties.${property.id}`}>
               {property.name}
             </SelectItem>
           ))}
