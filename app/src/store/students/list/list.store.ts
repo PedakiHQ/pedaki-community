@@ -30,11 +30,13 @@ export const useStudentsListStore = <T>(selector: (state: StudentsListStore) => 
   return useZustandStore(store, selector);
 };
 
+export type InitializeStoreProps = Omit<
+  StudentsListStore,
+  'translatedColumns' | 'propertySchemaMapping' | 'setTranslatedColumns'
+>;
+
 export const initializeStore = (
-  preloadedState: Omit<
-    StudentsListStore,
-    'translatedColumns' | 'propertySchemaMapping' | 'setTranslatedColumns'
-  >,
+  preloadedState: InitializeStoreProps,
 ) => {
   return createStore<StudentsListStore>(set => ({
     ...preloadedState,

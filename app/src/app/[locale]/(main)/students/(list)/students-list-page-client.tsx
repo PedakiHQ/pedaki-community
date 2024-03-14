@@ -16,11 +16,13 @@ export default function StudentsListPageClient() {
   const router = useRouter();
 
   const deletePropertyMutation = api.students.deleteOne.useMutation();
+  const utils = api.useUtils();
+
   const onDelete = async (data: { id: number }) => {
     return wrapWithLoading(
       async () => {
         await deletePropertyMutation.mutateAsync(data);
-        // TODO update cache
+        utils.students.getMany.invalidate();
       },
       {
         // TODO trads
