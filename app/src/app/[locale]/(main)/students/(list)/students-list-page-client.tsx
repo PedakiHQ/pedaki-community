@@ -37,12 +37,12 @@ export default function StudentsListPageClient() {
   return (
     <Client
       actionColumn={student => (
-        <>
+        <div className='flex gap-2'>
           <Button
             variant="lighter-primary"
             size="icon"
             className="h-6 w-6 shrink-0"
-            onClick={_event => router.push(`/students/edit/${student.id}`)}
+            onClick={() => router.push(`/students/edit/${student.id}`)}
             disabled={!student.id}
           >
             <IconPencil className="h-4 w-4" />
@@ -64,12 +64,8 @@ export default function StudentsListPageClient() {
             }
             onConfirm={() => onDelete({ id: student.id })}
             description={`Vous êtes sur le point de supprimer ${student.firstName} ${student.lastName}. This action cannot be undone.`}
-          >
-            <div>
-              <p></p>
-            </div>
-          </ConfirmDangerModal>
-        </>
+          />
+        </div>
       )}
       className={cn(
         // TODO: find a better way to do this
