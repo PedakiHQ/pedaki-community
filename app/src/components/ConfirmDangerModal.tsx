@@ -15,7 +15,7 @@ import React from 'react';
 
 interface ConfirmDangerModalProps {
   trigger: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onConfirm: () => void;
   title: string;
   description: string;
