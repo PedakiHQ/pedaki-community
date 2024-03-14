@@ -86,6 +86,7 @@ const PropertyFields = ({
                   <FormItem className="col-span-6">
                     <FormLabel className="flex items-center gap-2">
                       <span>{props.name}</span>
+                      {/* TODO trads */}
                       <ConfirmDangerModal
                         title="Remove Property"
                         confirmText="Remove"
