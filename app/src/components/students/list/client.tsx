@@ -108,7 +108,7 @@ const Client = ({
 
   return (
     <div className={cn('flex h-full flex-col gap-4 overflow-y-auto', className)}>
-      <div className="flex gap-4">
+      <div className="flex gap-4 pt-1 pr-1">
         <Filters filters={filters} setFilters={setFilters} type="students" />
         <ColumnSelector
           columns={translatedColumns}
@@ -176,11 +176,11 @@ const TableElement = ({
     () =>
       isLoading
         ? columns.map(col => {
-            return {
-              ...col,
-              cell: col.loadingCell ?? col.cell,
-            };
-          })
+          return {
+            ...col,
+            cell: col.loadingCell ?? col.cell,
+          };
+        })
         : columns,
     [isLoading, columns],
   );

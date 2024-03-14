@@ -105,7 +105,7 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
 
   return (
     <div className={cn('flex h-full flex-col gap-4', className)}>
-      <div className="flex gap-4">
+      <div className="flex gap-4 pr-1 pt-1">
         <Filters filters={filters} setFilters={setFilters} type="classes" />
         <ColumnSelector
           columns={translatedColumns}
@@ -164,11 +164,11 @@ const TableElement = ({
     () =>
       isLoading
         ? columns.map(col => {
-            return {
-              ...col,
-              cell: col.loadingCell ?? col.cell,
-            };
-          })
+          return {
+            ...col,
+            cell: col.loadingCell ?? col.cell,
+          };
+        })
         : columns,
     [isLoading, columns],
   );
