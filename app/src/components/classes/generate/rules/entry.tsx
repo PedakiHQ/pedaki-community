@@ -26,9 +26,9 @@ import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-input.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import { DIALOG_BODY_CLASS } from '~/constants.ts';
+import { useScopedI18n } from '~/locales/client.ts';
 import React from 'react';
 import classes from './entry.module.scss';
-import {useScopedI18n} from "~/locales/client.ts";
 
 interface EntryProps {
   item: { id: string; rule: RuleType; description?: string };
@@ -74,7 +74,7 @@ const Entry = ({ item, index }: EntryProps) => {
 
   const hasAttributes = mappedRule.attributesCount !== 'none';
 
-  const t = useScopedI18n('classes.generate.input.rules.types')
+  const t = useScopedI18n('classes.generate.input.rules.types');
 
   return (
     <SortableItem id={item.id}>

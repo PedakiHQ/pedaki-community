@@ -3,8 +3,8 @@ import {
   GetManyClassesSchema,
   GetPaginatedManyClassesInputSchema,
   GetPaginatedManyClassesOutputSchema,
-} from '@pedaki/services/classes/class.model.js';
-import type { GetManyClasses } from '@pedaki/services/classes/class.model.js';
+} from '@pedaki/services/classes/class.model';
+import type { GetManyClasses } from '@pedaki/services/classes/class.model';
 import type { Prisma } from '@prisma/client';
 import { classBranchesRouter } from '~api/router/routers/classes/branches';
 import { classesCreateRouter } from '~api/router/routers/classes/create';

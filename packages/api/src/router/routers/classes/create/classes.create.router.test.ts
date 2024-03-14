@@ -13,18 +13,10 @@ describe('classesCreateRouter', () => {
   const classesToCreate = [
     {
       name: 'test',
-      description: 'oui',
-      academicYear: { id: 1 },
-      level: { id: 1 },
-      branches: [{ id: 1 }],
       students: [1, 2, 3],
     },
     {
       name: 'yey',
-      description: 'non',
-      academicYear: { id: 1 },
-      level: { id: 1 },
-      branches: [{ id: 1 }],
       students: [1, 2, 3],
     },
   ];

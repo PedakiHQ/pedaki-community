@@ -21,11 +21,7 @@ const KnownFields: Record<(typeof KnownFieldsKeys)[number], QueryFieldSchema> = 
     fieldType: 'text',
   },
   status: {
-    type: z.enum([
-      'ACTIVE',
-      'ARCHIVED',
-      'PENDING'
-    ]), // TODO: synchro avec ClassStatus dans la db
+    type: z.enum(['ACTIVE', 'ARCHIVED', 'PENDING']), // TODO: synchro avec ClassStatus dans la db
     fieldType: 'text',
   },
   'academicYear.id': {
@@ -114,10 +110,9 @@ export const getKnownField = (key: string): QueryFieldSchema | undefined => {
 export const FieldSchema = z.enum(KnownFieldsKeys);
 export type Field = z.infer<typeof FieldSchema>;
 
-export const FilterSchema = createFilterSchema(FieldSchema)
-  .refine(({ field, value }) => {
-    const knownField = getKnownField(field)
-    if(!knownField) return true; // TODO ??
-    return knownField.type.safeParse(value).success
+export const FilterSchema = createFilterSchema(FieldSchema).refine(({ field, value }) => {
+  const knownField = getKnownField(field);
+  if (!knownField) return true; // TODO ??
+  return knownField.type.safeParse(value).success;
 });
 export type Filter = z.infer<typeof FilterSchema>;

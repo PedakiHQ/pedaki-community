@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-    | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-    | { onDeleted: () => void }
-  );
+  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+  | { onDeleted: () => void }
+);
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -410,7 +410,7 @@ const AttributeOptionFieldSingle = ({
   const tOperator = useScopedI18n('components.datatable.filters.form.operator.names');
   const tFields = useScopedI18n('students.schema.fields');
 
-  const selectedPropertyId = value.option ? value.option.split(".", 2)[1] : undefined;
+  const selectedPropertyId = value.option ? value.option.split('.', 2)[1] : undefined;
 
   const selectedProperty = selectedPropertyId ? propertyMapping[selectedPropertyId] : undefined;
   const propertyType = selectedProperty ? propertyFields[selectedProperty.type] : undefined;
