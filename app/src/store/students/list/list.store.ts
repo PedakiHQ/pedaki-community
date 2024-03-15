@@ -35,9 +35,7 @@ export type InitializeStoreProps = Omit<
   'translatedColumns' | 'propertySchemaMapping' | 'setTranslatedColumns'
 >;
 
-export const initializeStore = (
-  preloadedState: InitializeStoreProps,
-) => {
+export const initializeStore = (preloadedState: InitializeStoreProps) => {
   return createStore<StudentsListStore>(set => ({
     ...preloadedState,
     propertySchemaMapping: Object.entries(preloadedState.propertyMapping).reduce(

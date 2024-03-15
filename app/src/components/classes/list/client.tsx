@@ -164,11 +164,11 @@ const TableElement = ({
     () =>
       isLoading
         ? columns.map(col => {
-          return {
-            ...col,
-            cell: col.loadingCell ?? col.cell,
-          };
-        })
+            return {
+              ...col,
+              cell: col.loadingCell ?? col.cell,
+            };
+          })
         : columns,
     [isLoading, columns],
   );
