@@ -1,16 +1,21 @@
 import { prisma } from '@pedaki/db';
 import { preparePagination } from '@pedaki/services/shared/utils.js';
+import { studentPropertiesService } from '@pedaki/services/students/properties/properties.service';
+import type { Field } from '@pedaki/services/students/query.model.client';
 import { studentQueryService } from '@pedaki/services/students/query.service.js';
-import type { Student } from '@pedaki/services/students/student.model.js';
 import {
+  GetManyStudentsByIdInputSchema,
+  GetManyStudentsByIdOutputSchema,
   GetManyStudentsInputSchema,
   GetManyStudentsOutputSchema,
   StudentSchema,
   UpdateOneStudentInputSchema,
+  type Student,
 } from '@pedaki/services/students/student.model.js';
 import { studentImports } from '~api/router/routers/students/imports';
 import { studentPropertiesRouter } from '~api/router/routers/students/properties';
 import { privateProcedure, router } from '~api/router/trpc.ts';
+import { unflatten } from 'flat';
 
 export const studentsRouter = router({
   properties: studentPropertiesRouter,
@@ -108,6 +113,34 @@ export const studentsRouter = router({
         data: withoutDuplicates,
         meta: pagination,
       };
+    }),
+
+  getManyById: privateProcedure
+    .input(GetManyStudentsByIdInputSchema)
+    .output(GetManyStudentsByIdOutputSchema)
+    .query(async ({ input }) => {
+      const fields = (
+        studentPropertiesService.getPropertiesKeys().map(id => `properties.${id}`) as Field[]
+      ).concat('firstName', 'lastName', 'otherName', 'birthDate', 'gender');
+      let queryData = studentQueryService.buildSelectPreparedQuery(
+        {
+          fields,
+          pagination: {
+            page: 0,
+            limit: -1,
+          },
+        },
+        {
+          selectFields: fields,
+        },
+      );
+      queryData += ` WHERE students.id in (${input.where.join(',')})`;
+
+      const data = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData);
+
+      return data.map(student => {
+        return unflatten(student, { object: true });
+      });
     }),
 
   getOne: privateProcedure

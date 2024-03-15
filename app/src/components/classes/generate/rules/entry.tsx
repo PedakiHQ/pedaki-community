@@ -26,6 +26,7 @@ import { ruleMapping } from '~/components/classes/generate/rules/constants.ts';
 import GenericRuleInput from '~/components/classes/generate/rules/generic-rule-input.tsx';
 import { DragHandle, SortableItem } from '~/components/dnd/SortableItem.tsx';
 import { DIALOG_BODY_CLASS } from '~/constants.ts';
+import { useScopedI18n } from '~/locales/client.ts';
 import React from 'react';
 import classes from './entry.module.scss';
 
@@ -68,11 +69,12 @@ const Description = ({ item }: EntryProps) => {
   );
 };
 
-// TODO: rule type
 const Entry = ({ item, index }: EntryProps) => {
   const mappedRule = ruleMapping[item.rule];
 
   const hasAttributes = mappedRule.attributesCount !== 'none';
+
+  const t = useScopedI18n('classes.generate.input.rules.types');
 
   return (
     <SortableItem id={item.id}>
@@ -89,8 +91,7 @@ const Entry = ({ item, index }: EntryProps) => {
                 backgroundColor: mappedRule.color,
               }}
             >
-              {/*TODO: trads*/}
-              {item.rule}
+              {t(`${item.rule}.name`)}
             </Badge>
             <Description item={item} index={index} />
           </div>

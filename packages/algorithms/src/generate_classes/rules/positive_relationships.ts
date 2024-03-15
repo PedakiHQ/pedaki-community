@@ -1,4 +1,4 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
 import type { Input } from '../input';
@@ -23,18 +23,18 @@ export class PositiveRelationshipsRule extends Rule {
    */
   override getStudentValue(entry: Entry, student: StudentWithClass): StudentValue {
     let value = 0;
-    const worseClasses = [...entry.classes()];
+    const worseClasses = [...entry.classes().values()];
     for (const [relationValue, otherStudents] of Object.entries(student.student.relationships())) {
       // On ne prend en compte que les relations positives.
       if (parseInt(relationValue) <= 0) continue;
 
       for (const otherStudent of otherStudents) {
-        const otherStudentClassIndex = entry.studentClass(otherStudent)!.index;
+        const otherStudentClass = entry.studentClass(otherStudent)!;
         // S'ils ne sont pas dans la même classe alors qu'il s'agit d'une relation positive...
-        if (student.studentClass.index != otherStudentClassIndex) value += parseInt(relationValue);
+        if (student.studentClass.id() != otherStudentClass.id()) value += parseInt(relationValue);
 
         // Il doit aller dans cette classe, donc on la retire de celles exclues, si ce n'est pas déjà fait.
-        const currentIndex = worseClasses.indexOf(entry.class(otherStudentClassIndex)!);
+        const currentIndex = worseClasses.indexOf(otherStudentClass);
         if (currentIndex >= 0) worseClasses.splice(currentIndex, 1);
       }
     }

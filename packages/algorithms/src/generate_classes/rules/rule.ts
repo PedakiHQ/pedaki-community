@@ -1,4 +1,4 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { DEFAULT_PRIORITY } from '../algorithm';
 import { Attribute } from '../attribute';
 import type Class from '../class';

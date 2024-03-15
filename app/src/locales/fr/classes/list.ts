@@ -35,6 +35,9 @@ export default {
       teachers: {
         label: 'Professeurs',
       },
+      status: {
+        label: 'Status',
+      },
     },
     footer: {
       perPage: 'Classes par page',

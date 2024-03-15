@@ -8,6 +8,8 @@ import type { CSSProperties, PropsWithChildren } from 'react';
 interface Props {
   id: UniqueIdentifier;
   className?: string;
+  type?: 'item' | 'container';
+  enabled?: boolean;
 }
 
 interface Context {
@@ -22,7 +24,13 @@ const SortableItemContext = createContext<Context>({
   ref() {},
 });
 
-export function SortableItem({ children, id, className }: PropsWithChildren<Props>) {
+export function SortableItem({
+  children,
+  id,
+  className,
+  type,
+  enabled = true,
+}: PropsWithChildren<Props>) {
   const {
     attributes,
     isDragging,
@@ -33,7 +41,14 @@ export function SortableItem({ children, id, className }: PropsWithChildren<Prop
     setActivatorNodeRef,
     transform,
     transition,
-  } = useSortable({ id });
+  } = useSortable({
+    id,
+    data: {
+      type,
+      id,
+    },
+  });
+
   const context = useMemo(
     () => ({
       attributes,
@@ -52,7 +67,7 @@ export function SortableItem({ children, id, className }: PropsWithChildren<Prop
     <SortableItemContext.Provider value={context}>
       <li
         ref={setNodeRef}
-        style={style}
+        style={enabled ? style : undefined}
         className={cn(
           'w-full list-none',
           className,
@@ -66,7 +81,7 @@ export function SortableItem({ children, id, className }: PropsWithChildren<Prop
   );
 }
 
-export function DragHandle({ children, className }: PropsWithChildren<{ className: string }>) {
+export function DragHandle({ children, className }: PropsWithChildren<{ className?: string }>) {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { attributes, listeners, ref } = useContext(SortableItemContext);
 

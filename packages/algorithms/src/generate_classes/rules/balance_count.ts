@@ -1,4 +1,5 @@
 import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import type Class from '~/generate_classes/class.ts';
 import type { Attribute } from '../attribute';
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
@@ -34,8 +35,8 @@ export class BalanceCountRule extends Rule {
   override getEntryValue(entry: Entry): number {
     const countGoal = this.getCountPerClass(entry, this.attribute());
     let value = 0;
-    for (const classKey of Object.keys(entry.classes())) {
-      const count = this.getRelatedStudentsOfClass(entry, classKey);
+    for (const c of [...entry.classes().values()]) {
+      const count = this.getRelatedStudentsOfClass(c);
 
       // Si personne n'est concerné dans cette classe, on ne fait rien.
       if (!count) continue;
@@ -57,7 +58,7 @@ export class BalanceCountRule extends Rule {
 
     // On récupère la différence entre nombre d'élèves concernés dans sa classe et l'objectif.
     const diff = this.getDifference(
-      this.getRelatedStudentsOfClass(entry, student.studentClass.index),
+      this.getRelatedStudentsOfClass(student.studentClass),
       countGoal,
     );
     const hasAndMore =
@@ -67,11 +68,8 @@ export class BalanceCountRule extends Rule {
     // parce qu'on n'est pas sûr qu'il sera échangé avec quelqu'un du même attribut, il y a trop de risques de tout casser.
     return {
       value: hasAndMore ? Math.abs(diff) : 0,
-      worseClasses: entry.classes().filter((_c, classKey) => {
-        const classDiff = this.getDifference(
-          this.getRelatedStudentsOfClass(entry, classKey),
-          countGoal,
-        );
+      worseClasses: [...entry.classes().values()].filter(c => {
+        const classDiff = this.getDifference(this.getRelatedStudentsOfClass(c), countGoal);
         return !this.attribute() || student.student.hasAttribute(this.attribute()!)
           ? classDiff > 0
           : classDiff < 0;
@@ -84,7 +82,7 @@ export class BalanceCountRule extends Rule {
    * Prend en compte un éventuel attribut.
    */
   public getCountPerClass = (entry: Entry, attribute?: Attribute): number => {
-    if (!attribute) return entry.algo().input().students().length / entry.classes().length;
+    if (!attribute) return entry.algo().input().students().length / entry.classes().size;
     return attribute.count() / entry.getClassesWithAttribute(attribute).length;
   };
 
@@ -92,8 +90,8 @@ export class BalanceCountRule extends Rule {
    * Obtenir le nombre d'élèves concernés par la règle dans une classe.
    * C'est-à-dire tous les élèves, ou ceux possédant un éventuel attribut défini.
    */
-  private getRelatedStudentsOfClass = (entry: Entry, classKey: number | string): number => {
-    if (!this.attribute()) return entry.class(classKey)!.students().size;
-    return entry.class(classKey)!.count(this.attribute()!);
+  private getRelatedStudentsOfClass = (c: Class): number => {
+    if (!this.attribute()) return c.students().size;
+    return c.count(this.attribute()!);
   };
 }

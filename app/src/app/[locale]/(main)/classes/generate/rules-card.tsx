@@ -15,7 +15,7 @@ const RulesCard = () => {
   const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
 
   return (
-    <Card className={demoBannerVisible ? 'h-[calc(100vh-31rem)]' : 'h-[calc(100vh-28rem)]'}>
+    <Card className="h-full">
       <CardHeader>
         <div className="flex items-center justify-between space-x-4">
           <div className="flex items-center space-x-2">

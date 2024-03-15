@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { FieldSchemaWithRefinement, FilterSchemaWithRefinement } from './query.model.ts';
 
 export const GetManyStudentsInputSchema = z.object({
-  fields: FieldSchemaWithRefinement.array(),
+  fields: FieldSchemaWithRefinement.array().readonly(),
   where: FilterSchemaWithRefinement.array().optional(),
   orderBy: z.array(z.tuple([FieldSchemaWithRefinement, z.enum(['asc', 'desc'])])).optional(),
   pagination: PaginationInputSchema.optional().default({
@@ -40,5 +40,13 @@ export const UpdateOneStudentInputSchema = StudentSchema.partial().merge(
   StudentSchema.pick({ id: true }),
 );
 export type UpdateOneStudentInput = z.infer<typeof UpdateOneStudentInputSchema>;
+
+export const GetManyStudentsByIdInputSchema = z.object({
+  where: z.number().array(),
+});
+export type GetManyStudentsByIdInput = z.infer<typeof GetManyStudentsByIdInputSchema>;
+
+export const GetManyStudentsByIdOutputSchema = z.array(StudentSchema);
+export type GetManyStudentsByIdOutput = z.infer<typeof GetManyStudentsByIdOutputSchema>;
 
 export * from '~/students/student_base.model.ts';

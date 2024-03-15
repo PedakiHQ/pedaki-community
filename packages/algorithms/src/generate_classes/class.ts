@@ -14,7 +14,10 @@ export default class Class {
   // Nombre d'élèves ayant chaque attribut dans la classe.
   private attributesCount = new Map<number, number>();
 
-  constructor(students: Student[]) {
+  constructor(
+    students: Student[],
+    private _id: number,
+  ) {
     for (const student of students) {
       this.addStudent(student);
     }
@@ -25,6 +28,10 @@ export default class Class {
    */
   public students() {
     return this._students;
+  }
+
+  public id() {
+    return this._id;
   }
 
   /**
@@ -84,15 +91,11 @@ export default class Class {
     let bestStudent: Student | undefined;
 
     // On teste le nombre de règles respectées pour chaque élève, s'il est déplacé dans la classe.
-    const classIndex = entry.classes().indexOf(this);
     for (const student of sample) {
       const studentInitialClass = entry.studentClass(student)!;
 
       // On effectue le déplacement de l'élève dans cette classe.
-      entry.moveStudent(student, {
-        class: this,
-        index: classIndex,
-      });
+      entry.moveStudent(student, this);
 
       const values = new Map<number, number>();
       let index = 0;
