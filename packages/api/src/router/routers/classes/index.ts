@@ -69,60 +69,60 @@ export const classesRouter = router({
               input.fields.filter(field => field.startsWith('academicYear.')).length <= 0
                 ? undefined
                 : {
-                  select: {
-                    id: fields['academicYear.id'],
-                    name: fields['academicYear.name'],
-                    startDate: fields['academicYear.startDate'],
-                    endDate: fields['academicYear.endDate'],
+                    select: {
+                      id: fields['academicYear.id'],
+                      name: fields['academicYear.name'],
+                      startDate: fields['academicYear.startDate'],
+                      endDate: fields['academicYear.endDate'],
+                    },
                   },
-                },
             level:
               input.fields.filter(field => field.startsWith('level.')).length <= 0
                 ? undefined
                 : {
-                  select: {
-                    id: fields['level.id'],
-                    name: fields['level.name'],
-                    description: fields['level.description'],
+                    select: {
+                      id: fields['level.id'],
+                      name: fields['level.name'],
+                      description: fields['level.description'],
+                    },
                   },
-                },
             mainTeacher:
               input.fields.filter(field => field.startsWith('mainTeacher.')).length <= 0
                 ? undefined
                 : {
-                  select: {
-                    id: fields['mainTeacher.id'],
-                    name: fields['mainTeacher.name'],
+                    select: {
+                      id: fields['mainTeacher.id'],
+                      name: fields['mainTeacher.name'],
+                    },
                   },
-                },
             branches:
               input.fields.filter(field => field.startsWith('branches.')).length <= 0
                 ? undefined
                 : {
-                  select: {
-                    id: fields['branches.id'],
-                    name: fields['branches.name'],
-                    description: fields['branches.description'],
+                    select: {
+                      id: fields['branches.id'],
+                      name: fields['branches.name'],
+                      description: fields['branches.description'],
+                    },
+                    orderBy:
+                      orderByArrayToPrismaOrderBy<Prisma.ClassBranchOrderByWithRelationInput>(
+                        input.orderBy,
+                        { stepDown: 'branches' },
+                      ),
                   },
-                  orderBy:
-                    orderByArrayToPrismaOrderBy<Prisma.ClassBranchOrderByWithRelationInput>(
-                      input.orderBy,
-                      { stepDown: 'branches' },
-                    ),
-                },
             teachers:
               input.fields.filter(field => field.startsWith('teachers.')).length <= 0
                 ? undefined
                 : {
-                  select: {
-                    id: fields['teachers.id'],
-                    name: fields['teachers.name'],
+                    select: {
+                      id: fields['teachers.id'],
+                      name: fields['teachers.name'],
+                    },
+                    orderBy: orderByArrayToPrismaOrderBy<Prisma.TeacherOrderByWithRelationInput>(
+                      input.orderBy,
+                      { stepDown: 'teachers' },
+                    ),
                   },
-                  orderBy: orderByArrayToPrismaOrderBy<Prisma.TeacherOrderByWithRelationInput>(
-                    input.orderBy,
-                    { stepDown: 'teachers' },
-                  ),
-                },
           },
           where,
           orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
