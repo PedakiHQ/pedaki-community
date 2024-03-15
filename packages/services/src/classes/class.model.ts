@@ -41,8 +41,8 @@ export const GetPaginatedManyClassesOutputSchema = z.object({
       z.object({
         mainTeacher: TeacherSchema.partial().nullable(),
         branches: z.array(ClassBranchSchema.omit({ color: true }).partial()),
-        academicYear: AcademicYearSchema.nullable(),
-        level: ClassLevelSchema.omit({ color: true }).nullable(),
+        academicYear: AcademicYearSchema.partial().nullable(),
+        level: ClassLevelSchema.omit({ color: true }).partial().nullable(),
         teachers: z.array(TeacherSchema.partial()),
       }),
     ).partial(),
