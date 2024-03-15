@@ -52,8 +52,10 @@ export const classesRouter = router({
         relations,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if ((where?.status as any)?.mode) {
-        delete (where['status'] as any)['mode']; // TODO: faire ça propre
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        delete (where.status as any).mode; // TODO: faire ça propre
       }
 
       const [data, meta] = await prisma.class

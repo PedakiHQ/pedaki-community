@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@pedaki/design/ui/button';
-import { defaultColumns, serialize } from '~/components/classes/list/parameters.ts';
+import { serialize } from '~/components/classes/list/parameters.ts';
 import { api } from '~/server/clients/client.ts';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import { useRouter } from 'next/navigation';

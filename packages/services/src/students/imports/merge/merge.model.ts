@@ -46,7 +46,7 @@ export const MergeGetOneClassOutput = z.object({
   current: z
     .object({
       name: z.string(),
-      levelId: z.number(),
+      levelId: z.number().nullable(),
       // academicYearId: z.number(),
       // mainTeacherId: z.number(),
     })

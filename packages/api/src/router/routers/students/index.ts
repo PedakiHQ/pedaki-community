@@ -10,8 +10,8 @@ import {
   GetManyStudentsOutputSchema,
   StudentSchema,
   UpdateOneStudentInputSchema,
-  type Student,
 } from '@pedaki/services/students/student.model.js';
+import type { Student } from '@pedaki/services/students/student.model.js';
 import { studentImports } from '~api/router/routers/students/imports';
 import { studentPropertiesRouter } from '~api/router/routers/students/properties';
 import { privateProcedure, router } from '~api/router/trpc.ts';
