@@ -18,6 +18,8 @@ jobs:
     env:
       SKIP_ENV_VALIDATION: true
       NEXT_TELEMETRY_DISABLED: 1
+      TURBO_TELEMETRY_DISABLED: 1
+      DO_NOT_TRACK: 1
 
     runs-on: ubuntu-latest
     steps:
