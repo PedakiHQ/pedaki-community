@@ -20,13 +20,13 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.521.0",
+    "@aws-sdk/client-s3": "^3.535.0",
     "@pedaki/auth": "workspace:*",
     "@pedaki/common": "0.5.2-beta.10",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
     "@t3-oss/env-core": "^0.9.2",
-    "csv": "^6.3.6",
+    "csv": "^6.3.8",
     "dayjs": "^1.11.10",
     "esbuild-plugin-file-path-extensions": "^2.0.0",
     "exponential-backoff": "^3.1.1",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@pedaki/tests": "workspace:*",
-    "@prisma/client": "5.10.2",
+    "@prisma/client": "5.11.0",
     "@types/mime-types": "^2.1.4",
     "@types/sqlstring": "^2.3.2"
   },

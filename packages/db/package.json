@@ -26,15 +26,15 @@
   },
   "dependencies": {
     "@pedaki/logger": "workspace:*",
-    "@prisma/client": "5.10.2",
-    "@prisma/instrumentation": "5.10.2",
-    "cpy": "^11.0.0",
+    "@prisma/client": "5.11.0",
+    "@prisma/instrumentation": "5.11.0",
+    "cpy": "^11.0.1",
     "prisma-extension-pagination": "^0.6.0",
     "prisma-field-encryption": "^1.5.2",
     "tsup": "^8.0.2"
   },
   "devDependencies": {
-    "prisma": "5.10.2"
+    "prisma": "5.11.0"
   },
   "engines": {
     "node": ">=20",
