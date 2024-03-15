@@ -34,8 +34,8 @@ export const generateColumns = (
       ),
       cell: ({ row }) => {
         const data = row.original;
-        if (data.academicYear && academicYearMapping[data.academicYear.id]?.name) {
-          return <div>{academicYearMapping[data.academicYear.id]?.name}</div>;
+        if (data.academicYear && academicYearMapping[data.academicYear.id!]?.name) {
+          return <div>{academicYearMapping[data.academicYear.id!]?.name}</div>;
         }
         return <div>-</div>;
       },
@@ -44,8 +44,8 @@ export const generateColumns = (
       ...defaultCell<ClassColumnDef>('level.name', 'level.id', t('columns.level.label')),
       cell: ({ row }) => {
         const data = row.original;
-        if (data.level && classLevelMapping[data.level.id]?.name) {
-          return <div>{classLevelMapping[data.level.id]?.name}</div>;
+        if (data.level && classLevelMapping[data.level.id!]?.name) {
+          return <div>{classLevelMapping[data.level.id!]?.name}</div>;
         }
         return <div>-</div>;
       },
