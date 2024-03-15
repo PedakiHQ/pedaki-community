@@ -11,6 +11,7 @@ import {
 import UploadStudentsFile from '~/app/[locale]/(main)/students/(list)/upload-students-file.tsx';
 import { useScopedI18n } from '~/locales/client.ts';
 import { useIsSmall } from '~/utils.ts';
+import Link from 'next/link';
 import React from 'react';
 
 const HeaderActions = () => {
@@ -38,9 +39,11 @@ const HeaderActions = () => {
       </Tooltip>
       <Tooltip open={!isSmall ? false : undefined}>
         <TooltipTrigger asChild>
-          <Button variant="filled-primary" disabled>
-            <IconPlus className=" h-4 w-4" />
-            <span className="hidden @xl:inline">{t('headerActions.create.label')}</span>
+          <Button variant="filled-primary" asChild>
+            <Link href="/students/create">
+              <IconPlus className=" h-4 w-4" />
+              <span className="hidden @xl:inline">{t('headerActions.create.label')}</span>
+            </Link>
           </Button>
         </TooltipTrigger>
         <TooltipContent>{t('headerActions.create.label')}</TooltipContent>

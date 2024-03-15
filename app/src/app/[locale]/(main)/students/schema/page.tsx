@@ -1,9 +1,7 @@
 import { IconUserGroups } from '@pedaki/design/ui/icons';
-import { Separator } from '@pedaki/design/ui/separator';
 import type { PageType } from '~/app/types.ts';
 import PageHeader from '~/components/PageHeader.tsx';
-import PersonalInfoForm from '~/components/students/one/personal-info-form.tsx';
-import PropertiesSection from '~/components/students/one/properties-section.tsx';
+import EditStudentForm from '~/components/students/one/edit-student-form';
 import TutorialTrigger from '~/components/tutorial-trigger.tsx';
 import type { LocaleCode } from '~/locales/server.ts';
 import { getScopedI18n } from '~/locales/server.ts';
@@ -37,9 +35,7 @@ export default async function StudentSchemaPage({ params }: PageType) {
       />
       <TutorialTrigger id={TUTORIAL_ID} step={1} />
       <div className="flex h-full flex-col gap-6 @4xl:pt-6" id={MAIN_CONTENT}>
-        <PersonalInfoForm />
-        <Separator />
-        <PropertiesSection initialProperties={initialProperties} />
+        <EditStudentForm properties={initialProperties} editSchema />
       </div>
     </>
   );

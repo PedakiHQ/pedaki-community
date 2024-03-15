@@ -1,15 +1,74 @@
 'use client';
 
+import { wrapWithLoading } from '@pedaki/common/utils/wrap-with-loading';
+import { Button } from '@pedaki/design/ui/button';
+import { IconPencil, IconTrash } from '@pedaki/design/ui/icons';
 import { cn } from '@pedaki/design/utils';
+import ConfirmDangerModal from '~/components/ConfirmDangerModal';
 import Client from '~/components/students/list/client';
+import { api } from '~/server/clients/client';
 import { useGlobalStore } from '~/store/global/global.store';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function StudentsListPageClient() {
   const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
+  const router = useRouter();
+
+  const deletePropertyMutation = api.students.deleteOne.useMutation();
+  const utils = api.useUtils();
+
+  const onDelete = async (data: { id: number }) => {
+    return wrapWithLoading(
+      async () => {
+        await deletePropertyMutation.mutateAsync(data);
+        await utils.students.getMany.invalidate();
+      },
+      {
+        // TODO trads
+        errorProps: e => ({
+          title: e.message,
+        }),
+        loadingProps: {},
+        successProps: {},
+        throwOnError: false,
+      },
+    );
+  };
 
   return (
     <Client
+      actionColumn={student => (
+        <div className="flex gap-2">
+          <Button
+            variant="lighter-primary"
+            size="icon"
+            className="h-6 w-6 shrink-0"
+            onClick={() => router.push(`/students/edit/${student.id}`)}
+            disabled={!student.id}
+          >
+            <IconPencil className="h-4 w-4" />
+          </Button>
+          {/* TODO trads */}
+          <ConfirmDangerModal
+            title="Supprimer un élève"
+            confirmText="Supprimer"
+            cancelText="Annuler"
+            trigger={
+              <Button
+                variant="ghost-error"
+                className="h-6 w-6 shrink-0"
+                size="icon"
+                disabled={!student.id}
+              >
+                <IconTrash className="h-4 w-4" />
+              </Button>
+            }
+            onConfirm={() => onDelete({ id: student.id })}
+            description={`Vous êtes sur le point de supprimer ${student.firstName} ${student.lastName}. This action cannot be undone.`}
+          />
+        </div>
+      )}
       className={cn(
         // TODO: find a better way to do this
         // header has a h-14 => 3.5rem, with a pb-3 => 0.75rem

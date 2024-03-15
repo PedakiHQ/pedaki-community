@@ -547,7 +547,7 @@ describe('studentsRouter', () => {
       const student = await api.students.getOne({ id: 1 });
 
       expect(student).toBeDefined();
-      expect(student.id).toBe(1);
+      expect(student!.id).toBe(1);
     });
   });
 
@@ -590,11 +590,11 @@ describe('studentsRouter', () => {
 
       const student2 = await api.students.getOne({ id: student.id });
       expect(student2).toBeDefined();
-      expect(student2.id).toBe(student.id);
-      expect(student2.firstName).toBe('John');
-      expect(student2.lastName).toBe('Doe');
-      expect(student2.birthDate.toISOString()).toBe('2001-01-01T00:00:00.000Z');
-      expect(student2.properties!.shrek).toBe('is love');
+      expect(student2!.id).toBe(student.id);
+      expect(student2!.firstName).toBe('John');
+      expect(student2!.lastName).toBe('Doe');
+      expect(student2!.birthDate.toISOString()).toBe('2001-01-01T00:00:00.000Z');
+      expect(student2!.properties!.shrek).toBe('is love');
     });
   });
 
@@ -630,15 +630,16 @@ describe('studentsRouter', () => {
 
       const student2 = await api.students.getOne({ id: 1 });
 
+      expect(oldStudent).toBeDefined();
       expect(student2).toBeDefined();
-      expect(student2.id).toBe(oldStudent.id);
-      expect(student2.firstName).toBe('John');
-      expect(student2.properties!.shrek).toBe('is life');
-      expect(student2.properties!.random).toBe(randomValue);
+      expect(student2!.id).toBe(oldStudent!.id);
+      expect(student2!.firstName).toBe('John');
+      expect(student2!.properties!.shrek).toBe('is life');
+      expect(student2!.properties!.random).toBe(randomValue);
 
       // Old values should not have changed
-      expect(student2.lastName).toBe(oldStudent.lastName);
-      expect(student2.properties!['1']).toBe(oldStudent.properties!['1']);
+      expect(student2!.lastName).toBe(oldStudent!.lastName);
+      expect(student2!.properties!['1']).toBe(oldStudent!.properties!['1']);
     });
   });
 
@@ -668,12 +669,8 @@ describe('studentsRouter', () => {
 
       await api.students.deleteOne({ id: student.id });
 
-      try {
-        await api.students.getOne({ id: student.id });
-        expect.fail('Expected an error to be thrown');
-      } catch (e) {
-        expect((e as Error).message).toBe('Student not found');
-      }
+      const student3 = await api.students.getOne({ id: student.id });
+      expect(student3).toBeNull();
     });
   });
 });

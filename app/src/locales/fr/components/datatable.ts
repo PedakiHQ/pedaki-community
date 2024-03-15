@@ -1,5 +1,8 @@
 export default {
   noResult: 'Aucun résultat trouvé',
+  columns: {
+    actions: 'Actions',
+  },
   columnHeader: {
     asc: 'Ascendant',
     desc: 'Décroissant',

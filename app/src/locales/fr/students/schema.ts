@@ -7,6 +7,10 @@ export default {
     description: 'Modèle de données pour un étudiant',
   },
 
+  personalInfos: {
+    title: 'Informations de base',
+  },
+
   fields: {
     firstName: {
       label: 'Prénom',
@@ -59,6 +63,41 @@ export default {
       },
       required: {
         label: 'Requis',
+      },
+    },
+  },
+
+  create: {
+    submit: {
+      label: 'Ajouter',
+      loading: {
+        title: "Ajout de l'élève en cours",
+        description: ' ',
+      },
+      success: {
+        title: '🎉 Elève ajouté avec succès',
+        description: ' ',
+      },
+      error: {
+        title: "Une erreur est survenue lors de l'ajout de l'élève",
+        description: ' ',
+      },
+    },
+  },
+  edit: {
+    submit: {
+      label: 'Modifier',
+      loading: {
+        title: "Modification de l'élève en cours",
+        description: ' ',
+      },
+      success: {
+        title: '🎉 Elève modifié avec succès',
+        description: ' ',
+      },
+      error: {
+        title: "Une erreur est survenue lors de la modification de l'élève",
+        description: ' ',
       },
     },
   },

@@ -145,16 +145,11 @@ export const studentsRouter = router({
 
   getOne: privateProcedure
     .input(StudentSchema.pick({ id: true }))
-    .output(StudentSchema)
+    .output(StudentSchema.nullable())
     .query(async ({ input }) => {
       const student = await prisma.student.findUnique({
         where: { id: input.id },
       });
-
-      if (!student) {
-        // TODO custom error
-        throw new Error('Student not found');
-      }
 
       return student as Student;
     }),

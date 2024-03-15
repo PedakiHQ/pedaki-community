@@ -36,7 +36,7 @@ interface EntryProps {
 }
 
 const Description = ({ item }: EntryProps) => {
-  const [description, _setDescription] = React.useState(item.description);
+  const [description, _setDescription] = React.useState(item.description ?? '');
   const [_, setRules] = useRulesParams();
 
   const setDescription = (value: string) => {
@@ -157,7 +157,7 @@ const EditAction = ({ item }: EntryProps) => {
   const [open, setOpen] = React.useState(false);
   const [rules, setRules] = useRulesParams();
 
-  const currentRule = rules.find(r => ruleId(r) === item.id);
+  const currentRule = rules?.find(r => ruleId(r) === item.id);
 
   const onSubmitted = async (data: RawAttribute[]) => {
     await setRules(oldRules => {

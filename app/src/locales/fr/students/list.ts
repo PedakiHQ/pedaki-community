@@ -8,7 +8,7 @@ export default {
   },
   headerActions: {
     create: {
-      label: 'Ajouter des élèves',
+      label: 'Ajouter un élève',
     },
     export: {
       label: 'Exporter',
