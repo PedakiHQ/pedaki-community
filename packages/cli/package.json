@@ -27,7 +27,7 @@
     "@pedaki/common": "0.5.2-beta.10",
     "@pedaki/db": "workspace:*",
     "@pedaki/logger": "workspace:*",
-    "@pedaki/mailer": "0.5.2-beta.10",
+    "@pedaki/mailer": "0.5.2-beta.11",
     "@pedaki/services": "workspace:*",
     "chalk": "^5.3.0",
     "dotenv": "^16.4.5",
