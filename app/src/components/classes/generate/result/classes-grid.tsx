@@ -147,7 +147,7 @@ const ItemBody = ({ item }: { item: Item }) => {
   const hsl = `hsl(${hue}, 100%, 90%)`;
 
   let diffBirthDateMonth = dayjs().diff(item.birthDate, 'month');
-  let diffBirthDateYear = Math.floor(diffBirthDateMonth / 12);
+  const diffBirthDateYear = Math.floor(diffBirthDateMonth / 12);
   diffBirthDateMonth = diffBirthDateMonth % 12;
 
   const properties = useStudentsListStore(store => store.propertyMapping);
