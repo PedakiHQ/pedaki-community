@@ -73,7 +73,7 @@ const ValidateButton = ({ importId }: { importId: string }) => {
           <Button variant="stroke-primary-main" onClick={() => setOpen(false)}>
             {t('actions.cancel')}
           </Button>
-          <Button variant="filled-primary" onClick={confirm} disabled={confirmMutation.isLoading}>
+          <Button variant="filled-primary" onClick={confirm} disabled={confirmMutation.isPending}>
             <div className={cn('pr-2', !isTransitionLoading && 'hidden')}>
               <IconSpinner className="h-5 w-5 animate-spin text-primary-base" />
             </div>

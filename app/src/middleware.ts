@@ -53,24 +53,28 @@ export async function middleware(request: NextRequest) {
 
   const pathnameWithoutLocale = localePath ? pathname.replace(`/${localePath}`, '') : pathname;
 
-  const isInWithoutAuth = withoutAuth.includes(pathnameWithoutLocale);
-  if (isInWithoutAuth) {
-    // Check if the user is already logged in, if that's the case redirect to the homepage
+  try {
+    const isInWithoutAuth = withoutAuth.includes(pathnameWithoutLocale);
+    if (isInWithoutAuth) {
+      // Check if the user is already logged in, if that's the case redirect to the homepage
+      const user = await auth();
+      if (user) {
+        return NextResponse.redirect(new URL(`/${locale}?error=AlreadyLogged`, request.nextUrl));
+      }
+
+      return i18nMiddleware(request);
+    }
+
     const user = await auth();
-    if (user) {
-      return NextResponse.redirect(new URL(`/${locale}?error=AlreadyLogged`, request.nextUrl));
+    if (!user || typeof user === 'string') {
+      // If no user, redirect to login page
+      return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.nextUrl));
     }
 
     return i18nMiddleware(request);
+  } catch (error) {
+    return NextResponse.error();
   }
-
-  const user = await auth();
-  if (!user) {
-    // If no user, redirect to login page
-    return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.nextUrl));
-  }
-
-  return i18nMiddleware(request);
 }
 
 export const config = {

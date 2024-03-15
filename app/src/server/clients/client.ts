@@ -5,11 +5,12 @@ import { httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import { getUrl } from '~/server/clients/shared';
 import superjson from 'superjson';
+import { ssrPrepass } from '@trpc/next/ssrPrepass';
 
 export const api = createTRPCNext<AppRouter>({
+  transformer: superjson,
   config() {
     return {
-      transformer: superjson,
       queryClientConfig: {
         defaultOptions: {
           queries: {
@@ -50,6 +51,7 @@ export const api = createTRPCNext<AppRouter>({
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({
+          transformer: superjson,
           url: getUrl(),
           fetch(url, options) {
             return fetch(url, {
@@ -63,4 +65,5 @@ export const api = createTRPCNext<AppRouter>({
     };
   },
   ssr: true,
+  ssrPrepass,
 });

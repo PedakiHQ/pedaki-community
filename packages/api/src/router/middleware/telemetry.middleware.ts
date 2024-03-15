@@ -3,7 +3,7 @@ import { getHTTPStatusCodeFromError } from '@trpc/server/http';
 import { t } from '~api/router/init.ts';
 import { flatten } from 'flat';
 
-export const withTelemetry = t.middleware(async ({ rawInput, path, type, next }) => {
+export const withTelemetry = t.middleware(async ({ getRawInput, path, type, next }) => {
   const tracer = trace.getTracer('trpc');
   return tracer.startActiveSpan(`${path} - ${type}`, async span => {
     const result = await next();
@@ -14,6 +14,8 @@ export const withTelemetry = t.middleware(async ({ rawInput, path, type, next })
       statusCode = getHTTPStatusCodeFromError(result.error);
       stack = result.error.stack ?? null;
     }
+
+    const rawInput = await getRawInput();
 
     span.setAttributes(
       flatten({

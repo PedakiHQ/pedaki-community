@@ -86,7 +86,7 @@ const Existing = ({ baseData, importedData, importId, properties }: ExistingProp
     },
   });
 
-  const loading = updateStudentImportMutation.isLoading;
+  const loading = updateStudentImportMutation.isPending;
   const utils = api.useUtils();
 
   const deleteImport = () => {
