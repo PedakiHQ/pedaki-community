@@ -22,7 +22,7 @@ export default function StudentsListPageClient() {
     return wrapWithLoading(
       async () => {
         await deletePropertyMutation.mutateAsync(data);
-        utils.students.getMany.invalidate();
+        await utils.students.getMany.invalidate();
       },
       {
         // TODO trads
@@ -39,7 +39,7 @@ export default function StudentsListPageClient() {
   return (
     <Client
       actionColumn={student => (
-        <div className='flex gap-2'>
+        <div className="flex gap-2">
           <Button
             variant="lighter-primary"
             size="icon"

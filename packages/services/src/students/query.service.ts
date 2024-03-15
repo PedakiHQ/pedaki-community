@@ -161,6 +161,7 @@ class StudentQueryService {
             result.push(`jsonb_build_object('${k}', ${value})`);
           }
 
+          if (result.length <= 0) return;
           return `properties = properties || ${result.join(' || ')}`;
         }
 
