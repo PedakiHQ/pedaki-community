@@ -29,7 +29,7 @@
     "@pedaki/algorithms": "workspace:*",
     "@pedaki/api": "workspace:*",
     "@pedaki/auth": "workspace:*",
-    "@pedaki/common": "0.5.2-beta.10",
+    "@pedaki/common": "0.5.2-beta.11",
     "@pedaki/design": "0.5.2-beta.10",
     "@pedaki/logger": "workspace:*",
     "@pedaki/services": "workspace:*",
