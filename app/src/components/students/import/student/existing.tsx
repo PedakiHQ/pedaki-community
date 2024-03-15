@@ -86,7 +86,7 @@ const Existing = ({ baseData, importedData, importId, properties }: ExistingProp
     },
   });
 
-  const loading = updateStudentImportMutation.isLoading;
+  const loading = updateStudentImportMutation.isPending
   const utils = api.useUtils();
 
   const deleteImport = () => {
@@ -181,12 +181,12 @@ const SelectAnotherBaseStudent = ({
           {!isLinked
             ? t('linkToStudent')
             : t(
-                'linkedToStudent',
-                // @ts-expect-error: issue with the translation params type
-                {
-                  name: possibleStudent.firstName + ' ' + possibleStudent.lastName,
-                },
-              )}
+              'linkedToStudent',
+              // @ts-expect-error: issue with the translation params type
+              {
+                name: possibleStudent.firstName + ' ' + possibleStudent.lastName,
+              },
+            )}
         </SheetTrigger>
         <SheetContent
           side="right"
