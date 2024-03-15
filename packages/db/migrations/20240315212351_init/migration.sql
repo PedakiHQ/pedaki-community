@@ -2,7 +2,7 @@
 CREATE TYPE "PropertyType" AS ENUM ('LEVEL');
 
 -- CreateEnum
-CREATE TYPE "ClassStatus" AS ENUM ('ACTIVE', 'ARCHIVED');
+CREATE TYPE "ClassStatus" AS ENUM ('ACTIVE', 'ARCHIVED', 'PENDING');
 
 -- CreateEnum
 CREATE TYPE "TokenType" AS ENUM ('CONFIRM_EMAIL', 'ACTIVATE_ACCOUNT', 'RESET_PASSWORD');
@@ -167,8 +167,8 @@ CREATE TABLE "classes" (
     "name" VARCHAR(255) NOT NULL,
     "description" VARCHAR(1000),
     "main_teacher_id" INTEGER,
-    "level_id" INTEGER NOT NULL,
-    "academic_year_id" INTEGER NOT NULL,
+    "level_id" INTEGER,
+    "academic_year_id" INTEGER,
     "status" "ClassStatus" NOT NULL DEFAULT 'ACTIVE',
 
     CONSTRAINT "classes_pkey" PRIMARY KEY ("id")
@@ -364,7 +364,7 @@ ALTER TABLE "classes" ADD CONSTRAINT "classes_main_teacher_id_fkey" FOREIGN KEY 
 ALTER TABLE "classes" ADD CONSTRAINT "classes_level_id_fkey" FOREIGN KEY ("level_id") REFERENCES "class_levels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "classes" ADD CONSTRAINT "classes_academic_year_id_fkey" FOREIGN KEY ("academic_year_id") REFERENCES "academic_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "classes" ADD CONSTRAINT "classes_academic_year_id_fkey" FOREIGN KEY ("academic_year_id") REFERENCES "academic_years"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "import_students" ADD CONSTRAINT "import_students_import_id_fkey" FOREIGN KEY ("import_id") REFERENCES "imports"("id") ON DELETE CASCADE ON UPDATE CASCADE;
