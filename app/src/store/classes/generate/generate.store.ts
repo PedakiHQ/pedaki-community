@@ -9,10 +9,10 @@ export interface ClassesGenerateStore {
   studentsCount: number | null;
   setStudentsCount: (count: number) => void;
 
-  studentData: (Student & { containerId: UniqueIdentifier; key: UniqueIdentifier })[];
+  studentData: (Student & { containerId: string; key: UniqueIdentifier })[];
   setStudentData: (studentData: ClassesGenerateStore['studentData']) => void;
 
-  classesData: { id: UniqueIdentifier }[];
+  classesData: { id: string }[];
   setClassesData: (classesData: ClassesGenerateStore['classesData']) => void;
 
   activeCreateRule: RuleType | null;

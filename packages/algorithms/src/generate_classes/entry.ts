@@ -87,7 +87,7 @@ export default class Entry {
 
   public students(): StudentWithClass[] {
     return [...this.classes().values()]
-      .map((c, i) => {
+      .map(c => {
         const array = [];
         for (const student of c.students()) {
           array.push({
