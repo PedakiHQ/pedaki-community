@@ -1,4 +1,4 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type Entry from '../entry';
 import type { StudentWithClass } from '../entry';
 import type { Input } from '../input';
@@ -20,7 +20,7 @@ export class MaximizeClassesRule extends Rule {
    * On compte une pénalité par rapport à la différence avec le nombre maximum de classes.
    */
   override getEntryValue(entry: Entry): number {
-    return entry.algo().input().classAmount() - entry.classes().length;
+    return entry.algo().input().classAmount() - entry.classes().size;
   }
 
   /**
@@ -29,14 +29,14 @@ export class MaximizeClassesRule extends Rule {
    * Les pires classe sont alors celles qui ont plus d'élèves que celle actuelle, ou toutes si on n'a pas atteint le nombre maximum de classes.
    */
   override getStudentValue(entry: Entry, student: StudentWithClass): StudentValue {
+    const classArray = [...entry.classes().values()];
+
     return {
-      value: student.studentClass.class.students().size,
+      value: student.studentClass.students().size,
       worseClasses:
-        entry.classes().length < entry.algo().input().classAmount()
-          ? entry.classes()
-          : entry
-              .classes()
-              .filter(c => c.students().size > student.studentClass.class.students().size),
+        entry.classes().size < entry.algo().input().classAmount()
+          ? classArray
+          : classArray.filter(c => c.students().size > student.studentClass.students().size),
     };
   }
 
@@ -44,6 +44,6 @@ export class MaximizeClassesRule extends Rule {
    * Le pourcentage de respect correspond ici au nombre de classes par rapport au maximum défini.
    */
   override getRespectPercent(entry: Entry): number {
-    return entry.classes().length / entry.algo().input().classAmount();
+    return entry.classes().size / entry.algo().input().classAmount();
   }
 }

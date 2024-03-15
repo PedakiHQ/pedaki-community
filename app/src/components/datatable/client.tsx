@@ -39,7 +39,7 @@ export const useFilterParams = <
   startTransition?: TransitionStartFunction,
 ) => {
   return useQueryState(
-    'filter',
+    'filters',
     searchParams.filters.withOptions({ history: 'push', startTransition, clearOnDefault: true }),
   );
 };

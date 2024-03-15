@@ -3,10 +3,11 @@ import {
   GetManyClassesSchema,
   GetPaginatedManyClassesInputSchema,
   GetPaginatedManyClassesOutputSchema,
-} from '@pedaki/services/classes/class.model.js';
-import type { GetManyClasses } from '@pedaki/services/classes/class.model.js';
+} from '@pedaki/services/classes/class.model';
+import type { GetManyClasses } from '@pedaki/services/classes/class.model';
 import type { Prisma } from '@prisma/client';
 import { classBranchesRouter } from '~api/router/routers/classes/branches';
+import { classesCreateRouter } from '~api/router/routers/classes/create';
 import { classGeneratorRouter } from '~api/router/routers/classes/generator';
 import { classLevelsRouter } from '~api/router/routers/classes/levels';
 import { privateProcedure, router } from '~api/router/trpc.ts';
@@ -15,6 +16,7 @@ import { filtersArrayToPrismaWhere, orderByArrayToPrismaOrderBy } from '~api/rou
 export const classesRouter = router({
   branches: classBranchesRouter,
   generator: classGeneratorRouter,
+  create: classesCreateRouter,
   levels: classLevelsRouter,
 
   getMany: privateProcedure.output(GetManyClassesSchema).query(async () => {
@@ -46,12 +48,21 @@ export const classesRouter = router({
 
       const relations = ['branches', 'teachers'];
 
+      const where = filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where, {
+        relations,
+      });
+
+      if ((where?.status as any)?.mode) {
+        delete (where['status'] as any)['mode']; // TODO: faire ça propre
+      }
+
       const [data, meta] = await prisma.class
         .paginate({
           select: {
             id: fields.id,
             name: fields.name,
             description: fields.description,
+            status: fields.status,
             academicYear:
               input.fields.filter(field => field.startsWith('academicYear.')).length <= 0
                 ? undefined
@@ -111,9 +122,7 @@ export const classesRouter = router({
                     ),
                   },
           },
-          where: filtersArrayToPrismaWhere<Prisma.ClassWhereInput>(input.where, {
-            relations,
-          }),
+          where,
           orderBy: orderByArrayToPrismaOrderBy<Prisma.ClassOrderByWithRelationInput>(
             input.orderBy,
             { ignoreStartsWith: relations },

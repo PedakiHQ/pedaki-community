@@ -60,7 +60,7 @@ class StudentQueryService {
     const isCount = selectFields.includes('count');
     const whereClause = this.#buildWhereClause(request.where);
     const paginationClause =
-      !isCount || request.pagination.limit == -1 ? buildPaginationClause(request.pagination) : '';
+      !isCount && request.pagination.limit !== -1 ? buildPaginationClause(request.pagination) : '';
     const orderByClause = !isCount ? this.#buildOrderByClause(request.orderBy) : '';
 
     if (!selectFields.includes('id') && !isCount) {

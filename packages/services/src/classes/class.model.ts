@@ -1,3 +1,4 @@
+import { ClassStatus } from '@prisma/client';
 import { AcademicYearSchema } from '~/academic-year/academic-year.model.ts';
 import { ClassBranchSchema } from '~/classes/branch.model.ts';
 import { ClassLevelSchema } from '~/classes/level.model.ts';
@@ -14,11 +15,12 @@ export const ClassesSchema = z.object({
   level: ClassLevelSchema,
   branches: z.array(ClassBranchSchema),
   mainTeacher: TeacherSchema.nullable().optional(),
+  status: z.nativeEnum(ClassStatus).default('ACTIVE'),
 });
 export type Class = z.infer<typeof ClassesSchema>;
 
 export const GetManyClassesSchema = z.record(
-  ClassesSchema.pick({ id: true, name: true }).merge(z.object({ levelId: z.number() })),
+  ClassesSchema.pick({ id: true, name: true }).merge(z.object({ levelId: z.number().nullable() })),
 );
 export type GetManyClasses = z.infer<typeof GetManyClassesSchema>;
 
@@ -35,24 +37,15 @@ export type GetPaginatedManyClassesInput = z.infer<typeof GetPaginatedManyClasse
 
 export const GetPaginatedManyClassesOutputSchema = z.object({
   data: z.array(
-    ClassesSchema.pick({ id: true, name: true, description: true, mainTeacher: true })
-      .merge(
-        z.object({
-          mainTeacher: TeacherSchema.pick({ id: true, name: true }).partial().nullable(),
-          branches: z.array(
-            ClassBranchSchema.pick({ id: true, name: true, description: true }).partial(),
-          ),
-          academicYear: AcademicYearSchema.pick({
-            id: true,
-            name: true,
-            stardDate: true,
-            endDate: true,
-          }).partial(),
-          level: ClassLevelSchema.pick({ id: true, name: true, description: true }).partial(),
-          teachers: z.array(TeacherSchema.pick({ id: true, name: true }).partial()),
-        }),
-      )
-      .partial(),
+    ClassesSchema.merge(
+      z.object({
+        mainTeacher: TeacherSchema.partial().nullable(),
+        branches: z.array(ClassBranchSchema.omit({ color: true }).partial()),
+        academicYear: AcademicYearSchema.partial(),
+        level: ClassLevelSchema.omit({ color: true }).partial(),
+        teachers: z.array(TeacherSchema.partial()),
+      }),
+    ).partial(),
   ),
   meta: PaginationOutputSchema,
 });

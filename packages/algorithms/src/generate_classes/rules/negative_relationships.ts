@@ -1,4 +1,4 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema.ts';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type Class from '../class';
 import type { StudentWithClass } from '../entry';
 import type Entry from '../entry';
@@ -29,12 +29,12 @@ export class NegativeRelationshipsRule extends Rule {
       if (parseInt(relationValue) >= 0) continue;
 
       for (const otherStudent of otherStudents) {
-        const otherStudentClassIndex = entry.studentClass(otherStudent)!.index;
+        const otherStudentClassId = entry.studentClass(otherStudent)!.id();
         // S'ils sont dans la même classe alors qu'il s'agit d'une relation négative...
-        if (student.studentClass.index == otherStudentClassIndex) value += -parseInt(relationValue);
+        if (student.studentClass.id() == otherStudentClassId) value += -parseInt(relationValue);
 
         // Il ne doit pas aller dans cette classe, donc on l'ajoute à celles exclues, si ce n'est pas déjà fait.
-        const otherStudentClass = entry.class(otherStudentClassIndex)!;
+        const otherStudentClass = entry.class(otherStudentClassId)!;
         if (!worseClasses.includes(otherStudentClass)) worseClasses.push(otherStudentClass);
       }
     }

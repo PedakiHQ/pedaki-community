@@ -238,8 +238,8 @@ model Class {
   teachers Teacher[] @relation("class_to_teacher")
   students Student[] @relation("class_to_student")
 
-  levelId Int        @map("level_id") // ex: 1st year, 2nd year, 3rd year, ...
-  level   ClassLevel @relation("class_to_level", fields: [levelId], references: [id], onDelete: Cascade)
+  levelId Int?        @map("level_id") // ex: 1st year, 2nd year, 3rd year, ...
+  level   ClassLevel? @relation("class_to_level", fields: [levelId], references: [id], onDelete: Cascade)
 
   branches ClassBranch[] @relation("branch_to_class")
 
@@ -247,8 +247,8 @@ model Class {
   rooms Room[] @relation("class_to_room")
 
   // A class is linked to an academic year
-  academicYearId Int          @map("academic_year_id")
-  academicYear   AcademicYear @relation("class_to_academic_year", fields: [academicYearId], references: [id])
+  academicYearId Int?          @map("academic_year_id")
+  academicYear   AcademicYear? @relation("class_to_academic_year", fields: [academicYearId], references: [id])
 
   // Status of the class
   status ClassStatus @default(ACTIVE)
@@ -262,6 +262,7 @@ model Class {
 enum ClassStatus {
   ACTIVE // The class is active and can be used
   ARCHIVED // The class is archived and cannot be used
+  PENDING
 }
 
 enum TokenType {

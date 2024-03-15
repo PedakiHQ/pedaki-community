@@ -1,5 +1,5 @@
-import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { RawRuleSchema } from '@pedaki/services/algorithms/generate_classes/input.schema';
+import type { RawRule } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import { createParser, parseAsArrayOf, useQueryState } from 'nuqs';
 import { useMemo } from 'react';
 import { z } from 'zod';
@@ -42,7 +42,8 @@ const ruleParam = createParser({
 });
 
 // Ignore description when comparing rules to avoid unnecessary updates
-export const ruleId = (rule: RawRule) => JSON.stringify({ ...rule, description: '' });
+export const ruleId = (rule: RawRule) =>
+  JSON.stringify({ ...rule, description: undefined, id: undefined });
 
 export const useRulesParams = () => {
   const [rules, setRules] = useQueryState(

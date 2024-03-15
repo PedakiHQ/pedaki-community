@@ -87,6 +87,7 @@ export const generateColumns = (
         return <div>{teachers ?? '-'}</div>;
       },
     },
+    defaultCell<ClassColumnDef>('status', 'status', t('columns.status.label')),
   ];
 
   return res;

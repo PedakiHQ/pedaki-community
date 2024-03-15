@@ -3,14 +3,16 @@ import type { Filter } from '@pedaki/services/classes/query.model.client';
 import { createFiltersParser, createSearchParams } from '~/components/datatable/parameters';
 import { createSerializer } from 'nuqs/parsers';
 
+export const defaultColumns = {
+  name: true,
+  description: true,
+  'academicYear.name': true,
+  'level.name': true,
+  'mainTeacher.name': true,
+};
+
 export const searchParams = createSearchParams<Filter>(
-  {
-    name: true,
-    description: true,
-    'academicYear.name': true,
-    'level.name': true,
-    'mainTeacher.name': true,
-  },
+  defaultColumns,
   createFiltersParser<Filter>(FilterSchema),
 );
 
