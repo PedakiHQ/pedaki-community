@@ -68,10 +68,13 @@ const EditStudentForm = ({
         if (type === 'edit') {
           await updateMutation.mutateAsync({ ...values, id: student!.id });
           await utils.students.getOne.invalidate({ id: student!.id });
+          // FIXME: the getOne is server side, so it does not work to invalidate the cache here
         } else {
           await createMutation.mutateAsync(values);
         }
         await utils.students.getMany.invalidate();
+        // TODO: this reset line should not be necessary, yet it is
+        await utils.students.getMany.reset();
       },
       {
         loadingProps: {

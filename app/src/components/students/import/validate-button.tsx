@@ -34,8 +34,12 @@ const ValidateButton = ({ importId }: { importId: string }) => {
       toast.success('Import succeeded', {
         id: 'import-succeeded',
       });
+      // TODO: the reset lines should not be necessary, yet they are
       await utils.students.invalidate();
+      await utils.students.getMany.reset();
       await utils.classes.invalidate();
+      await utils.classes.getMany.reset();
+      await utils.classes.getPaginatedMany.reset();
       router.push('/students');
     },
     onError: () => {

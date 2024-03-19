@@ -21,8 +21,14 @@ const ResetWorkspaceButton = () => {
   const handleReset = async () => {
     resetWorkspaceMutation.mutate(['import', 'student', 'class', 'property']);
 
+    // TODO: the reset lines should not be necessary, yet they are
     await utils.students.invalidate();
+    await utils.students.getOne.reset();
+    await utils.students.getMany.reset();
+    await utils.students.properties.getMany.reset();
     await utils.classes.invalidate();
+    await utils.classes.getMany.reset();
+    await utils.classes.getPaginatedMany.reset();
   };
 
   return (
