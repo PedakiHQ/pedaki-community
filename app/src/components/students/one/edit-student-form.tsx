@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import wait from '@pedaki/common/utils/wait';
 import { wrapWithLoading } from '@pedaki/common/utils/wrap-with-loading';
 import { Button } from '@pedaki/design/ui/button';
 import { Form, FormField, FormItem, FormLabel, FormMessage } from '@pedaki/design/ui/form';
