@@ -54,6 +54,7 @@ const EditStudentForm = ({
   });
 
   const router = useRouter();
+  const utils = api.useUtils();
   const updateMutation = api.students.updateOne.useMutation();
   const createMutation = api.students.createOne.useMutation();
 
@@ -65,10 +66,12 @@ const EditStudentForm = ({
     return wrapWithLoading(
       async () => {
         if (type === 'edit') {
-          return wait(updateMutation.mutateAsync({ ...values, id: student!.id }), 200);
+          await updateMutation.mutateAsync({ ...values, id: student!.id });
+          await utils.students.getOne.invalidate({ id: student!.id });
         } else {
-          return wait(createMutation.mutateAsync(values), 200);
+          await createMutation.mutateAsync(values);
         }
+        await utils.students.getMany.invalidate();
       },
       {
         loadingProps: {
