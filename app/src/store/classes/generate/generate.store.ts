@@ -1,4 +1,5 @@
 import type { UniqueIdentifier } from '@dnd-kit/core';
+import { hashCode } from '@pedaki/common/utils/hash';
 import { randomId } from '@pedaki/common/utils/random.js';
 import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Student } from '@pedaki/services/students/student_base.model';
@@ -20,6 +21,13 @@ export interface ClassesGenerateStore {
 
   hasEdited: boolean;
   setHasEdited: (hasEdited: boolean) => void;
+
+  displayColumn: keyof Student;
+  setDisplayColumn: (displayColumn: keyof Student) => void;
+
+  displayColumnValues: any[] | null; // null if too many values
+  generateColorsCount: () => void;
+  getColorForStudent: (student: Student) => string;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;
@@ -48,6 +56,11 @@ export const initializeStore = (preloadedState: InitialStore) => {
     setActiveCreateRule: rule => set({ activeCreateRule: rule }),
     hasEdited: false,
     setHasEdited: hasEdited => set({ hasEdited }),
+    displayColumn: 'firstName',
+    setDisplayColumn: displayColumn => {
+      set({ displayColumn });
+      get().generateColorsCount();
+    },
     studentData: [],
     setStudentData: studentData => {
       const containers = get().classesData;
@@ -67,8 +80,69 @@ export const initializeStore = (preloadedState: InitialStore) => {
         set({ classesData: filteredContainers });
       }
       set({ studentData });
+      get().generateColorsCount();
     },
     classesData: [],
     setClassesData: classesData => set({ classesData }),
+    displayColumnValues: null,
+    generateColorsCount: () => {
+      const displayColumn = get().displayColumn;
+
+      const displayColumnValues = (() => {
+        switch (displayColumn) {
+          case 'firstName':
+            return null;
+          case 'birthDate': {
+            // count of years
+            const yearsValues = get().studentData.map(student => student.birthDate.getFullYear());
+            return [...new Set(yearsValues)];
+          }
+          case 'gender': {
+            const genderValues = get().studentData.map(student => student.gender);
+            return [...new Set(genderValues)];
+          }
+          default:
+            if (displayColumn.startsWith('properties.')) {
+              // TODO: depends on the type of the property
+              return new Array(21).fill(0).map((_, i) => i);
+            }
+            return null;
+        }
+      })();
+
+      set({ displayColumnValues });
+    },
+    getColorForStudent: student => {
+      const colorsCount = get().displayColumnValues;
+      const displayColumn = get().displayColumn;
+      let hue;
+      if (colorsCount === null) {
+        const nameKey =
+          displayColumn === 'firstName' ? student.firstName + student.lastName : displayColumn;
+        const nameHash = hashCode(nameKey);
+        hue = nameHash % 360;
+      } else {
+        let index: number;
+        if (displayColumn.startsWith('properties.')) {
+          const id = displayColumn.split('.', 2)[1]!;
+          const value = student.properties?.[id] ?? null;
+          index = value ? colorsCount.indexOf(value) : 0;
+        } else if (displayColumn === 'birthDate') {
+          const year = student.birthDate.getFullYear();
+          index = colorsCount.indexOf(year);
+        } else {
+          index = colorsCount.indexOf(student[displayColumn]);
+        }
+        if (index === -1) {
+          return 'transparent';
+        }
+
+        const percent = index / (colorsCount.length - 1);
+        hue = (1 - percent) * 240;
+      }
+
+      const hsl = `hsl(${hue}, 85%, 90%)`;
+      return hsl;
+    },
   }));
 };

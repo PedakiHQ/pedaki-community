@@ -21,7 +21,7 @@ import type { ClassesGenerateStore } from '~/store/classes/generate/generate.sto
 import { useStudentsListStore } from '~/store/students/list/list.store';
 import dayjs from 'dayjs';
 import deepEqual from 'fast-deep-equal/react';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -142,9 +142,9 @@ const Item = ({ item }: { item: Item }) => {
 };
 
 const ItemBody = ({ item }: { item: Item }) => {
-  const nameHash = hashCode(item.firstName);
-  const hue = nameHash % 360;
-  const hsl = `hsl(${hue}, 100%, 90%)`;
+  const displayColumn = useClassesGenerateStore(store => store.displayColumn);
+  const getColorForStudent = useClassesGenerateStore(store => store.getColorForStudent);
+  const color = getColorForStudent(item);
 
   let diffBirthDateMonth = dayjs().diff(item.birthDate, 'month');
   const diffBirthDateYear = Math.floor(diffBirthDateMonth / 12);
@@ -152,15 +152,29 @@ const ItemBody = ({ item }: { item: Item }) => {
 
   const properties = useStudentsListStore(store => store.propertyMapping);
 
+  const visibleName = (() => {
+    if (displayColumn === 'firstName') {
+      return twoLettersFromName(item.firstName + ' ' + item.lastName);
+    }
+    if (displayColumn === 'gender') {
+      return item.gender ?? '-';
+    }
+    if (displayColumn === 'birthDate') {
+      return `${diffBirthDateYear}`;
+    }
+    if (displayColumn.startsWith('properties.')) {
+      const id = displayColumn.split('.', 2)[1]!;
+      return item.properties?.[id] ?? '-';
+    }
+  })();
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <span>
           <DragHandle>
-            <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
-              <AvatarFallback>
-                {twoLettersFromName(item.firstName + ' ' + item.lastName)}
-              </AvatarFallback>
+            <Avatar style={{ backgroundColor: color }} className="h-8 w-8">
+              <AvatarFallback>{visibleName}</AvatarFallback>
             </Avatar>
           </DragHandle>
         </span>

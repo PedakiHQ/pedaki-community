@@ -40,7 +40,7 @@ const ResultActions = () => {
     });
 
     router.push(`/classes${params}`);
-  }, [createClassesMutation]);
+  }, [studentData, classesData, createClassesMutation]);
 
   return (
     <div>

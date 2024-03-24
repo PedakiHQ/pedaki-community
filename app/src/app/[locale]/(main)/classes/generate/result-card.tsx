@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
 import IconBookUser from '@pedaki/design/ui/icons/IconBookUser';
 import { Separator } from '@pedaki/design/ui/separator';
+import { Actions } from '~/components/classes/generate/result/actions/index.tsx';
 import ClassesGrid from '~/components/classes/generate/result/classes-grid.tsx';
 import RefetchQueryAction from '~/components/classes/generate/result/refetch-query-action.tsx';
-import ResultActions from '~/components/classes/generate/result/result-actions.tsx';
 import React from 'react';
 
 const ResultCard = () => {
@@ -15,7 +15,7 @@ const ResultCard = () => {
           {/*TODO: trads*/}
           <CardTitle>Classes</CardTitle>
         </div>
-        <ResultActions />
+        <Actions />
       </CardHeader>
       <Separator className="-ml-4 w-[calc(100%+2rem)]" />
       <CardContent className="flex flex-col gap-4 @container/classes">
