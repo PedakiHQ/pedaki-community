@@ -3,9 +3,9 @@
 import type { AppRouter } from '@pedaki/api/router/router';
 import { httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
+import { ssrPrepass } from '@trpc/next/ssrPrepass';
 import { getUrl } from '~/server/clients/shared';
 import superjson from 'superjson';
-import { ssrPrepass } from '@trpc/next/ssrPrepass';
 
 export const api = createTRPCNext<AppRouter>({
   transformer: superjson,

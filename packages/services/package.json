@@ -20,7 +20,7 @@
   "author": "Nathan David <me@vahor.fr>",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.535.0",
+    "@aws-sdk/client-s3": "^3.540.0",
     "@pedaki/auth": "workspace:*",
     "@pedaki/common": "0.5.2-beta.11",
     "@pedaki/db": "workspace:*",
