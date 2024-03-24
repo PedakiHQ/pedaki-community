@@ -8,6 +8,7 @@ import { settingsRouter } from '~api/router/routers/settings/index.ts';
 import { studentsRouter } from '~api/router/routers/students/index.ts';
 import { teachersRouter } from '~api/router/routers/teachers';
 import { router } from '~api/router/trpc.ts';
+import { t } from './init.ts';
 
 export const appRouter = router({
   settings: settingsRouter,
@@ -22,3 +23,5 @@ export const appRouter = router({
 
 export type AppRouter = typeof appRouter;
 export type OutputType = inferRouterOutputs<AppRouter>;
+
+export const createCaller = t.createCallerFactory(appRouter);
