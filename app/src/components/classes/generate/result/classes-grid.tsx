@@ -5,6 +5,7 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { Avatar, AvatarFallback } from '@pedaki/design/ui/avatar';
 import { Button } from '@pedaki/design/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
+import type { IconProps } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
 import {
   Tooltip,
@@ -21,6 +22,21 @@ import { useStudentsListStore } from '~/store/students/list/list.store';
 import dayjs from 'dayjs';
 import deepEqual from 'fast-deep-equal/react';
 import React from 'react';
+
+// TODO: move to @pedaki/design/ui/icons
+// Lucide icon: https://lucide.dev/icons/slash
+const IconSlash = (props: IconProps) => (
+  <svg width="512" height="512" viewBox="0 0 24 24" {...props}>
+    <path
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M22 2 2 22"
+    />
+  </svg>
+);
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -186,7 +202,9 @@ const ItemBody = ({ item }: { item: Item }) => {
               style={{ backgroundColor: color }}
               className={cn('h-8 w-8 border border-dashed', !hasNoValue && 'border-transparent')}
             >
-              <AvatarFallback>{visibleName}</AvatarFallback>
+              <AvatarFallback>
+                {hasNoValue ? <IconSlash className="p-2 opacity-10" /> : visibleName}
+              </AvatarFallback>
             </Avatar>
           </DragHandle>
         </span>
