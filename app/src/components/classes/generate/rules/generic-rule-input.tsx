@@ -49,7 +49,7 @@ interface FormValues {
 } // TODO weird type
 
 const attributesFields: readonly (keyof RawAttribute)[] = ['genders', 'options'];
-const partialOperators = ['eq', 'gt', 'lt'] as const;
+const partialOperators = ['eq', 'gte', 'lte'] as const;
 type PartialOperator = (typeof partialOperators)[number];
 
 const GenericRuleInputForm = (props: Rule) => {
@@ -385,14 +385,14 @@ const generateLevelArray = (
   switch (operator) {
     case 'eq':
       return [number];
-    case 'gt':
-      return Array.from({ length: max - number }, (_, i) => number + i + 1);
-    case 'lt':
-      return Array.from({ length: number - min }, (_, i) => min + i);
+    case 'gte':
+      return Array.from({ length: (max - number) + 1 }, (_, i) => number + i);
+    case 'lte':
+      return Array.from({ length: (number - min) + 1 }, (_, i) => min + i);
   }
 };
 
-const operatorFromLevelArray = (levels: number[] | undefined) => {
+const operatorFromLevelArray = (levels: readonly number[] | undefined): PartialOperator | undefined => {
   if (levels === undefined || levels.length === 0) {
     return undefined;
   }
@@ -401,24 +401,24 @@ const operatorFromLevelArray = (levels: number[] | undefined) => {
   }
   if (levels.length > 1) {
     if (levels[0] === 0) {
-      return 'lt';
+      return 'lte';
     }
-    return 'gt';
+    return 'gte';
   }
 }
 
-const numberFromLevelArray = (levels: number[] | undefined, operator: PartialOperator) => {
+const numberFromLevelArray = (levels: readonly number[] | undefined, operator: PartialOperator) => {
   if (levels === undefined || levels.length === 0) {
     return undefined;
   }
   if (operator === "eq") {
     return levels[0];
   }
-  if (operator === 'gt') {
-    return levels[0] - 1;
+  if (operator === 'gte') {
+    return levels[0];
   }
-  if (operator === 'lt') {
-    return levels[levels.length - 1] + 1;
+  if (operator === 'lte') {
+    return levels[levels.length - 1];
   }
 }
 
@@ -454,6 +454,7 @@ const AttributeOptionFieldSingle = ({
         operator === 'none'
           ? undefined
           : generateLevelArray(operator, number, propertyType.min, propertyType.max);
+      console.log({ option: value.option, levels: levelArray });
       update({ option: value.option, levels: levelArray });
     }
   }, [value.option, propertyType, operator, number]);
