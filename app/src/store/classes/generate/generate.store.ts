@@ -136,7 +136,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
         if (displayColumn.startsWith('properties.')) {
           const id = displayColumn.split('.', 2)[1]!;
           const value = student.properties?.[id] ?? null;
-          index = value ? colorsCount.indexOf(value) : 0;
+          index = value ? colorsCount.indexOf(value) : -1;
         } else if (displayColumn === 'birthDate') {
           const year = student.birthDate.getFullYear();
           index = colorsCount.indexOf(year);
@@ -174,8 +174,8 @@ export const initializeStore = (preloadedState: InitialStore) => {
           const aValue = a.properties?.[key] ?? null;
           const bValue = b.properties?.[key] ?? null;
           if (aValue === null && bValue === null) return 0;
-          if (aValue === null) return -1;
-          if (bValue === null) return 1;
+          if (aValue === null) return 1;
+          if (bValue === null) return -1;
           // check is number
           if (typeof aValue === 'number' && typeof bValue === 'number') {
             return bValue - aValue;

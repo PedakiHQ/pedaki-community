@@ -166,23 +166,25 @@ const ItemBody = ({ item }: { item: Item }) => {
       return twoLettersFromName(item.firstName + ' ' + item.lastName);
     }
     if (displayColumn === 'gender') {
-      return item.gender ?? '-';
+      return item.gender;
     }
     if (displayColumn === 'birthDate') {
       return `${diffBirthDateYear}`;
     }
     if (displayColumn.startsWith('properties.')) {
       const id = displayColumn.split('.', 2)[1]!;
-      return item.properties?.[id] ?? '-';
+      return item.properties?.[id];
     }
   })();
+
+  const hasNoValue = !visibleName || visibleName === 'undefined';
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <span>
           <DragHandle>
-            <Avatar style={{ backgroundColor: color }} className="h-8 w-8">
+            <Avatar style={{ backgroundColor: color }} className={cn("h-8 w-8 border border-dashed", !hasNoValue && 'border-transparent')}>
               <AvatarFallback>{visibleName}</AvatarFallback>
             </Avatar>
           </DragHandle>

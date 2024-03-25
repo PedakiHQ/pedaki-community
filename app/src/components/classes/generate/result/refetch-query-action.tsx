@@ -35,6 +35,7 @@ const RefetchQueryAction = () => {
   const setStudentsData = useClassesGenerateStore(store => store.setStudentData);
 
   const rulesWithoutDescription = rules.map(rule => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { description, id, ...rest } = rule;
     return rest;
   });

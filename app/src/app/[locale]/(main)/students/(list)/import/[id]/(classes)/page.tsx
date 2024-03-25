@@ -36,7 +36,7 @@ export default async function StudentsImportClassesPage({ params }: PageType<{ i
         importId={params.id}
         items={items}
       >
-        <ImportDataSelection type="students" />
+        <ImportDataSelection type="classes" />
         <StudentsListWrapper>
           <ClassDiff importId={params.id} />
         </StudentsListWrapper>

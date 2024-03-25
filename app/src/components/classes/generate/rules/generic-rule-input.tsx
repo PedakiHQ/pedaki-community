@@ -124,7 +124,6 @@ const GenericRuleInput = ({
 
   const canAddMoreAttributes = ruleMapping.attributesCount !== 'one';
   const canRemoveAttributes =
-    (ruleMapping.attributesCount === 'none_or_one' && attributesCount > 0) ||
     (ruleMapping.attributesCount === 'two_or_more' && attributesCount > 2) ||
     (ruleMapping.attributesCount === 'one_or_more' && attributesCount > 1);
 
