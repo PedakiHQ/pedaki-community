@@ -53,7 +53,7 @@ const Footer = ({
     });
   };
   return (
-    <div className="grid grid-cols-12 items-center justify-between gap-4">
+    <div className="grid grid-cols-12 items-center justify-between gap-4 pb-1">
       <span className="col-span-6 justify-start text-p-sm text-sub @3xl:col-span-3">
         {t('footer.showing', {
           from: isLoading ? '0' : Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0),
@@ -69,7 +69,7 @@ const Footer = ({
           generateUrl={generateUrl}
         />
       </div>
-      <div className="col-span-6 flex items-center justify-end gap-2 @3xl:col-span-3 lg:mr-0">
+      <div className="col-span-6 flex items-center justify-end gap-2 @3xl:col-span-3 lg:mr-1">
         <span className="text-p-sm text-sub">{perPageLabel ?? t('footer.perPage')}</span>
         <Select
           onValueChange={value => {
