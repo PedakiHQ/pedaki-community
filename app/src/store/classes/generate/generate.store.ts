@@ -28,6 +28,9 @@ export interface ClassesGenerateStore {
   displayColumnValues: any[] | null; // null if too many values
   generateDisplayColumnValues: () => void;
   getColorForStudent: (student: Student) => string;
+
+  sortBy: keyof Student | null;
+  setSortBy: (sortBy: keyof Student) => void;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;
@@ -80,10 +83,17 @@ export const initializeStore = (preloadedState: InitialStore) => {
         set({ classesData: filteredContainers });
       }
       set({ studentData });
+      // reset sorting
+      const sortBy = get().sortBy;
+      if (sortBy) {
+        get().setSortBy(sortBy);
+      }
       get().generateDisplayColumnValues();
     },
     classesData: [],
-    setClassesData: classesData => set({ classesData }),
+    setClassesData: classesData => {
+      set({ classesData })
+    },
     displayColumnValues: null,
     generateDisplayColumnValues: () => {
       const displayColumn = get().displayColumn;
@@ -146,5 +156,43 @@ export const initializeStore = (preloadedState: InitialStore) => {
       const hsl = `hsl(${hue}, 85%, 90%)`;
       return hsl;
     },
+    sortBy: null,
+    setSortBy: sortBy => {
+      set({ sortBy })
+      // Update studentData
+      const students = get().studentData;
+
+      students.sort((a, b) => {
+        if (a.containerId !== b.containerId) {
+          return 0;
+        }
+        if (sortBy === 'birthDate') {
+          return a.birthDate.getTime() - b.birthDate.getTime();
+        }
+        if (sortBy.startsWith('properties.')) {
+          const key = sortBy.split('.', 2)[1]!;
+          const aValue = a.properties?.[key] ?? null;
+          const bValue = b.properties?.[key] ?? null;
+          if (aValue === null && bValue === null) return 0;
+          if (aValue === null) return -1;
+          if (bValue === null) return 1;
+          // check is number
+          if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return bValue - aValue;
+          }
+          // else use as string
+          return bValue.toString().localeCompare(bValue.toString());
+        }
+
+        const aValue = a[sortBy]?.toString() ?? null;
+        const bValue = b[sortBy]?.toString() ?? null;
+        if (aValue === null && bValue === null) return 0;
+        if (aValue === null) return -1;
+        if (bValue === null) return 1;
+        return aValue.localeCompare(bValue);
+      }
+      );
+      set({ studentData: Object.assign([], students) });
+    }
   }));
 };
