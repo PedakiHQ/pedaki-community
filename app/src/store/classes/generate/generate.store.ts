@@ -92,7 +92,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
     },
     classesData: [],
     setClassesData: classesData => {
-      set({ classesData })
+      set({ classesData });
     },
     displayColumnValues: null,
     generateDisplayColumnValues: () => {
@@ -148,7 +148,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
         }
 
         const percent = index / (colorsCount.length - 1);
-        hue = 240 - ((1 - percent) * 240);
+        hue = 240 - (1 - percent) * 240;
 
         // TODO: add color filter = bad -> red, good -> green. No inbetween
       }
@@ -158,7 +158,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
     },
     sortBy: null,
     setSortBy: sortBy => {
-      set({ sortBy })
+      set({ sortBy });
       // Update studentData
       const students = get().studentData;
 
@@ -192,6 +192,6 @@ export const initializeStore = (preloadedState: InitialStore) => {
         return aValue.localeCompare(bValue);
       });
       set({ studentData: Object.assign([], students) });
-    }
+    },
   }));
 };

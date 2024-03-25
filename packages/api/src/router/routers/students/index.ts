@@ -36,17 +36,16 @@ export const studentsRouter = router({
       });
 
       const [data, meta] = await prisma.$transaction([
-        prisma.$queryRawUnsafe<{ id: number;[key: string]: any }[]>(queryData),
+        prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData),
         prisma.$queryRawUnsafe<{ count: BigInt }[]>(queryCount),
       ]);
 
-
-      let joinData: { id: number;[key: string]: any }[] | null = null;
+      let joinData: { id: number; [key: string]: any }[] | null = null;
       if (joinFields.length > 0) {
         const ids = data.map(student => student.id);
         const queryJoin = studentQueryService.buildSelectJoinQuery(input, ids);
         if (queryJoin !== null) {
-          joinData = await prisma.$queryRawUnsafe<{ id: number;[key: string]: any }[]>(queryJoin);
+          joinData = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryJoin);
         }
       }
 
@@ -137,7 +136,7 @@ export const studentsRouter = router({
       );
       queryData += ` WHERE students.id in (${input.where.join(',')})`;
 
-      const data = await prisma.$queryRawUnsafe<{ id: number;[key: string]: any }[]>(queryData);
+      const data = await prisma.$queryRawUnsafe<{ id: number; [key: string]: any }[]>(queryData);
 
       return data.map(student => {
         return unflatten(student, { object: true });

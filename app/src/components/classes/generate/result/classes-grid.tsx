@@ -128,7 +128,6 @@ const ContainerInfo = ({ items }: { items: Item[] }) => {
     <Button asChild variant="ghost-sub">
       <span>{count} élèves</span>
     </Button>
-
   );
 };
 
@@ -148,7 +147,6 @@ const Item = ({ item }: { item: Item }) => {
     </SortableItem>
   );
 };
-
 
 const ItemBody = ({ item }: { item: Item }) => {
   const displayColumn = useClassesGenerateStore(store => store.displayColumn);
@@ -184,7 +182,10 @@ const ItemBody = ({ item }: { item: Item }) => {
       <TooltipTrigger asChild>
         <span>
           <DragHandle>
-            <Avatar style={{ backgroundColor: color }} className={cn("h-8 w-8 border border-dashed", !hasNoValue && 'border-transparent')}>
+            <Avatar
+              style={{ backgroundColor: color }}
+              className={cn('h-8 w-8 border border-dashed', !hasNoValue && 'border-transparent')}
+            >
               <AvatarFallback>{visibleName}</AvatarFallback>
             </Avatar>
           </DragHandle>

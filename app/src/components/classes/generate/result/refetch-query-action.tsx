@@ -66,10 +66,10 @@ const RefetchQueryAction = () => {
 
   const flatIds = generatedClasses
     ? generatedClasses.classes
-      .map(c => c.students)
-      .flat()
-      .map(i => parseInt(i, 10))
-      .filter(Boolean)
+        .map(c => c.students)
+        .flat()
+        .map(i => parseInt(i, 10))
+        .filter(Boolean)
     : undefined;
 
   const { data: students } = api.students.getManyById.useQuery(
