@@ -26,7 +26,7 @@ export interface ClassesGenerateStore {
   setDisplayColumn: (displayColumn: keyof Student) => void;
 
   displayColumnValues: any[] | null; // null if too many values
-  generateColorsCount: () => void;
+  generateDisplayColumnValues: () => void;
   getColorForStudent: (student: Student) => string;
 }
 
@@ -59,7 +59,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
     displayColumn: 'firstName',
     setDisplayColumn: displayColumn => {
       set({ displayColumn });
-      get().generateColorsCount();
+      get().generateDisplayColumnValues();
     },
     studentData: [],
     setStudentData: studentData => {
@@ -80,12 +80,12 @@ export const initializeStore = (preloadedState: InitialStore) => {
         set({ classesData: filteredContainers });
       }
       set({ studentData });
-      get().generateColorsCount();
+      get().generateDisplayColumnValues();
     },
     classesData: [],
     setClassesData: classesData => set({ classesData }),
     displayColumnValues: null,
-    generateColorsCount: () => {
+    generateDisplayColumnValues: () => {
       const displayColumn = get().displayColumn;
 
       const displayColumnValues = (() => {
@@ -138,7 +138,9 @@ export const initializeStore = (preloadedState: InitialStore) => {
         }
 
         const percent = index / (colorsCount.length - 1);
-        hue = (1 - percent) * 240;
+        hue = 240 - ((1 - percent) * 240);
+
+        // TODO: add color filter = bad -> red, good -> green. No inbetween
       }
 
       const hsl = `hsl(${hue}, 85%, 90%)`;
