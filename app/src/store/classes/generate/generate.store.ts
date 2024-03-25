@@ -164,7 +164,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
 
       students.sort((a, b) => {
         if (a.containerId !== b.containerId) {
-          return 0;
+          return a.containerId.localeCompare(b.containerId);
         }
         if (sortBy === 'birthDate') {
           return a.birthDate.getTime() - b.birthDate.getTime();
@@ -178,7 +178,6 @@ export const initializeStore = (preloadedState: InitialStore) => {
           if (bValue === null) return 1;
           // check is number
           if (typeof aValue === 'number' && typeof bValue === 'number') {
-            console.log({ aValue, bValue });
             return bValue - aValue;
           }
           // else use as string
@@ -191,8 +190,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
         if (aValue === null) return -1;
         if (bValue === null) return 1;
         return aValue.localeCompare(bValue);
-      }
-      );
+      });
       set({ studentData: Object.assign([], students) });
     }
   }));
