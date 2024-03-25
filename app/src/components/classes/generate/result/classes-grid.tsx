@@ -2,7 +2,6 @@
 
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
-import { hashCode } from '@pedaki/common/utils/hash';
 import { Avatar, AvatarFallback } from '@pedaki/design/ui/avatar';
 import { Button } from '@pedaki/design/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
@@ -21,7 +20,7 @@ import type { ClassesGenerateStore } from '~/store/classes/generate/generate.sto
 import { useStudentsListStore } from '~/store/students/list/list.store';
 import dayjs from 'dayjs';
 import deepEqual from 'fast-deep-equal/react';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -99,7 +98,7 @@ const ContainerBody = ({
               <CardTitle className={isEmpty ? 'text-soft' : ''}>Classe {index}</CardTitle>
             </div>
           </div>
-          <ContainerInfo container={container} />
+          <ContainerInfo items={items} />
         </div>
       </CardHeader>
       <Separator className="-ml-4 w-[calc(100%+2rem)]" />
@@ -121,11 +120,20 @@ const ContainerBodyMemo = React.memo(
   (prev, next) => prev.container.id === next.container.id && deepEqual(prev.items, next.items),
 );
 
-const ContainerInfo = ({ container }: { container: { id: UniqueIdentifier } }) => {
-  return <Button variant="ghost-sub">{container.id}</Button>;
+const ContainerInfo = ({ items }: { items: Item[] }) => {
+  const count = items.length;
+  // TODO: trads
+  // TODO: pluralize
+  return (
+    <Button asChild variant="ghost-sub">
+      <span>{count} élèves</span>
+    </Button>
+
+  );
 };
 
 const twoLettersFromName = (name: unknown) => {
+  // TODO: move in utils
   if (typeof name !== 'string') return '??';
   if (!name || name.length < 2) return name?.toUpperCase() || '??';
   const [first, second] = name.split(' ', 2);
@@ -140,6 +148,7 @@ const Item = ({ item }: { item: Item }) => {
     </SortableItem>
   );
 };
+
 
 const ItemBody = ({ item }: { item: Item }) => {
   const displayColumn = useClassesGenerateStore(store => store.displayColumn);
