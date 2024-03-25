@@ -52,6 +52,7 @@ const Footer = ({
       columns: data.columns ?? columnVisibility,
     });
   };
+
   return (
     <div className="grid grid-cols-12 items-center justify-between gap-4 pb-1">
       <span className="col-span-6 justify-start text-p-sm text-sub @3xl:col-span-3">
@@ -77,6 +78,7 @@ const Footer = ({
             if (newValue === perPage) return;
             setPerPage(newValue);
           }}
+          value={String(perPage)}
         >
           <SelectTrigger className="w-[80px]">
             <SelectValue placeholder={perPage}>{perPage}</SelectValue>
