@@ -35,7 +35,7 @@ const RefetchQueryAction = () => {
   const setStudentsData = useClassesGenerateStore(store => store.setStudentData);
 
   const rulesWithoutDescription = rules.map(rule => {
-    const { description, ...rest } = rule;
+    const { description, id, ...rest } = rule;
     return rest;
   });
 
@@ -65,10 +65,10 @@ const RefetchQueryAction = () => {
 
   const flatIds = generatedClasses
     ? generatedClasses.classes
-        .map(c => c.students)
-        .flat()
-        .map(i => parseInt(i, 10))
-        .filter(Boolean)
+      .map(c => c.students)
+      .flat()
+      .map(i => parseInt(i, 10))
+      .filter(Boolean)
     : undefined;
 
   const { data: students } = api.students.getManyById.useQuery(

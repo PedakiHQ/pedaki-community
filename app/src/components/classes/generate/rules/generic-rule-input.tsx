@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-  | { onDeleted: () => void }
-);
+    | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+    | { onDeleted: () => void }
+  );
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -392,6 +392,37 @@ const generateLevelArray = (
   }
 };
 
+const operatorFromLevelArray = (levels: number[] | undefined) => {
+  if (levels === undefined || levels.length === 0) {
+    return undefined;
+  }
+  if (levels.length === 1) {
+    return 'eq';
+  }
+  if (levels.length > 1) {
+    if (levels[0] === 0) {
+      return 'lt';
+    }
+    return 'gt';
+  }
+}
+
+const numberFromLevelArray = (levels: number[] | undefined, operator: PartialOperator) => {
+  if (levels === undefined || levels.length === 0) {
+    return undefined;
+  }
+  if (operator === "eq") {
+    return levels[0];
+  }
+  if (operator === 'gt') {
+    return levels[0] - 1;
+  }
+  if (operator === 'lt') {
+    return levels[levels.length - 1] + 1;
+  }
+}
+
+
 const AttributeOptionFieldSingle = ({
   value,
   update,
@@ -405,8 +436,8 @@ const AttributeOptionFieldSingle = ({
 }) => {
   const propertyMapping = useStudentsListStore(state => state.propertyMapping);
 
-  const [operator, setOperator] = React.useState<PartialOperator | 'none' | undefined>(undefined);
-  const [number, setNumber] = React.useState<number | undefined>(undefined);
+  const [operator, setOperator] = React.useState<PartialOperator | 'none' | undefined>(() => operatorFromLevelArray(value.levels));
+  const [number, setNumber] = React.useState<number | undefined>(() => numberFromLevelArray(value.levels, operator));
   const tOperator = useScopedI18n('components.datatable.filters.form.operator.names');
   const tFields = useScopedI18n('students.schema.fields');
 

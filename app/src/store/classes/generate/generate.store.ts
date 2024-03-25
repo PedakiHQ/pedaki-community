@@ -178,6 +178,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
           if (bValue === null) return 1;
           // check is number
           if (typeof aValue === 'number' && typeof bValue === 'number') {
+            console.log({ aValue, bValue });
             return bValue - aValue;
           }
           // else use as string
