@@ -169,17 +169,30 @@ class StudentQueryService {
         if (typeof value === 'undefined') return;
 
         if (key === 'properties' && typeof value === 'object' && value !== null) {
-          const result: string[] = [];
+          const updateResult: string[] = [];
+          const deleteResult: string[] = [];
           for (const [k, v] of Object.entries(value)) {
-            if (typeof v === 'undefined') return;
+            if (typeof v === 'undefined') continue;
+            // If the value is empty we remove add the key to be removed
+            if (v === '') {
+              deleteResult.push(`'${k}'`);
+              continue;
+            }
             let value = escape(v);
             value = `to_jsonb(${value}:: ${getJsonBType(v)})`;
 
-            result.push(`jsonb_build_object('${k}', ${value})`);
+            updateResult.push(`jsonb_build_object('${k}', ${value})`);
           }
 
-          if (result.length <= 0) return;
-          return `properties = properties || ${result.join(' || ')} `;
+          let res = 'properties = properties ';
+          // Deletes should go first
+          if (deleteResult.length > 0) {
+            res = `${res}- ${deleteResult.join(' - ')} `;
+          }
+          if (updateResult.length > 0) {
+            res = `${res}|| ${updateResult.join(' || ')} `;
+          }
+          return res;
         }
 
         const knownField = getKnownField(key);

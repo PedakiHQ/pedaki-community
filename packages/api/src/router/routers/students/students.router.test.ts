@@ -641,6 +641,48 @@ describe('studentsRouter', () => {
       expect(student2!.lastName).toBe(oldStudent!.lastName);
       expect(student2!.properties!['1']).toBe(oldStudent!.properties!['1']);
     });
+
+    test.each([userSession, internalSession])(
+      'updates a student and delete property - $type',
+      async ({ api }) => {
+        const oldStudent = await api.students.getOne({ id: 1 });
+
+        await api.students.updateOne({
+          id: 1,
+          properties: {
+            lorem: 'ipsum',
+            dolor: 'sit',
+            amet: 'consectetur',
+          },
+        });
+        const student2 = await api.students.getOne({ id: 1 });
+        await api.students.updateOne({
+          id: 1,
+          properties: {
+            lorem: 'ipsum',
+            dolor: '',
+            amet: '',
+          },
+        });
+        const student3 = await api.students.getOne({ id: 1 });
+
+        expect(oldStudent).toBeDefined();
+        expect(student2).toBeDefined();
+        expect(student3).toBeDefined();
+        expect(student2!.id).toBe(oldStudent!.id);
+        expect(student3!.id).toBe(oldStudent!.id);
+        // Properties should have been added to the student
+        expect(student2!.properties!.lorem).toBe('ipsum');
+        expect(student2!.properties!.dolor).toBe('sit');
+        expect(student2!.properties!.amet).toBe('consectetur');
+        // Properties should have been deleted
+        expect(student3!.properties!.lorem).toBe('ipsum');
+        expect(student3!.properties!.dolor).toBeUndefined();
+        expect(student3!.properties!.amet).toBeUndefined();
+        // Other properties should not have changed
+        expect(student2!.properties!['1']).toBe(oldStudent!.properties!['1']);
+      },
+    );
   });
 
   describe('deleteOne', () => {
