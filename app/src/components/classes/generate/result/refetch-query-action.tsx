@@ -36,12 +36,12 @@ const RefetchQueryAction = () => {
 
   const rulesWithoutDescription = rules.map(rule => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { description, id, ...rest } = rule;
+    const { description, ...rest } = rule;
     return rest;
   });
 
   const previousFilters = useRef<typeof filters | undefined>(filters);
-  const previousRules = useRef<typeof rules | undefined>(rules);
+  const previousRules = useRef<typeof rulesWithoutDescription | undefined>(rules);
   const previousConfig = useRef<typeof config | undefined>(config);
   const hasChanged = useRef(false);
 

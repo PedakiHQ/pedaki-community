@@ -205,7 +205,7 @@ const ItemBody = ({ item }: { item: Item }) => {
               Object.entries(item.properties).map(([property, value]) => (
                 <li key={property}>
                   <span className="font-semibold">{properties[property]?.name ?? '-'}:</span>{' '}
-                  {value}
+                  {value ?? '-'}
                 </li>
               ))}
           </ul>
