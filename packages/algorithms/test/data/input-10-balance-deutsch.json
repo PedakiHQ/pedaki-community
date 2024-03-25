@@ -1,0 +1,19 @@
+{
+  "constraints": {
+    "class_size_limit": 5,
+    "class_amount_limit": 2
+  },
+  "rules": [
+    {
+      "rule": "balance_count",
+      "priority": 1,
+      "attributes": [
+        {
+          "options": [{
+            "option": "properties.allemand"
+          }]
+        }
+      ]
+    }
+  ]
+}
