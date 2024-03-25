@@ -70,7 +70,7 @@ class StudentQueryService {
 
   buildSelectPreparedQuery(
     request: GetManyStudentsInput,
-    { selectFields }: { selectFields: Field[] },
+    { selectFields, groupBy }: { selectFields: Field[]; groupBy?: string },
   ): string {
     const isCount = selectFields.includes('count');
     const whereClause = this.#buildWhereClause(request.where);
@@ -120,7 +120,7 @@ class StudentQueryService {
         LEFT JOIN teachers ON teachers.id = t2."B"`
       : '';
 
-    const groupByClause = this.#buildGroupByClause(isCount, hasClassFields, hasTeachers);
+    const groupByClause = groupBy ?? this.#buildGroupByClause(isCount, hasClassFields, hasTeachers);
 
     return `SELECT ${finalFields.join(', ')}
                 FROM students ${joinClass} ${joinTeachers} ${whereClause.length > 0 ? 'WHERE' : ''} ${whereClause} ${groupByClause} ${orderByClause} ${paginationClause} `;
