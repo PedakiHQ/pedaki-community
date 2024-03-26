@@ -14,7 +14,7 @@ import { useScopedI18n } from '~/locales/client';
 import { useClassesGenerateStore } from '~/store/classes/generate/generate.store.ts';
 import { useStudentsListStore } from '~/store/students/list/list.store.ts';
 
-const staticColumns = ['firstName', 'gender', 'birthDate'] as const;
+const staticColumns = ['none', 'firstName', 'gender', 'birthDate'] as const;
 
 export const SortActions = () => {
   const sortBy = useClassesGenerateStore(store => store.sortBy);
