@@ -146,12 +146,12 @@ class StudentQueryService {
       : '';
     const whereTeachers = hasTeachers
       ? request.where
-        ?.filter(({ field }) => field.startsWith('class.teachers.'))
-        .map(({ field, operator, value }) => {
-          const whereField = `teachers.${field.split('class.teachers.', 2)[1]} `;
-          return buildWhereClause(whereField, operator, value);
-        })
-        .join(' AND ')
+          ?.filter(({ field }) => field.startsWith('class.teachers.'))
+          .map(({ field, operator, value }) => {
+            const whereField = `teachers.${field.split('class.teachers.', 2)[1]} `;
+            return buildWhereClause(whereField, operator, value);
+          })
+          .join(' AND ')
       : '';
 
     return `SELECT ${finalFields.join(', ')}, "t"."B" as "id"

@@ -90,7 +90,15 @@ const Footer = ({
   );
 };
 
-const ShowInPage = ({ meta, page, perPage }: { meta: PaginationOutput | undefined; page: number; perPage: number; }) => {
+const ShowInPage = ({
+  meta,
+  page,
+  perPage,
+}: {
+  meta: PaginationOutput | undefined;
+  page: number;
+  perPage: number;
+}) => {
   const t = useScopedI18n('components.datatable');
 
   const from = Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0);
@@ -110,8 +118,7 @@ const ShowInPage = ({ meta, page, perPage }: { meta: PaginationOutput | undefine
         total: totalRef.current,
       })}
     </span>
-
-  )
-}
+  );
+};
 
 export default Footer;
