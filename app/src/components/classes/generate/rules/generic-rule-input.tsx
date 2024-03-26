@@ -61,7 +61,7 @@ const GenericRuleInputForm = (props: Rule) => {
     defaultValues: {
       attributes: props.defaultValues
         ? props.defaultValues
-        : ruleMapping.attributesCount === 'one' || ruleMapping.attributesCount === 'one_or_more'
+        : ruleMapping.attributesCount === 'one_or_more'
           ? [{}]
           : ruleMapping.attributesCount === 'two_or_more'
             ? [{}, {}]
@@ -122,8 +122,8 @@ const GenericRuleInput = ({
 
   const attributesCount = fields.length;
 
-  const canAddMoreAttributes = ruleMapping.attributesCount !== 'one';
   const canRemoveAttributes =
+    (ruleMapping.attributesCount === 'none_or_one' && attributesCount > 0) ||
     (ruleMapping.attributesCount === 'two_or_more' && attributesCount > 2) ||
     (ruleMapping.attributesCount === 'one_or_more' && attributesCount > 1);
 
@@ -142,18 +142,16 @@ const GenericRuleInput = ({
           <span>entre toutes les classes</span>
         </h3>
         <div>
-          {canAddMoreAttributes && (
-            <Button
-              variant="stroke-primary-main"
-              size="xs"
-              onClick={() => append({})}
-              disabled={attributesCount >= MAX_ATTRIBUTES}
-            >
-              <IconPlus className="h-4 w-4" />
-              {/*TODO: trads*/}
-              <span>Ajouter un attribut</span>
-            </Button>
-          )}
+          <Button
+            variant="stroke-primary-main"
+            size="xs"
+            onClick={() => append({})}
+            disabled={attributesCount >= MAX_ATTRIBUTES}
+          >
+            <IconPlus className="h-4 w-4" />
+            {/*TODO: trads*/}
+            <span>Ajouter un attribut</span>
+          </Button>
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-4">
