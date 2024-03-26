@@ -49,13 +49,9 @@ const ClassesGrid = () => {
 
   const setHasEdited = useClassesGenerateStore(state => state.setHasEdited);
 
-  const [_, startTransition] = React.useTransition();
-
   const setItems = (items: Item[]) => {
-    startTransition(() => {
-      setHasEdited(true);
-      _setItems(items);
-    });
+    setHasEdited(true);
+    _setItems(items);
   };
 
   return (

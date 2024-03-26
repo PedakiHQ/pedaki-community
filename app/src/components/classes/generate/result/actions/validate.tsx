@@ -42,12 +42,12 @@ const ResultActions = () => {
     router.push(`/classes${params}`);
   }, [studentData, classesData, createClassesMutation]);
 
+  const isEmpty = !studentData.length || !classesData.length;
+
   return (
-    <div>
-      <Button size="sm" onClick={confirm}>
-        Valider
-      </Button>
-    </div>
+    <Button size="sm" onClick={confirm} disabled={isEmpty}>
+      Valider
+    </Button>
   );
 };
 

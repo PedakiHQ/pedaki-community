@@ -22,13 +22,15 @@ export const SortActions = () => {
 
   const properties = useStudentsListStore(store => store.propertyMapping);
 
+  const hasData = useClassesGenerateStore(store => store.studentData.length > 0);
+
   // TODO: trads
   const t = useScopedI18n('todo');
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="stroke-primary-main" size="sm" className="shrink-0">
+        <Button variant="stroke-primary-main" size="sm" className="shrink-0" disabled={!hasData}>
           <IconCaretSort className="mr-2 h-4 w-4" />
           {/* TODO: trads  */}
           <span>Trier par</span>
