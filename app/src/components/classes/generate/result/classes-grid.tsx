@@ -2,10 +2,10 @@
 
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
-import { hashCode } from '@pedaki/common/utils/hash';
 import { Avatar, AvatarFallback } from '@pedaki/design/ui/avatar';
 import { Button } from '@pedaki/design/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@pedaki/design/ui/card';
+import type { IconProps } from '@pedaki/design/ui/icons';
 import { Separator } from '@pedaki/design/ui/separator';
 import {
   Tooltip,
@@ -22,6 +22,21 @@ import { useStudentsListStore } from '~/store/students/list/list.store';
 import dayjs from 'dayjs';
 import deepEqual from 'fast-deep-equal/react';
 import React from 'react';
+
+// TODO: move to @pedaki/design/ui/icons
+// Lucide icon: https://lucide.dev/icons/slash
+const IconSlash = (props: IconProps) => (
+  <svg width="512" height="512" viewBox="0 0 24 24" {...props}>
+    <path
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M22 2 2 22"
+    />
+  </svg>
+);
 
 type Item = ClassesGenerateStore['studentData'][number];
 
@@ -99,7 +114,7 @@ const ContainerBody = ({
               <CardTitle className={isEmpty ? 'text-soft' : ''}>Classe {index}</CardTitle>
             </div>
           </div>
-          <ContainerInfo container={container} />
+          <ContainerInfo items={items} />
         </div>
       </CardHeader>
       <Separator className="-ml-4 w-[calc(100%+2rem)]" />
@@ -121,11 +136,19 @@ const ContainerBodyMemo = React.memo(
   (prev, next) => prev.container.id === next.container.id && deepEqual(prev.items, next.items),
 );
 
-const ContainerInfo = ({ container }: { container: { id: UniqueIdentifier } }) => {
-  return <Button variant="ghost-sub">{container.id}</Button>;
+const ContainerInfo = ({ items }: { items: Item[] }) => {
+  const count = items.length;
+  // TODO: trads
+  // TODO: pluralize
+  return (
+    <Button asChild variant="ghost-sub">
+      <span>{count} élèves</span>
+    </Button>
+  );
 };
 
 const twoLettersFromName = (name: unknown) => {
+  // TODO: move in utils
   if (typeof name !== 'string') return '??';
   if (!name || name.length < 2) return name?.toUpperCase() || '??';
   const [first, second] = name.split(' ', 2);
@@ -142,9 +165,9 @@ const Item = ({ item }: { item: Item }) => {
 };
 
 const ItemBody = ({ item }: { item: Item }) => {
-  const nameHash = hashCode(item.firstName);
-  const hue = nameHash % 360;
-  const hsl = `hsl(${hue}, 100%, 90%)`;
+  const displayColumn = useClassesGenerateStore(store => store.displayColumn);
+  const getColorForStudent = useClassesGenerateStore(store => store.getColorForStudent);
+  const color = getColorForStudent(item);
 
   let diffBirthDateMonth = dayjs().diff(item.birthDate, 'month');
   const diffBirthDateYear = Math.floor(diffBirthDateMonth / 12);
@@ -152,14 +175,35 @@ const ItemBody = ({ item }: { item: Item }) => {
 
   const properties = useStudentsListStore(store => store.propertyMapping);
 
+  const visibleName = (() => {
+    if (displayColumn === 'firstName') {
+      return twoLettersFromName(item.firstName + ' ' + item.lastName);
+    }
+    if (displayColumn === 'gender') {
+      return item.gender;
+    }
+    if (displayColumn === 'birthDate') {
+      return `${diffBirthDateYear}`;
+    }
+    if (displayColumn.startsWith('properties.')) {
+      const id = displayColumn.split('.', 2)[1]!;
+      return item.properties?.[id];
+    }
+  })();
+
+  const hasNoValue = !visibleName || visibleName === 'undefined';
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <span>
           <DragHandle>
-            <Avatar style={{ backgroundColor: hsl }} className="h-8 w-8">
+            <Avatar
+              style={{ backgroundColor: color }}
+              className={cn('h-8 w-8 border border-dashed', !hasNoValue && 'border-transparent')}
+            >
               <AvatarFallback>
-                {twoLettersFromName(item.firstName + ' ' + item.lastName)}
+                {hasNoValue ? <IconSlash className="p-2 opacity-10" /> : visibleName}
               </AvatarFallback>
             </Avatar>
           </DragHandle>
@@ -180,7 +224,7 @@ const ItemBody = ({ item }: { item: Item }) => {
               Object.entries(item.properties).map(([property, value]) => (
                 <li key={property}>
                   <span className="font-semibold">{properties[property]?.name ?? '-'}:</span>{' '}
-                  {value}
+                  {value ?? '-'}
                 </li>
               ))}
           </ul>

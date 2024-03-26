@@ -53,9 +53,24 @@ class StudentQueryService {
     return `ORDER BY ${orderByClauses.join(', ')}`;
   }
 
+  #buildGroupByClause(isCount: boolean, hasClassFields: boolean, hasTeachers: boolean): string {
+    const groupByClause = [];
+    if (!isCount) {
+      groupByClause.push('students.id');
+    }
+    if (hasClassFields) {
+      groupByClause.push('class.id');
+    }
+    if (hasTeachers) {
+      groupByClause.push('teachers.id');
+    }
+    if (groupByClause.length === 0) return '';
+    return `GROUP BY ${groupByClause.join(', ')}`;
+  }
+
   buildSelectPreparedQuery(
     request: GetManyStudentsInput,
-    { selectFields }: { selectFields: Field[] },
+    { selectFields, groupBy }: { selectFields: Field[]; groupBy?: string },
   ): string {
     const isCount = selectFields.includes('count');
     const whereClause = this.#buildWhereClause(request.where);
@@ -86,7 +101,7 @@ class StudentQueryService {
     const hasClassFields =
       request.where?.some(({ field }) => field.startsWith('class.')) ||
       (!isCount && request.orderBy?.some(([field]) => field.startsWith('class.'))) ||
-      (!isCount && request.fields.some(field => field.startsWith('class.'))) ||
+      (!isCount && selectFields.some(field => field.startsWith('class.'))) ||
       false;
 
     const joinClass = hasClassFields
@@ -97,7 +112,7 @@ class StudentQueryService {
     const hasTeachers =
       request.where?.some(({ field }) => field.startsWith('class.teachers.')) ||
       (!isCount && request.orderBy?.some(([field]) => field.startsWith('class.teachers.'))) ||
-      (!isCount && request.fields.some(field => field.startsWith('class.teachers.'))) ||
+      (!isCount && selectFields.some(field => field.startsWith('class.teachers.'))) ||
       false;
     const joinTeachers = hasTeachers
       ? `
@@ -105,8 +120,10 @@ class StudentQueryService {
         LEFT JOIN teachers ON teachers.id = t2."B"`
       : '';
 
+    const groupByClause = groupBy ?? this.#buildGroupByClause(isCount, hasClassFields, hasTeachers);
+
     return `SELECT ${finalFields.join(', ')}
-                FROM students ${joinClass} ${joinTeachers} ${whereClause.length > 0 ? 'WHERE' : ''} ${whereClause} ${orderByClause} ${paginationClause} `;
+                FROM students ${joinClass} ${joinTeachers} ${whereClause.length > 0 ? 'WHERE' : ''} ${whereClause} ${groupByClause} ${orderByClause} ${paginationClause} `;
   }
 
   buildSelectJoinQuery(request: GetManyStudentsInput, ids: number[]): string | null {
@@ -131,7 +148,7 @@ class StudentQueryService {
       ? request.where
           ?.filter(({ field }) => field.startsWith('class.teachers.'))
           .map(({ field, operator, value }) => {
-            const whereField = `teachers.${field.split('class.teachers.', 2)[1]}`;
+            const whereField = `teachers.${field.split('class.teachers.', 2)[1]} `;
             return buildWhereClause(whereField, operator, value);
           })
           .join(' AND ')
@@ -139,9 +156,9 @@ class StudentQueryService {
 
     return `SELECT ${finalFields.join(', ')}, "t"."B" as "id"
                 FROM "_class_to_student" t
-                         INNER JOIN "classes" class ON "t"."A" = "class"."id"
+                         INNER JOIN "classes" class ON "t"."A" = "class"."id" and "class"."status" = 'ACTIVE' 
                     ${joinTeachers}
-                WHERE "t"."B" IN (${ids.join(',')}) ${whereTeachers ? `AND ${whereTeachers}` : ''}`;
+                WHERE "t"."B" IN(${ids.join(',')}) ${whereTeachers ? `AND ${whereTeachers}` : ''} `;
   }
 
   buildUpdatePreparedQuery(request: UpdateOneStudentInput): string {
@@ -152,29 +169,44 @@ class StudentQueryService {
         if (typeof value === 'undefined') return;
 
         if (key === 'properties' && typeof value === 'object' && value !== null) {
-          const result: string[] = [];
-          for (const [k, v] of Object.entries(value)) {
-            if (typeof v === 'undefined') return;
-            let value = escape(v);
-            value = `to_jsonb(${value}::${getJsonBType(v)})`;
+          const values = Object.entries(value);
+          if (values.length <= 0) return;
 
-            result.push(`jsonb_build_object('${k}', ${value})`);
+          const updateResult: string[] = [];
+          const deleteResult: string[] = [];
+          for (const [k, v] of values) {
+            // If the value meet conditions we remove add the key to be removed
+            if (v === '' || v === null || v === undefined) {
+              deleteResult.push(`'${k}'`);
+              continue;
+            }
+            let value = escape(v);
+            value = `to_jsonb(${value}:: ${getJsonBType(v)})`;
+
+            updateResult.push(`jsonb_build_object('${k}', ${value})`);
           }
 
-          if (result.length <= 0) return;
-          return `properties = properties || ${result.join(' || ')}`;
+          let res = 'properties = properties ';
+          // Deletes should go first
+          if (deleteResult.length > 0) {
+            res = `${res}- ${deleteResult.join(' - ')} `;
+          }
+          if (updateResult.length > 0) {
+            res = `${res}|| ${updateResult.join(' || ')} `;
+          }
+          return res;
         }
 
         const knownField = getKnownField(key);
         if (knownField) {
-          return `${knownField.mapping} = ${escape(value)}`;
+          return `${knownField.mapping} = ${escape(value)} `;
         }
       })
       .filter(Boolean);
 
     return `UPDATE students
                 SET ${finalFields.join(', ')}
-                WHERE id = ${escape(request.id)}`;
+                WHERE id = ${escape(request.id)} `;
   }
 }
 

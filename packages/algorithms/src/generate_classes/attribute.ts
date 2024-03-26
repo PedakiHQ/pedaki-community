@@ -67,7 +67,10 @@ export class Attribute {
    */
   private correspond(student: Student): boolean {
     // S'il n'a pas toutes les options de la liste, il n'est pas concerné.
-    if (this.options().some(o => !(o in student.levels()))) return false;
+    if (
+      this.options().some(o => !(o in student.levels()) || typeof student.levels()[o] !== 'number')
+    )
+      return false;
 
     // Pour chacune des options, s'il n'a pas l'un des niveaux associés, il n'est pas concerné non plus.
     for (const option of this.optionsWithLevels()) {

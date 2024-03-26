@@ -49,7 +49,7 @@ interface FormValues {
 } // TODO weird type
 
 const attributesFields: readonly (keyof RawAttribute)[] = ['genders', 'options'];
-const partialOperators = ['eq', 'gt', 'lt'] as const;
+const partialOperators = ['eq', 'gte', 'lte'] as const;
 type PartialOperator = (typeof partialOperators)[number];
 
 const GenericRuleInputForm = (props: Rule) => {
@@ -124,7 +124,6 @@ const GenericRuleInput = ({
 
   const canAddMoreAttributes = ruleMapping.attributesCount !== 'one';
   const canRemoveAttributes =
-    (ruleMapping.attributesCount === 'none_or_one' && attributesCount > 0) ||
     (ruleMapping.attributesCount === 'two_or_more' && attributesCount > 2) ||
     (ruleMapping.attributesCount === 'one_or_more' && attributesCount > 1);
 
@@ -385,10 +384,42 @@ const generateLevelArray = (
   switch (operator) {
     case 'eq':
       return [number];
-    case 'gt':
-      return Array.from({ length: max - number }, (_, i) => number + i + 1);
-    case 'lt':
-      return Array.from({ length: number - min }, (_, i) => min + i);
+    case 'gte':
+      return Array.from({ length: max - number + 1 }, (_, i) => number + i);
+    case 'lte':
+      return Array.from({ length: number - min + 1 }, (_, i) => min + i);
+  }
+};
+
+const operatorFromLevelArray = (
+  levels: readonly number[] | undefined,
+): PartialOperator | undefined => {
+  if (levels === undefined || levels.length === 0) {
+    return undefined;
+  }
+  if (levels.length === 1) {
+    return 'eq';
+  }
+  if (levels.length > 1) {
+    if (levels[0] === 0) {
+      return 'lte';
+    }
+    return 'gte';
+  }
+};
+
+const numberFromLevelArray = (levels: readonly number[] | undefined, operator: PartialOperator) => {
+  if (levels === undefined || levels.length === 0) {
+    return undefined;
+  }
+  if (operator === 'eq') {
+    return levels[0];
+  }
+  if (operator === 'gte') {
+    return levels[0];
+  }
+  if (operator === 'lte') {
+    return levels[levels.length - 1];
   }
 };
 
@@ -405,8 +436,12 @@ const AttributeOptionFieldSingle = ({
 }) => {
   const propertyMapping = useStudentsListStore(state => state.propertyMapping);
 
-  const [operator, setOperator] = React.useState<PartialOperator | 'none' | undefined>(undefined);
-  const [number, setNumber] = React.useState<number | undefined>(undefined);
+  const [operator, setOperator] = React.useState<PartialOperator | 'none' | undefined>(() =>
+    operatorFromLevelArray(value.levels),
+  );
+  const [number, setNumber] = React.useState<number | undefined>(() =>
+    numberFromLevelArray(value.levels, operator),
+  );
   const tOperator = useScopedI18n('components.datatable.filters.form.operator.names');
   const tFields = useScopedI18n('students.schema.fields');
 
@@ -423,6 +458,7 @@ const AttributeOptionFieldSingle = ({
         operator === 'none'
           ? undefined
           : generateLevelArray(operator, number, propertyType.min, propertyType.max);
+      console.log({ option: value.option, levels: levelArray });
       update({ option: value.option, levels: levelArray });
     }
   }, [value.option, propertyType, operator, number]);

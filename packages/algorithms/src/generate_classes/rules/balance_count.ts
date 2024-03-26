@@ -56,7 +56,7 @@ export class BalanceCountRule extends Rule {
     // Récupération de l'objectif de nombre d'élèves concernés.
     const countGoal = this.getCountPerClass(entry, this.attribute());
 
-    // On récupère la différence entre nombre d'élèves concernés dans sa classe et l'objectif.
+    // On récupère la différence entre le nombre d'élèves concernés dans sa classe et l'objectif.
     const diff = this.getDifference(
       this.getRelatedStudentsOfClass(student.studentClass),
       countGoal,

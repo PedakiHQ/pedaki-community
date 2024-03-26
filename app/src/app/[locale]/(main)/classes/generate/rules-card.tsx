@@ -7,13 +7,9 @@ import { useRulesParams } from '~/components/classes/generate/parameters.tsx';
 import Entry from '~/components/classes/generate/rules/entry.tsx';
 import RulesTrigger from '~/components/classes/generate/rules/rules-trigger.tsx';
 import { SortableList } from '~/components/dnd/SortableList.tsx';
-import { useGlobalStore } from '~/store/global/global.store.ts';
 import React from 'react';
 
 const RulesCard = () => {
-  // TODO: this is disgusting, find a better way to handle this
-  const demoBannerVisible = useGlobalStore(state => state.demoBannerVisible);
-
   return (
     <Card className="h-full">
       <CardHeader>

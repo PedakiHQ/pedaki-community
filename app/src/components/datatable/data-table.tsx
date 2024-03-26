@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
       )}
     >
       <TableHeader
-        className="sticky top-0 rounded-t-md bg-white"
+        className="z-1 sticky -top-px rounded-t-md bg-white"
         style={{
           boxShadow: '0 0px 4px 0 rgba(0, 0, 0, 0.1)',
         }}

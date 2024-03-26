@@ -5,7 +5,7 @@ import {
   parseAsInteger,
   parseAsJson,
   parseAsNumberLiteral,
-} from 'nuqs/parsers';
+} from 'nuqs/server';
 import type { z } from 'zod';
 
 export const createFiltersParser = <T extends DefaultFilter, U extends z.Schema = z.Schema>(

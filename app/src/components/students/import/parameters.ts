@@ -1,5 +1,5 @@
 import { useQueryState } from 'nuqs';
-import { createSerializer, parseAsArrayOf, parseAsInteger, parseAsStringEnum } from 'nuqs/parsers';
+import { createSerializer, parseAsArrayOf, parseAsInteger, parseAsStringEnum } from 'nuqs/server';
 import type { TransitionStartFunction } from 'react';
 
 export const possibleFilters = ['DONE', 'REMOVED', 'PENDING'] as const;

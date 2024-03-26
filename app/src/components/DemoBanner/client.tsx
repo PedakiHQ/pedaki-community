@@ -47,9 +47,11 @@ const DemoBannerComponentContent = () => {
             <div className="flex flex-1 items-center justify-center gap-2">
               <IconInfoCircleFill className="hidden h-5 w-5 sm:block" />
               <p className="text-label-sm font-medium">{t('label')}</p>
-              <p>∙</p>
+              <p aria-hidden>∙</p>
               <p className="hidden text-p-sm lg:block">{t('description')}</p>
-              <p className="hidden lg:block">∙</p>
+              <p className="hidden lg:block" aria-hidden>
+                ∙
+              </p>
               <StyledLink
                 href="#"
                 decoration="underline"
@@ -63,7 +65,7 @@ const DemoBannerComponentContent = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button onClick={() => setDemoBannerVisible(false)}>
+                  <button onClick={() => setDemoBannerVisible(false)} aria-label={t('close')}>
                     <IconX className="h-5 w-5" />
                   </button>
                 </TooltipTrigger>

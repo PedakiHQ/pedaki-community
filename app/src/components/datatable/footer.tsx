@@ -52,15 +52,10 @@ const Footer = ({
       columns: data.columns ?? columnVisibility,
     });
   };
+
   return (
-    <div className="grid grid-cols-12 items-center justify-between gap-4">
-      <span className="col-span-6 justify-start text-p-sm text-sub @3xl:col-span-3">
-        {t('footer.showing', {
-          from: isLoading ? '0' : Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0),
-          to: isLoading ? '0' : Math.min(page * perPage, meta?.totalCount ?? 0),
-          total: isLoading ? '0' : meta?.totalCount,
-        })}
-      </span>
+    <div className="grid grid-cols-12 items-center justify-between gap-4 pb-1">
+      <ShowInPage meta={meta} page={page} perPage={perPage} isLoading={isLoading} />
       <div className="order-last col-span-12 flex justify-start @3xl:order-none @3xl:col-span-6">
         <PaginationElement
           page={page}
@@ -69,7 +64,7 @@ const Footer = ({
           generateUrl={generateUrl}
         />
       </div>
-      <div className="col-span-6 flex items-center justify-end gap-2 @3xl:col-span-3 lg:mr-0">
+      <div className="col-span-6 flex items-center justify-end gap-2 @3xl:col-span-3 lg:mr-1">
         <span className="text-p-sm text-sub">{perPageLabel ?? t('footer.perPage')}</span>
         <Select
           onValueChange={value => {
@@ -77,6 +72,7 @@ const Footer = ({
             if (newValue === perPage) return;
             setPerPage(newValue);
           }}
+          value={String(perPage)}
         >
           <SelectTrigger className="w-[80px]">
             <SelectValue placeholder={perPage}>{perPage}</SelectValue>
@@ -91,6 +87,37 @@ const Footer = ({
         </Select>
       </div>
     </div>
+  );
+};
+
+const ShowInPage = ({
+  meta,
+  page,
+  perPage,
+}: {
+  meta: PaginationOutput | undefined;
+  page: number;
+  perPage: number;
+}) => {
+  const t = useScopedI18n('components.datatable');
+
+  const from = Math.min((page - 1) * perPage + 1, meta?.totalCount ?? 0);
+  const to = Math.min(page * perPage, meta?.totalCount ?? 0);
+  const total = meta?.totalCount;
+
+  const totalRef = React.useRef(0);
+  if (total && totalRef.current !== total) {
+    totalRef.current = total;
+  }
+
+  return (
+    <span className="col-span-6 justify-start text-p-sm text-sub @3xl:col-span-3">
+      {t('footer.showing', {
+        from,
+        to,
+        total: totalRef.current,
+      })}
+    </span>
   );
 };
 

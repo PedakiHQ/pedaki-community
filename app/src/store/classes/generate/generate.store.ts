@@ -1,4 +1,5 @@
 import type { UniqueIdentifier } from '@dnd-kit/core';
+import { hashCode } from '@pedaki/common/utils/hash';
 import { randomId } from '@pedaki/common/utils/random.js';
 import type { RuleType } from '@pedaki/services/algorithms/generate_classes/input.schema';
 import type { Student } from '@pedaki/services/students/student_base.model';
@@ -20,6 +21,16 @@ export interface ClassesGenerateStore {
 
   hasEdited: boolean;
   setHasEdited: (hasEdited: boolean) => void;
+
+  displayColumn: keyof Student;
+  setDisplayColumn: (displayColumn: keyof Student) => void;
+
+  displayColumnValues: any[] | null; // null if too many values
+  generateDisplayColumnValues: () => void;
+  getColorForStudent: (student: Student) => string;
+
+  sortBy: keyof Student | null;
+  setSortBy: (sortBy: keyof Student) => void;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;
@@ -48,6 +59,11 @@ export const initializeStore = (preloadedState: InitialStore) => {
     setActiveCreateRule: rule => set({ activeCreateRule: rule }),
     hasEdited: false,
     setHasEdited: hasEdited => set({ hasEdited }),
+    displayColumn: 'firstName',
+    setDisplayColumn: displayColumn => {
+      set({ displayColumn });
+      get().generateDisplayColumnValues();
+    },
     studentData: [],
     setStudentData: studentData => {
       const containers = get().classesData;
@@ -67,8 +83,115 @@ export const initializeStore = (preloadedState: InitialStore) => {
         set({ classesData: filteredContainers });
       }
       set({ studentData });
+      // reset sorting
+      const sortBy = get().sortBy;
+      if (sortBy) {
+        get().setSortBy(sortBy);
+      }
+      get().generateDisplayColumnValues();
     },
     classesData: [],
-    setClassesData: classesData => set({ classesData }),
+    setClassesData: classesData => {
+      set({ classesData });
+    },
+    displayColumnValues: null,
+    generateDisplayColumnValues: () => {
+      const displayColumn = get().displayColumn;
+
+      const displayColumnValues = (() => {
+        switch (displayColumn) {
+          case 'firstName':
+            return null;
+          case 'birthDate': {
+            // count of years
+            const yearsValues = get().studentData.map(student => student.birthDate.getFullYear());
+            return [...new Set(yearsValues)];
+          }
+          case 'gender': {
+            const genderValues = get().studentData.map(student => student.gender);
+            return [...new Set(genderValues)];
+          }
+          default:
+            if (displayColumn.startsWith('properties.')) {
+              // TODO: depends on the type of the property
+              return new Array(21).fill(0).map((_, i) => i);
+            }
+            return null;
+        }
+      })();
+
+      set({ displayColumnValues });
+    },
+    getColorForStudent: student => {
+      const colorsCount = get().displayColumnValues;
+      const displayColumn = get().displayColumn;
+      let hue;
+      if (colorsCount === null) {
+        const nameKey =
+          displayColumn === 'firstName' ? student.firstName + student.lastName : displayColumn;
+        const nameHash = hashCode(nameKey);
+        hue = nameHash % 360;
+      } else {
+        let index: number;
+        if (displayColumn.startsWith('properties.')) {
+          const id = displayColumn.split('.', 2)[1]!;
+          const value = student.properties?.[id] ?? null;
+          index = value ? colorsCount.indexOf(value) : -1;
+        } else if (displayColumn === 'birthDate') {
+          const year = student.birthDate.getFullYear();
+          index = colorsCount.indexOf(year);
+        } else {
+          index = colorsCount.indexOf(student[displayColumn]);
+        }
+        if (index === -1) {
+          return 'transparent';
+        }
+
+        const percent = index / (colorsCount.length - 1);
+        hue = 240 - (1 - percent) * 240;
+
+        // TODO: add color filter = bad -> red, good -> green. No inbetween
+      }
+
+      const hsl = `hsl(${hue}, 85%, 90%)`;
+      return hsl;
+    },
+    sortBy: null,
+    setSortBy: sortBy => {
+      set({ sortBy });
+      // Update studentData
+      const students = get().studentData;
+
+      students.sort((a, b) => {
+        if (a.containerId !== b.containerId) {
+          return a.containerId.localeCompare(b.containerId);
+        }
+        if (sortBy === 'birthDate') {
+          return a.birthDate.getTime() - b.birthDate.getTime();
+        }
+        if (sortBy.startsWith('properties.')) {
+          const key = sortBy.split('.', 2)[1]!;
+          const aValue = a.properties?.[key] ?? null;
+          const bValue = b.properties?.[key] ?? null;
+          if (aValue === null && bValue === null) return 0;
+          if (aValue === null) return 1;
+          if (bValue === null) return -1;
+          // check is number
+          if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return bValue - aValue;
+          }
+          // else use as string
+          return bValue.toString().localeCompare(bValue.toString());
+        }
+
+        const aValue = a[sortBy]?.toString() ?? null;
+        const bValue = b[sortBy]?.toString() ?? null;
+        if (aValue === null && bValue === null) return 0;
+        if (aValue === null) return -1;
+        if (bValue === null) return 1;
+        return aValue.localeCompare(bValue);
+      });
+      set({ studentData: Object.assign([], students) });
+    },
   }));
 };

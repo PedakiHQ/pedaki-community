@@ -132,6 +132,7 @@ export const studentsRouter = router({
         },
         {
           selectFields: fields,
+          groupBy: '',
         },
       );
       queryData += ` WHERE students.id in (${input.where.join(',')})`;
