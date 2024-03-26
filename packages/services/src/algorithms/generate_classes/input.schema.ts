@@ -6,10 +6,8 @@ export const algorithmRules = [
   'gather_attributes',
   // Répartir équitablement le nombre d'élèves dans chaque classe.
   // Si un attribut est associée à la règle, alors seulement cet attribut sera pris en compte.
-  // Elle est faite après les répartitions d'attributs.
   'balance_count',
   // Équilibrer le dénombrement de plusieurs attributs dans un maximum de classes.
-  // Elle est faite après les répartitions d'attributs.
   'balance_class_count',
   // Maximiser le nombre d'élèves dans chaque classe, en respectant les contraintes.
   // Règle inverse de "maximize_classes", ne peut pas être utilisé en même temps.
