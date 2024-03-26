@@ -185,13 +185,17 @@ class StudentQueryService {
           }
 
           let res = 'properties = properties ';
+          let hasRes = false;
           // Deletes should go first
           if (deleteResult.length > 0) {
             res = `${res}- ${deleteResult.join(' - ')} `;
+            hasRes = true;
           }
           if (updateResult.length > 0) {
             res = `${res}|| ${updateResult.join(' || ')} `;
+            hasRes = true;
           }
+          if (!hasRes) return;
           return res;
         }
 
