@@ -34,20 +34,19 @@ export const generateColumns = (
       ),
       cell: ({ row }) => {
         const data = row.original;
-        if (data.academicYear && academicYearMapping[data.academicYear.id!]?.name) {
-          return <div>{academicYearMapping[data.academicYear.id!]?.name}</div>;
-        }
-        return <div>-</div>;
+        const value = data.academicYear && academicYearMapping[data.academicYear.id!]?.name;
+        const hasValue = value != null;
+        console.log('value', value);
+        return <div className={hasValue ? '' : 'text-soft'}>{hasValue ? value : '-'}</div>;
       },
     },
     {
       ...defaultCell<ClassColumnDef>('level.name', 'level.id', t('columns.level.label')),
       cell: ({ row }) => {
         const data = row.original;
-        if (data.level && classLevelMapping[data.level.id!]?.name) {
-          return <div>{classLevelMapping[data.level.id!]?.name}</div>;
-        }
-        return <div>-</div>;
+        const value = data.level && classLevelMapping[data.level.id!]?.name;
+        const hasValue = value != null;
+        return <div className={hasValue ? '' : 'text-soft'}>{hasValue ? value : '-'}</div>;
       },
     },
     {
@@ -58,10 +57,9 @@ export const generateColumns = (
       ),
       cell: ({ row }) => {
         const data = row.original;
-        if (data.mainTeacher && teacherMapping[data.mainTeacher.id!]?.name) {
-          return <div>{teacherMapping[data.mainTeacher.id!]?.name}</div>;
-        }
-        return <div>-</div>;
+        const value = data.mainTeacher && teacherMapping[data.mainTeacher.id!]?.name;
+        const hasValue = value != null;
+        return <div className={hasValue ? '' : 'text-soft'}>{hasValue ? value : '-'}</div>;
       },
     },
     {

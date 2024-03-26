@@ -30,7 +30,9 @@ export const generateColumns = (
       ...defaultCell<StudentColumnDef>('class.name', `class.id`, t('columns.class.label')),
       cell: ({ row }) => {
         const data = row.original;
-        return <div>{(data.class && classMapping[data.class.id!]?.name) ?? '-'}</div>;
+        const value = data.class && classMapping[data.class.id!]?.name;
+        const hasValue = value !== undefined;
+        return <div className={hasValue ? '' : 'text-soft'}>{hasValue ? value : '-'}</div>;
       },
     },
     {

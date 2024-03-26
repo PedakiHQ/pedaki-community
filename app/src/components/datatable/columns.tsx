@@ -30,7 +30,9 @@ export const levelCell = <T extends ColumnDef<any>>(
     cell: ({ row }) => {
       const data = row.original as { properties: Record<string, number> };
       const propertyId = accessorKey.split('.', 2)[1];
-      return <div>{(propertyId && data?.properties?.[propertyId]) ?? '-'}</div>;
+      const value = propertyId && data?.properties?.[propertyId];
+      const hasValue = value != null;
+      return <div className={hasValue ? '' : 'text-soft'}>{hasValue ? value : '-'}</div>;
     },
   };
 };
