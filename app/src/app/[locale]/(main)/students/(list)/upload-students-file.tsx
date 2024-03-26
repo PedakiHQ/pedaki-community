@@ -102,7 +102,8 @@ const UploadStudentsFile = () => {
       enabled: importId !== null,
       refetchOnWindowFocus: false,
       refetchInterval: res => {
-        if (res?.status === 'DONE' || res?.status === 'ERROR') return false;
+        const data = res.state.data;
+        if (data?.status === 'DONE' || data?.status === 'ERROR') return false;
         return 200;
       },
     },
