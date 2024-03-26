@@ -124,7 +124,6 @@ const Client = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
         setColumnVisibility={setColumnVisibility}
       />
       <Footer
-        isLoading={isLoading}
         page={page}
         setPage={setPage}
         perPage={perPage}
@@ -164,11 +163,11 @@ const TableElement = ({
     () =>
       isLoading
         ? columns.map(col => {
-            return {
-              ...col,
-              cell: col.loadingCell ?? col.cell,
-            };
-          })
+          return {
+            ...col,
+            cell: col.loadingCell ?? col.cell,
+          };
+        })
         : columns,
     [isLoading, columns],
   );

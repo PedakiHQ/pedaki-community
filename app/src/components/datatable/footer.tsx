@@ -21,7 +21,6 @@ interface GenerateUrlArgs {
 
 const Footer = ({
   perPageLabel,
-  isLoading,
   page,
   setPage,
   perPage,
@@ -32,7 +31,6 @@ const Footer = ({
   serialize,
 }: {
   perPageLabel?: string;
-  isLoading: boolean;
   page: number;
   perPage: PossiblePerPage;
   setPerPage: React.Dispatch<React.SetStateAction<PossiblePerPage>>;
@@ -55,7 +53,7 @@ const Footer = ({
 
   return (
     <div className="grid grid-cols-12 items-center justify-between gap-4 pb-1">
-      <ShowInPage meta={meta} page={page} perPage={perPage} isLoading={isLoading} />
+      <ShowInPage meta={meta} page={page} perPage={perPage} />
       <div className="order-last col-span-12 flex justify-start @3xl:order-none @3xl:col-span-6">
         <PaginationElement
           page={page}
