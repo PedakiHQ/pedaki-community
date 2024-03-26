@@ -172,9 +172,8 @@ class StudentQueryService {
           const updateResult: string[] = [];
           const deleteResult: string[] = [];
           for (const [k, v] of Object.entries(value)) {
-            if (typeof v === 'undefined') continue;
-            // If the value is empty we remove add the key to be removed
-            if (v === '') {
+            // If the value meet conditions we remove add the key to be removed
+            if (v === '' || v === null || v === undefined) {
               deleteResult.push(`'${k}'`);
               continue;
             }
