@@ -187,7 +187,7 @@ const ItemBody = ({ item }: { item: Item }) => {
     }
   })();
 
-  const hasNoValue = !visibleName || visibleName === 'undefined';
+  const hasNoValue = visibleName == null || visibleName === 'undefined';
 
   return (
     <Tooltip>
