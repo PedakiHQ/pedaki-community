@@ -30,7 +30,7 @@ export const generateColumns = (
       ...defaultCell<StudentColumnDef>('class.name', `class.id`, t('columns.class.label')),
       cell: ({ row }) => {
         const data = row.original;
-        return <div>{classMapping[data.class.id!]?.name ?? '-'}</div>;
+        return <div>{(data.class && classMapping[data.class.id!]?.name) ?? '-'}</div>;
       },
     },
     {

@@ -15,12 +15,12 @@ INTERNAL_HEADERS.set('x-pedaki-secret', env.API_INTERNAL_SECRET);
 export const api = experimental_createTRPCNextAppDirServer<typeof appRouter>({
   config() {
     return {
-      transformer: SuperJSON,
       links: [
         loggerLink({
           enabled: () => false,
         }),
         experimental_nextCacheLink({
+          transformer: SuperJSON,
           revalidate: 1, // todo cache ? cpt il faut actualiser deux fois pour que le cache parte
           router: appRouter,
           // eslint-disable-next-line @typescript-eslint/require-await

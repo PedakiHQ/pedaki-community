@@ -53,7 +53,7 @@ export const DisplayActions = () => {
         })}
 
         {Object.entries(properties).map(([id, value]) => {
-          const key = `properties.${id}`;
+          const key = `properties.${id}` as const;
           const isColumnVisible = displayColumn === key;
           return (
             <ColumnCheckbox

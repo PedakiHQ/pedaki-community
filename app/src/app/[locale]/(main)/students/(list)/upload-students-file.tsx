@@ -102,7 +102,8 @@ const UploadStudentsFile = () => {
       enabled: importId !== null,
       refetchOnWindowFocus: false,
       refetchInterval: res => {
-        if (res?.status === 'DONE' || res?.status === 'ERROR') return false;
+        const data = res.state.data;
+        if (data?.status === 'DONE' || data?.status === 'ERROR') return false;
         return 200;
       },
     },
@@ -292,7 +293,7 @@ const OldUploadStudentsFile = () => {
   const t = useScopedI18n('students.list.upload.oldImport');
   const { data } = api.students.imports.getMany.useQuery();
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const deleteOneMutation = api.students.imports.deleteOne.useMutation({
     onMutate: (id: string) => {
       utils.students.imports.getMany.setData(undefined, old => {

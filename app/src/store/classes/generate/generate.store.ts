@@ -22,15 +22,15 @@ export interface ClassesGenerateStore {
   hasEdited: boolean;
   setHasEdited: (hasEdited: boolean) => void;
 
-  displayColumn: keyof Student;
-  setDisplayColumn: (displayColumn: keyof Student) => void;
+  displayColumn: keyof Student | `properties.${string}`;
+  setDisplayColumn: (displayColumn: ClassesGenerateStore['displayColumn']) => void;
 
   displayColumnValues: any[] | null; // null if too many values
   generateDisplayColumnValues: () => void;
   getColorForStudent: (student: Student) => string;
 
-  sortBy: keyof Student | null;
-  setSortBy: (sortBy: keyof Student) => void;
+  sortBy: keyof Student | `properties.${string}` | null;
+  setSortBy: (sortBy: ClassesGenerateStore['sortBy']) => void;
 }
 
 export type ClassesGenerateStoreType = ReturnType<typeof initializeStore>;
@@ -141,7 +141,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
           const year = student.birthDate.getFullYear();
           index = colorsCount.indexOf(year);
         } else {
-          index = colorsCount.indexOf(student[displayColumn]);
+          index = colorsCount.indexOf(student[displayColumn as keyof Student]);
         }
         if (index === -1) {
           return 'transparent';
@@ -159,6 +159,7 @@ export const initializeStore = (preloadedState: InitialStore) => {
     sortBy: null,
     setSortBy: sortBy => {
       set({ sortBy });
+      if (!sortBy) return;
       // Update studentData
       const students = get().studentData;
 
@@ -184,8 +185,10 @@ export const initializeStore = (preloadedState: InitialStore) => {
           return bValue.toString().localeCompare(bValue.toString());
         }
 
-        const aValue = a[sortBy]?.toString() ?? null;
-        const bValue = b[sortBy]?.toString() ?? null;
+        const studentKey = sortBy as keyof Student;
+
+        const aValue = a[studentKey]?.toString() ?? null;
+        const bValue = b[studentKey]?.toString() ?? null;
         if (aValue === null && bValue === null) return 0;
         if (aValue === null) return -1;
         if (bValue === null) return 1;

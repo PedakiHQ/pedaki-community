@@ -79,7 +79,7 @@ const ContentWrapper = ({ importId, id }: StudentDiffProps & { id: number }) => 
     }
   }, [isError]);
 
-  if (isLoading || isError || propertiesLoading || propertiesError) {
+  if (isLoading || isError || propertiesLoading || propertiesError || !properties) {
     return <SuspenseCard />;
   }
 

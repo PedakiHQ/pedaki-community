@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-  | { onDeleted: () => void }
-);
+    | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+    | { onDeleted: () => void }
+  );
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -298,7 +298,6 @@ const AttributeGenderField = ({
           name={`${field.name}.genders.0`}
           value={value}
           onValueChange={v => update(v)}
-          defaultValue={value}
         >
           <SelectTrigger>
             <SelectValue placeholder="TODO trads" className="w-full">
@@ -408,7 +407,7 @@ const operatorFromLevelArray = (
   }
 };
 
-const numberFromLevelArray = (levels: readonly number[] | undefined, operator: PartialOperator) => {
+const numberFromLevelArray = (levels: readonly number[] | undefined, operator: PartialOperator | 'none' | undefined) => {
   if (levels === undefined || levels.length === 0) {
     return undefined;
   }
@@ -469,7 +468,6 @@ const AttributeOptionFieldSingle = ({
       <Select
         value={value.option}
         onValueChange={newValue => update({ ...value, option: newValue as Field })}
-        defaultValue={value.option}
       >
         <SelectTrigger className="w-max shrink-0">
           <SelectValue placeholder="TODO trads">
