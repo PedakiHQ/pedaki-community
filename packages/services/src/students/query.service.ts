@@ -146,12 +146,12 @@ class StudentQueryService {
       : '';
     const whereTeachers = hasTeachers
       ? request.where
-          ?.filter(({ field }) => field.startsWith('class.teachers.'))
-          .map(({ field, operator, value }) => {
-            const whereField = `teachers.${field.split('class.teachers.', 2)[1]} `;
-            return buildWhereClause(whereField, operator, value);
-          })
-          .join(' AND ')
+        ?.filter(({ field }) => field.startsWith('class.teachers.'))
+        .map(({ field, operator, value }) => {
+          const whereField = `teachers.${field.split('class.teachers.', 2)[1]} `;
+          return buildWhereClause(whereField, operator, value);
+        })
+        .join(' AND ')
       : '';
 
     return `SELECT ${finalFields.join(', ')}, "t"."B" as "id"
@@ -169,9 +169,12 @@ class StudentQueryService {
         if (typeof value === 'undefined') return;
 
         if (key === 'properties' && typeof value === 'object' && value !== null) {
+          const values = Object.entries(value);
+          if (values.length <= 0) return;
+
           const updateResult: string[] = [];
           const deleteResult: string[] = [];
-          for (const [k, v] of Object.entries(value)) {
+          for (const [k, v] of values) {
             // If the value meet conditions we remove add the key to be removed
             if (v === '' || v === null || v === undefined) {
               deleteResult.push(`'${k}'`);
@@ -184,17 +187,13 @@ class StudentQueryService {
           }
 
           let res = 'properties = properties ';
-          let hasRes = false;
           // Deletes should go first
           if (deleteResult.length > 0) {
             res = `${res}- ${deleteResult.join(' - ')} `;
-            hasRes = true;
           }
           if (updateResult.length > 0) {
             res = `${res}|| ${updateResult.join(' || ')} `;
-            hasRes = true;
           }
-          if (!hasRes) return;
           return res;
         }
 
