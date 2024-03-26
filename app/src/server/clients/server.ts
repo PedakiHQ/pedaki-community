@@ -12,12 +12,12 @@ import SuperJSON from 'superjson';
 export const api = experimental_createTRPCNextAppDirServer<typeof appRouter>({
   config() {
     return {
-      transformer: SuperJSON,
       links: [
         loggerLink({
           enabled: () => false,
         }),
         experimental_nextCacheLink({
+          transformer: SuperJSON,
           // requests are cached for 5 seconds
           revalidate: 5,
           router: appRouter,
