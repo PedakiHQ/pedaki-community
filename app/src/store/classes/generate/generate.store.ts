@@ -22,8 +22,8 @@ export interface ClassesGenerateStore {
   hasEdited: boolean;
   setHasEdited: (hasEdited: boolean) => void;
 
-  displayColumn: keyof Student;
-  setDisplayColumn: (displayColumn: keyof Student) => void;
+  displayColumn: keyof Student | `properties.${string}`;
+  setDisplayColumn: (displayColumn: ClassesGenerateStore['displayColumn']) => void;
 
   displayColumnValues: any[] | null; // null if too many values
   generateDisplayColumnValues: () => void;
