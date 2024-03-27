@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-  | { onDeleted: () => void }
-);
+      | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+      | { onDeleted: () => void }
+    );
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -324,9 +324,9 @@ const AttributeGenderField = ({
       <FormControl>
         <Select name={`${field.name}.genders.0`} value={value} onValueChange={v => update(v)}>
           <SelectTrigger>
-            <SelectValue placeholder="TODO trads" className="w-full">
+            <SelectValue placeholder="Genre" className="w-full">
               {/*TODO: trads*/}
-              {value ? tField(`gender.options.${value}`) : 'TODO trads'}
+              {value ? tField(`gender.options.${value}`) : 'Genre'}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -497,9 +497,9 @@ const AttributeOptionFieldSingle = ({
         onValueChange={newValue => update({ ...value, option: newValue as Field })}
       >
         <SelectTrigger className="w-max shrink-0">
-          <SelectValue placeholder="TODO trads">
+          <SelectValue placeholder="Option">
             {/*TODO: trads*/}
-            {(selectedPropertyId && propertyMapping[selectedPropertyId]?.name) ?? 'TODO trads'}
+            {(selectedPropertyId && propertyMapping[selectedPropertyId]?.name) ?? 'Option'}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
