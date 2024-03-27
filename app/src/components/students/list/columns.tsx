@@ -31,7 +31,7 @@ export const generateColumns = (
       cell: ({ row }) => {
         const data = row.original;
         const value = data.class && classMapping[data.class.id!]?.name;
-        const hasValue = value !== undefined;
+        const hasValue = value != null;
         return <div className={hasValue ? '' : 'text-soft'}>{hasValue ? value : '-'}</div>;
       },
     },

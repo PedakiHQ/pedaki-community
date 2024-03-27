@@ -9,7 +9,6 @@ import { Rule, RuleType } from './rule';
 
 /**
  * Équilibrer le dénombrement de plusieurs attributs dans un maximum de classes.
- * Elle est faite après les répartitions d'attributs.
  * S'adapte à la configuration actuelle des attributs non concernés, et ne modifie pas leur dénombrement.
  *
  * La différence avec balance_count, c'est qu'on équilibre ici les attributs entre eux, à l'intérieur des classes.
