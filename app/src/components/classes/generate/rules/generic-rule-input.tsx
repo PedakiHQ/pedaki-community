@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-    | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-    | { onDeleted: () => void }
-  );
+      | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+      | { onDeleted: () => void }
+    );
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -130,17 +130,7 @@ const GenericRuleInput = ({
   return (
     <div className="flex-1 space-y-6">
       <div className="space-y-4">
-        <h3 className="text-sub-sm font-medium">
-          {/*TODO: trads*/}
-          <span>Equilibrer</span>
-          <span className="space-x-2 px-2">
-            {fields.map(({ id }, index) => (
-              <AttributeIcon key={id} index={index} />
-            ))}
-          </span>
-          {/*TODO: trads*/}
-          <span>entre toutes les classes</span>
-        </h3>
+        <Title fields={fields} ruleMapping={ruleMapping} />
         <div>
           {canAddMoreAttributes && (
             <Button
@@ -176,6 +166,44 @@ const GenericRuleInput = ({
         </TooltipProvider>
       </div>
     </div>
+  );
+};
+
+const Title = ({
+  ruleMapping,
+  fields,
+}: {
+  ruleMapping: Rule['ruleMapping'];
+  fields: { id: string }[];
+}) => {
+  const isEmpty = fields.length === 0;
+
+  const t = useScopedI18n('classes.generate.input.form');
+  const emptyTranslation = t(`${ruleMapping.key}.empty`);
+  const note = t(`${ruleMapping.key}.note`);
+  const hasNote = note !== `${ruleMapping.key}.note`;
+
+  if (isEmpty && emptyTranslation) {
+    return (
+      <h3 className="space-x-2 text-sub-sm font-medium">
+        <span>{emptyTranslation}</span>
+        <span className="text-sub-xs text-sub">{hasNote && note}</span>
+      </h3>
+    );
+  }
+
+  const AttributesNodes = fields.map(({ id }, index) => <AttributeIcon key={id} index={index} />);
+
+  const part1 = t(`${ruleMapping.key}.part1`);
+  const part2 = t(`${ruleMapping.key}.part2`);
+
+  return (
+    <h3 className="space-x-2 text-sub-sm font-medium">
+      <span>{part1}</span>
+      <span className="space-x-2">{AttributesNodes}</span>
+      <span>{part2}</span>
+      <span className="text-sub-xs text-sub">{hasNote && note}</span>
+    </h3>
   );
 };
 
@@ -294,15 +322,11 @@ const AttributeGenderField = ({
         <span>Genre équal à</span>
       </Button>
       <FormControl>
-        <Select
-          name={`${field.name}.genders.0`}
-          value={value}
-          onValueChange={v => update(v)}
-        >
+        <Select name={`${field.name}.genders.0`} value={value} onValueChange={v => update(v)}>
           <SelectTrigger>
-            <SelectValue placeholder="TODO trads" className="w-full">
+            <SelectValue placeholder="Genre" className="w-full">
               {/*TODO: trads*/}
-              {value ? tField(`gender.options.${value}`) : 'TODO trads'}
+              {value ? tField(`gender.options.${value}`) : 'Genre'}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -407,7 +431,10 @@ const operatorFromLevelArray = (
   }
 };
 
-const numberFromLevelArray = (levels: readonly number[] | undefined, operator: PartialOperator | 'none' | undefined) => {
+const numberFromLevelArray = (
+  levels: readonly number[] | undefined,
+  operator: PartialOperator | 'none' | undefined,
+) => {
   if (levels === undefined || levels.length === 0) {
     return undefined;
   }
@@ -470,9 +497,9 @@ const AttributeOptionFieldSingle = ({
         onValueChange={newValue => update({ ...value, option: newValue as Field })}
       >
         <SelectTrigger className="w-max shrink-0">
-          <SelectValue placeholder="TODO trads">
+          <SelectValue placeholder="Option">
             {/*TODO: trads*/}
-            {(selectedPropertyId && propertyMapping[selectedPropertyId]?.name) ?? 'TODO trads'}
+            {(selectedPropertyId && propertyMapping[selectedPropertyId]?.name) ?? 'Option'}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
