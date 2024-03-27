@@ -19,10 +19,11 @@ export const RuleOrder: Record<
   RuleType,
   { rule: new (rawRule: RawRule, input: Input) => Rule; priority: number }
 > = {
+  // TODO: priority are not needed anymore
   gather_attributes: { rule: GatherAttributesRule, priority: 1 },
   maximize_class_size: { rule: MaximizeClassSizeRule, priority: 1 },
   maximize_classes: { rule: MaximizeClassesRule, priority: 1 },
-  positive_relationships: { rule: PositiveRelationshipsRule, priority: 1},
+  positive_relationships: { rule: PositiveRelationshipsRule, priority: 1 },
   negative_relationships: { rule: NegativeRelationshipsRule, priority: 1 },
   balance_count: { rule: BalanceCountRule, priority: 1 },
   balance_class_count: { rule: BalanceClassCountRule, priority: 1 },

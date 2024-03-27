@@ -40,9 +40,9 @@ type Rule = {
   onDeleted?: () => void;
   onSaved?: (rule: RawAttribute[]) => Promise<void>;
 } & (
-    | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
-    | { onDeleted: () => void }
-  );
+  | { onCanceled: () => void; onSaved: (rule: RawAttribute[]) => Promise<void> }
+  | { onDeleted: () => void }
+);
 
 interface FormValues {
   attributes: RawAttribute[];
@@ -292,11 +292,7 @@ const AttributeGenderField = ({
         <span>Genre équal à</span>
       </Button>
       <FormControl>
-        <Select
-          name={`${field.name}.genders.0`}
-          value={value}
-          onValueChange={v => update(v)}
-        >
+        <Select name={`${field.name}.genders.0`} value={value} onValueChange={v => update(v)}>
           <SelectTrigger>
             <SelectValue placeholder="TODO trads" className="w-full">
               {/*TODO: trads*/}
@@ -405,7 +401,10 @@ const operatorFromLevelArray = (
   }
 };
 
-const numberFromLevelArray = (levels: readonly number[] | undefined, operator: PartialOperator | 'none' | undefined) => {
+const numberFromLevelArray = (
+  levels: readonly number[] | undefined,
+  operator: PartialOperator | 'none' | undefined,
+) => {
   if (levels === undefined || levels.length === 0) {
     return undefined;
   }
